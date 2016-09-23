@@ -15,17 +15,17 @@
 class BasicShader{
     private:
         std::map<std::string, int> uniforms;
-        GLuint shader = 0;
-        GLuint vertexShader = 0;
-        GLuint fragmentShader = 0;
-        GLuint geometryShader = 0;
+        GLuint shader;
+        GLuint vertexShader;
+        GLuint fragmentShader;
+        GLuint geometryShader;
         std::string title;
         int getUniformLocation(const std::string uniformName);
         GLuint addShader(int, std::string);
     public:
         BasicShader(const std::string);
-        ~BasicShader();
-        void connectTextures(void );
+        ~BasicShader(void);
+        void connectTextures(void);
         void bind(void);
         void unbind(void);
 
@@ -37,7 +37,8 @@ class BasicShader{
         void updateUniform(const std::string, const bool);
     protected:
         virtual void setAllAttributes(void) = 0;
-        virtual void setAllUniforms(void ) = 0;
+        virtual void setAllUniforms(void) = 0;
+        void compileShader(void);
         void bindAttribute(const int index, const char * title);
         void setUniform(const std::string title);
 };

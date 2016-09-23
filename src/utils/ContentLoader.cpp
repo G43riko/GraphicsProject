@@ -2,6 +2,7 @@
 // Created by gabriel on 22.9.2016.
 //
 
+#ifndef GRAPHICSPROJECT_CONTENTLOADER_H
 #include "ContentLoader.h"
 
 std::string ContentLoader::loadFileContent(std::string fileName){
@@ -12,4 +13,5 @@ std::string ContentLoader::loadFileContent(std::string fileName){
     }
     Logger::error(ERROR_MISSING_FILE + fileName);
     return "";
-};
+}
+#endif

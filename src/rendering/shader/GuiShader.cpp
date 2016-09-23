@@ -4,8 +4,9 @@
 
 #include "BasicShader.cpp"
 
-class EntityShader : BasicShader{
-    EntityShader() : BasicShader("EntityShader"){};
+class GuiShader : BasicShader{
+    public:
+        GuiShader() : BasicShader("GuiShader"){};
 
     void setAllAttributes(){
         this -> bindAttribute(0, "position");

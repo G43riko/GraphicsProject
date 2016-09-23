@@ -4,9 +4,7 @@
 #include <iostream>
 
 #ifndef GRAPHICSPROJECT_LOGGER_B
-#   define GRAPHICSPROJECT_LOGGER_B
-#endif
-
+#define GRAPHICSPROJECT_LOGGER_B
 
 class Logger{
     public:
@@ -23,3 +21,5 @@ class Logger{
             std::cerr << message << std::endl;
         }
 };
+
+#endif

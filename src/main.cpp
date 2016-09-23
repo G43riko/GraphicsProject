@@ -5,13 +5,13 @@
 #include <GLFW/glfw3.h>
 #include "rendering/WindowManager.cpp"
 
-
+#include "rendering/shader/GuiShader.cpp"
 int main(){
     WindowManager::init(800, 600, "Okno");
+    GuiShader * guiShader = new GuiShader();
+    //BasicShader * shader = new BasicShader("GuiShader");
 
-    // Main execution loop
     while (!WindowManager::isCloseRequest()) {
-        // Display result
         WindowManager::update();
         glfwPollEvents();
     }

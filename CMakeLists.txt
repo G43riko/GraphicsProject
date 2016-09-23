@@ -56,17 +56,17 @@ if (NOT CMAKE_INSTALL_PREFIX)
 endif ()
 
 # PPGSO library
-add_library(libppgso STATIC
+add_library(libGraphics STATIC
         src/lib/mesh.cpp
         src/lib/tiny_obj_loader.cpp
         src/lib/shader.cpp
         src/lib/texture.cpp)
 # Make sure GLM uses radians and static GLEW library
-target_compile_definitions(libppgso PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC )
+target_compile_definitions(libGraphics PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC )
 # Link to GLFW, GLEW and OpenGL
-target_link_libraries(libppgso PUBLIC ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(libGraphics PUBLIC ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
 # Pass on include directories
-target_include_directories(libppgso PUBLIC
+target_include_directories(libGraphics PUBLIC
         src/lib
         ${GLFW_INCLUDE_DIRS}
         ${GLEW_INCLUDE_DIRS}
@@ -77,9 +77,10 @@ target_include_directories(libppgso PUBLIC
 #<<moje
 
 #>>zaciatok projektu
-set(GL_MAIN_SRC src/main.cpp)
+#####TUTO TREBA PRIDAŤ AK BUDE CHÝBAŤ UNDEFINED REFERENCE
+set(GL_MAIN_SRC src/main.cpp src/utils/ContentLoader.cpp src/utils/ContentLoader.h)
 add_executable(gl_main ${GL_MAIN_SRC})
-target_link_libraries(gl_main libppgso)
+target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)
 #<<koniec projektu
 

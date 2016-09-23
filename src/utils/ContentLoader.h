@@ -10,10 +10,9 @@
 #include "utils.cpp"
 #include "Logger.cpp"
 #include <fstream>
-
 class ContentLoader {
     public:
-        std::string loadFileContent(std::string);
+        static std::string loadFileContent(std::string);
 };
 
 
