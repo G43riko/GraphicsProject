@@ -13,35 +13,23 @@ class Transform {
         Vector3f * rotation;
         Vector3f * scale;
     public:
-        Transform(Vector3f * position, Vector3f * rotation, Vector3f * scale) {
-            this -> position = position;
-            this -> rotation = rotation;
-            this -> scale = scale;
-        }
-        void move(float x, float y, float z){
-            position -> x += x;
-            position -> y += y;
-            position -> z += z;
-        }
+        Transform(Vector3f *, Vector3f *, Vector3f *);
+        void move(float, float, float);
 
-        void rotate(float x, float y, float z){
-            rotation -> x += x;
-            rotation -> y += y;
-            rotation -> z += z;
-        }
+        void rotate(float, float, float);
 
-        Vector3f * getPosition(void){return position;}
-        float getPosX(void){return position -> x;}
-        float getPosY(void){return position -> y;}
-        float getPosZ(void){return position -> z;}
-        Vector3f * getRotation(void){return rotation;}
-        float getRotX(void){return rotation -> x;}
-        float getRotY(void){return rotation -> y;}
-        float getRotZ(void){return rotation -> z;}
-        Vector3f * getScale(void){return scale;}
-        float getScaleX(void){return scale -> x;}
-        float getScaleY(void){return scale -> y;}
-        float getScaleZ(void){return scale -> z;}
+        Vector3f * getPosition(void);
+        float getPosX(void);
+        float getPosY(void);
+        float getPosZ(void);
+        Vector3f * getRotation(void);
+        float getRotX(void);
+        float getRotY(void);
+        float getRotZ(void);
+        Vector3f * getScale(void);
+        float getScaleX(void);
+        float getScaleY(void);
+        float getScaleZ(void);
 };
 
 

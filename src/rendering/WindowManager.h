@@ -13,9 +13,9 @@
 class WindowManager {
     public:
         static int init(const int, const int, std::string);
-        static void close();
-        static bool isCloseRequest();
-        static void update();
+        static void close(void);
+        static bool isCloseRequest(void);
+        static void update(void);
         static int width;
         static int height;
         static GLFWwindow* window;

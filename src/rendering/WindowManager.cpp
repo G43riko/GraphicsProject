@@ -9,15 +9,15 @@ GLFWwindow* WindowManager::window;
 int WindowManager::width;
 int WindowManager::height;
 
-bool WindowManager::isCloseRequest(){
+bool WindowManager::isCloseRequest(void){
     return glfwWindowShouldClose(WindowManager::window);
 }
-void WindowManager::update(){
+void WindowManager::update(void){
     glfwSwapBuffers(WindowManager::window);
     glfwPollEvents();
 }
 
-void WindowManager::close() {
+void WindowManager::close(void) {
     glfwTerminate();
 }
 

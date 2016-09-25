@@ -4,3 +4,9 @@
 
 #include "Material.h"
 
+Material::Material(Texture2D * diffuse){
+    this -> diffuse = diffuse;
+}
+Texture2D * Material::getDiffuse(void){
+    return diffuse;
+}

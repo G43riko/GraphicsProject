@@ -21,6 +21,8 @@ class Camera {
         const float NEAR_PLANE = 0.1f;
         const float FAR_PLANE = 1000.0f;
         Vector3f * forward = new Vector3f(0, 0, 1);
+        bool mouseLocked = false;
+        Vector2f lastMousePos;
     public:
         Vector3f * position = new Vector3f(0, 0, 0);
         float pitch = 0;
@@ -32,20 +34,10 @@ class Camera {
         glm::mat4 getViewMatrix(void);
         void updateForward(void);
 
-        Vector3f * getForwardVector(){
-            if(VERTICAL)
-                return forward -> getMul(-1) -> normalize();
-
-            return UP -> getCross(forward) -> cross(UP) -> mul(-1) -> normalize();
-        }
-
-        Vector3f * getRightVector(){
-            return UP -> getCross(forward) -> normalize();
-        }
-
-        Vector3f * getUpVector(){
-            return UP -> getNormal();
-        }
+        Vector3f * getForwardVector(void);
+        Vector3f * getRightVector(void);
+        Vector3f * getUpVector(void);
 };
 
+#include "../utils/Maths.h"
 #endif //GRAPHICSPROJECT_CAMERA_H

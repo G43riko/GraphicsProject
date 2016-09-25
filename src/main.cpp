@@ -9,20 +9,9 @@
 #include "utils/Vectors.cpp"
 #include <vector>
 #include "rendering/material/Texture2D.cpp"
-#include "rendering/material/Material.cpp"
+#include "rendering/material/Material.h"
 
-void onKeyDown(GLFWwindow * window, int key, int scanCode, int action, int mods){
-    if(action == GLFW_PRESS){
-        std::cout << "GLFW_PRESS: " << key << std::endl;
-    }
-    else if(action == GLFW_RELEASE){
-        std::cout << "GLFW_RELEASE: " << key << std::endl;
-    }
-    else if(action == GLFW_REPEAT){
-        std::cout << "GLFW_REPEAT: " << key << std::endl;
-    }
-}
-int main(){
+int main(void){
     WindowManager::init(800, 600, "Okno");
 
     Loader * loader = new Loader();
@@ -37,7 +26,7 @@ int main(){
 
     Renderer * renderer = new Renderer(guiShader);
 
-    Input::init(WindowManager::window);
+    Input::init();
 
     while (!WindowManager::isCloseRequest()) {
         renderer -> prepare(0, 0, 0, 1);

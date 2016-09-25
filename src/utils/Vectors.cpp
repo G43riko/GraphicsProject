@@ -10,7 +10,7 @@ Vector3f::Vector3f(float x, float y, float z) {
     this -> z = z;
 }
 
-void Vector3f::show(){
+void Vector3f::show(void){
     std::cout << "[" << x << "x" << y << "x" << z << "]" << std::endl;
 }
 
@@ -49,3 +49,9 @@ Vector3f * Vector3f::mul(Vector3f * v){x *= v -> x; y *= v -> y; z *= v -> z; re
 Vector3f * Vector3f::mul(float v){x *= v; y *= v; z *= v; return this;};
 Vector3f * Vector3f::getMul(Vector3f *v){new Vector3f(x / v -> x, y / v -> y, z / v -> z);};
 Vector3f * Vector3f::getMul(float v){new Vector3f(x / v, y / v, z / v);};
+
+
+Vector2f::Vector2f(float x, float y){
+    this -> x = x;
+    this -> y = y;
+}

@@ -10,9 +10,9 @@
 #include "model/MaterialedModel.h"
 #include "model/Entity.h"
 #include <iostream>
+#include "Camera.h"
 #include "shader/BasicShader.cpp"
 #include <glm/mat4x4.hpp>
-#include "Camera.h"
 #include "../utils/Maths.h"
 
 class Renderer {

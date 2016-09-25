@@ -12,22 +12,10 @@ class Texture2D {
     private:
         GLuint textureID;
     public:
-        Texture2D(GLuint textureID){
-            this -> textureID = textureID;
-        }
-
-        GLuint getTextureID(){
-            return textureID;
-        }
-
-        void bind(){
-            glBindTexture(GL_TEXTURE_2D, textureID);
-        }
-
-        void bind(GLuint num){
-            glActiveTexture(num);
-            bind();
-        }
+        Texture2D(GLuint);
+        GLuint getTextureID(void);
+        void bind(void);
+        void bind(GLuint);
 };
 
 

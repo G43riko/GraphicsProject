@@ -16,25 +16,13 @@ class Entity {
         Transform * transform;
 
     public:
-        Entity(MaterialedModel * model, Vector3f * position, Vector3f * rotation, Vector3f * scale) {
-            this -> model = model;
-            transform = new Transform(position, rotation, scale);
-        }
+        Entity(MaterialedModel *, Vector3f *, Vector3f *, Vector3f *);
 
-        void move(float x, float y, float z){
-            transform -> move(x, y, z);
-        }
+        void move(float, float, float);
 
-        void rotate(float x, float y, float z){
-            transform -> rotate(x, y, z);
-        }
-
-        MaterialedModel * getModel(){
-            return model;
-        }
-        Transform * getTransform(){
-            return transform;
-        }
+        void rotate(float, float, float);
+        MaterialedModel * getModel(void);
+        Transform * getTransform(void);
 };
 
 

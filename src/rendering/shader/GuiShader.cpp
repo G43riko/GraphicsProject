@@ -8,12 +8,12 @@ class GuiShader : public BasicShader{
     public:
         GuiShader() : BasicShader("GuiShader"){};
 
-    void setAllAttributes(){
+    void setAllAttributes(void){
         this -> bindAttribute(0, "Position");
         this -> bindAttribute(1, "Texture");
 
     };
-    void setAllUniforms(){
+    void setAllUniforms(void){
         this -> setUniform("projectionMatrix");
         this -> setUniform("viewMatrix");
         this -> setUniform("transformationMatrix");

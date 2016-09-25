@@ -12,19 +12,9 @@ private:
     GLuint vaoID;
     GLuint vertexCount;
 public:
-    RawModel(GLuint vaoID, GLuint vertexCount){
-        this -> vaoID = vaoID;
-        this -> vertexCount = vertexCount;
-    }
-
-    GLuint getVaoID(){
-        return this -> vaoID;
-    }
-
-    GLuint getVertexCount() {
-        return vertexCount;
-    }
-
+    RawModel(GLuint, GLuint);
+    GLuint getVaoID(void);
+    GLuint getVertexCount(void);
 };
 
 #endif //GRAPHICSPROJECT_RAWMODEL_H

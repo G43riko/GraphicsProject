@@ -8,13 +8,12 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec3.hpp>
+#include "../rendering/Camera.h"
 #include <glm/vec4.hpp>
 #include "../rendering/model/Transform.h"
-#include "../rendering/Camera.h"
 #include <iostream>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/string_cast.hpp>
-
 
 class Maths {
     public:

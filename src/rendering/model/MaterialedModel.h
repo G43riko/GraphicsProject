@@ -6,26 +6,18 @@
 #define GRAPHICSPROJECT_MATERIALEDMODEL_H
 
 
-#include "RawModel.cpp"
-#include "../material/Material.cpp"
+#include "RawModel.h"
+#include "../material/Material.h"
 
 class MaterialedModel {
 private:
-    RawModel * model = NULL;
-    Material * material = NULL;
+    RawModel * model;
+    Material * material;
 public:
-    MaterialedModel(RawModel * model, Material * material) {
-        this -> model = model;
-        this -> material = material;
-    }
+    MaterialedModel(RawModel *, Material *);
 
-    RawModel * getModel(){
-        return model;
-    }
-
-    Material * getMaterial(){
-        return material;
-    }
+    RawModel * getModel(void);
+    Material * getMaterial(void);
 };
 
 

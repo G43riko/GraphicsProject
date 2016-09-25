@@ -6,6 +6,7 @@
 
 Renderer::Renderer(BasicShader * shader){
     actualCamera = new Camera();
+
     shader -> bind();
     shader -> updateUniform("projectionMatrix", actualCamera -> getProjectionMatrix());
 }
