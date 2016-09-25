@@ -5,6 +5,7 @@
 #ifndef GRAPHICSPROJECT_VECTORS_H
 #define GRAPHICSPROJECT_VECTORS_H
 
+#include <iostream>
 class Vector2f{
     public:
         float x, y;
@@ -18,6 +19,15 @@ class Vector3f{
         Vector3f(float, float, float);
         Vector3f(float);
         Vector3f(const Vector3f&);
+        Vector3f * normalize(void);
+        Vector3f * getNormal(void);
+        Vector3f * cross(Vector3f *);
+        Vector3f * getCross(Vector3f *);
+        Vector3f * mul(Vector3f *);
+        Vector3f * mul(float);
+        Vector3f * getMul(Vector3f *);
+        Vector3f * getMul(float);
+        void show(void);
 };
 class Vector4f{
     public:

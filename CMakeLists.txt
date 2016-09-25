@@ -60,7 +60,8 @@ add_library(libGraphics STATIC
         src/lib/mesh.cpp
         src/lib/tiny_obj_loader.cpp
         src/lib/shader.cpp
-        src/lib/texture.cpp)
+        src/lib/texture.cpp
+        res/textures/stoneFloor.png)
 # Make sure GLM uses radians and static GLEW library
 target_compile_definitions(libGraphics PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC )
 # Link to GLFW, GLEW and OpenGL
@@ -68,6 +69,7 @@ target_link_libraries(libGraphics PUBLIC ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${O
 # Pass on include directories
 target_include_directories(libGraphics PUBLIC
         src/lib
+        res
         ${GLFW_INCLUDE_DIRS}
         ${GLEW_INCLUDE_DIRS}
         ${GLM_INCLUDE_DIRS}
@@ -78,11 +80,11 @@ target_include_directories(libGraphics PUBLIC
 
 #>>zaciatok projektu
 #####TUTO TREBA PRIDAŤ AK BUDE CHÝBAŤ UNDEFINED REFERENCE
-set(GL_MAIN_SRC src/main.cpp src/utils/ContentLoader.cpp src/utils/ContentLoader.h)
+set(GL_MAIN_SRC src/main.cpp src/utils/FileLoader.cpp src/utils/FileLoader.h src/rendering/material/Texture2D.cpp src/rendering/material/Texture2D.h src/rendering/material/Material.cpp src/rendering/material/Material.h src/rendering/Camera.cpp src/rendering/Camera.h src/utils/Maths.cpp src/utils/Maths.h src/rendering/model/Mesh.cpp src/rendering/model/Mesh.h)
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)
 #<<koniec projektu
 
-set(SOURCE_FILES src/main.cpp src/utils/utils.cpp src/utils/Vectors.h src/utils/Vectors.cpp src/rendering/shader/BasicShader.cpp src/rendering/shader/BasicShader.h src/rendering/WindowManager.cpp src/rendering/WindowManager.h src/utils/Logger.cpp src/utils/ContentLoader.cpp src/utils/ContentLoader.h src/rendering/shader/GuiShader.cpp src/utils/Const.h)
-add_executable(GraphicsProject ${SOURCE_FILES} src/utils/utils.cpp src/utils/Vectors.cpp src/rendering/shader/BasicShader.cpp src/rendering/shader/BasicShader.h src/rendering/WindowManager.cpp src/rendering/WindowManager.h src/utils/Logger.cpp src/utils/ContentLoader.cpp src/utils/ContentLoader.h src/rendering/shader/GuiShader.cpp src/utils/Const.h)
+set(SOURCE_FILES src/main.cpp src/utils/utils.cpp src/utils/Vectors.h src/utils/Vectors.cpp src/rendering/shader/BasicShader.cpp src/rendering/shader/BasicShader.h src/rendering/WindowManager.cpp src/rendering/WindowManager.h src/utils/Logger.cpp src/utils/FileLoader.cpp src/utils/FileLoader.h src/rendering/shader/GuiShader.cpp src/utils/Const.h src/utils/Loader.cpp src/utils/Loader.h src/rendering/model/RawModel.cpp src/rendering/model/RawModel.h src/rendering/Renderer.cpp src/rendering/Renderer.h src/rendering/model/MaterialedModel.cpp src/rendering/model/MaterialedModel.h src/rendering/model/Entity.cpp src/rendering/model/Entity.h src/utils/Maths.cpp src/utils/Maths.h src/rendering/model/Transform.cpp src/rendering/model/Transform.h src/rendering/Camera.cpp src/rendering/Camera.h src/utils/Input.cpp src/utils/Input.h src/rendering/model/Mesh.cpp src/rendering/model/Mesh.h)
+add_executable(GraphicsProject ${SOURCE_FILES} src/utils/utils.cpp src/utils/Vectors.cpp src/rendering/shader/BasicShader.cpp src/rendering/shader/BasicShader.h src/rendering/WindowManager.cpp src/rendering/WindowManager.h src/utils/Logger.cpp src/utils/FileLoader.cpp src/utils/FileLoader.h src/rendering/shader/GuiShader.cpp src/utils/Const.h)

@@ -6,11 +6,14 @@
 #define GRAPHICSPROJECT_BASICSHADER_H
 
 #include <map>
+#include <typeinfo>
 #include <string>
 #include "../../utils/Vectors.h"
 #include "../../utils/Const.h"
-#include "../../utils/ContentLoader.h"
+#include "../../utils/FileLoader.h"
 #include <GL/glew.h>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 class BasicShader{
     private:
@@ -28,6 +31,7 @@ class BasicShader{
         void connectTextures(void);
         void bind(void);
         void unbind(void);
+        void compileShader(void);
 
         void updateUniform(const std::string, const int);
         void updateUniform(const std::string, const float);
@@ -35,10 +39,10 @@ class BasicShader{
         void updateUniform(const std::string, const Vector3f);
         void updateUniform(const std::string, const Vector4f);
         void updateUniform(const std::string, const bool);
+        void updateUniform(const std::string, const glm::mat4);
     protected:
         virtual void setAllAttributes(void) = 0;
         virtual void setAllUniforms(void) = 0;
-        void compileShader(void);
         void bindAttribute(const int index, const char * title);
         void setUniform(const std::string title);
 };

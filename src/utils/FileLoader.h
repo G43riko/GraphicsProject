@@ -10,9 +10,13 @@
 #include "utils.cpp"
 #include "Logger.cpp"
 #include <fstream>
+#include <vector>
+#include <GL/glew.h>
+
 class ContentLoader {
     public:
-        static std::string loadFileContent(std::string);
+        static void loadTextFile(std::string, std::string *);
+        static GLuint loadTexture(std::string, unsigned int, unsigned int);
 };
 
 

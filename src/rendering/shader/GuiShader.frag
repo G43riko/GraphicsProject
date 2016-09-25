@@ -1,11 +1,11 @@
-#version 150
-in vec3 VertexColor;
+#version 330
+in vec2 pass_Texture;
 
-// This output is the final RGBA color of the fragment
 out vec4 FragmentColor;
 
+uniform sampler2D textureSampler;
+
 void main() {
-  // Calculate the color based on the poisition of the fragment on screen
-  // Note that the VertexColor is interpolated between the geometry vertices producing a smooth gradient transition
-  FragmentColor = vec4(VertexColor, 1.0f);
+  //FragmentColor = vec4(vec3(0.0f, 1.0f, 1.0f), 1.0f);
+  FragmentColor = texture(textureSampler, pass_Texture);
 }

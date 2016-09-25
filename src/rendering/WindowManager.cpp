@@ -6,15 +6,15 @@
 
 WindowManager::WindowManager(void) {}
 GLFWwindow* WindowManager::window;
+int WindowManager::width;
+int WindowManager::height;
 
 bool WindowManager::isCloseRequest(){
     return glfwWindowShouldClose(WindowManager::window);
 }
 void WindowManager::update(){
-    glClearColor(1, 0, 1, 0);
-    // Clear depth and color buffers
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glfwSwapBuffers(WindowManager::window);
+    glfwPollEvents();
 }
 
 void WindowManager::close() {
@@ -25,6 +25,7 @@ int WindowManager::init(int width, int height, std::string title){
     //inicializuje openGL
     if (!glfwInit()) {
         Logger::error(ERROR_INITIAL_GLFW);
+        return EXIT_FAILURE;
     }
     //nastaví openGL
     glfwWindowHint(GLFW_SAMPLES, WindowManager::samples);
@@ -34,6 +35,8 @@ int WindowManager::init(int width, int height, std::string title){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     //Vytvorí okno
+    WindowManager::width = width;
+    WindowManager::height = height;
     WindowManager::window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
     if (!WindowManager::window) {
         //Logger::error(ERROR_OPEN_GLFW_WINDOW);
@@ -52,5 +55,6 @@ int WindowManager::init(int width, int height, std::string title){
         glfwTerminate();
         return EXIT_FAILURE;
     }
+
     return EXIT_SUCCESS;
 }

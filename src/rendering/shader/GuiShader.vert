@@ -1,13 +1,14 @@
-#version 150
-// Get vertex position from the vertex buffer
-in vec2 Position;
-in vec3 Color;
+#version 330
+in vec3 Position;
+in vec2 Texture;
 
-// This will be passed on to the fragment shader
-out vec3 VertexColor;
+out vec2 pass_Texture;
+
+uniform mat4 transformationMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 viewMatrix;
 
 void main() {
-  VertexColor = Color;
-  // The vertex shader needs to output a vec4 gl_Position so we fill in z and w to comply
-  gl_Position = vec4(Position, 0.0, 1.0);
+  pass_Texture = Texture;
+  gl_Position = projectionMatrix * viewMatrix * transformationMatrix *vec4(Position, 1.0);
 }

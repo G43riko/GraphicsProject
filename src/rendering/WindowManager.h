@@ -12,16 +12,18 @@
 
 class WindowManager {
     public:
-        static int init(int, int, std::string);
+        static int init(const int, const int, std::string);
         static void close();
         static bool isCloseRequest();
         static void update();
+        static int width;
+        static int height;
+        static GLFWwindow* window;
     private:
         static const int contentAttributesMinorVersion = 3;
         static const int contentAttributesMajorVersion = 3;
         static const int samples = 4;
 
-        static GLFWwindow* window;
         WindowManager(void);
 };
 

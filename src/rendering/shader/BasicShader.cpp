@@ -4,7 +4,6 @@
 
 #ifndef GRAPHICSPROJECT_BASICSHADER_H
 #include "BasicShader.h"
-#include <typeinfo>
 
 BasicShader::BasicShader(const std::string title){
     this -> title = title;
@@ -18,36 +17,48 @@ BasicShader::BasicShader(const std::string title){
     glAttachShader(shader, fragmentShader);
 }
 BasicShader::~BasicShader(void){
+    //glDetachShader(this -> shader, this -> vertexShader);
+    //glDetachShader(this -> shader, this -> fragmentShader);
+    //glDetachShader(shader, geometryShader);
+
+
     glDeleteProgram(this -> shader);
     glDeleteShader(this -> vertexShader);
     glDeleteShader(this -> fragmentShader);
     //glDeleteShader(this -> geometryShader);
+
 }
 
 void BasicShader::compileShader(){
+    glLinkProgram(this -> shader);
+    glValidateProgram(this -> shader);
     this -> setAllAttributes();
-    glLinkProgram(shader);
-    glValidateProgram(shader);
     this -> setAllUniforms();
 }
 
 GLuint BasicShader::addShader(int type, std::string fileName){
     unsigned int info_length = 1024;
-    auto result = GL_FALSE;
+    GLint result = GL_FALSE;
     std::string fragment_shader_log(info_length, ' ');
     GLuint shader = glCreateShader(type);
-    //ContentLoader * loader = new ContentLoader();
-    auto shaderContentPointer = ContentLoader::loadFileContent(fileName).c_str();
+
+    std::string content;
+
+    ContentLoader::loadTextFile(fileName, &content);
+
+    const char * shaderContentPointer = content.c_str();
 
     //načíta obsah shadera
-    glShaderSource(shader, 1, &shaderContentPointer, nullptr);
+
+    glShaderSource(shader, 1, &shaderContentPointer, NULL);
+
     //skompiluje shadere
     glCompileShader(shader);
 
     //skontroluje či je skompilovaný
     glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
     if(result == GL_FALSE){
-        glGetShaderInfoLog(shader, info_length, nullptr, &fragment_shader_log[0]);
+        glGetShaderInfoLog(shader, info_length, NULL, &fragment_shader_log[0]);
         Logger::error(ERROR_COMPILE_SHADER(fileName, fragment_shader_log));
         return 0;
     }
@@ -87,8 +98,11 @@ void BasicShader::updateUniform(std::string name, Vector4f value){
 void BasicShader::updateUniform(std::string name, bool value){
     glUniform1i(uniforms[name], value ? 1 : 0);
 }
+void BasicShader::updateUniform(const std::string name, const glm::mat4 matrix){
+    glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
+}
 void BasicShader::bindAttribute(const int index, const char * title){
-    //glBindAttribLocation(index, title);
+    glBindAttribLocation(shader, index, title);
 }
 void BasicShader::setUniform(std::string title){
     this -> uniforms[title] = this -> getUniformLocation(title.c_str());

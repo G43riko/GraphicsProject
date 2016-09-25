@@ -4,14 +4,18 @@
 
 #include "BasicShader.cpp"
 
-class GuiShader : BasicShader{
+class GuiShader : public BasicShader{
     public:
         GuiShader() : BasicShader("GuiShader"){};
 
     void setAllAttributes(){
-        this -> bindAttribute(0, "position");
+        this -> bindAttribute(0, "Position");
+        this -> bindAttribute(1, "Texture");
+
     };
     void setAllUniforms(){
-        this -> setUniform("ambientLight");
+        this -> setUniform("projectionMatrix");
+        this -> setUniform("viewMatrix");
+        this -> setUniform("transformationMatrix");
     }
 };
