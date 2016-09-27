@@ -9,6 +9,7 @@
 class Vector2f{
     public:
         float x, y;
+        Vector2f(int, int);
         Vector2f(float, float);
         Vector2f(float);
         Vector2f(const Vector2f&);
@@ -17,6 +18,7 @@ class Vector3f{
     public:
         float x, y, z;
         Vector3f(float, float, float);
+
         Vector3f(float);
         Vector3f(const Vector3f&);
         Vector3f * normalize(void);

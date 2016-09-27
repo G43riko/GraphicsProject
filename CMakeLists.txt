@@ -82,23 +82,15 @@ target_include_directories(libGraphics PUBLIC
 #####TUTO TREBA PRIDAŤ AK BUDE CHÝBAŤ UNDEFINED REFERENCE
 set(GL_MAIN_SRC src/main.cpp
                 src/utils/FileLoader.cpp
-                src/utils/FileLoader.h
-                src/utils/Maths.h
                 src/utils/Maths.cpp
-                src/rendering/Camera.h
                 src/rendering/Camera.cpp
-                src/rendering/material/Material.h
                 src/rendering/material/Material.cpp
-                src/rendering/model/Mesh.h
+                src/rendering/shader/BasicShader.cpp
                 src/rendering/model/Mesh.cpp
                 src/rendering/model/RawModel.cpp
-                src/rendering/model/RawModel.h
                 src/rendering/model/Entity.cpp
-                src/rendering/model/Entity.h
                 src/rendering/model/Transform.cpp
-                src/rendering/model/Transform.h
-                src/rendering/model/MaterialedModel.cpp
-                src/rendering/model/MaterialedModel.h)
+                src/rendering/model/MaterialedModel.cpp)
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)
@@ -106,36 +98,21 @@ install(TARGETS gl_main DESTINATION .)
 
 set(SOURCE_FILES    src/main.cpp
                     src/utils/utils.cpp
-                    src/utils/Vectors.h
                     src/utils/Vectors.cpp
                     src/rendering/shader/BasicShader.cpp
-                    src/rendering/shader/BasicShader.h
                     src/rendering/WindowManager.cpp
-                    src/rendering/WindowManager.h
                     src/utils/Logger.cpp
                     src/utils/FileLoader.cpp
-                    src/utils/FileLoader.h
                     src/rendering/shader/GuiShader.cpp
-                    src/utils/Const.h
                     src/utils/Loader.cpp
-                    src/utils/Loader.h
                     src/rendering/model/RawModel.cpp
-                    src/rendering/model/RawModel.h
                     src/rendering/Renderer.cpp
-                    src/rendering/Renderer.h
                     src/rendering/model/MaterialedModel.cpp
-                    src/rendering/model/MaterialedModel.h
                     src/rendering/model/Entity.cpp
-                    src/rendering/model/Entity.h
                     src/utils/Maths.cpp
-                    src/utils/Maths.h
                     src/rendering/model/Transform.cpp
-                    src/rendering/model/Transform.h
                     src/rendering/Camera.cpp
-                    src/rendering/Camera.h
                     src/utils/Input.cpp
-                    src/utils/Input.h
-                    src/rendering/model/Mesh.cpp
-                    src/rendering/model/Mesh.h)
+                    src/rendering/model/Mesh.cpp)
 
 add_executable(GraphicsProject ${SOURCE_FILES})

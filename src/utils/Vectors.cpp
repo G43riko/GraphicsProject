@@ -45,12 +45,15 @@ Vector3f * Vector3f::getNormal(void){
     return result -> normalize();
 }
 
-Vector3f * Vector3f::mul(Vector3f * v){x *= v -> x; y *= v -> y; z *= v -> z; return this;};
-Vector3f * Vector3f::mul(float v){x *= v; y *= v; z *= v; return this;};
-Vector3f * Vector3f::getMul(Vector3f *v){new Vector3f(x / v -> x, y / v -> y, z / v -> z);};
-Vector3f * Vector3f::getMul(float v){new Vector3f(x / v, y / v, z / v);};
+Vector3f * Vector3f::mul(Vector3f * v){x *= v -> x; y *= v -> y; z *= v -> z; return this;}
+Vector3f * Vector3f::mul(float v){x *= v; y *= v; z *= v; return this;}
+Vector3f * Vector3f::getMul(Vector3f *v){return new Vector3f(x / v -> x, y / v -> y, z / v -> z);}
+Vector3f * Vector3f::getMul(float v){return new Vector3f(x / v, y / v, z / v);}
 
-
+Vector2f::Vector2f(int x, int y){
+    this -> x = static_cast<float>(x);
+    this -> y = static_cast<float>(y);
+}
 Vector2f::Vector2f(float x, float y){
     this -> x = x;
     this -> y = y;

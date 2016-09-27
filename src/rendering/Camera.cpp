@@ -15,16 +15,16 @@ glm::mat4 Camera::getProjectionMatrix(void){
 }
 
 float toRadians(float val){
-    return val * (M_PI / 180);
+    return static_cast<float>(val * (M_PI / 180));
 }
 
 void Camera::updateForward(void){
-    forward -> z = cos((360 - yaw)) * cos((pitch));
-    forward -> x = sin((360 - yaw)) * cos((pitch));
-    forward -> y = sin((pitch));
+    forward -> z = static_cast<float>(cos((360 - yaw)) * cos((pitch)));
+    forward -> x = static_cast<float>(sin((360 - yaw)) * cos((pitch)));
+    forward -> y = static_cast<float>(sin((pitch)));
     forward -> normalize();
     forward -> show();
-};
+}
 
 void Camera::input(void){
     float movSpeed = 0.1f;
@@ -65,25 +65,25 @@ void Camera::input(void){
 
     if(Input::isKeyDown(Input::KEY_W)) {
         //position -> z -= movSpeed;
-        position -> x += cos(pitch) * sin(yaw) * movSpeed;
-        position -> z += -cos(pitch) * cos(yaw) * movSpeed;
+        position -> x += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position -> z += static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
     }
     if(Input::isKeyDown(Input::KEY_S)) {
         //position->z += movSpeed;
-        position -> x -= cos(pitch) * sin(yaw) * movSpeed;
-        position -> z -= -cos(pitch) * cos(yaw) * movSpeed;
+        position -> x -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position -> z -= static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
     }
 
 
     if(Input::isKeyDown(Input::KEY_A)) {
         //position->x -= movSpeed;
-        position -> z -= cos(pitch) * sin(yaw) * movSpeed;
-        position -> x -= cos(pitch) * cos(yaw) * movSpeed;
+        position -> z -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position -> x -= static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
     }
     if(Input::isKeyDown(Input::KEY_D)) {
         //position->x += movSpeed;
-        position -> z += cos(pitch) * sin(yaw) * movSpeed;
-        position -> x += cos(pitch) * cos(yaw) * movSpeed;
+        position -> z += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position -> x += static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
     }
 
     if(Input::isKeyDown(Input::KEY_LSHIFT))

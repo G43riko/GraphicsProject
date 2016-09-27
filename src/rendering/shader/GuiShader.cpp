@@ -2,7 +2,7 @@
 // Created by gabriel on 22.9.2016.
 //
 
-#include "BasicShader.cpp"
+#include "BasicShader.h"
 
 class GuiShader : public BasicShader{
     public:
