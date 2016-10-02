@@ -36,9 +36,9 @@ void Renderer::render(Entity * entity, BasicShader * shader){
 
     shader -> updateUniform("transformationMatrix", Maths::createTransformationMatrix(entity -> getTransform()));
     prepareMaterial(entity -> getModel() -> getMaterial());
-    prepareModel(model, 1);
+    prepareModel(model, 3);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-    finishRender(1);
+    finishRender(3);
 }
 
 void Renderer::prepare(GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1){

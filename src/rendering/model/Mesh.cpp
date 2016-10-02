@@ -4,10 +4,35 @@
 
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> textureCoors, std::vector<GLuint> indices){
+Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLuint> indices){
     this -> vertices = vertices;
-    this -> textureCoors = textureCoors;
+    this -> uvs = uvs;
     this -> indices = indices;
+}
+Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLuint> indices){
+    this -> vertices = vertices;
+    this -> uvs = uvs;
+    this -> normals = normals;
+    this -> indices = indices;
+}
+
+void Mesh::show(void){
+    std::cout << "vertices: " << std::endl;
+    for(auto i : vertices)
+        std::cout << i << " ";
+    std::cout << std::endl;
+    std::cout << "uvs: " << std::endl;
+    for(auto i : uvs)
+        std::cout << i << " ";
+    std::cout << std::endl;
+    std::cout << "normals: " << std::endl;
+    for(auto i : normals)
+        std::cout << i << " ";
+    std::cout << std::endl;
+    std::cout << "indices: " << std::endl;
+    for(auto i : indices)
+        std::cout << i << " ";
+    std::cout << std::endl;
 }
 
 Mesh * Mesh::plane = new Mesh({-0.5f, 0.5f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f, 0.5f, 0.5f, 0.0f},

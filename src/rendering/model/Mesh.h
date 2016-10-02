@@ -7,15 +7,19 @@
 
 #include <GL/glew.h>
 #include <vector>
+#include <iostream>
 
 class Mesh {
     public:
         std::vector<GLfloat> vertices;
-        std::vector<GLfloat> textureCoors;
+        std::vector<GLfloat> uvs;
         std::vector<GLuint> indices;
+        std::vector<GLfloat> normals;
         static Mesh * plane;
         static Mesh * cube;
+        void show(void);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
+        Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
 };
 
 

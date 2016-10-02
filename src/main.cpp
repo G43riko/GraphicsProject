@@ -1,7 +1,7 @@
 
 
 #include "rendering/WindowManager.cpp"
-#include "rendering/shader/GuiShader.cpp"
+#include "rendering/shader/EntityShader.cpp"
 #include "rendering/Renderer.cpp"
 #include "rendering/model/Mesh.h"
 #include "utils/Loader.cpp"
@@ -36,17 +36,35 @@ void saveBuffer(){
     */
 }
 
+template<typename T> class GVector3 : public GVector<T>{
+    public:
+        template<typename S>
+        GVector3(S x, S y, S z) : GVector3(static_cast<T>(x), static_cast<T>(y), static_cast<T>(z)){}
+        GVector3(GVector3<T> * a) : GVector3(a -> getX(), a -> getY(), a -> getZ()) {};
+        GVector3(T x, T y, T z){
+            this -> size = 3;
+            this -> data = new T[this -> size]{x, y, z};
+        }
+
+        T getX(){return this -> data[0];}
+        T getY(){return this -> data[1];}
+        T getZ(){return this -> data[2];}
+};
+
 int main(void){
+    //ContentLoader::loadOBJ("res/models/plane.obj") -> show();
+    //exit(1);
     WindowManager::init(800, 600, "Okno");
 
     Loader * loader = new Loader();
 
-    Material * material = new Material(new Texture2D(ContentLoader::loadTexture("res/textures/lena.rgb", 512, 512)));
-    MaterialedModel * model = new MaterialedModel(loader -> loadToVao(Mesh::cube), material);
+    Material * material = new Material(new Texture2D(ContentLoader::loadTexture("res/textures/barrel.rgb", 512, 512)));
+    //MaterialedModel * model = new MaterialedModel(loader -> loadToVao(Mesh::cube), material);
+    MaterialedModel * model = new MaterialedModel(loader -> loadToVao(ContentLoader::loadOBJ("res/models/barrel.obj")), material);
     Entity * entity = new Entity(model, new Vector3f(0, 0, -5), new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
 
 
-    BasicShader * guiShader = new GuiShader();
+    BasicShader * guiShader = new EntityShader();
     guiShader -> compileShader();
 
     Renderer * renderer = new Renderer(guiShader);

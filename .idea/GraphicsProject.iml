@@ -11,26 +11,27 @@
       <sourceFolder url="file://$MODULE_DIR$/src/lib/shader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lib/mesh.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/EntityShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/GuiShader.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Camera.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/Material.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/Material.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Camera.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Transform.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/RawModel.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Entity.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Mesh.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Mesh.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/MaterialedModel.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Transform.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/MaterialedModel.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/RawModel.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/MaterialedModel.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Transform.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Entity.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Camera.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.cpp" isTestSource="false" />

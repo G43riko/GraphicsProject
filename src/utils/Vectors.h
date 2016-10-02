@@ -6,19 +6,41 @@
 #define GRAPHICSPROJECT_VECTORS_H
 
 #include <iostream>
+#include <string.h>
+
 class Vector2f{
     public:
         float x, y;
-        Vector2f(int, int);
+        void show(bool = true);
+        Vector2f(std::string data){
+            std::string currentLine = strtok((char *)data.c_str(), " ");
+            x = static_cast<float>(atof(currentLine.c_str()));
+            currentLine = strtok(NULL, " ");
+            y = static_cast<float>(atof(currentLine.c_str()));
+        }
+
         Vector2f(float, float);
+        Vector2f() : Vector2f(0.0f, 0.0f){};
+        Vector2f(double x, double y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
+        Vector2f(int x, int y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(float);
         Vector2f(const Vector2f&);
 };
 class Vector3f{
     public:
         float x, y, z;
+        Vector3f() : Vector3f(0.0f, 0.0f, 0.0f){};
         Vector3f(float, float, float);
-
+        Vector3f(double x, double y, double z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
+        Vector3f(int x, int y, int z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
+        Vector3f(std::string data){
+            std::string currentLine = strtok((char *)data.c_str(), " ");
+            x = static_cast<float>(atof(currentLine.c_str()));
+            currentLine = strtok(NULL, " ");
+            y = static_cast<float>(atof(currentLine.c_str()));
+            currentLine = strtok(NULL, " ");
+            z = static_cast<float>(atof(currentLine.c_str()));
+        }
         Vector3f(float);
         Vector3f(const Vector3f&);
         Vector3f * normalize(void);
@@ -29,7 +51,16 @@ class Vector3f{
         Vector3f * mul(float);
         Vector3f * getMul(Vector3f *);
         Vector3f * getMul(float);
-        void show(void);
+        Vector3f * add(Vector3f * v){
+            x += v -> x;
+            y += v -> y;
+            z += v -> z;
+            return this;
+        };
+        float getLength(){
+            return (x * x + y * y + z * z) * (x * x + y * y + z * z);
+        }
+        void show(bool = true);
 };
 class Vector4f{
     public:
@@ -43,5 +74,46 @@ class Matrix4f{
     public:
         float x, y, z;
 };
+
+template <typename T>class GVector{
+    protected:
+        T * data;
+        int size;
+    public:
+        GVector(){};
+        GVector(GVector<T> * arg){
+            data = new T[arg -> size];
+            size = arg -> size;
+            for(int i=0 ; i<arg -> size ; i++)
+                data[i] = arg -> data[i];
+
+        }
+        GVector<T> * mul(GVector<T> * arg){
+            if(arg -> size != size)
+                exit(10);
+            for(int i=0 ; i<size ; i++)
+                data[i] *= arg -> data[i];
+        };
+
+        GVector<T> * mul(T arg){
+            if(arg -> size != size)
+                exit(10);
+            for(int i=0 ; i<size ; i++)
+                data[i] *= arg;
+        };
+        GVector<T> * getMul(GVector<T> * arg){
+            return  (new GVector<T>(this)) -> mul(arg);
+        };
+        GVector<T> * getMul(float arg){
+            return  (new GVector<T>(this)) -> mul(arg);
+        };
+        void show(){
+            std::cout << "[" << data[0];
+            for(int i=1 ; i<size ; i++)
+                std::cout << ", " << data[i];
+            std::cout << "]" << std::endl;
+        }
+};
+
 
 #endif //GRAPHICSPROJECT_VECTORS_H

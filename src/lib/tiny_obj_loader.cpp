@@ -254,16 +254,14 @@ static inline void parseFloat2(float &x, float &y, const char *&token) {
   y = parseFloat(token);
 }
 
-static inline void parseFloat3(float &x, float &y, float &z,
-                               const char *&token) {
+static inline void parseFloat3(float &x, float &y, float &z, const char *&token) {
   x = parseFloat(token);
   y = parseFloat(token);
   z = parseFloat(token);
 }
 
 // Parse triples: i, i/j/k, i//k, i/j
-static vertex_index parseTriple(const char *&token, int vsize, int vnsize,
-                                int vtsize) {
+static vertex_index parseTriple(const char *&token, int vsize, int vnsize, int vtsize) {
   vertex_index vi(-1);
 
   vi.v_idx = fixIndex(atoi(token), vsize);
@@ -295,13 +293,12 @@ static vertex_index parseTriple(const char *&token, int vsize, int vnsize,
   return vi;
 }
 
-static unsigned int
-updateVertex(std::map<vertex_index, unsigned int> &vertexCache,
-             std::vector<float> &positions, std::vector<float> &normals,
-             std::vector<float> &texcoords,
-             const std::vector<float> &in_positions,
-             const std::vector<float> &in_normals,
-             const std::vector<float> &in_texcoords, const vertex_index &i) {
+static unsigned int updateVertex(std::map<vertex_index, unsigned int> &vertexCache,
+                                 std::vector<float> &positions, std::vector<float> &normals,
+                                 std::vector<float> &texcoords,
+                                 const std::vector<float> &in_positions,
+                                 const std::vector<float> &in_normals,
+                                 const std::vector<float> &in_texcoords, const vertex_index &i) {
   const std::map<vertex_index, unsigned int>::iterator it = vertexCache.find(i);
 
   if (it != vertexCache.end()) {
@@ -355,13 +352,12 @@ void InitMaterial(material_t &material) {
   material.unknown_parameter.clear();
 }
 
-static bool exportFaceGroupToShape(
-    shape_t &shape, std::map<vertex_index, unsigned int> vertexCache,
-    const std::vector<float> &in_positions,
-    const std::vector<float> &in_normals,
-    const std::vector<float> &in_texcoords,
-    const std::vector<std::vector<vertex_index>> &faceGroup,
-    const int material_id, const std::string &name, bool clearCache) {
+static bool exportFaceGroupToShape(shape_t &shape, std::map<vertex_index, unsigned int> vertexCache,
+                                  const std::vector<float> &in_positions,
+                                  const std::vector<float> &in_normals,
+                                  const std::vector<float> &in_texcoords,
+                                  const std::vector<std::vector<vertex_index>> &faceGroup,
+                                  const int material_id, const std::string &name, bool clearCache) {
   if (faceGroup.empty()) {
     return false;
   }

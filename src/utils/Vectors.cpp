@@ -10,8 +10,11 @@ Vector3f::Vector3f(float x, float y, float z) {
     this -> z = z;
 }
 
-void Vector3f::show(void){
-    std::cout << "[" << x << "x" << y << "x" << z << "]" << std::endl;
+void Vector3f::show(bool endLine){
+    std::cout << "[" << x << "x" << y << "x" << z << "]";
+    if(endLine)
+        std::cout << std::endl;
+
 }
 
 Vector3f * Vector3f::normalize(void){
@@ -50,11 +53,13 @@ Vector3f * Vector3f::mul(float v){x *= v; y *= v; z *= v; return this;}
 Vector3f * Vector3f::getMul(Vector3f *v){return new Vector3f(x / v -> x, y / v -> y, z / v -> z);}
 Vector3f * Vector3f::getMul(float v){return new Vector3f(x / v, y / v, z / v);}
 
-Vector2f::Vector2f(int x, int y){
-    this -> x = static_cast<float>(x);
-    this -> y = static_cast<float>(y);
-}
 Vector2f::Vector2f(float x, float y){
     this -> x = x;
     this -> y = y;
+}
+
+void Vector2f::show(bool endLine){
+    std::cout << "[" << x << "x" << y << "]";
+    if(endLine)
+        std::cout << std::endl;
 }

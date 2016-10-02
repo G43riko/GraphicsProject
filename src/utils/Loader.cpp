@@ -10,6 +10,7 @@ RawModel * Loader::loadToVao(std::vector<GLfloat> positions){
     unbindVAO();
     return new RawModel(vaoID, (int)positions.size() / 3);
 }
+
 RawModel * Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLuint> indices){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(indices);
@@ -17,6 +18,7 @@ RawModel * Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLuint>
     unbindVAO();
     return new RawModel(vaoID, (int)indices.size());
 }
+
 RawModel * Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLfloat> texts, std::vector<GLuint> indices){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(indices);
@@ -30,17 +32,19 @@ RawModel * Loader::loadToVao(Mesh * mesh){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(mesh -> indices);
     storeDataInAttributeList(0, 3, mesh -> vertices);
-    storeDataInAttributeList(1, 2, mesh -> textureCoors);
+    storeDataInAttributeList(1, 2, mesh -> uvs);
+    storeDataInAttributeList(2, 3, mesh -> normals);
     unbindVAO();
     return new RawModel(vaoID, (int)mesh -> indices.size());
 }
 
 void Loader::cleanUp(void){
-    for (std::list<GLuint>::iterator it = vaos.begin(); it != vaos.end(); ++it)
+    for (auto it = vaos.begin(); it != vaos.end(); ++it)
         glDeleteVertexArrays(1, &(*it));
-    for (std::list<GLuint>::iterator it = vbos.begin(); it != vbos.end(); ++it)
+    for (auto it = vbos.begin(); it != vbos.end(); ++it)
         glDeleteBuffers(1, &(*it));
 }
+
 GLuint Loader::createVAO(void){
     GLuint vaoID;
     vaos.push_front(vaoID);

@@ -10,7 +10,7 @@ Vector2f * Input::windowCenter;
 Vector2f * Input::getWindowCenter(void){
     return new Vector2f(Input::windowCenter -> x, Input::windowCenter -> y);
 }
-        Vector2f * Input::mousePos = new Vector2f(0, 0);
+        Vector2f * Input::mousePos = new Vector2f();
 bool Input::lastKeys[NUM_KEY_CODES] = {false};
 bool Input::keys[NUM_KEY_CODES] = {false};
 bool Input::lastButtons[NUM_MOUSE_BUTTONS] = {false};

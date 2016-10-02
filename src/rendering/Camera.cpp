@@ -19,11 +19,21 @@ float toRadians(float val){
 }
 
 void Camera::updateForward(void){
+    double xzLen = cos(pitch);
+    forward -> x = static_cast<float>(xzLen * cos(yaw));
+    forward -> y = static_cast<float>(sin(pitch));
+    forward -> z = static_cast<float>(xzLen * sin(-yaw));
+    /*
     forward -> z = static_cast<float>(cos((360 - yaw)) * cos((pitch)));
     forward -> x = static_cast<float>(sin((360 - yaw)) * cos((pitch)));
     forward -> y = static_cast<float>(sin((pitch)));
+    */
     forward -> normalize();
     forward -> show();
+}
+
+bool isNotZoer(float val){
+    return val > 0 || val < 0;
 }
 
 void Camera::input(void){
@@ -37,8 +47,8 @@ void Camera::input(void){
         std::cout << "pos: " <<Input::mousePos -> x << " x " << Input::mousePos -> y;
         std::cout << ", cent: " << Input::getWindowCenter() -> x << " x " << Input::getWindowCenter() -> y << std::endl;
         //std::cout << "center: " <<center -> x << " x " << center -> y << std::endl;
-        bool rotY = deltaPos -> x != 0;
-        bool rotX = deltaPos -> y != 0;
+        bool rotY = isNotZoer(deltaPos -> x);
+        bool rotX = isNotZoer(deltaPos -> y);
 
         if (rotY) {
             yaw += (deltaPos -> x * SENSITIVITY);

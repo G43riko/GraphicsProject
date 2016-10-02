@@ -113,6 +113,6 @@ set(SOURCE_FILES    src/main.cpp
                     src/rendering/model/Transform.cpp
                     src/rendering/Camera.cpp
                     src/utils/Input.cpp
-                    src/rendering/model/Mesh.cpp)
+                    src/rendering/model/Mesh.cpp src/rendering/shader/EntityShader.cpp)
 
 add_executable(GraphicsProject ${SOURCE_FILES})
