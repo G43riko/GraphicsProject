@@ -8,6 +8,10 @@
 #include <GL/glew.h>
 #include <vector>
 #include <iostream>
+#include <memory>
+class Mesh;
+
+typedef std::shared_ptr<Mesh> PointerMesh;
 
 class Mesh {
     public:
@@ -15,12 +19,11 @@ class Mesh {
         std::vector<GLfloat> uvs;
         std::vector<GLuint> indices;
         std::vector<GLfloat> normals;
-        static Mesh * plane;
-        static Mesh * cube;
+        static PointerMesh plane;
+        static PointerMesh cube;
         void show(void);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
 };
-
 
 #endif //GRAPHICSPROJECT_MESH_H

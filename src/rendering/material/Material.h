@@ -5,16 +5,19 @@
 #ifndef GRAPHICSPROJECT_MATERIAL_H
 #define GRAPHICSPROJECT_MATERIAL_H
 
+#include <memory>
 #include "Texture2D.h"
 
 
 class Material {
     private:
-        Texture2D * diffuse;
+    PointerTexture2D diffuse;
     public:
-        Material(Texture2D *);
-        Texture2D * getDiffuse(void);
+        Material(PointerTexture2D);
+        PointerTexture2D getDiffuse(void);
 };
+typedef std::shared_ptr<Material> PointerMaterial;
+
 
 
 #endif //GRAPHICSPROJECT_MATERIAL_H

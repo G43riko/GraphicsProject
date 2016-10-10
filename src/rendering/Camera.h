@@ -14,13 +14,13 @@
 
 class Camera {
     private:
-        static Vector3f * UP;
+        static Vector3f UP;
         glm::mat4 projectionMatrix;
         bool VERTICAL = true;
         const float FOV = 70.0f;
         const float NEAR_PLANE = 0.1f;
         const float FAR_PLANE = 1000.0f;
-        Vector3f * forward = new Vector3f(0, 0, 1);
+        PointerVector3f forward = PointerVector3f(new Vector3f(0, 0, 1));
         bool mouseLocked = false;
         Vector2f lastMousePos;
     public:
@@ -34,9 +34,9 @@ class Camera {
         glm::mat4 getViewMatrix(void);
         void updateForward(void);
 
-        Vector3f * getForwardVector(void);
-        Vector3f * getRightVector(void);
-        Vector3f * getUpVector(void);
+        PointerVector3f getForwardVector(void);
+        PointerVector3f getRightVector(void);
+        PointerVector3f getUpVector(void);
 };
 
 #include "../utils/Maths.h"

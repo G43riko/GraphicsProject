@@ -12,18 +12,20 @@
 
 class Entity {
     private:
-        MaterialedModel * model;
+    PointerMaterialedModel model;
         Transform * transform;
 
     public:
-        Entity(MaterialedModel *, Vector3f *, Vector3f *, Vector3f *);
+        Entity(PointerMaterialedModel, PointerVector3f, PointerVector3f, PointerVector3f);
 
         void move(float, float, float);
 
         void rotate(float, float, float);
-        MaterialedModel * getModel(void);
+    PointerMaterialedModel getModel(void);
         Transform * getTransform(void);
 };
+
+typedef std::shared_ptr<Entity> PointerEntity;
 
 
 #endif //GRAPHICSPROJECT_ENTITY_H

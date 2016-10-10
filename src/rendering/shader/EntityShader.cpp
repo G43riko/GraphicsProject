@@ -18,5 +18,8 @@ class EntityShader : public BasicShader{
             this -> setUniform("projectionMatrix");
             this -> setUniform("viewMatrix");
             this -> setUniform("transformationMatrix");
+
+            this -> setUniform("lightColor");
+            this -> setUniform("lightPosition");
         }
 };

@@ -23,7 +23,7 @@ class ContentLoader {
 public:
     static void loadTextFile(std::string, std::string *);
     static GLuint loadTexture(std::string, unsigned int, unsigned int);
-    static Mesh * loadOBJ(std::string fileName) {
+    static PointerMesh loadOBJ(std::string fileName) {
         std::ifstream ifs(fileName, std::ios::in);
 
         std::string line;
@@ -104,8 +104,9 @@ public:
             normalsFinal.push_back(i -> z);
         }
         */
+
         convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal);
-        return new Mesh(verticesFinal, uvsFinal, normalsFinal, indices);
+        return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, indices));
         //float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray, normalsArray, tangentsArray);
         // ModelData data = new ModelData(verticesArray, texturesArray,
         // normalsArray, tangentsArray, indicesArray,
@@ -181,7 +182,7 @@ private:
                                      std::vector<GLfloat>& texturesArray,
                                      std::vector<GLfloat>& normalsArray) {
         float furthestPoint = 0;
-        for (int i = 0; i < vertices.size(); i++) {
+        for (unsigned int i = 0; i < vertices.size(); i++) {
             Vertex * currentVertex = vertices.at(i);
             Vector3f * position = currentVertex -> getPosition();
             Vector2f * textureCoord = textures.at(currentVertex -> getTextureIndex());
@@ -190,11 +191,10 @@ private:
             verticesArray.push_back(position -> y);
             verticesArray.push_back(position -> z);
             texturesArray.push_back(textureCoord -> x);
-            texturesArray.push_back(textureCoord -> y);
+            texturesArray.push_back(1 - textureCoord -> y);
             normalsArray.push_back(normalVector -> x);
             normalsArray.push_back(normalVector -> y);
             normalsArray.push_back(normalVector -> z);
-
         }
         return furthestPoint;
     }

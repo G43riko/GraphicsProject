@@ -4,7 +4,7 @@
 
 #include "Entity.h"
 
-Entity::Entity(MaterialedModel * model, Vector3f * position, Vector3f * rotation, Vector3f * scale) {
+Entity::Entity(PointerMaterialedModel model, PointerVector3f position, PointerVector3f rotation, PointerVector3f scale) {
     this -> model = model;
     transform = new Transform(position, rotation, scale);
 }
@@ -17,7 +17,7 @@ void Entity::rotate(float x, float y, float z){
     transform -> rotate(x, y, z);
 }
 
-MaterialedModel * Entity::getModel(void){
+PointerMaterialedModel Entity::getModel(void){
     return model;
 }
 Transform * Entity::getTransform(void){

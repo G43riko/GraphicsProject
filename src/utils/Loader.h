@@ -15,11 +15,11 @@
 
 class Loader {
     public:
-        RawModel * loadToVao(std::vector<GLfloat>);
-        RawModel * loadToVao(std::vector<GLfloat>, std::vector<GLuint>);
-        RawModel * loadToVao(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
+        PointerRawModel loadToVao(std::vector<GLfloat>);
+        PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLuint>);
+        PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
 
-        RawModel * loadToVao(Mesh *);
+        PointerRawModel loadToVao(PointerMesh);
 
         void cleanUp(void);
 private:

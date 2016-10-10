@@ -33,6 +33,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Camera.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/entities/Light.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/entities/Light.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Logger.cpp" isTestSource="false" />

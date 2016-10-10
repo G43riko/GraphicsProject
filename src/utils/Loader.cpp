@@ -4,38 +4,38 @@
 
 #include "Loader.h"
 
-RawModel * Loader::loadToVao(std::vector<GLfloat> positions){
+PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions){
     GLuint vaoID = createVAO();
     storeDataInAttributeList(0, 3, positions);
     unbindVAO();
-    return new RawModel(vaoID, (int)positions.size() / 3);
+    return PointerRawModel(new RawModel(vaoID, (int)positions.size() / 3));
 }
 
-RawModel * Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLuint> indices){
+PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLuint> indices){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(indices);
     storeDataInAttributeList(0, 3, positions);
     unbindVAO();
-    return new RawModel(vaoID, (int)indices.size());
+    return PointerRawModel(new RawModel(vaoID, (int)indices.size()));
 }
 
-RawModel * Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLfloat> texts, std::vector<GLuint> indices){
+PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLfloat> texts, std::vector<GLuint> indices){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(indices);
     storeDataInAttributeList(0, 3, positions);
     storeDataInAttributeList(1, 2, texts);
     unbindVAO();
-    return new RawModel(vaoID, (int)indices.size());
+    return PointerRawModel(new RawModel(vaoID, (int)indices.size()));
 }
 
-RawModel * Loader::loadToVao(Mesh * mesh){
+PointerRawModel Loader::loadToVao(PointerMesh mesh){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(mesh -> indices);
     storeDataInAttributeList(0, 3, mesh -> vertices);
     storeDataInAttributeList(1, 2, mesh -> uvs);
     storeDataInAttributeList(2, 3, mesh -> normals);
     unbindVAO();
-    return new RawModel(vaoID, (int)mesh -> indices.size());
+    return PointerRawModel(new RawModel(vaoID, (int)mesh -> indices.size()));
 }
 
 void Loader::cleanUp(void){

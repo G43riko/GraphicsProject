@@ -6,6 +6,7 @@
 #define GRAPHICSPROJECT_RAWMODEL_H
 
 #include <GL/glew.h>
+#include <memory>
 
 class RawModel{
 private:
@@ -16,5 +17,7 @@ public:
     GLuint getVaoID(void);
     GLuint getVertexCount(void);
 };
+typedef std::shared_ptr<RawModel> PointerRawModel;
+
 
 #endif //GRAPHICSPROJECT_RAWMODEL_H

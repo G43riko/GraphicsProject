@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <string.h>
+#include <memory>
 
 class Vector2f{
     public:
@@ -20,7 +21,7 @@ class Vector2f{
         }
 
         Vector2f(float, float);
-        Vector2f() : Vector2f(0.0f, 0.0f){};
+        Vector2f(void) : Vector2f(0.0f, 0.0f){};
         Vector2f(double x, double y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(int x, int y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(float);
@@ -28,19 +29,14 @@ class Vector2f{
 };
 class Vector3f{
     public:
+        static int count;
         float x, y, z;
-        Vector3f() : Vector3f(0.0f, 0.0f, 0.0f){};
+        ~Vector3f(void);
+        Vector3f(void) : Vector3f(0.0f, 0.0f, 0.0f){};
         Vector3f(float, float, float);
         Vector3f(double x, double y, double z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
         Vector3f(int x, int y, int z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
-        Vector3f(std::string data){
-            std::string currentLine = strtok((char *)data.c_str(), " ");
-            x = static_cast<float>(atof(currentLine.c_str()));
-            currentLine = strtok(NULL, " ");
-            y = static_cast<float>(atof(currentLine.c_str()));
-            currentLine = strtok(NULL, " ");
-            z = static_cast<float>(atof(currentLine.c_str()));
-        }
+        Vector3f(std::string);
         Vector3f(float);
         Vector3f(const Vector3f&);
         Vector3f * normalize(void);
@@ -51,17 +47,12 @@ class Vector3f{
         Vector3f * mul(float);
         Vector3f * getMul(Vector3f *);
         Vector3f * getMul(float);
-        Vector3f * add(Vector3f * v){
-            x += v -> x;
-            y += v -> y;
-            z += v -> z;
-            return this;
-        };
-        float getLength(){
-            return (x * x + y * y + z * z) * (x * x + y * y + z * z);
-        }
+        Vector3f * add(Vector3f *);
+        float getLength(void);
         void show(bool = true);
 };
+typedef std::shared_ptr<Vector3f> PointerVector3f;
+
 class Vector4f{
     public:
         float x, y, z, w;

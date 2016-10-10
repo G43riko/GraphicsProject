@@ -11,14 +11,15 @@
 
 class MaterialedModel {
 private:
-    RawModel * model;
-    Material * material;
+    PointerRawModel model;
+    PointerMaterial material;
 public:
-    MaterialedModel(RawModel *, Material *);
+    MaterialedModel(PointerRawModel, PointerMaterial);
 
-    RawModel * getModel(void);
-    Material * getMaterial(void);
+    PointerRawModel getModel(void);
+    PointerMaterial getMaterial(void);
 };
+typedef std::shared_ptr<MaterialedModel> PointerMaterialedModel;
 
 
 #endif //GRAPHICSPROJECT_MATERIALEDMODEL_H

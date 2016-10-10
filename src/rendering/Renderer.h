@@ -9,6 +9,7 @@
 #include "model/RawModel.h"
 #include "model/MaterialedModel.h"
 #include "model/Entity.h"
+#include "../entities/Light.h";
 #include <iostream>
 #include "Camera.h"
 #include "shader/BasicShader.cpp"
@@ -17,15 +18,16 @@
 
 class Renderer {
     public:
-        Renderer(BasicShader *);
-        void render(RawModel *);
-        void render(MaterialedModel *);
-        void render(Entity *, BasicShader *);
+        Renderer(PointerBasicShader);
+        void render(PointerRawModel);
+        void render(PointerMaterialedModel);
+        void render(PointerEntity, PointerBasicShader);
         void prepare(GLfloat, GLfloat, GLfloat, GLfloat);
     private:
+        Light * light = new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
         Camera * actualCamera;
-        void prepareModel(RawModel *, GLuint);
-        void prepareMaterial(Material *);
+        void prepareModel(PointerRawModel, GLuint);
+        void prepareMaterial(PointerMaterial);
 
         void finishRender(GLuint);
 };

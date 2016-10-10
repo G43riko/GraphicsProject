@@ -90,7 +90,7 @@ set(GL_MAIN_SRC src/main.cpp
                 src/rendering/model/RawModel.cpp
                 src/rendering/model/Entity.cpp
                 src/rendering/model/Transform.cpp
-                src/rendering/model/MaterialedModel.cpp)
+                src/rendering/model/MaterialedModel.cpp src/entities/Light.cpp src/entities/Light.h)
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)

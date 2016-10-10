@@ -4,7 +4,7 @@
 
 #include "Camera.h"
 
-Vector3f * Camera::UP = new Vector3f(0, 1, 0);
+Vector3f Camera::UP(0, 1, 0);
 
 Camera::Camera(void) : lastMousePos(Input::mousePos -> x, Input::mousePos -> y){
     projectionMatrix = glm::perspectiveFov<float>(FOV, static_cast<float>(WindowManager::width),
@@ -109,19 +109,19 @@ void Camera::input(void){
     //updateForward();
 }
 
-Vector3f * Camera::getForwardVector(void){
+PointerVector3f Camera::getForwardVector(void){
     if(VERTICAL)
-        return forward -> getMul(-1) -> normalize();
+        return PointerVector3f(forward -> getMul(-1) -> normalize());
 
-    return UP -> getCross(forward) -> cross(UP) -> mul(-1) -> normalize();
+    return PointerVector3f(UP.getCross(forward.get()) -> cross(&UP) -> mul(-1) -> normalize());
 }
 
-Vector3f * Camera::getRightVector(void){
-    return UP -> getCross(forward) -> normalize();
+PointerVector3f Camera::getRightVector(void){
+    return PointerVector3f(UP.getCross(forward.get()) -> normalize());
 }
 
-Vector3f * Camera::getUpVector(void){
-    return UP -> getNormal();
+PointerVector3f Camera::getUpVector(void){
+    return PointerVector3f(UP.getNormal());
 }
 
 glm::mat4 Camera::getViewMatrix(void){

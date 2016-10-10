@@ -4,10 +4,35 @@
 #include "Vectors.h"
 #include <math.h>
 
+int Vector3f::count = 0;
 Vector3f::Vector3f(float x, float y, float z) {
     this -> x = x;
     this -> y = y;
     this -> z = z;
+    Vector3f::count++;
+}
+Vector3f::Vector3f(std::string data){
+    std::string currentLine = strtok((char *)data.c_str(), " ");
+    x = static_cast<float>(atof(currentLine.c_str()));
+    currentLine = strtok(NULL, " ");
+    y = static_cast<float>(atof(currentLine.c_str()));
+    currentLine = strtok(NULL, " ");
+    z = static_cast<float>(atof(currentLine.c_str()));
+}
+
+float Vector3f::getLength(void){
+    return (x * x + y * y + z * z) * (x * x + y * y + z * z);
+}
+
+Vector3f::~Vector3f(void){
+    Vector3f::count--;
+}
+
+Vector3f * Vector3f::add(Vector3f * v){
+    x += v -> x;
+    y += v -> y;
+    z += v -> z;
+    return this;
 }
 
 void Vector3f::show(bool endLine){
@@ -63,3 +88,19 @@ void Vector2f::show(bool endLine){
     if(endLine)
         std::cout << std::endl;
 }
+
+
+template<typename T> class GVector3 : public GVector<T>{
+public:
+    template<typename S>
+    GVector3(S x, S y, S z) : GVector3(static_cast<T>(x), static_cast<T>(y), static_cast<T>(z)){}
+    GVector3(GVector3<T> * a) : GVector3(a -> getX(), a -> getY(), a -> getZ()) {};
+    GVector3(T x, T y, T z){
+        this -> size = 3;
+        this -> data = new T[this -> size]{x, y, z};
+    }
+
+    T getX(){return this -> data[0];}
+    T getY(){return this -> data[1];}
+    T getZ(){return this -> data[2];}
+};
