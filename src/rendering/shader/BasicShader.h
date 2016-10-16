@@ -28,21 +28,23 @@ class BasicShader{
     public:
         BasicShader(const std::string);
         ~BasicShader(void);
+        static int MAX_LIGHTS;
         void connectTextures(void);
         void bind(void);
+        void cleanUp();
         void unbind(void);
         void compileShader(void);
-
         void updateUniform(const std::string, const int);
         void updateUniform(const std::string, const float);
         void updateUniform(const std::string, const Vector2f);
         void updateUniform(const std::string, const Vector3f);
         void updateUniform(const std::string name, Vector3f * value){
             glUniform3f(uniforms[name], value -> x, value -> y, value -> z);
-        };
+        }
+        bool hasUniform(const std::string);
         void updateUniform(const std::string, const Vector4f);
         void updateUniform(const std::string, const bool);
-        void updateUniform(const std::string, const glm::mat4);
+        void updateUniform4m(const std::string, const glm::mat4);
     protected:
         virtual void setAllAttributes(void) = 0;
         virtual void setAllUniforms(void) = 0;
@@ -50,8 +52,6 @@ class BasicShader{
         void setUniform(const std::string title);
 };
 
-
 typedef std::shared_ptr<BasicShader> PointerBasicShader;
-
 
 #endif //GRAPHICSPROJECT_BASICSHADER_H

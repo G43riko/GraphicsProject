@@ -82,6 +82,13 @@ Vector2f::Vector2f(float x, float y){
     this -> x = x;
     this -> y = y;
 }
+Vector2f * Vector2f::getSub(Vector2f * v){
+    return new Vector2f(x - v -> x, y - v -> y);
+};
+
+Vector3f * Vector3f::getSub(Vector3f * v){
+    return new Vector3f(x - v -> x, y - v -> y, z - v -> z);
+};
 
 void Vector2f::show(bool endLine){
     std::cout << "[" << x << "x" << y << "]";

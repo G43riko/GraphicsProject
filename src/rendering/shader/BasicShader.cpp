@@ -5,6 +5,8 @@
 #ifndef GRAPHICSPROJECT_BASICSHADER_H
 #include "BasicShader.h"
 
+int BasicShader::MAX_LIGHTS = 8;
+
 BasicShader::BasicShader(const std::string title){
     this -> title = title;
     this -> shader = glCreateProgram();
@@ -17,16 +19,14 @@ BasicShader::BasicShader(const std::string title){
     glAttachShader(shader, fragmentShader);
 }
 BasicShader::~BasicShader(void){
-    //glDetachShader(this -> shader, this -> vertexShader);
-    //glDetachShader(this -> shader, this -> fragmentShader);
-    //glDetachShader(shader, geometryShader);
+    cleanUp();
+}
 
-
+void BasicShader::cleanUp(){
     glDeleteProgram(this -> shader);
     glDeleteShader(this -> vertexShader);
     glDeleteShader(this -> fragmentShader);
     //glDeleteShader(this -> geometryShader);
-
 }
 
 void BasicShader::compileShader(){
@@ -49,7 +49,6 @@ GLuint BasicShader::addShader(int type, std::string fileName){
     const char * shaderContentPointer = content.c_str();
 
     //načíta obsah shadera
-
     glShaderSource(shader, 1, &shaderContentPointer, NULL);
 
     //skompiluje shadere
@@ -95,10 +94,14 @@ void BasicShader::updateUniform(std::string name, Vector3f value){
 void BasicShader::updateUniform(std::string name, Vector4f value){
     glUniform4f(uniforms[name], value.x, value.y, value.z, value.w);
 }
+bool BasicShader::hasUniform(const std::string title){
+    return uniforms.find(title) != uniforms.end();
+}
+
 void BasicShader::updateUniform(std::string name, bool value){
     glUniform1i(uniforms[name], value ? 1 : 0);
 }
-void BasicShader::updateUniform(const std::string name, const glm::mat4 matrix){
+void BasicShader::updateUniform4m(const std::string name, const glm::mat4 matrix){
     glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
 }
 void BasicShader::bindAttribute(const int index, const char * title){

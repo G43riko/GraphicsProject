@@ -8,6 +8,13 @@ Texture2D::Texture2D(GLuint textureID){
     this -> textureID = textureID;
 }
 
+Texture2D::Texture2D(std::string title, GLuint id, int width, int height){
+    this -> width = width;
+    this -> height = height;
+    this -> title = title;
+    textureID = id;
+}
+
 GLuint Texture2D::getTextureID(void){
     return textureID;
 }

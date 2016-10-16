@@ -7,7 +7,6 @@
 
 #include <string>
 #include "Const.h"
-#include "utils.cpp"
 #include "Logger.cpp"
 #include <fstream>
 #include "../rendering/model/Mesh.h"
@@ -75,10 +74,10 @@ public:
             Vector3f * vertex2 = new Vector3f(atof(ver2.at(0).c_str()), atof(ver2.at(1).c_str()), atof(ver2.at(2).c_str()));;
             Vector3f * vertex3 = new Vector3f(atof(ver3.at(0).c_str()), atof(ver3.at(1).c_str()), atof(ver3.at(2).c_str()));;
 
-            /*Vertex * v0 = */processVertex(vertex1, vertices, indices);
-            /*Vertex * v1 = */processVertex(vertex2, vertices, indices);
-            /*Vertex * v2 = */processVertex(vertex3, vertices, indices);
-            //calculateTangents(v0, v1, v2, textures);
+            Vertex * v0 = processVertex(vertex1, vertices, indices);
+            Vertex * v1 = processVertex(vertex2, vertices, indices);
+            Vertex * v2 = processVertex(vertex3, vertices, indices);
+            calculateTangents(v0, v1, v2, textures);
 
             std::getline(ifs, line);
         }
@@ -88,6 +87,7 @@ public:
         std::vector<GLfloat> uvsFinal;
         std::vector<GLuint> indicesFinal;
         std::vector<GLfloat> normalsFinal;
+        std::vector<GLfloat> tangentsFinal;
         /*
         for(auto i : vertices){
             verticesFinal.push_back(i -> position -> x);
@@ -105,8 +105,9 @@ public:
         }
         */
 
-        convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal);
-        return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, indices));
+        convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal, tangentsFinal);
+        return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices));
+        //return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, indices));
         //float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray, normalsArray, tangentsArray);
         // ModelData data = new ModelData(verticesArray, texturesArray,
         // normalsArray, tangentsArray, indicesArray,
@@ -180,13 +181,16 @@ private:
                                      std::vector<Vector3f *> normals,
                                      std::vector<GLfloat>& verticesArray,
                                      std::vector<GLfloat>& texturesArray,
-                                     std::vector<GLfloat>& normalsArray) {
+                                     std::vector<GLfloat>& normalsArray,
+                                     std::vector<GLfloat>& tangentsArray) {
         float furthestPoint = 0;
         for (unsigned int i = 0; i < vertices.size(); i++) {
             Vertex * currentVertex = vertices.at(i);
             Vector3f * position = currentVertex -> getPosition();
             Vector2f * textureCoord = textures.at(currentVertex -> getTextureIndex());
             Vector3f * normalVector = normals.at(currentVertex-> getNormalIndex());
+            Vector3f * tangent = currentVertex -> getAverageTangent();
+
             verticesArray.push_back(position -> x);
             verticesArray.push_back(position -> y);
             verticesArray.push_back(position -> z);
@@ -195,8 +199,31 @@ private:
             normalsArray.push_back(normalVector -> x);
             normalsArray.push_back(normalVector -> y);
             normalsArray.push_back(normalVector -> z);
+            tangentsArray.push_back(tangent -> x);
+            tangentsArray.push_back(tangent -> y);
+            tangentsArray.push_back(tangent -> z);
         }
         return furthestPoint;
+    }
+
+    static void calculateTangents(Vertex * v0, Vertex * v1, Vertex * v2, std::vector<Vector2f *> textures) {
+        //Vector3f * delatPos1 = Vector3f.sub(v1.getPosition(), v0.getPosition(), null);
+        Vector3f * delatPos1 = v1 -> getPosition() -> getSub(v0->getPosition());
+        Vector3f * delatPos2 = v2 -> getPosition() -> getSub(v0 -> getPosition());
+        Vector2f * uv0 = textures.at(v0 -> getTextureIndex());
+        Vector2f * uv1 = textures.at(v1 -> getTextureIndex());
+        Vector2f * uv2 = textures.at(v2 -> getTextureIndex());
+        Vector2f * deltaUv1 = uv1 -> getSub(uv0);
+        Vector2f * deltaUv2 = uv2 -> getSub(uv0);
+
+        float r = 1.0f / (deltaUv1 -> x * deltaUv2 -> y - deltaUv1 -> y * deltaUv2 -> x);
+        delatPos1 -> mul(deltaUv2 -> y);
+        delatPos2 -> mul(deltaUv1 -> y);
+        Vector3f * tangent = delatPos1 -> getMul(delatPos2);
+        tangent -> mul(r);
+        v0 -> addTangent(tangent);
+        v1 -> addTangent(tangent);
+        v2 -> addTangent(tangent);
     }
 };
 

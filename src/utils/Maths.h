@@ -19,6 +19,7 @@ class Maths {
     public:
         static glm::mat4 createTransformationMatrix(Transform *);
         static glm::mat4 createViewMatrix(Camera *);
+        static glm::mat4 createTransformationMatrix(Vector2f *, Vector2f *);
 };
 
 

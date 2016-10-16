@@ -27,3 +27,10 @@ glm::mat4 Maths::createViewMatrix(Camera * camera){
     resultMatrix *= glm::translate(glm::vec3(-camera -> position -> x, -camera -> position -> y, -camera -> position -> z));
     return resultMatrix;
 }
+
+glm::mat4 Maths::createTransformationMatrix(Vector2f * pos, Vector2f * scale) {
+    glm::mat4 matrix = glm::mat4(1.0f);
+    matrix *= glm::translate(glm::vec3(pos -> x, pos -> y, 0.0f));
+    matrix *= glm::scale(glm::vec3(scale -> x, scale -> y, 1.0f));
+    return matrix;
+}

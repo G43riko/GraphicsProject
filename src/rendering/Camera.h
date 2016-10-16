@@ -39,5 +39,7 @@ class Camera {
         PointerVector3f getUpVector(void);
 };
 
+typedef std::shared_ptr<Camera> PointerCamera;
+
 #include "../utils/Maths.h"
 #endif //GRAPHICSPROJECT_CAMERA_H

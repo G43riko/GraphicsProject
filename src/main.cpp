@@ -2,13 +2,18 @@
 
 #include "rendering/WindowManager.cpp"
 #include "rendering/shader/EntityShader.cpp"
+#include "rendering/shader/PostFxShader.cpp"
+#include "rendering/shader/ObjectShader.cpp"
 #include "rendering/Renderer.cpp"
 #include "rendering/model/Mesh.h"
 #include "utils/Loader.cpp"
 #include "utils/Input.cpp"
+#include "postProccessing/Screen.cpp"
 #include <memory>
 #include "utils/Vectors.cpp"
 #include <vector>
+#include <src/postProccessing/Fbo.h>
+#include <src/postProccessing/PostProccessing.h>
 #include "rendering/material/Texture2D.cpp"
 #include "rendering/material/Material.h"
 
@@ -21,29 +26,57 @@ int main(void){
     PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/lena.rgb", 512, 512)));
     PointerMaterial material(new Material(texture));
     PointerRawModel rawModel(loader -> loadToVao(ContentLoader::loadOBJ("res/models/dragon.obj")));
+    //PointerRawModel rawModel(loader -> loadToVao(Mesh::plane));
     PointerMaterialedModel model(new MaterialedModel(rawModel, material));
     PointerEntity entity(new Entity(model, PointerVector3f(new Vector3f(0, 0, -5)),
                                            PointerVector3f(new Vector3f(0, 0,  0)),
                                            PointerVector3f(new Vector3f(1, 1,  1))));
 
 
-    PointerBasicShader guiShader = PointerBasicShader(new EntityShader());
-    guiShader -> compileShader();
-    Renderer * renderer = new Renderer(guiShader);
+    Renderer * renderer = new Renderer();
+    renderer -> addShader("entityShader", PointerBasicShader(new EntityShader()));
+    renderer -> addShader("postFxShader", PointerBasicShader(new PostFxShader()));
+    renderer -> addShader("objectShader", PointerBasicShader(new ObjectShader()));
+
+    renderer -> setCamera(PointerCamera(new Camera()));
+
+    ;
+    std::vector<PointerLight> ligts{PointerLight(new Light(new Vector3f(200,  10, -200), new Vector3f(10, 0, 0))),
+                                    PointerLight(new Light(new Vector3f(200, 10, 200), new Vector3f(0, 0, 10)))};
+
 
     Input::init();
 
+    Fbo * fbo = new Fbo(WindowManager::width, WindowManager::height, Fbo::DEPTH_RENDER_BUFFER);
+    PostProccessing * pp = new PostProccessing(loader, WindowManager::width, WindowManager::height);
+    Screen * screen = new Screen(WindowManager::width, WindowManager::height, loader);
     while (!WindowManager::isCloseRequest()) {
         renderer -> prepare(0, 0, 0, 1);
+        renderer -> init3D();
         entity -> getTransform() -> getRotation() -> y -= 0.03f;
+        screen -> startRenderToScreen();
+
+        //fbo -> bindFrameBuffer();
+
+        //renderer -> renderEntity(entity);
+        renderer -> renderObject(entity, ligts);
+
+        screen -> stopRenderToScreen();
+        renderer -> renderScreen(screen);
 
 
-        renderer -> render(entity, guiShader);
+        //fbo -> unbindFrameBuffer();
+
+        //pp -> doPostProcessing(fbo -> getColourTexture());
+        //pp -> doPostProcessing(texture -> getTextureID());
+
 
         Input::update();
         WindowManager::update();
     }
 
+    pp -> cleanUp();
+    fbo -> cleanUp();
     //saveBuffer();
     std::cout << "vectors: " << Vector3f::count << std::endl;
     loader -> cleanUp();

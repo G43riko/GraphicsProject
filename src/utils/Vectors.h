@@ -24,8 +24,9 @@ class Vector2f{
         Vector2f(void) : Vector2f(0.0f, 0.0f){};
         Vector2f(double x, double y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(int x, int y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
-        Vector2f(float);
-        Vector2f(const Vector2f&);
+        Vector2f(float val) : Vector2f(val, val){};
+        Vector2f * getSub(Vector2f *);
+        //Vector2f(const Vector2f&);
 };
 class Vector3f{
     public:
@@ -47,6 +48,7 @@ class Vector3f{
         Vector3f * mul(float);
         Vector3f * getMul(Vector3f *);
         Vector3f * getMul(float);
+        Vector3f * getSub(Vector3f *);
         Vector3f * add(Vector3f *);
         float getLength(void);
         void show(bool = true);

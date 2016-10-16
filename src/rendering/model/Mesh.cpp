@@ -15,6 +15,13 @@ Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<
     this -> normals = normals;
     this -> indices = indices;
 }
+Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLfloat> tangents, std::vector<GLuint> indices){
+    this -> vertices = vertices;
+    this -> uvs = uvs;
+    this -> normals = normals;
+    this -> indices = indices;
+    this -> tangents = tangents;
+}
 
 void Mesh::show(void){
     std::cout << "vertices: " << std::endl;

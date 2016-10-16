@@ -19,11 +19,13 @@ class Mesh {
         std::vector<GLfloat> uvs;
         std::vector<GLuint> indices;
         std::vector<GLfloat> normals;
+        std::vector<GLfloat> tangents;
         static PointerMesh plane;
         static PointerMesh cube;
         void show(void);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
+        Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>,std::vector<GLfloat>, std::vector<GLuint>);
 };
 
 #endif //GRAPHICSPROJECT_MESH_H

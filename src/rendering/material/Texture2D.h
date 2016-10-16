@@ -12,11 +12,27 @@
 class Texture2D {
     private:
         GLuint textureID;
+        int width;
+        int height;
+        std::string title;
     public:
         Texture2D(GLuint);
+        Texture2D(std::string title, GLuint id, int width, int height);
         GLuint getTextureID(void);
         void bind(void);
         void bind(GLuint);
+        int getWidth(void){
+            return width;
+        };
+        int getHeight(void){
+            return height;
+        };
+        GLuint getId(void){
+            return textureID;
+        };
+        void cleanUp(void){
+            glDeleteTextures(1, &textureID);
+        }
 };
 
 typedef std::shared_ptr<Texture2D> PointerTexture2D;

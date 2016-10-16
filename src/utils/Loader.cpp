@@ -28,12 +28,20 @@ PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GL
     return PointerRawModel(new RawModel(vaoID, (int)indices.size()));
 }
 
+PointerRawModel Loader::loadToVAO(std::vector<GLfloat> positions, int dimensions) {
+    int vaoID = createVAO();
+    storeDataInAttributeList(0, dimensions, positions);
+    unbindVAO();
+    return PointerRawModel(new RawModel(vaoID, (int)(positions.size() / dimensions)));
+}
+
 PointerRawModel Loader::loadToVao(PointerMesh mesh){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(mesh -> indices);
     storeDataInAttributeList(0, 3, mesh -> vertices);
     storeDataInAttributeList(1, 2, mesh -> uvs);
     storeDataInAttributeList(2, 3, mesh -> normals);
+    storeDataInAttributeList(3, 3, mesh -> tangents);
     unbindVAO();
     return PointerRawModel(new RawModel(vaoID, (int)mesh -> indices.size()));
 }

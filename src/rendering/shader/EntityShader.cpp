@@ -6,7 +6,9 @@
 
 class EntityShader : public BasicShader{
     public:
-        EntityShader() : BasicShader("EntityShader"){};
+        EntityShader() : BasicShader("EntityShader"){
+            compileShader();
+        };
 
         void setAllAttributes(void){
             this -> bindAttribute(0, "Position");
@@ -21,5 +23,7 @@ class EntityShader : public BasicShader{
 
             this -> setUniform("lightColor");
             this -> setUniform("lightPosition");
+
+            this -> setUniform("levels");
         }
 };

@@ -83,29 +83,32 @@ target_include_directories(libGraphics PUBLIC
 set(GL_MAIN_SRC src/main.cpp
                 src/utils/FileLoader.cpp
                 src/utils/Maths.cpp
+                src/utils/utils.cpp
                 src/rendering/Camera.cpp
                 src/rendering/material/Material.cpp
-                src/rendering/shader/BasicShader.cpp
                 src/rendering/model/Mesh.cpp
                 src/rendering/model/RawModel.cpp
                 src/rendering/model/Entity.cpp
                 src/rendering/model/Transform.cpp
-                src/rendering/model/MaterialedModel.cpp src/entities/Light.cpp src/entities/Light.h)
+                src/rendering/model/MaterialedModel.cpp
+                src/postProccessing/Fbo.cpp
+                src/postProccessing/ImageRenderer.cpp
+                src/rendering/shader/BasicShader.cpp
+                src/postProccessing/ToFrameBufferRendering.cpp)
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)
 #<<koniec projektu
 
 set(SOURCE_FILES    src/main.cpp
-                    src/utils/utils.cpp
                     src/utils/Vectors.cpp
                     src/rendering/shader/BasicShader.cpp
-                    src/rendering/WindowManager.cpp
                     src/utils/Logger.cpp
                     src/utils/FileLoader.cpp
                     src/rendering/shader/GuiShader.cpp
                     src/utils/Loader.cpp
                     src/rendering/model/RawModel.cpp
+                    src/postProccessing/Screen.cpp
                     src/rendering/Renderer.cpp
                     src/rendering/model/MaterialedModel.cpp
                     src/rendering/model/Entity.cpp
@@ -113,6 +116,8 @@ set(SOURCE_FILES    src/main.cpp
                     src/rendering/model/Transform.cpp
                     src/rendering/Camera.cpp
                     src/utils/Input.cpp
-                    src/rendering/model/Mesh.cpp src/rendering/shader/EntityShader.cpp)
+                    src/rendering/model/Mesh.cpp
+                    src/rendering/shader/EntityShader.cpp
+                    src/utils/Math.cpp src/rendering/shader/ObjectShader.cpp)
 
 add_executable(GraphicsProject ${SOURCE_FILES})

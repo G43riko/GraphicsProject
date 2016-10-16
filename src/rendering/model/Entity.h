@@ -9,15 +9,17 @@
 #include "../../utils/Vectors.h"
 #include "MaterialedModel.h"
 #include "Transform.h"
+#include "../../utils/utils.h"
 
 class Entity {
     private:
-    PointerMaterialedModel model;
+        int id;
+        PointerMaterialedModel model;
         Transform * transform;
 
     public:
         Entity(PointerMaterialedModel, PointerVector3f, PointerVector3f, PointerVector3f);
-
+        int getId(void);
         void move(float, float, float);
 
         void rotate(float, float, float);
