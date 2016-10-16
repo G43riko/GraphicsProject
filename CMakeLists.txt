@@ -118,6 +118,6 @@ set(SOURCE_FILES    src/main.cpp
                     src/utils/Input.cpp
                     src/rendering/model/Mesh.cpp
                     src/rendering/shader/EntityShader.cpp
-                    src/utils/Math.cpp src/rendering/shader/ObjectShader.cpp)
+                    src/utils/Math.cpp src/rendering/shader/ObjectShader.cpp src/utils/Matrix4f.cpp src/utils/Matrix4f.h)
 
 add_executable(GraphicsProject ${SOURCE_FILES})

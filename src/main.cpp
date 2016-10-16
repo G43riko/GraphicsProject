@@ -17,15 +17,28 @@
 #include "rendering/material/Texture2D.cpp"
 #include "rendering/material/Material.h"
 
+class v3{
+public:
+    float x, y, z;
+    v3(float x, float y, float z) : x(x), y(y), z(z){};
+    void show(){
+        std::cout << "[" << x << "x" << y << "x" << z << "]" << std::endl;
+    }
+
+};
+
+
 int main(void){
     //ContentLoader::loadOBJ("res/models/plane.obj") -> show();
     //exit(1);
     WindowManager::init(800, 600, "Okno");
 
     Loader * loader = new Loader();
-    PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/lena.rgb", 512, 512)));
+    //PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/lena.rgb", 512, 512)));
+    PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/barrel.rgb", 1024, 1024)));
     PointerMaterial material(new Material(texture));
-    PointerRawModel rawModel(loader -> loadToVao(ContentLoader::loadOBJ("res/models/dragon.obj")));
+    //PointerRawModel rawModel(loader -> loadToVao(ContentLoader::loadOBJ("res/models/dragon.obj")));
+    PointerRawModel rawModel(loader -> loadToVao(ContentLoader::loadOBJ("res/models/barrel.obj")));
     //PointerRawModel rawModel(loader -> loadToVao(Mesh::plane));
     PointerMaterialedModel model(new MaterialedModel(rawModel, material));
     PointerEntity entity(new Entity(model, PointerVector3f(new Vector3f(0, 0, -5)),
@@ -41,8 +54,8 @@ int main(void){
     renderer -> setCamera(PointerCamera(new Camera()));
 
     ;
-    std::vector<PointerLight> ligts{PointerLight(new Light(new Vector3f(200,  10, -200), new Vector3f(10, 0, 0))),
-                                    PointerLight(new Light(new Vector3f(200, 10, 200), new Vector3f(0, 0, 10)))};
+    std::vector<PointerLight> ligts{PointerLight(new Light(new Vector3f(200,  10, -200), new Vector3f(1, 0, 0))),
+                                    PointerLight(new Light(new Vector3f(200, 10, 200), new Vector3f(0, 0, 1)))};
 
 
     Input::init();

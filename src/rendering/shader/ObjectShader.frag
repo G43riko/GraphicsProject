@@ -2,6 +2,7 @@
 in vec2 pass_Texture;
 in vec3 surfaceNormal;
 in vec3 toLightVector[8];
+in vec3 pass_Tangent;
 
 out vec4 FragmentColor;
 
@@ -29,4 +30,6 @@ void main() {
     totalDiffuse = max(totalDiffuse, 0.2);
 
     FragmentColor = vec4(totalDiffuse, 1.0) * texture(textureSampler, pass_Texture);
+    FragmentColor = vec4(pass_Tangent, 1.0);
+    //FragmentColor = vec4(1,0,1, 1.0);
 }

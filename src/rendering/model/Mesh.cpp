@@ -36,6 +36,10 @@ void Mesh::show(void){
     for(auto i : normals)
         std::cout << i << " ";
     std::cout << std::endl;
+    std::cout << "tangents: " << std::endl;
+    for(auto i : tangents)
+        std::cout << i << " ";
+    std::cout << std::endl;
     std::cout << "indices: " << std::endl;
     for(auto i : indices)
         std::cout << i << " ";

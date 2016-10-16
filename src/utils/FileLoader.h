@@ -88,11 +88,10 @@ public:
         std::vector<GLuint> indicesFinal;
         std::vector<GLfloat> normalsFinal;
         std::vector<GLfloat> tangentsFinal;
+
         /*
         for(auto i : vertices){
-            verticesFinal.push_back(i -> position -> x);
-            verticesFinal.push_back(i -> position -> y);
-            verticesFinal.push_back(i -> position -> z);
+          i -> getAverageTangent() -> show();
         }
         for(auto i : textures){
             uvsFinal.push_back(i -> x);
@@ -107,7 +106,6 @@ public:
 
         convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal, tangentsFinal);
         return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices));
-        //return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, indices));
         //float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray, normalsArray, tangentsArray);
         // ModelData data = new ModelData(verticesArray, texturesArray,
         // normalsArray, tangentsArray, indicesArray,
@@ -208,7 +206,7 @@ private:
 
     static void calculateTangents(Vertex * v0, Vertex * v1, Vertex * v2, std::vector<Vector2f *> textures) {
         //Vector3f * delatPos1 = Vector3f.sub(v1.getPosition(), v0.getPosition(), null);
-        Vector3f * delatPos1 = v1 -> getPosition() -> getSub(v0->getPosition());
+        Vector3f * delatPos1 = v1 -> getPosition() -> getSub(v0 -> getPosition());
         Vector3f * delatPos2 = v2 -> getPosition() -> getSub(v0 -> getPosition());
         Vector2f * uv0 = textures.at(v0 -> getTextureIndex());
         Vector2f * uv1 = textures.at(v1 -> getTextureIndex());
@@ -219,6 +217,8 @@ private:
         float r = 1.0f / (deltaUv1 -> x * deltaUv2 -> y - deltaUv1 -> y * deltaUv2 -> x);
         delatPos1 -> mul(deltaUv2 -> y);
         delatPos2 -> mul(deltaUv1 -> y);
+
+
         Vector3f * tangent = delatPos1 -> getMul(delatPos2);
         tangent -> mul(r);
         v0 -> addTangent(tangent);

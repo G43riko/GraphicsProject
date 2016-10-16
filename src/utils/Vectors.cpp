@@ -75,8 +75,8 @@ Vector3f * Vector3f::getNormal(void){
 
 Vector3f * Vector3f::mul(Vector3f * v){x *= v -> x; y *= v -> y; z *= v -> z; return this;}
 Vector3f * Vector3f::mul(float v){x *= v; y *= v; z *= v; return this;}
-Vector3f * Vector3f::getMul(Vector3f *v){return new Vector3f(x / v -> x, y / v -> y, z / v -> z);}
-Vector3f * Vector3f::getMul(float v){return new Vector3f(x / v, y / v, z / v);}
+Vector3f * Vector3f::getMul(Vector3f * v){return new Vector3f(x * v -> x, y * v -> y, z * v -> z);}
+Vector3f * Vector3f::getMul(float v){return new Vector3f(x * v, y * v, z * v);}
 
 Vector2f::Vector2f(float x, float y){
     this -> x = x;
@@ -84,11 +84,11 @@ Vector2f::Vector2f(float x, float y){
 }
 Vector2f * Vector2f::getSub(Vector2f * v){
     return new Vector2f(x - v -> x, y - v -> y);
-};
+}
 
 Vector3f * Vector3f::getSub(Vector3f * v){
     return new Vector3f(x - v -> x, y - v -> y, z - v -> z);
-};
+}
 
 void Vector2f::show(bool endLine){
     std::cout << "[" << x << "x" << y << "]";

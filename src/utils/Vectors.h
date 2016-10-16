@@ -27,6 +27,8 @@ class Vector2f{
         Vector2f(float val) : Vector2f(val, val){};
         Vector2f * getSub(Vector2f *);
         //Vector2f(const Vector2f&);
+
+
 };
 class Vector3f{
     public:
@@ -50,6 +52,26 @@ class Vector3f{
         Vector3f * getMul(float);
         Vector3f * getSub(Vector3f *);
         Vector3f * add(Vector3f *);
+
+        Vector3f operator *= (const float& x){ this -> x *= x, this -> y *= y, this -> z *= z;return *this; }
+        Vector3f operator *= (const Vector3f& v){ this -> x *= v.x, this -> y *= v.y, this -> z *= v.z;return *this; }
+        friend Vector3f operator * (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x * c2.x, c1.y * c2.y, c1.z * c2.z); }
+        friend Vector3f operator * (const Vector3f &c1, const float& val){ return Vector3f(c1.x * val, c1.y * val, c1.z * val); }
+
+        Vector3f operator /= (const float& x){ this -> x /= x, this -> y /= y, this -> z /= z;return *this; }
+        Vector3f operator /= (const Vector3f& v){ this -> x /= v.x, this -> y /= v.y, this -> z /= v.z;return *this; }
+        friend Vector3f operator / (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x / c2.x, c1.y / c2.y, c1.z / c2.z); }
+        friend Vector3f operator / (const Vector3f &c1, const float& val){ return Vector3f(c1.x / val, c1.y / val, c1.z / val); }
+
+        Vector3f operator += (const float& x){ this -> x += x, this -> y += y, this -> z += z;return *this; }
+        Vector3f operator += (const Vector3f& v){ this -> x += v.x, this -> y += v.y, this -> z += v.z;return *this; }
+        friend Vector3f operator + (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x + c2.x, c1.y + c2.y, c1.z + c2.z); }
+        friend Vector3f operator + (const Vector3f &c1, const float& val){ return Vector3f(c1.x + val, c1.y + val, c1.z + val); }
+
+        Vector3f operator -= (const float& x){ this -> x -= x, this -> y -= y, this -> z -= z;return *this; }
+        Vector3f operator -= (const Vector3f& v){ this -> x -= v.x, this -> y -= v.y, this -> z -= v.z;return *this; }
+        friend Vector3f operator - (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x - c2.x, c1.y - c2.y, c1.z - c2.z); }
+        friend Vector3f operator - (const Vector3f &c1, const float& val){ return Vector3f(c1.x - val, c1.y - val, c1.z - val); }
         float getLength(void);
         void show(bool = true);
 };
@@ -58,6 +80,7 @@ typedef std::shared_ptr<Vector3f> PointerVector3f;
 class Vector4f{
     public:
         float x, y, z, w;
+        Vector4f(void) : Vector4f(0, 0, 0, 0){};
         Vector4f(float, float, float, float);
         Vector4f(float);
         Vector4f(const Vector4f&);

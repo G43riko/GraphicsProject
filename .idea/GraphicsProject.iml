@@ -26,11 +26,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/MaterialedModel.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Transform.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Entity.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/GuiShader.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/ObjectShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/EntityShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/ObjectShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/GuiShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/ToFrameBufferRendering.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/Fbo.h" isTestSource="false" />
@@ -42,13 +42,15 @@
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/Fbo.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Math.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/Matrix4f.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Maths.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Logger.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/Loader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/utils.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/Loader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/Matrix4f.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Math.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Loader.cpp" isTestSource="false" />

@@ -6,6 +6,7 @@ in vec3 Tangent;
 
 out vec2 pass_Texture;
 out vec3 surfaceNormal;
+out vec3 pass_Tangent;
 out vec3 toLightVector[8];
 
 uniform mat4 transformationMatrix;
@@ -15,6 +16,7 @@ uniform mat4 viewMatrix;
 uniform vec3 lightPosition[8];
 
 void main() {
+    pass_Tangent = Tangent;
     pass_Texture = Texture;
     vec4 worldPosition = transformationMatrix * vec4(Position, 1.0);
     mat4 modelViewMatrix = viewMatrix * transformationMatrix;

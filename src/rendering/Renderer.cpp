@@ -75,10 +75,10 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerLight> ligh
 
     shader -> updateUniform4m("transformationMatrix", Maths::createTransformationMatrix(object -> getTransform()));
     prepareMaterial(object -> getModel() -> getMaterial());
-    prepareModel(model, 3);
+    prepareModel(model, 4);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-    finishRender(3);
-};
+    finishRender(4);
+}
 void Renderer::renderEntity(PointerEntity entity){
     PointerBasicShader shader = shaders["entityShader"];
     if(!shader)
