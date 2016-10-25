@@ -78,37 +78,38 @@ void BasicShader::bind(){
 void BasicShader::unbind(){
     glUseProgram(0);
 }
-
-void BasicShader::updateUniform(std::string name, int value){
-    glUniform1i(uniforms[name], value);
-}
-void BasicShader::updateUniform(std::string name, float value){
-    glUniform1f(uniforms[name], value);
-}
-void BasicShader::updateUniform(std::string name, Vector2f value){
-    glUniform2f(uniforms[name], value.x, value.y);
-}
-void BasicShader::updateUniform(std::string name, Vector3f value){
-    glUniform3f(uniforms[name], value.x, value.y, value.z);
-}
-void BasicShader::updateUniform(std::string name, Vector4f value){
-    glUniform4f(uniforms[name], value.x, value.y, value.z, value.w);
-}
 bool BasicShader::hasUniform(const std::string title){
     return uniforms.find(title) != uniforms.end();
 }
 
-void BasicShader::updateUniform(std::string name, bool value){
-    glUniform1i(uniforms[name], value ? 1 : 0);
-}
-void BasicShader::updateUniform4m(const std::string name, const glm::mat4 matrix){
-    glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
-}
+
 void BasicShader::bindAttribute(const int index, const char * title){
     glBindAttribLocation(shader, index, title);
 }
 void BasicShader::setUniform(std::string title){
     this -> uniforms[title] = this -> getUniformLocation(title.c_str());
+}
+
+void BasicShader::updateUniformi(std::string name, int value){
+    glUniform1i(uniforms[name], value);
+}
+void BasicShader::updateUniformf(std::string name, float value){
+    glUniform1f(uniforms[name], value);
+}
+void BasicShader::updateUniform2f(std::string name, const Vector2f &value){
+    glUniform2f(uniforms[name], value.x, value.y);
+}
+void BasicShader::updateUniform4f(std::string name, const Vector4f &value){
+    glUniform4f(uniforms[name], value.x, value.y, value.z, value.w);
+}
+void BasicShader::updateUniformb(std::string name, bool value){
+    glUniform1i(uniforms[name], value ? 1 : 0);
+}
+void BasicShader::updateUniform4m(const std::string name, const glm::mat4 matrix){
+    glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
+}
+void BasicShader::updateUniform3f(const std::string name, const Vector3f & value){
+    glUniform3f(uniforms[name], value.x, value.y, value.z);
 }
 
 #endif

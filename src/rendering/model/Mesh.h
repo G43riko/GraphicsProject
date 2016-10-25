@@ -14,18 +14,25 @@ class Mesh;
 typedef std::shared_ptr<Mesh> PointerMesh;
 
 class Mesh {
-    public:
+    private:
         std::vector<GLfloat> vertices;
         std::vector<GLfloat> uvs;
-        std::vector<GLuint> indices;
         std::vector<GLfloat> normals;
         std::vector<GLfloat> tangents;
+        std::vector<GLuint> indices;
+    public:
         static PointerMesh plane;
         static PointerMesh cube;
         void show(void);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>,std::vector<GLfloat>, std::vector<GLuint>);
+
+        std::vector<GLfloat> getVertices(void);
+        std::vector<GLfloat> getTangents(void);
+        std::vector<GLfloat> getNormals(void);
+        std::vector<GLfloat> getUvs(void);
+        std::vector<GLuint> getIndices(void);
 };
 
 #endif //GRAPHICSPROJECT_MESH_H

@@ -9,10 +9,16 @@
 
 class Transform {
     private:
-        PointerVector3f position;
-        PointerVector3f rotation;
-        PointerVector3f scale;
+        PointerVector3f position = nullptr;
+        PointerVector3f rotation = nullptr;
+        PointerVector3f scale = nullptr;
     public:
+        void init(PointerVector3f position, PointerVector3f rotation, PointerVector3f scale) {
+            this -> position = position;
+            this -> rotation = rotation;
+            this -> scale = scale;
+        }
+        Transform() : Transform(nullptr, nullptr, nullptr){};
         Transform(PointerVector3f, PointerVector3f, PointerVector3f);
         void move(float, float, float);
 

@@ -9,6 +9,8 @@
 #include <iostream>
 #include <memory>
 
+class Texture2D;
+typedef std::shared_ptr<Texture2D> PointerTexture2D;
 class Texture2D {
     private:
         GLuint textureID;
@@ -17,7 +19,7 @@ class Texture2D {
         std::string title;
     public:
         Texture2D(GLuint);
-        Texture2D(std::string title, GLuint id, int width, int height);
+        Texture2D(std::string, GLuint, int, int);
         GLuint getTextureID(void);
         void bind(void);
         void bind(GLuint);
@@ -33,9 +35,13 @@ class Texture2D {
         void cleanUp(void){
             glDeleteTextures(1, &textureID);
         }
+        static PointerTexture2D create(GLuint id){
+            return PointerTexture2D(new Texture2D(id));
+        }
+        static PointerTexture2D create(std::string title, GLuint id, int width, int height){
+            return PointerTexture2D(new Texture2D(title, id, width, height));
+        }
 };
-
-typedef std::shared_ptr<Texture2D> PointerTexture2D;
 
 
 #endif //GRAPHICSPROJECT_TEXTURE2D_H

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string.h>
 #include <memory>
+#include <math.h>
 
 class Vector2f{
     public:
@@ -30,6 +31,9 @@ class Vector2f{
 
 
 };
+
+class Vector3f;
+typedef std::shared_ptr<Vector3f> PointerVector3f;
 class Vector3f{
     public:
         static int count;
@@ -72,10 +76,26 @@ class Vector3f{
         Vector3f operator -= (const Vector3f& v){ this -> x -= v.x, this -> y -= v.y, this -> z -= v.z;return *this; }
         friend Vector3f operator - (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x - c2.x, c1.y - c2.y, c1.z - c2.z); }
         friend Vector3f operator - (const Vector3f &c1, const float& val){ return Vector3f(c1.x - val, c1.y - val, c1.z - val); }
+
+        Vector3f& operator = (const Vector3f& other){
+            if (this != &other) {
+                this -> x = other.x;
+                this -> y = other.y;
+                this -> z = other.z;
+            }
+            return *this;
+        }
+
         float getLength(void);
         void show(bool = true);
+
+        template <typename  T>
+        inline static PointerVector3f create(T x, T y, T z){
+            return PointerVector3f(new Vector3f(x, y, z));
+        }
 };
-typedef std::shared_ptr<Vector3f> PointerVector3f;
+
+
 
 class Vector4f{
     public:
@@ -86,7 +106,7 @@ class Vector4f{
         Vector4f(const Vector4f&);
 };
 
-class Matrix4f{
+class GMatrix4f{
     public:
         float x, y, z;
 };

@@ -7,8 +7,11 @@
 Vector3f Camera::UP(0, 1, 0);
 
 Camera::Camera(void) : lastMousePos(Input::mousePos -> x, Input::mousePos -> y){
-    projectionMatrix = glm::perspectiveFov<float>(FOV, static_cast<float>(WindowManager::width),
-                                                  static_cast<float>(WindowManager::height), NEAR_PLANE, FAR_PLANE);
+    projectionMatrix = glm::perspectiveFov<float>(FOV,
+                                                  static_cast<float>(WindowManager::width),
+                                                  static_cast<float>(WindowManager::height),
+                                                  NEAR_PLANE,
+                                                  FAR_PLANE);
 }
 glm::mat4 Camera::getProjectionMatrix(void){
     return projectionMatrix;
@@ -125,5 +128,5 @@ PointerVector3f Camera::getUpVector(void){
 }
 
 glm::mat4 Camera::getViewMatrix(void){
-    return Maths::createViewMatrix(this);
+    return Maths::createViewMatrix(pitch, yaw, position -> x, position -> y, position -> z);
 }

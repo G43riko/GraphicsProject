@@ -5,9 +5,10 @@
 #include "MaterialedModel.h"
 
 MaterialedModel::MaterialedModel(PointerRawModel model, PointerMaterial material) {
-this -> model = model;
-this -> material = material;
+    this -> model = model;
+    this -> material = material;
 }
+
 
 PointerRawModel MaterialedModel::getModel(void){
     return model;

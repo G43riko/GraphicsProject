@@ -8,15 +8,18 @@
 #include <memory>
 #include "Texture2D.h"
 
-
+class Material;
+typedef std::shared_ptr<Material> PointerMaterial;
 class Material {
     private:
-    PointerTexture2D diffuse;
+        PointerTexture2D diffuse;
     public:
+        static PointerMaterial create(PointerTexture2D texture){
+            return PointerMaterial(new Material(texture));
+        }
         Material(PointerTexture2D);
         PointerTexture2D getDiffuse(void);
 };
-typedef std::shared_ptr<Material> PointerMaterial;
 
 
 

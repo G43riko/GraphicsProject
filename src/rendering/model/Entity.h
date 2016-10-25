@@ -11,11 +11,13 @@
 #include "Transform.h"
 #include "../../utils/utils.h"
 
+class Entity;
+typedef std::shared_ptr<Entity> PointerEntity;
 class Entity {
     private:
         int id;
         PointerMaterialedModel model;
-        Transform * transform;
+        Transform transform = Transform();
 
     public:
         Entity(PointerMaterialedModel, PointerVector3f, PointerVector3f, PointerVector3f);
@@ -23,11 +25,13 @@ class Entity {
         void move(float, float, float);
 
         void rotate(float, float, float);
-    PointerMaterialedModel getModel(void);
+        PointerMaterialedModel getModel(void);
         Transform * getTransform(void);
+        static PointerEntity create(PointerMaterialedModel model, PointerVector3f pos, PointerVector3f rot, PointerVector3f scale){
+            return PointerEntity(new Entity(model, pos, rot, scale));
+        }
 };
 
-typedef std::shared_ptr<Entity> PointerEntity;
 
 
 #endif //GRAPHICSPROJECT_ENTITY_H

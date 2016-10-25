@@ -34,7 +34,7 @@ class Renderer {
 
     private:
         Vector3f * getEyeSpacePosition(Light * light, glm::mat4 view){
-            Vector3f * position = light -> position;
+            PointerVector3f position = light -> getPosition();
             glm::vec4 eye(position -> x, position ->y, position -> z, 0.0);
             //eyeSpacePos = glm::translate(view, eye);
             float x = view[0][0] * eye.x + view[1][0] * eye.y + view[2][0] * eye.z + view[3][0] * eye.w;
@@ -44,7 +44,8 @@ class Renderer {
             return new Vector3f(x, y, z);
         };
         std::map<std::string, PointerBasicShader> shaders;
-        Light * light = new Light(new Vector3f(0, 0, 0), new Vector3f(1, 1, 1));
+        //Light * light = new Light(PointerVector3f(new Vector3f(0, 0, 0)), PointerVector3f(new Vector3f(1, 1, 1)));
+        Light * light = new Light(Vector3f::create(0, 0, 0), Vector3f::create(1, 1, 1));
         PointerCamera actualCamera = nullptr;
         void prepareModel(PointerRawModel, GLuint);
         void prepareMaterial(PointerMaterial);

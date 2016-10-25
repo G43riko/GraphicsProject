@@ -34,16 +34,15 @@ class BasicShader{
         void cleanUp();
         void unbind(void);
         void compileShader(void);
-        void updateUniform(const std::string, const int);
-        void updateUniform(const std::string, const float);
-        void updateUniform(const std::string, const Vector2f);
-        void updateUniform(const std::string, const Vector3f);
-        void updateUniform(const std::string name, Vector3f * value){
-            glUniform3f(uniforms[name], value -> x, value -> y, value -> z);
-        }
+        void updateUniformi(std::string, int);
+        void updateUniformf(std::string, float);
+        void updateUniform2f(std::string, const Vector2f &);
+
+        void updateUniform3f(const std::string, const Vector3f &);
+
         bool hasUniform(const std::string);
-        void updateUniform(const std::string, const Vector4f);
-        void updateUniform(const std::string, const bool);
+        void updateUniform4f(std::string, const Vector4f &);
+        void updateUniformb(std::string, bool);
         void updateUniform4m(const std::string, const glm::mat4);
     protected:
         virtual void setAllAttributes(void) = 0;

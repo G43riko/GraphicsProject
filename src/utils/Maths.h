@@ -8,18 +8,19 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec3.hpp>
-#include "../rendering/Camera.h"
 #include <glm/vec4.hpp>
 #include "../rendering/model/Transform.h"
-#include <iostream>
 #include <glm/gtx/transform.hpp>
-#include <glm/gtx/string_cast.hpp>
 
 class Maths {
     public:
-        static glm::mat4 createTransformationMatrix(Transform *);
-        static glm::mat4 createViewMatrix(Camera *);
+        static glm::mat4 createTransformationMatrix(const float &, const float &, const float &,
+                                                    const float &, const float &, const float &,
+                                                    const float &, const float &, const float &);
+        static glm::mat4 createViewMatrix(const float &, const float &, const float &, const float &, const float &);
+        static glm::mat4 createTransformationMatrix(const float &, const float &, const float &, const float &);
         static glm::mat4 createTransformationMatrix(Vector2f *, Vector2f *);
+        static glm::mat4 createTransformationMatrix(Transform *);
 };
 
 

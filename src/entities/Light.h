@@ -10,11 +10,7 @@
 #include "../utils/utils.h"
 class Light {
     public:
-        Vector3f * position;
-        Vector3f * color;
-        int id;
-
-        Light(Vector3f * position, Vector3f * color){
+        Light(PointerVector3f position, PointerVector3f color){
             this -> position = position;
             this -> color = color;
             id = IdGenerator::getId();
@@ -23,6 +19,18 @@ class Light {
         int getId(void){
             return id;
         }
+
+        PointerVector3f getPosition(){
+            return position;
+        }
+        PointerVector3f getColor(){
+            return color;
+        }
+
+    private:
+        PointerVector3f position;
+        PointerVector3f color;
+        int id;
 };
 
 typedef std::shared_ptr<Light> PointerLight;

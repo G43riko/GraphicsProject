@@ -29,13 +29,15 @@ public:
 
 
 int main(void){
+
+
     //ContentLoader::loadOBJ("res/models/plane.obj") -> show();
     //exit(1);
     WindowManager::init(800, 600, "Okno");
 
     Loader * loader = new Loader();
-    //PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/lena.rgb", 512, 512)));
-    PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/barrel.rgb", 1024, 1024)));
+    PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/lena.rgb", 512, 512)));
+    //PointerTexture2D texture(new Texture2D(ContentLoader::loadTexture("res/textures/barrel.rgb", 1024, 1024)));
     PointerMaterial material(new Material(texture));
     //PointerRawModel rawModel(loader -> loadToVao(ContentLoader::loadOBJ("res/models/dragon.obj")));
     PointerRawModel rawModel(loader -> loadToVao(ContentLoader::loadOBJ("res/models/barrel.obj")));
@@ -54,8 +56,8 @@ int main(void){
     renderer -> setCamera(PointerCamera(new Camera()));
 
     ;
-    std::vector<PointerLight> ligts{PointerLight(new Light(new Vector3f(200,  10, -200), new Vector3f(1, 0, 0))),
-                                    PointerLight(new Light(new Vector3f(200, 10, 200), new Vector3f(0, 0, 1)))};
+    std::vector<PointerLight> ligts{PointerLight(new Light(Vector3f::create(200,  10, -200), Vector3f::create(1, 0, 0))),
+                                    PointerLight(new Light(Vector3f::create(200, 10, 200), Vector3f::create(0, 0, 1)))};
 
 
     Input::init();
@@ -75,7 +77,7 @@ int main(void){
         renderer -> renderObject(entity, ligts);
 
         screen -> stopRenderToScreen();
-        renderer -> renderScreen(screen);
+        renderer -> renderScreen(screen, texture -> getId());
 
 
         //fbo -> unbindFrameBuffer();

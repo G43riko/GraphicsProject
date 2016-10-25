@@ -23,6 +23,23 @@ Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<
     this -> tangents = tangents;
 }
 
+
+std::vector<GLfloat> Mesh::getVertices(void){
+    return vertices;
+};
+std::vector<GLfloat> Mesh::getTangents(void){
+    return tangents;
+};
+std::vector<GLfloat> Mesh::getNormals(void){
+    return normals;
+};
+std::vector<GLfloat> Mesh::getUvs(void){
+    return uvs;
+};
+std::vector<GLuint> Mesh::getIndices(void){
+    return indices;
+};
+
 void Mesh::show(void){
     std::cout << "vertices: " << std::endl;
     for(auto i : vertices)

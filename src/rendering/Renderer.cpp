@@ -63,11 +63,11 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerLight> ligh
 
     actualCamera -> input();
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
-    //shader -> updateUniform("levels", 4);
+    //shader -> updateUniform2f("levels", 4);
 
     for(int i=0 ; i<lights.size() ; i++){
-        shader -> updateUniform("lightPosition[" + std::to_string(i) + "]", lights.at(i) -> position);
-        shader -> updateUniform("lightColor[" + std::to_string(i) + "]", lights.at(i) -> color);
+        shader -> updateUniform3f("lightPosition[" + std::to_string(i) + "]", *lights.at(i) -> getPosition());
+        shader -> updateUniform3f("lightColor[" + std::to_string(i) + "]", *lights.at(i) -> getColor());
     }
 
     PointerRawModel model = object -> getModel() -> getModel();
@@ -87,10 +87,10 @@ void Renderer::renderEntity(PointerEntity entity){
 
     actualCamera -> input();
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
-    //shader -> updateUniform("levels", 4);
+    //shader -> updateUniform2f("levels", 4);
 
-    shader -> updateUniform("lightPosition", light -> position);
-    shader -> updateUniform("lightColor", light -> color);
+    shader -> updateUniform3f("lightPosition", *light -> getPosition());
+    shader -> updateUniform3f("lightColor", *light -> getColor());
 
     PointerRawModel model = entity -> getModel() -> getModel();
     glEnable(GL_TEXTURE);
