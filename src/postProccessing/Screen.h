@@ -27,7 +27,7 @@ private:
     //CONSTRUCTORS
 
 public:
-    Screen(int, int, Loader *);
+    Screen(int, int, Loader);
 
     //OTHERS
 /*

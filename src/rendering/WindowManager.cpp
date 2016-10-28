@@ -21,7 +21,8 @@ void WindowManager::close(void) {
     glfwTerminate();
 }
 
-int WindowManager::init(int width, int height, std::string title){
+
+int WindowManager::init(int width, int height, std::string title, bool fullscreen){
     //inicializuje openGL
     if (!glfwInit()) {
         Logger::error(ERROR_INITIAL_GLFW);
@@ -35,15 +36,29 @@ int WindowManager::init(int width, int height, std::string title){
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     //Vytvorí okno
+
+    GLFWmonitor * monitor = nullptr;
+    if(fullscreen){
+        monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode * mode = glfwGetVideoMode(monitor);
+
+        glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+        glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+        glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+        glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+        width = mode -> width;
+        height = mode -> height;
+    }
     WindowManager::width = width;
     WindowManager::height = height;
-    WindowManager::window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+
+    WindowManager::window = glfwCreateWindow(width, height, title.c_str(), monitor, nullptr);
     if (!WindowManager::window) {
         //Logger::error(ERROR_OPEN_GLFW_WINDOW);
         glfwTerminate();
         return EXIT_FAILURE;
     }
-
     //nastaví aktualne okno
     glfwMakeContextCurrent(WindowManager::window);
 

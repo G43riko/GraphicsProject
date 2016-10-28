@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+
 class Mesh;
 
 typedef std::shared_ptr<Mesh> PointerMesh;

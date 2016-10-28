@@ -4,6 +4,11 @@
 
 #include "Renderer.h"
 
+Renderer::Renderer(void){
+    initShaders();
+    setCamera(PointerCamera(new Camera()));
+}
+
 void Renderer::setCamera(PointerCamera camera){
     actualCamera = camera;
     updateProjectionMatrix(camera);
@@ -22,6 +27,18 @@ void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader s
             }
         }
     }
+}
+
+void Renderer::cleanUp(void){
+    for (auto it = shaders.begin(); it != shaders.end(); ++it){
+        it -> second -> cleanUp();
+    }
+}
+
+void Renderer::initShaders(void){
+    addShader("entityShader", PointerBasicShader(new EntityShader()));
+    addShader("postFxShader", PointerBasicShader(new PostFxShader()));
+    addShader("objectShader", PointerBasicShader(new ObjectShader()));
 }
 
 void Renderer::addShader(std::string key, PointerBasicShader shader){
@@ -65,7 +82,7 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerLight> ligh
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
     //shader -> updateUniform2f("levels", 4);
 
-    for(int i=0 ; i<lights.size() ; i++){
+    for(unsigned int i=0 ; i<lights.size() ; i++){
         shader -> updateUniform3f("lightPosition[" + std::to_string(i) + "]", *lights.at(i) -> getPosition());
         shader -> updateUniform3f("lightColor[" + std::to_string(i) + "]", *lights.at(i) -> getColor());
     }
@@ -102,23 +119,23 @@ void Renderer::renderEntity(PointerEntity entity){
     finishRender(3);
 }
 
-void Renderer::renderScreen(Screen * screen, int texture) {
+void Renderer::renderScreen(Screen screen, int texture) {
     PointerBasicShader shader = shaders["postFxShader"];
     if(!shader)
         return;
     shader -> bind();
-    glBindVertexArray(screen -> getModel() -> getVaoID());
+    glBindVertexArray(screen.getModel() -> getVaoID());
     glEnableVertexAttribArray(0);
 
     glDisable(GL_DEPTH_TEST);
 
     glActiveTexture(GL_TEXTURE0);
-    screen -> getTexture() -> bind();
+    screen.getTexture() -> bind();
     if(texture > 0)
         glBindTexture(GL_TEXTURE_2D, texture);
 
-    shader -> updateUniform4m("transformationMatrix", screen -> getTransformationMatrix());
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, screen -> getModel() -> getVertexCount());
+    shader -> updateUniform4m("transformationMatrix", screen.getTransformationMatrix());
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, screen.getModel() -> getVertexCount());
 
     glEnable(GL_DEPTH_TEST);
     glDisableVertexAttribArray(0);

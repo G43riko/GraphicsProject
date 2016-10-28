@@ -7,7 +7,6 @@
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "WindowManager.h"
 #include "../utils/Input.h"
 #include "../utils/Vectors.h"
 #include <math.h>

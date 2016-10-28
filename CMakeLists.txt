@@ -84,6 +84,7 @@ set(GL_MAIN_SRC src/main.cpp
                 src/utils/FileLoader.cpp
                 src/utils/Maths.cpp
                 src/utils/utils.cpp
+                src/utils/Vertex.cpp
                 src/rendering/Camera.cpp
                 src/rendering/material/Material.cpp
                 src/rendering/model/Mesh.cpp

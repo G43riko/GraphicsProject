@@ -4,10 +4,14 @@
 
 #include "Entity.h"
 
+PointerEntity createEntity(PointerMaterialedModel model, PointerVector3f pos, PointerVector3f rot, PointerVector3f scale){
+    return PointerEntity(new Entity(model, pos, rot, scale));
+}
+
 Entity::Entity(PointerMaterialedModel model, PointerVector3f position, PointerVector3f rotation, PointerVector3f scale) {
     this -> model = model;
     id = IdGenerator::getId();
-    transform.init(position, rotation, scale);
+    transform.init(*position, *rotation, *scale);
     //transform = Transform(position, rotation, scale);
 }
 

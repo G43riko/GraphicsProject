@@ -69,12 +69,14 @@ void Camera::input(void){
     }
 
 
+    /*
     if(Input::getKeyDown(Input::KEY_P)) {
         mouseLocked = !mouseLocked;
         if(mouseLocked)
             Input::setMousePos(Input::getWindowCenter());
         //glfwSetInputMode(WindowManager::window, GLFW_CURSOR, mouseLocked ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
     }
+    */
 
     if(Input::isKeyDown(Input::KEY_W)) {
         //position -> z -= movSpeed;

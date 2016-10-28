@@ -6,10 +6,8 @@
 #define GRAPHICSPROJECT_BASICSHADER_H
 
 #include <map>
-#include <typeinfo>
 #include <string>
 #include "../../utils/Vectors.h"
-#include "../../utils/Const.h"
 #include "../../utils/FileLoader.h"
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>

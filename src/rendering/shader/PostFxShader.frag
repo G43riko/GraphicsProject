@@ -97,5 +97,5 @@ void main(void){
         }
     }
 
-    out_Color = sum ;
+    //out_Color = sum ;
 }

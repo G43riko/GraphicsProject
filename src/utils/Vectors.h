@@ -94,7 +94,10 @@ class Vector3f{
             return PointerVector3f(new Vector3f(x, y, z));
         }
 };
-
+template <typename  T>
+inline static PointerVector3f createVector3f(T x, T y, T z){
+    return PointerVector3f(new Vector3f(x, y, z));
+}
 
 
 class Vector4f{

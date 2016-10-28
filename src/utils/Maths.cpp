@@ -4,8 +4,6 @@
 
 #include "Maths.h"
 
-
-
 glm::mat4 Maths::createTransformationMatrix(const float &posX, const float &posY, const float &posZ,
                                             const float &rotX, const float &rotY, const float &rotZ,
                                             const float &scaleX, const float &scaleY, const float &scaleZ){

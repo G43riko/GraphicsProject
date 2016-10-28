@@ -19,5 +19,10 @@ public:
 };
 typedef std::shared_ptr<RawModel> PointerRawModel;
 
+PointerRawModel createRawModel(GLuint, GLuint);
+
+
+
+
 
 #endif //GRAPHICSPROJECT_RAWMODEL_H

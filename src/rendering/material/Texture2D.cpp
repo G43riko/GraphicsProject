@@ -4,6 +4,13 @@
 
 #include "Texture2D.h"
 
+PointerTexture2D createTexture2D(std::string title, GLuint id, int width, int height){
+    return PointerTexture2D(new Texture2D(title, id, width, height));
+}
+PointerTexture2D createTexture2D(GLuint id){
+    return PointerTexture2D(new Texture2D(id));
+}
+
 Texture2D::Texture2D(GLuint textureID){
     this -> textureID = textureID;
 }

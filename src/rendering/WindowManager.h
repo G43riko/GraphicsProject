@@ -12,7 +12,7 @@
 
 class WindowManager {
     public:
-        static int init(const int, const int, std::string);
+        static int init(const int, const int, std::string, bool = false);
         static void close(void);
         static bool isCloseRequest(void);
         static void update(void);

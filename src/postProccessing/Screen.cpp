@@ -6,8 +6,8 @@
 
 std::vector<float> Screen::POINTS{-1, 1, -1, -1, 1, 1, 1, -1};
 PointerRawModel Screen::MODEL = nullptr;
-Screen::Screen(int width, int height, Loader * loader) {
-    MODEL = loader -> loadToVAO(POINTS, 2);
+Screen::Screen(int width, int height, Loader loader) {
+    MODEL = loader.loadToVAO(POINTS, 2);
     frameRenderer = new ToFrameBufferRendering(width, height);
     texture = frameRenderer -> getTexture();
     position = new Vector2f();

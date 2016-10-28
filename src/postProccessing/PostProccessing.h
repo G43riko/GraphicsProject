@@ -12,8 +12,8 @@
 
 class PostProccessing {
     public:
-        PostProccessing(Loader * loader, int width, int height){
-            quad = loader -> loadToVAO(POSITIONS, 2);
+        PostProccessing(Loader loader, int width, int height){
+            quad = loader.loadToVAO(POSITIONS, 2);
             contrastChanger = new ContrastChanger(width, height);
         }
 

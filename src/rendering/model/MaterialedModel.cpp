@@ -4,6 +4,10 @@
 
 #include "MaterialedModel.h"
 
+PointerMaterialedModel createMaterialedModel(PointerRawModel model, PointerMaterial material){
+    return PointerMaterialedModel(new MaterialedModel(model, material));
+}
+
 MaterialedModel::MaterialedModel(PointerRawModel model, PointerMaterial material) {
     this -> model = model;
     this -> material = material;

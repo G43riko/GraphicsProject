@@ -11,8 +11,6 @@
 #include "Transform.h"
 #include "../../utils/utils.h"
 
-class Entity;
-typedef std::shared_ptr<Entity> PointerEntity;
 class Entity {
     private:
         int id;
@@ -27,10 +25,9 @@ class Entity {
         void rotate(float, float, float);
         PointerMaterialedModel getModel(void);
         Transform * getTransform(void);
-        static PointerEntity create(PointerMaterialedModel model, PointerVector3f pos, PointerVector3f rot, PointerVector3f scale){
-            return PointerEntity(new Entity(model, pos, rot, scale));
-        }
 };
+typedef std::shared_ptr<Entity> PointerEntity;
+PointerEntity createEntity(PointerMaterialedModel, PointerVector3f, PointerVector3f, PointerVector3f);
 
 
 

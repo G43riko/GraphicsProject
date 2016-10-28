@@ -35,5 +35,9 @@ class Light {
 
 typedef std::shared_ptr<Light> PointerLight;
 
+PointerLight createLight(PointerVector3f position, PointerVector3f color){
+    return PointerLight(new Light(position, color));
+}
+
 
 #endif //GRAPHICSPROJECT_LIGHT_H

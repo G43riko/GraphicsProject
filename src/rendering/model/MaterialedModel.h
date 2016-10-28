@@ -5,10 +5,8 @@
 #ifndef GRAPHICSPROJECT_MATERIALEDMODEL_H
 #define GRAPHICSPROJECT_MATERIALEDMODEL_H
 
-
 #include "RawModel.h"
 #include "../material/Material.h"
-#include "Mesh.h"
 
 class MaterialedModel {
 private:
@@ -21,10 +19,7 @@ public:
     PointerMaterial getMaterial(void);
 };
 typedef std::shared_ptr<MaterialedModel> PointerMaterialedModel;
-
-PointerMaterialedModel createMaterialedModel(PointerRawModel model, PointerMaterial material){
-    return PointerMaterialedModel(new MaterialedModel(model, material));
-}
+PointerMaterialedModel createMaterialedModel(PointerRawModel, PointerMaterial);
 
 
 #endif //GRAPHICSPROJECT_MATERIALEDMODEL_H

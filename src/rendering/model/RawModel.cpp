@@ -4,6 +4,10 @@
 
 #include "RawModel.h"
 
+PointerRawModel createRawModel(GLuint vaoId, GLuint vertexCount){
+    return PointerRawModel(new RawModel(vaoId, vertexCount));
+}
+
 RawModel::RawModel(GLuint vaoID, GLuint vertexCount){
     this -> vaoID = vaoID;
     this -> vertexCount = vertexCount;
