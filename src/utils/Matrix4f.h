@@ -6,6 +6,7 @@
 #define GRAPHICSPROJECT_MATRIX4F_H
 
 #include "Vectors.h"
+#include <iomanip>
 #define TO_DEGREES(X) X * 180 / M_PI
 #define TO_RADIANS(X) X * M_PI / 180
 
@@ -37,6 +38,27 @@ public:
     }
     Matrix4f operator *= (const Matrix4f& matrix){
         return *mul(*this, matrix, this);
+    }
+    void show(bool formate = true){
+        std::cout << std::fixed << std::setprecision(6);
+        std::cout << "mat4x4((" << m00 << ", " << m10 << ", " << m20 << ", " << m30 << ")";
+        if(formate)
+            std::cout << std::endl;
+        else
+            std ::cout << ", ";
+        std::cout << "(" << m01 << ", " << m11 << ", " << m21 << ", " << m31 << ")";
+
+        if(formate)
+            std::cout << std::endl;
+        else
+            std ::cout << ", ";
+        std::cout << "(" << m02 << ", " << m12 << ", " << m22 << ", " << m32 << ")";
+        if(formate)
+            std::cout << std::endl;
+        else
+            std ::cout << ", ";
+        std::cout << "(" << m03 << ", " << m13 << ", " << m23 << ", " << m33 << ")";
+        std::cout << std::endl;
     }
 };
 
