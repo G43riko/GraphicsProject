@@ -5,14 +5,27 @@
 #ifndef GRAPHICSPROJECT_TRANSFORM_H
 #define GRAPHICSPROJECT_TRANSFORM_H
 
-#include "../../utils/Vectors.h"
+#include "../../utils/Quaternion.h"
 class Transform {
 private:
     Vector3f position;
     Vector3f rotation;
+    Quaternion rot;
     Vector3f scale;
     Transform * parent = nullptr;
 public:
+    void init(Vector3f &position, Quaternion &rotation, Vector3f &scale) {
+        this -> position.x = position.x;
+        this -> position.y = position.y;
+        this -> position.z = position.z;
+        this -> rot.x = rotation.x;
+        this -> rot.y = rotation.y;
+        this -> rot.z = rotation.z;
+        this -> rot.w = rotation.w;
+        this -> scale.x = scale.x;
+        this -> scale.y = scale.y;
+        this -> scale.z = scale.z;
+    }
     void init(Vector3f &position, Vector3f &rotation, Vector3f &scale) {
         this -> position.x = position.x;
         this -> position.y = position.y;
@@ -29,6 +42,18 @@ public:
 
     void move(float, float, float);
     void rotate(float, float, float);
+
+    Matrix4f getTransformation(){
+        Matrix4f translationMatrix;
+        Matrix4f scaleMatrix;
+
+        translationMatrix.initTranslation(position.x, position.y, position.z);
+        scaleMatrix.initScale(scale.x, scale.y, scale.z);
+
+        Matrix4f *result = Matrix4f::mul(translationMatrix, rot.toRotationMatrix());
+        Matrix4f::mul(*result, scaleMatrix, result);
+        return *result;
+    }
 
     Vector3f * getPosition(void);
     float getPosX(void);

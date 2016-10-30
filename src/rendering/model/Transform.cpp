@@ -33,4 +33,3 @@ Vector3f * Transform::getScale(void){return &scale;}
 float Transform::getScaleX(void){return scale.x;}
 float Transform::getScaleY(void){return scale.y;}
 float Transform::getScaleZ(void){return scale.z;}
-

@@ -15,9 +15,8 @@
 #include "rendering/material/Material.h"
 
 int main(void){
-
     //ContentLoader::loadOBJ("res/models/plane.obj") -> show();
-    //exit(1);
+    //  exit(1);
     WindowManager::init(800, 600, "Okno", true);
     Input::init();
 

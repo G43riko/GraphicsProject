@@ -2,7 +2,12 @@
 // Created by gabriel on 22.9.2016.
 //
 #include "Vectors.h"
+#include "Quaternion.h"
 #include <math.h>
+
+/************************
+ * Vector3f
+ ***********************/
 
 int Vector3f::count = 0;
 Vector3f::Vector3f(float x, float y, float z) {
@@ -73,10 +78,22 @@ Vector3f * Vector3f::getNormal(void){
     return result -> normalize();
 }
 
+
+Vector3f Vector3f::rotate(Quaternion rotation){
+    Quaternion w = rotation * (*this) * rotation.conjugate();
+
+    return Vector3f(w.x, w.y, w.z);
+}
+
+
 Vector3f * Vector3f::mul(Vector3f * v){x *= v -> x; y *= v -> y; z *= v -> z; return this;}
 Vector3f * Vector3f::mul(float v){x *= v; y *= v; z *= v; return this;}
 Vector3f * Vector3f::getMul(Vector3f * v){return new Vector3f(x * v -> x, y * v -> y, z * v -> z);}
 Vector3f * Vector3f::getMul(float v){return new Vector3f(x * v, y * v, z * v);}
+
+/************************
+ * Vector2f
+ ***********************/
 
 Vector2f::Vector2f(float x, float y){
     this -> x = x;
@@ -95,7 +112,14 @@ void Vector2f::show(bool endLine){
     if(endLine)
         std::cout << std::endl;
 }
+/************************
+ * Vector4f
+ ***********************/
 
+
+/************************
+ * OTHER
+ ***********************/
 
 template<typename T> class GVector3 : public GVector<T>{
 public:

@@ -10,6 +10,11 @@
 #include <memory>
 #include <math.h>
 
+
+class Vector3f;
+typedef std::shared_ptr<Vector3f> PointerVector3f;
+class Quaternion;
+
 class Vector2f{
     public:
         float x, y;
@@ -28,12 +33,8 @@ class Vector2f{
         Vector2f(float val) : Vector2f(val, val){};
         Vector2f * getSub(Vector2f *);
         //Vector2f(const Vector2f&);
-
-
 };
 
-class Vector3f;
-typedef std::shared_ptr<Vector3f> PointerVector3f;
 class Vector3f{
     public:
         static int count;
@@ -57,22 +58,22 @@ class Vector3f{
         Vector3f * getSub(Vector3f *);
         Vector3f * add(Vector3f *);
 
-        Vector3f operator *= (const float& x){ this -> x *= x, this -> y *= y, this -> z *= z;return *this; }
+        Vector3f& operator *= (const float& val){ this -> x *= val, this -> y *= val, this -> z *= val;return *this; }
         Vector3f operator *= (const Vector3f& v){ this -> x *= v.x, this -> y *= v.y, this -> z *= v.z;return *this; }
         friend Vector3f operator * (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x * c2.x, c1.y * c2.y, c1.z * c2.z); }
         friend Vector3f operator * (const Vector3f &c1, const float& val){ return Vector3f(c1.x * val, c1.y * val, c1.z * val); }
 
-        Vector3f operator /= (const float& x){ this -> x /= x, this -> y /= y, this -> z /= z;return *this; }
+        Vector3f operator /= (const float& val){ this -> x /= val, this -> y /= val, this -> z /= val;return *this; }
         Vector3f operator /= (const Vector3f& v){ this -> x /= v.x, this -> y /= v.y, this -> z /= v.z;return *this; }
         friend Vector3f operator / (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x / c2.x, c1.y / c2.y, c1.z / c2.z); }
         friend Vector3f operator / (const Vector3f &c1, const float& val){ return Vector3f(c1.x / val, c1.y / val, c1.z / val); }
 
-        Vector3f operator += (const float& x){ this -> x += x, this -> y += y, this -> z += z;return *this; }
+        Vector3f operator += (const float& val){ this -> x += val, this -> y += val, this -> z += val;return *this; }
         Vector3f operator += (const Vector3f& v){ this -> x += v.x, this -> y += v.y, this -> z += v.z;return *this; }
         friend Vector3f operator + (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x + c2.x, c1.y + c2.y, c1.z + c2.z); }
         friend Vector3f operator + (const Vector3f &c1, const float& val){ return Vector3f(c1.x + val, c1.y + val, c1.z + val); }
 
-        Vector3f operator -= (const float& x){ this -> x -= x, this -> y -= y, this -> z -= z;return *this; }
+        Vector3f operator -= (const float& val){ this -> x -= val, this -> y -= val, this -> z -= val;return *this; }
         Vector3f operator -= (const Vector3f& v){ this -> x -= v.x, this -> y -= v.y, this -> z -= v.z;return *this; }
         friend Vector3f operator - (const Vector3f &c1, const Vector3f &c2){ return Vector3f(c1.x - c2.x, c1.y - c2.y, c1.z - c2.z); }
         friend Vector3f operator - (const Vector3f &c1, const float& val){ return Vector3f(c1.x - val, c1.y - val, c1.z - val); }
@@ -86,6 +87,8 @@ class Vector3f{
             return *this;
         }
 
+        Vector3f rotate(Quaternion);
+
         float getLength(void);
         void show(bool = true);
 
@@ -94,6 +97,8 @@ class Vector3f{
             return PointerVector3f(new Vector3f(x, y, z));
         }
 };
+
+
 template <typename  T>
 inline static PointerVector3f createVector3f(T x, T y, T z){
     return PointerVector3f(new Vector3f(x, y, z));
@@ -104,14 +109,35 @@ class Vector4f{
     public:
         float x, y, z, w;
         Vector4f(void) : Vector4f(0, 0, 0, 0){};
-        Vector4f(float, float, float, float);
-        Vector4f(float);
-        Vector4f(const Vector4f&);
-};
+        Vector4f(float val) : x(val), y(val), z(val), w(val){};
+        Vector4f(const Vector4f& v) : x(v.x), y(v.y), z(v.z), w(v.w){};
+        Vector4f(float x, float y, float z, float w){
+            this -> x = x;
+            this -> y = y;
+            this -> z = z;
+            this -> w = w;
+        };
+        Vector4f * normalize(void){
+            float len = length();
+            x /= len;
+            y /= len;
+            z /= len;
+            w /= len;
+            return this;
+        };
 
-class GMatrix4f{
-    public:
-        float x, y, z;
+        Vector4f * getNormal(void){
+            float len = length();
+            return new Vector4f(x /= len, y /= len, z /= len, w /= len);
+        };
+
+        float lengthSquared() {
+            return x * x + y * y + z * z + w * w;
+        }
+
+        float length() {
+            return static_cast<float>(sqrt(lengthSquared()));
+        }
 };
 
 template <typename T>class GVector{
@@ -153,6 +179,7 @@ template <typename T>class GVector{
             std::cout << "]" << std::endl;
         }
 };
+
 
 
 #endif //GRAPHICSPROJECT_VECTORS_H
