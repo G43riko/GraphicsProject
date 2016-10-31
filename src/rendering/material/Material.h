@@ -16,6 +16,7 @@ class Material {
         PointerTexture2D alpha = nullptr;
     public:
         Material(PointerTexture2D);
+        Material(PointerTexture2D, PointerTexture2D);
         PointerTexture2D getDiffuse(void);
         PointerTexture2D getNormal(void);
         PointerTexture2D getSpecular(void);
@@ -23,6 +24,7 @@ class Material {
 };
 typedef std::shared_ptr<Material> PointerMaterial;
 PointerMaterial createMaterial(PointerTexture2D);
+PointerMaterial createMaterial(PointerTexture2D, PointerTexture2D);
 
 
 

@@ -25,10 +25,8 @@ Vector3f * Transform::getPosition(void){return &position;}
 float Transform::getPosX(void){return position.x;}
 float Transform::getPosY(void){return position.y;}
 float Transform::getPosZ(void){return position.z;}
-Vector3f * Transform::getRotation(void){return &rotation;}
-float Transform::getRotX(void){return rotation.x;}
-float Transform::getRotY(void){return rotation.y;}
-float Transform::getRotZ(void){return rotation.z;}
+Quaternion * Transform::getRotation(void){return &rotation;}
+
 Vector3f * Transform::getScale(void){return &scale;}
 float Transform::getScaleX(void){return scale.x;}
 float Transform::getScaleY(void){return scale.y;}

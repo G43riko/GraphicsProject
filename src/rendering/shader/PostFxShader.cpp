@@ -16,9 +16,14 @@ public:
     };
     void setAllUniforms(void){
         this -> setUniform("transformationMatrix");
-        this -> setUniform("mouseMove");
-        this -> setUniform("useCameraBlur");
-        this -> setUniform("useAntiAliasing");
-        this -> setUniform("typeOfView");
+        //this -> setUniform("mouseMove");
+        //this -> setUniform("useCameraBlur");
+        //this -> setUniform("useAntiAliasing");
+        //this -> setUniform("typeOfView");
+
+        this -> setUniform("greyscale");
+        this -> setUniform("invert");
+        this -> setUniform("contrast");
+        this -> setUniform("levels");
     }
 };

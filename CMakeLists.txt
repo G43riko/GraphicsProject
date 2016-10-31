@@ -97,7 +97,7 @@ set(GL_MAIN_SRC src/main.cpp
                 src/postProccessing/Fbo.cpp
                 src/postProccessing/ImageRenderer.cpp
                 src/rendering/shader/BasicShader.cpp
-                src/postProccessing/ToFrameBufferRendering.cpp src/components/FreeMove.cpp)
+                src/postProccessing/ToFrameBufferRendering.cpp src/components/FreeMove.cpp src/static_libs/stb_image.h src/static_libs/stb_image.c src/static_libs/lodepng.cpp src/static_libs/lodepng.h)
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)

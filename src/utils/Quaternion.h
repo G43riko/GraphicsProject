@@ -24,7 +24,22 @@ class Quaternion : public Vector4f{
         Vector3f getLeft(void);
 
         Quaternion conjugate(void);
+        void rotate(const Vector3f & vec){
+            Quaternion result = *this;
+            if(vec.x != 0)
+                result = result * Quaternion(Vector3f(1, 0, 0), vec.x);
 
+            if(vec.y != 0)
+                result = result * Quaternion(Vector3f(0, 1, 0), vec.y);
+
+            if(vec.z != 0)
+                result = result * Quaternion(Vector3f(0, 0, 1), vec.z);
+
+            x = result.x;
+            y = result.y;
+            z = result.z;
+            w = result.w;
+        }
         Quaternion operator * (const Quaternion&);
         Quaternion operator * (const Vector3f&);
 };

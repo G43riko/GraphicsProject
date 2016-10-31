@@ -43,6 +43,7 @@ PointerRawModel Loader::loadToVao(PointerMesh mesh){
     storeDataInAttributeList(2, 3, mesh -> getNormals());
     storeDataInAttributeList(3, 3, mesh -> getTangents());
     unbindVAO();
+    //mesh -> show();
     return createRawModel(vaoID, (int)mesh -> getIndices().size());
 }
 

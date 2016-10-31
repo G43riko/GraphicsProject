@@ -10,8 +10,26 @@
 #include <../utils/Vectors.h>
 #include <../utils/Loader.h>
 #include "ToFrameBufferRendering.h"
+#include <../rendering/shader/BasicShader.h>
 #include "../rendering/Renderer.h"
 #include "Fbo.h"
+
+
+class PostFx{
+
+/*
+ * blur
+ * -offset X
+ * -offset Y
+ * -samples
+ * -factor
+ */
+
+public:
+
+private:
+};
+
 
 
 class Screen {
@@ -24,17 +42,25 @@ private:
     Vector2f * scale;
     ToFrameBufferRendering * frameRenderer;
 
-    //CONSTRUCTORS
+    //EFFECTS
 
+    bool changed = true;
+    Vector2f blurOffset = Vector2f(1, 1);
+    float blurSamples = 3;
+    float blurFactor = 0.5;
+    float * filterMatrix;
+    Vector2f filterOffset = Vector2f(1, 1);
+    float filterFactor = 0.5;
+    float filterBias = 0;
+    bool greyscale = false;
+    bool invert = false;
+    float contrast = 0;//(0-1)(0=N)
+    int levels = 0;
 public:
     Screen(int, int, Loader);
 
     //OTHERS
-/*
-    void render(Renderer * renderer) {
-        renderer -> renderScreen(this, nullptr);
-    }
-*/
+
     void cleanUp(){
         frameRenderer -> cleanUp();
     }
@@ -58,7 +84,52 @@ public:
     void setTexture(PointerTexture2D texture) {
         this -> texture = texture;
     }
-};
+    //EFFECTS
 
+    void setFilter(float *, int offsetX, int offsetY, float factor, float bias){
+        changed = true;
+        filterOffset.x = offsetX;
+        filterOffset.y = offsetY;
+        filterFactor = factor;
+        filterBias = bias;
+    }
+
+    void setGreyscale(bool value = false){
+        changed = true;
+        greyscale = value;
+    }
+
+    void setInvert(bool value = false){
+        changed = true;
+        invert = value;
+    }
+
+    void setContrast(float value = 0){
+        changed = true;
+        contrast = value;
+    }
+    void setLevels(int value = 0){
+        changed = true;
+        levels = value;
+    }
+    bool isChanged(){
+        return changed;
+    }
+    void setUniforms(PointerBasicShader shader){
+        if(!changed)
+            return;
+        shader -> updateUniform2f("fitlerOffset", filterOffset);
+        shader -> updateUniformf("filterFactor", filterFactor);
+        shader -> updateUniformf("filterBias", filterBias);
+        shader -> updateUniform4f("filterMatrix", *filterMatrix);
+
+        shader -> updateUniformb("greyscale", greyscale);
+        shader -> updateUniformb("invert", invert);
+        shader -> updateUniformf("contrast", contrast);
+        shader -> updateUniformi("levels", levels);
+        changed = false;
+    }
+
+};
 
 #endif //GRAPHICSPROJECT_SCREEN_H

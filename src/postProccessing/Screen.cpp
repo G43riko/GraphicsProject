@@ -13,4 +13,9 @@ Screen::Screen(int width, int height, Loader loader) {
     position = new Vector2f();
     scale = new Vector2f(1);
 
+    //setGreyscale(true);
+    //setInvert(true);
+    //setContrast(1);
+    //setLevels(0);
+
 }

@@ -3,7 +3,7 @@
 //
 
 #include "Renderer.h"
-
+#include <glm/gtx/string_cast.hpp>
 Renderer::Renderer(void){
     initShaders();
     setCamera(PointerCamera(new Camera()));
@@ -67,7 +67,7 @@ void Renderer::render(PointerRawModel model){
 void Renderer::render(PointerMaterialedModel materialedModel){
     PointerRawModel model = materialedModel -> getModel();
     glEnable(GL_TEXTURE);
-    prepareMaterial(materialedModel -> getMaterial());
+    prepareMaterial(materialedModel -> getMaterial(), nullptr);
     prepareModel(model, 1);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     finishRender(1);
@@ -83,15 +83,17 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerLight> ligh
     //shader -> updateUniform2f("levels", 4);
 
     for(unsigned int i=0 ; i<lights.size() ; i++){
-        shader -> updateUniform3f("lightPosition[" + std::to_string(i) + "]", *lights.at(i) -> getPosition());
+        //shader -> updateUniform3f("lightPositionEyeSpace[" + std::to_string(i) + "]", *lights.at(i) -> getPosition());
+        shader -> updateUniform3f("lightPositionEyeSpace[" + std::to_string(i) + "]", getEyeSpacePosition(*lights.at(i), actualCamera->getViewMatrix()));
         shader -> updateUniform3f("lightColor[" + std::to_string(i) + "]", *lights.at(i) -> getColor());
+        shader -> updateUniform3f("attenuation[" + std::to_string(i) + "]", lights.at(i) -> getAttenuation());
     }
 
     PointerRawModel model = object -> getModel() -> getModel();
     glEnable(GL_TEXTURE);
 
-    shader -> updateUniform4m("transformationMatrix", Maths::createTransformationMatrix(object -> getTransform()));
-    prepareMaterial(object -> getModel() -> getMaterial());
+    shader -> updateUniform4m("transformationMatrix", object->getTransform()->getTransformation());
+    prepareMaterial(object -> getModel() -> getMaterial(), shader);
     prepareModel(model, 4);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     finishRender(4);
@@ -112,8 +114,9 @@ void Renderer::renderEntity(PointerEntity entity){
     PointerRawModel model = entity -> getModel() -> getModel();
     glEnable(GL_TEXTURE);
 
-    shader -> updateUniform4m("transformationMatrix", Maths::createTransformationMatrix(entity -> getTransform()));
-    prepareMaterial(entity -> getModel() -> getMaterial());
+    shader -> updateUniform4m("transformationMatrix", entity->getTransform()->getTransformation());
+
+    prepareMaterial(entity -> getModel() -> getMaterial(), shader);
     prepareModel(model, 3);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     finishRender(3);
@@ -124,6 +127,9 @@ void Renderer::renderScreen(Screen screen, int texture) {
     if(!shader)
         return;
     shader -> bind();
+
+    screen.setUniforms(shader);
+
     glBindVertexArray(screen.getModel() -> getVaoID());
     glEnableVertexAttribArray(0);
 
@@ -152,8 +158,16 @@ void Renderer::prepareModel(PointerRawModel model, GLuint numberOfAttributes){
     for(GLuint i=0 ; i<=numberOfAttributes ; i++)
         glEnableVertexAttribArray(i);
 }
-void Renderer::prepareMaterial(PointerMaterial material){
+void Renderer::prepareMaterial(PointerMaterial material, PointerBasicShader shader){
+    if(shader)
+        shader -> connectTextures();
+
     material -> getDiffuse() -> bind(GL_TEXTURE0);
+
+    PointerTexture2D normal = material -> getNormal();
+    if(normal)
+        normal -> bind(GL_TEXTURE1);
+
 }
 
 void Renderer::finishRender(GLuint numberOfAttributes){

@@ -71,11 +71,6 @@ Matrix4f Quaternion::toRotationMatrix() {
     Vector3f forward = Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
     Vector3f up      = Vector3f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
     Vector3f right   = Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
-    std::cout << (2.0f * (x * z - w * y)) << " " << 2.0f * (y * z + w * x) << " " << 1.0f - 2.0f * (x * x + y * y) << "\n";
-    std::cout << x << " " << y << " " << z << " " << w << "\n";
-    forward.show();
-    up.show();
-    right.show();
     return Matrix4f().InitRotationFromVectors(forward, up, right);
 }
 

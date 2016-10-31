@@ -37,12 +37,13 @@ glm::mat4 Maths::createTransformationMatrix(const float &posX, const float &posY
     return matrix;
 }
 
-
+/*
 glm::mat4 Maths::createTransformationMatrix(Transform * transform){
     return createTransformationMatrix(transform -> getPosX(), transform -> getPosY(), transform -> getPosZ(),
                                       transform -> getRotX(), transform -> getRotY(), transform -> getRotZ(),
                                       transform -> getScaleX(), transform -> getScaleY(), transform -> getScaleZ());
 }
+*/
 
 
 glm::mat4 Maths::createTransformationMatrix(Vector2f * pos, Vector2f * scale) {

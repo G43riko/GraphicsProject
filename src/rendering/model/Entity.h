@@ -18,17 +18,17 @@ class Entity {
         Transform transform = Transform();
 
     public:
-        Entity(PointerMaterialedModel, PointerVector3f, PointerVector3f, PointerVector3f);
+        Entity(PointerMaterialedModel, const Vector3f &, const Vector3f &, const Vector3f &);
         int getId(void);
-        void move(float, float, float);
 
+        void move(float, float, float);
         void rotate(float, float, float);
+
         PointerMaterialedModel getModel(void);
         Transform * getTransform(void);
 };
 typedef std::shared_ptr<Entity> PointerEntity;
-PointerEntity createEntity(PointerMaterialedModel, PointerVector3f, PointerVector3f, PointerVector3f);
 
-
+PointerEntity createEntity(PointerMaterialedModel, const Vector3f &, const Vector3f &, const Vector3f &);
 
 #endif //GRAPHICSPROJECT_ENTITY_H

@@ -7,9 +7,17 @@
 PointerMaterial createMaterial(PointerTexture2D texture){
     return PointerMaterial(new Material(texture));
 }
+PointerMaterial createMaterial(PointerTexture2D texture, PointerTexture2D normal){
+    return PointerMaterial(new Material(texture, normal));
+}
 
 Material::Material(PointerTexture2D diffuse){
     this -> diffuse = diffuse;
+}
+
+Material::Material(PointerTexture2D diffuse, PointerTexture2D normal){
+    this -> diffuse = diffuse;
+    this -> normal = normal;
 }
 PointerTexture2D Material::getDiffuse(void){
     return diffuse;

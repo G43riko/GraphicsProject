@@ -8,6 +8,7 @@
 #include <GL/glew.h>
 #include <iostream>
 #include <memory>
+#include <vector>
 
 class Texture2D {
     private:
@@ -35,6 +36,7 @@ class Texture2D {
         }
 };
 typedef std::shared_ptr<Texture2D> PointerTexture2D;
+PointerTexture2D initTexture2D(std::string, std::vector<unsigned char>, int, int);
 PointerTexture2D createTexture2D(std::string, GLuint, int, int);
 PointerTexture2D createTexture2D(GLuint);
 

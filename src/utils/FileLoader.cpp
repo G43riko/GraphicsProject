@@ -3,6 +3,8 @@
 //
 
 #ifndef GRAPHICSPROJECT_CONTENTLOADER_H
+
+#include <src/rendering/material/Texture2D.h>
 #include "FileLoader.h"
 
 void ContentLoader::loadTextFile(std::string fileName, std::string *content){
@@ -19,27 +21,17 @@ void ContentLoader::loadTextFile(std::string fileName, std::string *content){
     Logger::error(ERROR_MISSING_FILE + fileName);
 }
 
-GLuint ContentLoader::loadTexture(std::string fileName, unsigned int width, unsigned int height){
-    GLuint texture_id;
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-
-    // Set mipmaps
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
+PointerTexture2D ContentLoader::loadTexture(std::string fileName, unsigned int width, unsigned int height){
     //std::ifstream ifs(fileName, std::ios::binary);
     std::ifstream ifs(fileName, std::ios::binary);
 
 
     if(!ifs.is_open())
         Logger::error(ERROR_MISSING_FILE + fileName);
-    std::vector<char> buffer(width * height * 4);
-    ifs.read(buffer.data(), buffer.size());
+    std::vector<unsigned char> buffer(width * height * 4);
+    ifs.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
     ifs.close();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, buffer.data());
-    return texture_id;
+
+    return initTexture2D(fileName, buffer, width, height);
 }
 #endif

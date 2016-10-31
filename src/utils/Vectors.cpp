@@ -41,7 +41,7 @@ Vector3f * Vector3f::add(Vector3f * v){
 }
 
 void Vector3f::show(bool endLine){
-    std::cout << "[" << x << "x" << y << "x" << z << "]";
+    std::cout << "[" << x << " x " << y << " x " << z << "]";
     if(endLine)
         std::cout << std::endl;
 

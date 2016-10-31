@@ -10,6 +10,12 @@
 #include "../utils/utils.h"
 class Light {
     public:
+        Light(PointerVector3f position, PointerVector3f color, const Vector3f & attenuation){
+            this -> attenuation = attenuation;
+            this -> position = position;
+            this -> color = color;
+            id = IdGenerator::getId();
+        }
         Light(PointerVector3f position, PointerVector3f color){
             this -> position = position;
             this -> color = color;
@@ -26,10 +32,14 @@ class Light {
         PointerVector3f getColor(){
             return color;
         }
+        Vector3f getAttenuation(){
+            return attenuation;
+        }
 
     private:
         PointerVector3f position;
         PointerVector3f color;
+        Vector3f attenuation = (1, 0, 0);
         int id;
 };
 
@@ -39,5 +49,8 @@ PointerLight createLight(PointerVector3f position, PointerVector3f color){
     return PointerLight(new Light(position, color));
 }
 
+PointerLight createLight(PointerVector3f position, PointerVector3f color, const Vector3f & attenuation){
+    return PointerLight(new Light(position, color, attenuation));
+}
 
 #endif //GRAPHICSPROJECT_LIGHT_H

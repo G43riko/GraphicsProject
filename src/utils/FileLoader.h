@@ -10,6 +10,8 @@
 #include "Logger.cpp"
 #include <fstream>
 #include "../rendering/model/Mesh.h"
+#include "../rendering/material/Texture2D.h"
+#include "Vectors.h"
 
 #include <vector>
 #include <GL/glew.h>
@@ -17,11 +19,22 @@
 #include <string.h>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+#include "../static_libs/lodepng.h"
 
 class ContentLoader {
 public:
+    static PointerTexture2D loadTexturePNG(std::string fileName){
+        unsigned int width;
+        unsigned int height;
+        std::vector<unsigned char> image;
+        unsigned error = lodepng::decode(image, width, height, fileName);
+        if(error != 0) {
+            std::cout << "error " << error << ": " << lodepng_error_text(error) << std::endl;
+        }
+        return initTexture2D(fileName, image, width, height);
+    }
     static void loadTextFile(std::string, std::string *);
-    static GLuint loadTexture(std::string, unsigned int, unsigned int);
+    static PointerTexture2D loadTexture(std::string, unsigned int, unsigned int);
     static PointerMesh loadOBJ(std::string fileName) {
         std::ifstream ifs(fileName, std::ios::in);
 
@@ -88,22 +101,6 @@ public:
         std::vector<GLuint> indicesFinal;
         std::vector<GLfloat> normalsFinal;
         std::vector<GLfloat> tangentsFinal;
-
-        /*
-        for(auto i : vertices){
-          i -> getAverageTangent() -> show();
-        }
-        for(auto i : textures){
-            uvsFinal.push_back(i -> x);
-            uvsFinal.push_back(i -> y);
-        }
-        for(auto i : normals){
-            normalsFinal.push_back(i -> x);
-            normalsFinal.push_back(i -> y);
-            normalsFinal.push_back(i -> z);
-        }
-        */
-
         convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal, tangentsFinal);
         return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices));
         //float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray, normalsArray, tangentsArray);
@@ -159,8 +156,17 @@ private:
         }
     }
     static void removeUnusedVertices(std::vector<Vertex *>& vertices) {
+        /*
+        for(auto it = vertices.begin(); it != vertices.end(); ++it) {
+            (*it) -> averageTangents();
+            if((*it) -> isSet()){
+                (*it) -> setTextureIndex(0);
+                (*it) -> setNormalIndex(0);
+            }
+        }
+         */
         for (Vertex * vertex : vertices) {
-            vertex ->averageTangents();
+            vertex -> averageTangents();
             if (!vertex -> isSet()) {
                 vertex -> setTextureIndex(0);
                 vertex -> setNormalIndex(0);
@@ -187,8 +193,8 @@ private:
             Vector3f * position = currentVertex -> getPosition();
             Vector2f * textureCoord = textures.at(currentVertex -> getTextureIndex());
             Vector3f * normalVector = normals.at(currentVertex-> getNormalIndex());
-            Vector3f * tangent = currentVertex -> getAverageTangent();
-
+            Vector3f tangent = currentVertex -> getAverageTangent();
+            //tangent -> show();
             verticesArray.push_back(position -> x);
             verticesArray.push_back(position -> y);
             verticesArray.push_back(position -> z);
@@ -197,33 +203,32 @@ private:
             normalsArray.push_back(normalVector -> x);
             normalsArray.push_back(normalVector -> y);
             normalsArray.push_back(normalVector -> z);
-            tangentsArray.push_back(tangent -> x);
-            tangentsArray.push_back(tangent -> y);
-            tangentsArray.push_back(tangent -> z);
+            tangentsArray.push_back(tangent.x);
+            tangentsArray.push_back(tangent.y);
+            tangentsArray.push_back(tangent.z);
         }
         return furthestPoint;
     }
 
     static void calculateTangents(Vertex * v0, Vertex * v1, Vertex * v2, std::vector<Vector2f *> textures) {
-        //Vector3f * delatPos1 = Vector3f.sub(v1.getPosition(), v0.getPosition(), null);
-        Vector3f * delatPos1 = v1 -> getPosition() -> getSub(v0 -> getPosition());
-        Vector3f * delatPos2 = v2 -> getPosition() -> getSub(v0 -> getPosition());
+        Vector3f deltaPos1 = *v1 -> getPosition() - *v0 -> getPosition();
+        Vector3f deltaPos2 = *v2 -> getPosition() - *v0 -> getPosition();
         Vector2f * uv0 = textures.at(v0 -> getTextureIndex());
         Vector2f * uv1 = textures.at(v1 -> getTextureIndex());
         Vector2f * uv2 = textures.at(v2 -> getTextureIndex());
-        Vector2f * deltaUv1 = uv1 -> getSub(uv0);
-        Vector2f * deltaUv2 = uv2 -> getSub(uv0);
 
-        float r = 1.0f / (deltaUv1 -> x * deltaUv2 -> y - deltaUv1 -> y * deltaUv2 -> x);
-        delatPos1 -> mul(deltaUv2 -> y);
-        delatPos2 -> mul(deltaUv1 -> y);
+        Vector2f deltaUv1 = *uv1 - *uv0;
+        Vector2f deltaUv2 = *uv2 - *uv0;
 
+        float r = 1.0f / (deltaUv1.x * deltaUv2.y - deltaUv1.y * deltaUv2.x);
+        deltaPos1 *= deltaUv2.y;
+        deltaPos2 *= deltaUv1.y;
 
-        Vector3f * tangent = delatPos1 -> getMul(delatPos2);
-        tangent -> mul(r);
+        Vector3f * tangent = new Vector3f((deltaPos1 - deltaPos2) * r);
         v0 -> addTangent(tangent);
         v1 -> addTangent(tangent);
         v2 -> addTangent(tangent);
+
     }
 };
 

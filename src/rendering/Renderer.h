@@ -22,25 +22,6 @@
 
 class Screen;
 
-/*
- * blur
- * -offset X
- * -offset Y
- * -samples
- * -factor
- *
- * filter
- * -matrix(float list)
- * -offset
- * -factor
- * -bias
- *
- * greyscale - Y/N
- * contrast -number, (0-1)(0=N)
- * invert - Y/N
- * levels -number, int(0=N)
- *
- */
 class Renderer {
     public:
         Renderer(void);
@@ -59,11 +40,16 @@ class Renderer {
     private:
         Vector3f * getEyeSpacePosition(Light light, glm::mat4 view){
             PointerVector3f position = light.getPosition();
-            glm::vec4 eye(position -> x, position ->y, position -> z, 0.0);
-            //eyeSpacePos = glm::translate(view, eye);
+            glm::vec4 eye(position -> x, position ->y, position -> z, 1.0);
             float x = view[0][0] * eye.x + view[1][0] * eye.y + view[2][0] * eye.z + view[3][0] * eye.w;
             float y = view[0][1] * eye.x + view[1][1] * eye.y + view[2][1] * eye.z + view[3][1] * eye.w;
             float z = view[0][2] * eye.x + view[1][2] * eye.y + view[2][2] * eye.z + view[3][2] * eye.w;
+            /*
+            float x = view[0][0] * eye.x + view[0][1] * eye.y + view[0][2] * eye.z + view[0][3] * eye.w;
+            float y = view[1][0] * eye.x + view[1][1] * eye.y + view[1][2] * eye.z + view[1][3] * eye.w;
+            float z = view[2][0] * eye.x + view[2][1] * eye.y + view[2][2] * eye.z + view[2][3] * eye.w;
+            */
+
             //float w = view[0][3] * eye.x + view[1][3] * eye.y + view[2][3] * eye.z + view[3][3] * eye.w;
             return new Vector3f(x, y, z);
         };
@@ -72,7 +58,7 @@ class Renderer {
         Light * light = new Light(createVector3f(0, 0, 0), createVector3f(1, 1, 1));
         PointerCamera actualCamera = nullptr;
         void prepareModel(PointerRawModel, GLuint);
-        void prepareMaterial(PointerMaterial);
+        void prepareMaterial(PointerMaterial, PointerBasicShader);
 
         void finishRender(GLuint);
 };

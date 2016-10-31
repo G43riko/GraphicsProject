@@ -6,9 +6,11 @@
 #include "../rendering/WindowManager.h"
 
 Vector2f * Input::windowCenter;
-
-Vector2f * Input::getWindowCenter(void){
-    return new Vector2f(Input::windowCenter -> x, Input::windowCenter -> y);
+Vector2f Input::getMousePosition(void){
+    return *mousePos;
+};
+Vector2f Input::getWindowCenter(void){
+    return *windowCenter;
 }
         Vector2f * Input::mousePos = new Vector2f();
 bool Input::lastKeys[NUM_KEY_CODES] = {false};
@@ -22,8 +24,8 @@ void Input::init(){
     Input::windowCenter = new Vector2f(WindowManager::width >> 1, WindowManager::height >> 1);
 }
 
-void Input::setMousePos(Vector2f * pos){
-    glfwSetCursorPos(WindowManager::window, pos -> x, pos -> y);
+void Input::setMousePos(Vector2f  pos){
+    glfwSetCursorPos(WindowManager::window, pos.x, pos.y);
 }
 
 void Input::onKeyDown(GLFWwindow * window, int key, int scanCode, int action, int mods){
@@ -49,7 +51,7 @@ void Input::update(void){
     for(int i = 0; i < NUM_MOUSE_BUTTONS; i++)
         lastButtons[i] = isButtonDown(i);
 }
-void Input::setMousePos(Vector2f *);
+void Input::setMousePos(Vector2f);
 //KEYS
 
 bool Input::isKeyDown(int keyCode){

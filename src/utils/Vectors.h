@@ -32,6 +32,9 @@ class Vector2f{
         Vector2f(int x, int y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(float val) : Vector2f(val, val){};
         Vector2f * getSub(Vector2f *);
+        friend Vector2f operator - (const Vector2f &c1, const Vector2f &c2){
+            return Vector2f(c1.x - c2.x, c1.y - c2.y);
+        }
         //Vector2f(const Vector2f&);
 };
 
@@ -45,8 +48,9 @@ class Vector3f{
         Vector3f(double x, double y, double z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
         Vector3f(int x, int y, int z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
         Vector3f(std::string);
-        Vector3f(float);
-        Vector3f(const Vector3f&);
+        Vector3f(Vector3f* vec) : Vector3f(vec->x, vec->y, vec->z){};
+        Vector3f(float val) : Vector3f(val, val, val){};
+        Vector3f(const Vector3f& vec) : Vector3f(vec.x, vec.y, vec.z){};
         Vector3f * normalize(void);
         Vector3f * getNormal(void);
         Vector3f * cross(Vector3f *);
@@ -79,11 +83,9 @@ class Vector3f{
         friend Vector3f operator - (const Vector3f &c1, const float& val){ return Vector3f(c1.x - val, c1.y - val, c1.z - val); }
 
         Vector3f& operator = (const Vector3f& other){
-            if (this != &other) {
-                this -> x = other.x;
-                this -> y = other.y;
-                this -> z = other.z;
-            }
+            this -> x = other.x;
+            this -> y = other.y;
+            this -> z = other.z;
             return *this;
         }
 

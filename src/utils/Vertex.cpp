@@ -13,7 +13,7 @@ Vertex::Vertex(long unsigned int index,Vector3f * position){
 void Vertex::show(void){
     position -> show();
 }
-void Vertex::addTangent(Vector3f * tangent){
+void Vertex::addTangent(Vector3f tangent){
     tangents.push_back(tangent);
 }
 
@@ -21,13 +21,13 @@ void Vertex::averageTangents(void){
     if(tangents.size() == 0){
         return;
     }
-    for(Vector3f * tangent : tangents){
-        averagedTangent -> add(tangent);
+    for(Vector3f tangent : tangents){
+        //averagedTangent -> add(tangent);
+        averagedTangent += tangent;
     }
-    averagedTangent -> normalize();
 }
 
-Vector3f * Vertex::getAverageTangent(void){
+Vector3f Vertex::getAverageTangent(void){
     return averagedTangent;
 }
 

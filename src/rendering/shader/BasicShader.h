@@ -12,6 +12,7 @@
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <src/utils/Matrix4f.h>
 
 class BasicShader{
     private:
@@ -27,7 +28,7 @@ class BasicShader{
         BasicShader(const std::string);
         ~BasicShader(void);
         static int MAX_LIGHTS;
-        void connectTextures(void);
+        virtual void connectTextures(void);
         void bind(void);
         void cleanUp();
         void unbind(void);
@@ -42,6 +43,7 @@ class BasicShader{
         void updateUniform4f(std::string, const Vector4f &);
         void updateUniformb(std::string, bool);
         void updateUniform4m(const std::string, const glm::mat4);
+        void updateUniform4m(const std::string, const Matrix4f);
     protected:
         virtual void setAllAttributes(void) = 0;
         virtual void setAllUniforms(void) = 0;

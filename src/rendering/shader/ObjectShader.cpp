@@ -8,8 +8,11 @@ class ObjectShader : public BasicShader{
 public:
     ObjectShader() : BasicShader("ObjectShader"){
         compileShader();
-    };
-
+    }
+    void connectTextures(void){
+        updateUniformi("textureSampler", 0);
+        updateUniformi("normalSampler", 1);
+    }
     void setAllAttributes(void){
         this -> bindAttribute(0, "Position");
         this -> bindAttribute(1, "Texture");
@@ -22,9 +25,13 @@ public:
         this -> setUniform("viewMatrix");
         this -> setUniform("transformationMatrix");
 
+        this -> setUniform("textureSampler");
+        this -> setUniform("normalSampler");
+
         for(int i=0 ; i<MAX_LIGHTS ; i++){
-            this -> setUniform("lightPosition[" + std::to_string(i) + "]");
+            this -> setUniform("lightPositionEyeSpace[" + std::to_string(i) + "]");
             this -> setUniform("lightColor[" + std::to_string(i)+ "]");
+            this -> setUniform("attenuation[" + std::to_string(i)+ "]");
         }
 
         this -> setUniform("levels");

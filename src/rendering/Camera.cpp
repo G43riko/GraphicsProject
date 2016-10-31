@@ -3,10 +3,11 @@
 //
 
 #include "Camera.h"
+#include <sys/time.h>
 
 Vector3f Camera::UP(0, 1, 0);
 
-Camera::Camera(void) : lastMousePos(Input::mousePos -> x, Input::mousePos -> y){
+Camera::Camera(void) : lastMousePos(Input::getMousePosition()){
     projectionMatrix = glm::perspectiveFov<float>(FOV,
                                                   static_cast<float>(WindowManager::width),
                                                   static_cast<float>(WindowManager::height),
@@ -35,48 +36,50 @@ void Camera::updateForward(void){
     forward -> show();
 }
 
-bool isNotZoer(float val){
+bool isNotZero(float val){
     return val > 0 || val < 0;
 }
 
 void Camera::input(void){
     float movSpeed = 0.1f;
     float rotSpeed = 0.05f;
-    float SENSITIVITY = 0.0002f;
+    float SENSITIVITY = 0.02f;
+
+    timeval now;
+    gettimeofday(&now, 0);
+    if(setTime){
+        //std::cout << now.tv_sec - tv.tv_sec << " " << now.tv_usec - tv.tv_usec << std::endl;
+    }
+    setTime = true;
+    tv = now;
 
     if(mouseLocked) {
-        Vector2f * center = Input::getWindowCenter();
-        Vector2f *deltaPos = new Vector2f(Input::mousePos -> x - center -> x, Input::mousePos -> y - center -> y);
-        std::cout << "pos: " <<Input::mousePos -> x << " x " << Input::mousePos -> y;
-        std::cout << ", cent: " << Input::getWindowCenter() -> x << " x " << Input::getWindowCenter() -> y << std::endl;
-        //std::cout << "center: " <<center -> x << " x " << center -> y << std::endl;
-        bool rotY = isNotZoer(deltaPos -> x);
-        bool rotX = isNotZoer(deltaPos -> y);
+        Vector2f center = Input::getWindowCenter();
+        Vector2f deltaPos = Input::getMousePosition() - center;
+        bool rotY = deltaPos.x != 0;
+        bool rotX = deltaPos.y != 0;
 
-        if (rotY) {
-            yaw += (deltaPos -> x * SENSITIVITY);
+        if(rotY) {
+            pitch += deltaPos.y * SENSITIVITY;
         }
-        if (rotX) {
-            pitch += (deltaPos -> y * SENSITIVITY);
+        if(rotX) {
+            yaw += (deltaPos.x * SENSITIVITY);
         }
 
-
-        //lastMousePos.x = Input::mousePos.x;
-        //lstMousePos.y = Input::mousePos.y;
-        if (rotY || rotX) {
-            Input::setMousePos(Input::getWindowCenter());
+        if(rotY || rotX) {
+            Input::setMousePos(center);
         }
     }
 
 
-    /*
+
     if(Input::getKeyDown(Input::KEY_P)) {
         mouseLocked = !mouseLocked;
         if(mouseLocked)
             Input::setMousePos(Input::getWindowCenter());
-        //glfwSetInputMode(WindowManager::window, GLFW_CURSOR, mouseLocked ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(WindowManager::window, GLFW_CURSOR, mouseLocked ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
     }
-    */
+
 
     if(Input::isKeyDown(Input::KEY_W)) {
         //position -> z -= movSpeed;

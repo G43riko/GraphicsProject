@@ -28,12 +28,13 @@ class Input {
         static Vector2f * windowCenter;
         static void onKeyDown(GLFWwindow *, int, int, int, int);
         static void onMouseMove(GLFWwindow *, double, double);
-    public:
-        static Vector2f * getWindowCenter(void);
         static Vector2f * mousePos;
+    public:
+        static Vector2f getWindowCenter(void);
+        static Vector2f getMousePosition(void);
         static void init(void);
         static void update(void);
-        static void setMousePos(Vector2f *);
+        static void setMousePos(Vector2f);
 
         //KEYS
         static bool isKeyDown(int);

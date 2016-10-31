@@ -17,11 +17,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/MaterialedModel.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Transform.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Entity.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/ObjectShader.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/GuiShader.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/EntityShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/ObjectShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/GuiShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/FreeMove.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/FreeMove.h" isTestSource="false" />
@@ -47,13 +47,13 @@
       <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Maths.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/utils.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/Screen.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/ToFrameBufferRendering.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/Fbo.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/Screen.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/ImageRenderer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/ToFrameBufferRendering.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/ImageRenderer.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/Screen.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/ImageRenderer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/postProccessing/Fbo.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lib/shader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lib/mesh.cpp" isTestSource="false" />
@@ -63,6 +63,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/lib/tiny_obj_loader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lib/shader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lib/mesh.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/res/textures/stoneFloor.png" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cmake/shaders.cmake" isTestSource="false" />

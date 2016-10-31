@@ -1,35 +1,33 @@
 #version 330
 in vec2 pass_Texture;
-in vec3 surfaceNormal;
 in vec3 toLightVector[8];
-in vec3 pass_Tangent;
 
 out vec4 FragmentColor;
 
 uniform sampler2D textureSampler;
+uniform sampler2D normalSampler;
 uniform vec3 lightColor[8];
+uniform vec3 attenuation[8];
 uniform int levels;
 
 void main() {
-    //FragmentColor = vec4(vec3(0.0f, 1.0f, 1.0f), 1.0f);
-
-    vec3 unitNormal = normalize(surfaceNormal);
+    vec4 normalMapValue = 2.0 * texture(normalSampler, pass_Texture) - 1.0;
+    vec3 unitNormal = normalize(normalMapValue.rgb);
     vec3 totalDiffuse  = vec3(0.0f);
 
     for(int i=0 ; i<8 ; i++){
+        if(lightColor[i] == vec3(0))
+    			break;
+        float distance = length(toLightVector[i]);
+        float attFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
         vec3 unitLightVector = normalize(toLightVector[i]);
 
         float nDot1 = dot(unitNormal, unitLightVector);
         float brightness = max(nDot1, 0.0);
-        if(levels > 0){
-            float level = floor(brightness * levels);
-            brightness = level / levels;
-        }
-        totalDiffuse += brightness * lightColor[i];
+        totalDiffuse += (brightness * lightColor[i]) / attFactor;
     }
     totalDiffuse = max(totalDiffuse, 0.2);
 
     FragmentColor = vec4(totalDiffuse, 1.0) * texture(textureSampler, pass_Texture);
-    FragmentColor = vec4(pass_Tangent, 1.0);
-    //FragmentColor = vec4(1,0,1, 1.0);
+
 }

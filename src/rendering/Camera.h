@@ -22,6 +22,8 @@ class Camera {
         PointerVector3f forward = PointerVector3f(new Vector3f(0, 0, 1));
         bool mouseLocked = false;
         Vector2f lastMousePos;
+        timeval tv;
+        bool setTime = false;
     public:
         Vector3f * position = new Vector3f(0, 0, 0);
         float pitch = 0;
