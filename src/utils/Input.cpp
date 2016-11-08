@@ -5,14 +5,14 @@
 #include "Input.h"
 #include "../rendering/WindowManager.h"
 
-Vector2f * Input::windowCenter;
+Vector2f Input::windowCenter;
+Vector2f Input::mousePos = Vector2f();
 Vector2f Input::getMousePosition(void){
-    return *mousePos;
+    return mousePos;
 };
 Vector2f Input::getWindowCenter(void){
-    return *windowCenter;
+    return windowCenter;
 }
-        Vector2f * Input::mousePos = new Vector2f();
 bool Input::lastKeys[NUM_KEY_CODES] = {false};
 bool Input::keys[NUM_KEY_CODES] = {false};
 bool Input::lastButtons[NUM_MOUSE_BUTTONS] = {false};
@@ -21,7 +21,7 @@ bool Input::buttons[NUM_MOUSE_BUTTONS] = {false};
 void Input::init(){
     glfwSetKeyCallback(WindowManager::window, Input::onKeyDown);
     glfwSetCursorPosCallback(WindowManager::window, Input::onMouseMove);
-    Input::windowCenter = new Vector2f(WindowManager::width >> 1, WindowManager::height >> 1);
+    Input::windowCenter = Vector2f(WindowManager::width >> 1, WindowManager::height >> 1);
 }
 
 void Input::setMousePos(Vector2f  pos){
@@ -40,8 +40,8 @@ void Input::onKeyDown(GLFWwindow * window, int key, int scanCode, int action, in
 void Input::onMouseMove(GLFWwindow * window, double posX, double posY){
     double x, y;
     glfwGetCursorPos(window, &x, &y);
-    Input::mousePos -> x = (float)x;
-    Input::mousePos -> y = (float)y;
+    Input::mousePos.x = (float)x;
+    Input::mousePos.y = (float)y;
 }
 
 void Input::update(void){

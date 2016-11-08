@@ -7,13 +7,13 @@
 std::vector<float> Screen::POINTS{-1, 1, -1, -1, 1, 1, 1, -1};
 PointerRawModel Screen::MODEL = nullptr;
 Screen::Screen(int width, int height, Loader loader) {
-    MODEL = loader.loadToVAO(POINTS, 2);
-    frameRenderer = new ToFrameBufferRendering(width, height);
-    texture = frameRenderer -> getTexture();
-    position = new Vector2f();
-    scale = new Vector2f(1);
+    MODEL = loader.loadToVao(POINTS, 2);
+    frameRenderer = ToFrameBufferRendering(width, height);
+    texture = frameRenderer.getTexture();
+    position = Vector2f();
+    scale = Vector2f(1);
 
-    //setGreyscale(true);
+    setGreyscale(true);
     //setInvert(true);
     //setContrast(1);
     //setLevels(0);

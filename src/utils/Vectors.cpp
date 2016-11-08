@@ -33,12 +33,6 @@ Vector3f::~Vector3f(void){
     Vector3f::count--;
 }
 
-Vector3f * Vector3f::add(Vector3f * v){
-    x += v -> x;
-    y += v -> y;
-    z += v -> z;
-    return this;
-}
 
 void Vector3f::show(bool endLine){
     std::cout << "[" << x << " x " << y << " x " << z << "]";
@@ -47,35 +41,35 @@ void Vector3f::show(bool endLine){
 
 }
 
-Vector3f * Vector3f::normalize(void){
+Vector3f Vector3f::normalize(void){
     float length = (float)sqrt(x * x + y * y + z * z);
     x /= length;
     y /= length;
     z /= length;
-    return this;
+    return *this;
 }
 
-Vector3f * Vector3f::cross(Vector3f * v){
+Vector3f Vector3f::cross(Vector3f * v){
         float x_ = y * v -> z - z * v -> y;
         float y_ = z * v -> x - x * v -> z;
         float z_ = x * v -> y - y * v -> x;
         x = x_;
         y = y_;
         z = z_;
-        return this;
+        return *this;
 }
 
-Vector3f * Vector3f::getCross(Vector3f * v){
+Vector3f Vector3f::getCross(Vector3f * v){
     float x_ = y * v -> z - z * v -> y;
     float y_ = z * v -> x - x * v -> z;
     float z_ = x * v -> y - y * v -> x;
 
-    return new Vector3f(x_, y_, z_);
+    return Vector3f(x_, y_, z_);
 }
 
-Vector3f * Vector3f::getNormal(void){
-    Vector3f * result = new Vector3f(x, y, z);
-    return result -> normalize();
+Vector3f Vector3f::getNormal(void){
+    Vector3f result = Vector3f(x, y, z).normalize();
+    return result;
 }
 
 
@@ -85,12 +79,6 @@ Vector3f Vector3f::rotate(Quaternion rotation){
     return Vector3f(w.x, w.y, w.z);
 }
 
-
-Vector3f * Vector3f::mul(Vector3f * v){x *= v -> x; y *= v -> y; z *= v -> z; return this;}
-Vector3f * Vector3f::mul(float v){x *= v; y *= v; z *= v; return this;}
-Vector3f * Vector3f::getMul(Vector3f * v){return new Vector3f(x * v -> x, y * v -> y, z * v -> z);}
-Vector3f * Vector3f::getMul(float v){return new Vector3f(x * v, y * v, z * v);}
-
 /************************
  * Vector2f
  ***********************/
@@ -99,13 +87,7 @@ Vector2f::Vector2f(float x, float y){
     this -> x = x;
     this -> y = y;
 }
-Vector2f * Vector2f::getSub(Vector2f * v){
-    return new Vector2f(x - v -> x, y - v -> y);
-}
 
-Vector3f * Vector3f::getSub(Vector3f * v){
-    return new Vector3f(x - v -> x, y - v -> y, z - v -> z);
-}
 
 void Vector2f::show(bool endLine){
     std::cout << "[" << x << "x" << y << "]";

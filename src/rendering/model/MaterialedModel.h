@@ -7,6 +7,8 @@
 
 #include "RawModel.h"
 #include "../material/Material.h"
+#include "../../utils/FileLoader.h"
+#include "../../utils/Loader.h"
 
 class MaterialedModel {
 private:
@@ -20,6 +22,7 @@ public:
 };
 typedef std::shared_ptr<MaterialedModel> PointerMaterialedModel;
 PointerMaterialedModel createMaterialedModel(PointerRawModel, PointerMaterial);
+PointerMaterialedModel createMaterialedModel(std::string, Loader);
 
 
 #endif //GRAPHICSPROJECT_MATERIALEDMODEL_H

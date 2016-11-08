@@ -10,13 +10,13 @@
 #include "../utils/utils.h"
 class Light {
     public:
-        Light(PointerVector3f position, PointerVector3f color, const Vector3f & attenuation){
+        Light(const Vector3f & position, const Vector3f & color, const Vector3f & attenuation){
             this -> attenuation = attenuation;
             this -> position = position;
             this -> color = color;
             id = IdGenerator::getId();
         }
-        Light(PointerVector3f position, PointerVector3f color){
+        Light(const Vector3f & position, const Vector3f & color){
             this -> position = position;
             this -> color = color;
             id = IdGenerator::getId();
@@ -25,11 +25,16 @@ class Light {
         int getId(void){
             return id;
         }
+        void setPosition(float x, float y, float z){
+            position.x = x;
+            position.y = y;
+            position.z = z;
+        }
 
-        PointerVector3f getPosition(){
+        Vector3f getPosition(){
             return position;
         }
-        PointerVector3f getColor(){
+        Vector3f getColor(){
             return color;
         }
         Vector3f getAttenuation(){
@@ -37,20 +42,15 @@ class Light {
         }
 
     private:
-        PointerVector3f position;
-        PointerVector3f color;
-        Vector3f attenuation = (1, 0, 0);
+        Vector3f position = Vector3f(0, 0, 0);
+        Vector3f color = Vector3f(1, 1, 1);
+        Vector3f attenuation = Vector3f(1, 0, 0);
         int id;
 };
 
 typedef std::shared_ptr<Light> PointerLight;
 
-PointerLight createLight(PointerVector3f position, PointerVector3f color){
-    return PointerLight(new Light(position, color));
-}
-
-PointerLight createLight(PointerVector3f position, PointerVector3f color, const Vector3f & attenuation){
-    return PointerLight(new Light(position, color, attenuation));
-}
+PointerLight createLight(const Vector3f &, const Vector3f &);
+PointerLight createLight(const Vector3f &, const Vector3f &, const Vector3f &);
 
 #endif //GRAPHICSPROJECT_LIGHT_H

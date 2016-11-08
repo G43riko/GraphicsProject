@@ -10,57 +10,71 @@
 #include "model/MaterialedModel.h"
 #include "model/Entity.h"
 #include "../entities/Light.h"
+#include "../entities/Scene.h"
 #include <iostream>
 #include "Camera.h"
 #include <glm/mat4x4.hpp>
 #include "../utils/Maths.h"
 #include "../postProccessing/Screen.h"
+#include "GuiTexture.h"
+#include <glm/gtx/string_cast.hpp>
 
 #include "shader/EntityShader.cpp"
 #include "shader/PostFxShader.cpp"
 #include "shader/ObjectShader.cpp"
+#include "shader/GuiShader.cpp"
+#include "shader/SkyBoxShader.cpp"
+#include "shader/ColorShader.cpp"
+#include "../postProccessing/PostProccessing.h"
+#include "../water/WaterFrameBuffer.h"
 
 class Screen;
+class Scene;
 
 class Renderer {
     public:
-        Renderer(void);
-        void render(PointerRawModel);
-        void render(PointerMaterialedModel);
-        void renderEntity(PointerEntity);
-        void renderObject(PointerEntity, std::vector<PointerLight>);
-        void renderScreen(Screen , int = 0);
+        Renderer(Loader, int, int );
+        void renderGui(std::vector<GuiTexture>, PointerRawModel);
+        void renderScene(Scene);
+        void renderSky(PointerCubeTexture, PointerRawModel);
+        void renderObjects(std::vector<PointerEntity>, std::vector<PointerLight>);
+        void renderScreen(Screen);
         void setCamera(PointerCamera);
         void updateProjectionMatrix(PointerCamera, PointerBasicShader = nullptr);
-        void prepare(GLfloat, GLfloat, GLfloat, GLfloat);
+        void prepareRenderer(GLfloat, GLfloat, GLfloat, GLfloat);
         void init3D(void);
         void addShader(std::string, PointerBasicShader);
         void cleanUp(void);
         void initShaders(void);
+        void addTexture(GuiTexture texture){
+            textures.push_back(texture);
+        }
+        void setPostFx(bool val){
+            usePostFx = val;
+        }
+        //DEPRECATED
+        void render(PointerRawModel);
+        void render(PointerMaterialedModel);
+        void renderEntity(PointerEntity);
+        void renderObject(PointerEntity, std::vector<PointerLight>);
     private:
-        Vector3f * getEyeSpacePosition(Light light, glm::mat4 view){
-            PointerVector3f position = light.getPosition();
-            glm::vec4 eye(position -> x, position ->y, position -> z, 1.0);
-            float x = view[0][0] * eye.x + view[1][0] * eye.y + view[2][0] * eye.z + view[3][0] * eye.w;
-            float y = view[0][1] * eye.x + view[1][1] * eye.y + view[2][1] * eye.z + view[3][1] * eye.w;
-            float z = view[0][2] * eye.x + view[1][2] * eye.y + view[2][2] * eye.z + view[3][2] * eye.w;
-            /*
-            float x = view[0][0] * eye.x + view[0][1] * eye.y + view[0][2] * eye.z + view[0][3] * eye.w;
-            float y = view[1][0] * eye.x + view[1][1] * eye.y + view[1][2] * eye.z + view[1][3] * eye.w;
-            float z = view[2][0] * eye.x + view[2][1] * eye.y + view[2][2] * eye.z + view[2][3] * eye.w;
-            */
-
-            //float w = view[0][3] * eye.x + view[1][3] * eye.y + view[2][3] * eye.z + view[3][3] * eye.w;
-            return new Vector3f(x, y, z);
-        };
+        WaterFrameBuffer wf;
+        Fbo fbo;
+        PostProccessing pp;
         std::map<std::string, PointerBasicShader> shaders;
-        //Light * light = new Light(PointerVector3f(new Vector3f(0, 0, 0)), PointerVector3f(new Vector3f(1, 1, 1)));
-        Light * light = new Light(createVector3f(0, 0, 0), createVector3f(1, 1, 1));
+        Light * light = new Light(Vector3f(0, 0, 0), Vector3f(1, 1, 1));
         PointerCamera actualCamera = nullptr;
+        Screen screen;
+        bool usePostFx = false;
+        std::vector<GuiTexture> textures;
+        //PRIVATE METHODS
+        void updateLightUniforms(PointerLight, PointerBasicShader, int);
+        Vector3f getEyeSpacePosition(PointerLight, glm::mat4);
         void prepareModel(PointerRawModel, GLuint);
         void prepareMaterial(PointerMaterial, PointerBasicShader);
-
         void finishRender(GLuint);
+
+
 };
 
 

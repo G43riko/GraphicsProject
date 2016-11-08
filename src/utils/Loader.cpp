@@ -28,7 +28,7 @@ PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GL
     return createRawModel(vaoID, (int)indices.size());
 }
 
-PointerRawModel Loader::loadToVAO(std::vector<GLfloat> positions, int dimensions) {
+PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, int dimensions) {
     int vaoID = createVAO();
     storeDataInAttributeList(0, dimensions, positions);
     unbindVAO();
@@ -48,6 +48,7 @@ PointerRawModel Loader::loadToVao(PointerMesh mesh){
 }
 
 void Loader::cleanUp(void){
+    //TODO nestaci for (GLuint vao : vaos)??
     for (auto it = vaos.begin(); it != vaos.end(); ++it)
         glDeleteVertexArrays(1, &(*it));
     for (auto it = vbos.begin(); it != vbos.end(); ++it)

@@ -48,19 +48,13 @@ class Vector3f{
         Vector3f(double x, double y, double z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
         Vector3f(int x, int y, int z) : Vector3f(static_cast<float>(x),static_cast<float>(y), static_cast<float>(z)){};
         Vector3f(std::string);
-        Vector3f(Vector3f* vec) : Vector3f(vec->x, vec->y, vec->z){};
+        Vector3f(Vector3f* vec) : Vector3f(vec -> x, vec -> y, vec -> z){};
         Vector3f(float val) : Vector3f(val, val, val){};
         Vector3f(const Vector3f& vec) : Vector3f(vec.x, vec.y, vec.z){};
-        Vector3f * normalize(void);
-        Vector3f * getNormal(void);
-        Vector3f * cross(Vector3f *);
-        Vector3f * getCross(Vector3f *);
-        Vector3f * mul(Vector3f *);
-        Vector3f * mul(float);
-        Vector3f * getMul(Vector3f *);
-        Vector3f * getMul(float);
-        Vector3f * getSub(Vector3f *);
-        Vector3f * add(Vector3f *);
+        Vector3f normalize(void);
+        Vector3f getNormal(void);
+        Vector3f cross(Vector3f *);
+        Vector3f getCross(Vector3f *);
 
         Vector3f& operator *= (const float& val){ this -> x *= val, this -> y *= val, this -> z *= val;return *this; }
         Vector3f operator *= (const Vector3f& v){ this -> x *= v.x, this -> y *= v.y, this -> z *= v.z;return *this; }
@@ -94,17 +88,8 @@ class Vector3f{
         float getLength(void);
         void show(bool = true);
 
-        template <typename  T>
-        inline static PointerVector3f create(T x, T y, T z){
-            return PointerVector3f(new Vector3f(x, y, z));
-        }
 };
 
-
-template <typename  T>
-inline static PointerVector3f createVector3f(T x, T y, T z){
-    return PointerVector3f(new Vector3f(x, y, z));
-}
 
 
 class Vector4f{
@@ -119,18 +104,18 @@ class Vector4f{
             this -> z = z;
             this -> w = w;
         };
-        Vector4f * normalize(void){
+        Vector4f normalize(void){
             float len = length();
             x /= len;
             y /= len;
             z /= len;
             w /= len;
-            return this;
+            return *this;
         };
 
-        Vector4f * getNormal(void){
+        Vector4f getNormal(void){
             float len = length();
-            return new Vector4f(x /= len, y /= len, z /= len, w /= len);
+            return Vector4f(x /= len, y /= len, z /= len, w /= len);
         };
 
         float lengthSquared() {

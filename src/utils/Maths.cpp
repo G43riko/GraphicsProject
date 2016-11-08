@@ -46,6 +46,6 @@ glm::mat4 Maths::createTransformationMatrix(Transform * transform){
 */
 
 
-glm::mat4 Maths::createTransformationMatrix(Vector2f * pos, Vector2f * scale) {
-    return createTransformationMatrix(pos -> x, pos -> y, scale -> x, scale -> y);
+glm::mat4 Maths::createTransformationMatrix(Vector2f pos, Vector2f scale) {
+    return createTransformationMatrix(pos.x, pos.y, scale.x, scale.y);
 }

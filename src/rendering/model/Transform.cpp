@@ -15,12 +15,6 @@ void Transform::move(float x, float y, float z){
     position.z += z;
 }
 
-void Transform::rotate(float x, float y, float z){
-    rotation.x += x;
-    rotation.y += y;
-    rotation.z += z;
-}
-
 Vector3f * Transform::getPosition(void){return &position;}
 float Transform::getPosX(void){return position.x;}
 float Transform::getPosY(void){return position.y;}

@@ -12,21 +12,54 @@
 #include <src/rendering/Renderer.h>
 
 class Scene {
-private:
-    std::map<int, PointerEntity> entities;
-    std::map<int, PointerLight> lights;
-public:
-    void addLight(PointerLight light){
-        lights[light -> getId()] = light;
-    }
-    void addEntity(PointerEntity entity){
-        entities[entity -> getId()] = entity;
-    }
+    private:
+        PointerRawModel guiModel = nullptr;
+        PointerRawModel sphereModel = nullptr;
+        PointerRawModel skyModel = nullptr;
+        PointerCubeTexture sky = nullptr;
+        static std::vector<GLfloat> guiVertices;
+        constexpr static float SIZE = 500;
+        static std::vector<float> VERTICES;
+        std::vector<PointerEntity> entities;
+        std::vector<PointerLight> lights;
+    public:
+        Scene(Loader, PointerCubeTexture);
+        void addLight(PointerLight light){
+            lights.push_back(light);
+        }
+        void addEntity(PointerEntity entity){
+            entities.push_back(entity);
+        }
 
-    void render(Renderer renderer){
+        std::vector<PointerLight> getLights(){
+            return lights;
+        };
 
-    }
+        std::vector<PointerEntity> getEntities(){
+            return entities;
+        };
 
+        PointerRawModel getGuiModel(void){
+            if(!guiModel)
+                std::cout << "nieje guiModel\n";
+            return guiModel;
+        };
+        PointerCubeTexture getSky(void){
+            if(!sky)
+                std::cout << "nieje sky\n";
+            return sky;
+        }
+
+        PointerRawModel getSphereModel(void){
+            if(!sphereModel)
+                std::cout << "nieje sphereModel\n";
+            return sphereModel;
+        };
+        PointerRawModel getSkyModel(void){
+            if(!skyModel)
+                std::cout << "nieje skyModel\n";
+            return skyModel;
+        };
 };
 
 

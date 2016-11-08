@@ -4,8 +4,10 @@
 
 #ifndef GRAPHICSPROJECT_CONTENTLOADER_H
 
-#include <src/rendering/material/Texture2D.h>
 #include "FileLoader.h"
+
+std::vector<std::string> ContentLoader::TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
+
 
 void ContentLoader::loadTextFile(std::string fileName, std::string *content){
     std::ifstream ifs(fileName, std::ios::in);

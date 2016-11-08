@@ -13,29 +13,10 @@ private:
     Vector3f scale;
     Transform * parent = nullptr;
 public:
-    /*
-    void init(Vector3f &position, Quaternion &rotation, Vector3f &scale) {
-        this -> position.x = position.x;
-        this -> position.y = position.y;
-        this -> position.z = position.z;
-        this -> rotation.x = rotation.x;
-        this -> rotation.y = rotation.y;
-        this -> rotation.z = rotation.z;
-        this -> rotation.w = rotation.w;
-        this -> scale.x = scale.x;
-        this -> scale.y = scale.y;
-        this -> scale.z = scale.z;
-    }
-    */
-
     void init(const Vector3f &position, const Vector3f &rotation, const Vector3f &scale) {
-        this -> position.x = position.x;
-        this -> position.y = position.y;
-        this -> position.z = position.z;
+        this -> position = position;
         this -> rotation.rotate(rotation);
-        this -> scale.x = scale.x;
-        this -> scale.y = scale.y;
-        this -> scale.z = scale.z;
+        this -> scale = scale;
     }
     Transform(){};
     Transform(Vector3f, Vector3f, Vector3f);
@@ -48,7 +29,9 @@ public:
         Matrix4f scaleMatrix = *Matrix4f::initScale(scale.x, scale.y, scale.z);
         return scaleMatrix * rotation.toRotationMatrix() * translationMatrix;
     }
-
+    void setPosition(Vector3f vec){
+        position = vec;
+    }
     Vector3f * getPosition(void);
     float getPosX(void);
     float getPosY(void);

@@ -4,14 +4,13 @@
 
 #include "Vertex.h"
 
-Vector3f * position;
-Vertex::Vertex(long unsigned int index,Vector3f * position){
+Vertex::Vertex(long unsigned int index,Vector3f position){
     this -> index = index;
     this -> position = position;
-    this -> length = position -> getLength();
+    this -> length = position.getLength();
 }
 void Vertex::show(void){
-    position -> show();
+    position.show();
 }
 void Vertex::addTangent(Vector3f tangent){
     tangents.push_back(tangent);
@@ -55,7 +54,7 @@ void Vertex::setNormalIndex(int normalIndex){
     this -> normalIndex = normalIndex;
 }
 
-Vector3f * Vertex::getPosition(void){
+Vector3f Vertex::getPosition(void){
     return position;
 }
 
@@ -67,10 +66,10 @@ int Vertex::getNormalIndex(void){
     return normalIndex;
 }
 
-Vertex * Vertex::getDuplicateVertex(void){
+PointerVertex Vertex::getDuplicateVertex(void){
     return duplicateVertex;
 }
 
-void Vertex::setDuplicateVertex(Vertex * duplicateVertex){
+void Vertex::setDuplicateVertex(PointerVertex duplicateVertex){
     this -> duplicateVertex = duplicateVertex;
 }

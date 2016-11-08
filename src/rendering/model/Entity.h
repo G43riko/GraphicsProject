@@ -22,7 +22,6 @@ class Entity {
         int getId(void);
 
         void move(float, float, float);
-        void rotate(float, float, float);
 
         PointerMaterialedModel getModel(void);
         Transform * getTransform(void);

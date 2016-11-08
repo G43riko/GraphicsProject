@@ -38,9 +38,9 @@ private:
     static std::vector<float> POINTS;
     PointerTexture2D texture;
 
-    Vector2f * position;
-    Vector2f * scale;
-    ToFrameBufferRendering * frameRenderer;
+    Vector2f position;
+    Vector2f scale;
+    ToFrameBufferRendering frameRenderer;
 
     //EFFECTS
 
@@ -62,15 +62,15 @@ public:
     //OTHERS
 
     void cleanUp(){
-        frameRenderer -> cleanUp();
+        frameRenderer.cleanUp();
     }
 
     void startRenderToScreen() {
-        frameRenderer -> startRenderToFrameBuffer();
+        frameRenderer.startRenderToFrameBuffer();
     }
 
     void stopRenderToScreen() {
-        frameRenderer -> stopRenderToFrameBuffer();
+        frameRenderer.stopRenderToFrameBuffer();
     }
 
     //GETTERS
@@ -118,10 +118,12 @@ public:
     void setUniforms(PointerBasicShader shader){
         if(!changed)
             return;
+        /*
         shader -> updateUniform2f("fitlerOffset", filterOffset);
         shader -> updateUniformf("filterFactor", filterFactor);
         shader -> updateUniformf("filterBias", filterBias);
         shader -> updateUniform4f("filterMatrix", *filterMatrix);
+         */
 
         shader -> updateUniformb("greyscale", greyscale);
         shader -> updateUniformb("invert", invert);

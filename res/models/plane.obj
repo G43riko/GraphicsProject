@@ -15,9 +15,9 @@ v 5.0 0.0 -5.0
 # 4 vertices
 
 vt 0 0
-vt 0 1
-vt 1 1
-vt 1 0
+vt 0 5
+vt 5 5
+vt 5 0
 # 4 texture coordinates
 
 vn 0 1 0

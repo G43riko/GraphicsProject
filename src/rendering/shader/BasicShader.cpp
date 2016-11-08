@@ -7,13 +7,14 @@
 
 int BasicShader::MAX_LIGHTS = 8;
 
-BasicShader::BasicShader(const std::string title){
-    this -> title = title;
+BasicShader::BasicShader(const std::string vertex, const std::string fragment){
+    this -> vertexFileName = vertex;
+    this -> fragmentFileName = fragment;
     this -> shader = glCreateProgram();
 
-    this -> vertexShader = this -> addShader(GL_VERTEX_SHADER, "src/rendering/shader/" + title + EXTENSION_VERTEX);
-    //this -> geometryShader = this -> addShader(GL_GEOMETRY_SHADER, "src/rendering/shader/" + title + EXTENSION_GEOMETRY);
-    this -> fragmentShader = this -> addShader(GL_FRAGMENT_SHADER, "src/rendering/shader/" + title + EXTENSION_FRAGMENT);
+    this -> vertexShader = this -> addShader(GL_VERTEX_SHADER, "res/shaders/" + vertex + EXTENSION_VERTEX);
+    //this -> geometryShader = this -> addShader(GL_GEOMETRY_SHADER, "src/shaders/" + title + EXTENSION_GEOMETRY);
+    this -> fragmentShader = this -> addShader(GL_FRAGMENT_SHADER, "res/shaders/" + fragment + EXTENSION_FRAGMENT);
 
     glAttachShader(shader, vertexShader);
     glAttachShader(shader, fragmentShader);

@@ -24,16 +24,16 @@ float toRadians(float val){
 
 void Camera::updateForward(void){
     double xzLen = cos(pitch);
-    forward -> x = static_cast<float>(xzLen * cos(yaw));
-    forward -> y = static_cast<float>(sin(pitch));
-    forward -> z = static_cast<float>(xzLen * sin(-yaw));
+    forward.x = static_cast<float>(xzLen * cos(yaw));
+    forward.y = static_cast<float>(sin(pitch));
+    forward.z = static_cast<float>(xzLen * sin(-yaw));
     /*
     forward -> z = static_cast<float>(cos((360 - yaw)) * cos((pitch)));
     forward -> x = static_cast<float>(sin((360 - yaw)) * cos((pitch)));
     forward -> y = static_cast<float>(sin((pitch)));
     */
-    forward -> normalize();
-    forward -> show();
+    forward.normalize();
+    forward.show();
 }
 
 bool isNotZero(float val){
@@ -83,31 +83,31 @@ void Camera::input(void){
 
     if(Input::isKeyDown(Input::KEY_W)) {
         //position -> z -= movSpeed;
-        position -> x += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
-        position -> z += static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
+        position.x += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position.z += static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
     }
     if(Input::isKeyDown(Input::KEY_S)) {
         //position->z += movSpeed;
-        position -> x -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
-        position -> z -= static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
+        position.x -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position.z -= static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
     }
 
 
     if(Input::isKeyDown(Input::KEY_A)) {
         //position->x -= movSpeed;
-        position -> z -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
-        position -> x -= static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
+        position.z -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position.x -= static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
     }
     if(Input::isKeyDown(Input::KEY_D)) {
         //position->x += movSpeed;
-        position -> z += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
-        position -> x += static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
+        position.z += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
+        position.x += static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
     }
 
     if(Input::isKeyDown(Input::KEY_LSHIFT))
-        position -> y -= movSpeed;
+        position.y -= movSpeed;
     if(Input::isKeyDown(Input::KEY_SPACE))
-        position -> y += movSpeed;
+        position.y += movSpeed;
 
     if(Input::isKeyDown(Input::KEY_Q))
         yaw -= rotSpeed;
@@ -116,12 +116,13 @@ void Camera::input(void){
 
     //updateForward();
 }
-
+/*
 PointerVector3f Camera::getForwardVector(void){
     if(VERTICAL)
         return PointerVector3f(forward -> getMul(-1) -> normalize());
 
-    return PointerVector3f(UP.getCross(forward.get()) -> cross(&UP) -> mul(-1) -> normalize());
+    //return PointerVector3f(UP.getCross(forward.get()) -> cross(&UP) -> mul(-1) -> normalize());
+    return Vector
 }
 
 PointerVector3f Camera::getRightVector(void){
@@ -131,7 +132,8 @@ PointerVector3f Camera::getRightVector(void){
 PointerVector3f Camera::getUpVector(void){
     return PointerVector3f(UP.getNormal());
 }
+*/
 
 glm::mat4 Camera::getViewMatrix(void){
-    return Maths::createViewMatrix(pitch, yaw, position -> x, position -> y, position -> z);
+    return Maths::createViewMatrix(pitch, yaw, position.x, position.y, position.z);
 }

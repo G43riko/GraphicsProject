@@ -19,10 +19,6 @@ void Entity::move(float x, float y, float z){
     transform.move(x, y, z);
 }
 
-void Entity::rotate(float x, float y, float z){
-    transform.rotate(x, y, z);
-}
-
 int Entity::getId(void){
     return id;
 }

@@ -21,11 +21,13 @@ class BasicShader{
         GLuint vertexShader;
         GLuint fragmentShader;
         GLuint geometryShader;
-        std::string title;
+        std::string vertexFileName;
+        std::string fragmentFileName;
         int getUniformLocation(const std::string uniformName);
         GLuint addShader(int, std::string);
     public:
-        BasicShader(const std::string);
+        BasicShader(const std::string, const std::string);
+        BasicShader(const std::string shader) : BasicShader(shader, shader){};
         ~BasicShader(void);
         static int MAX_LIGHTS;
         virtual void connectTextures(void);

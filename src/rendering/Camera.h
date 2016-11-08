@@ -19,13 +19,13 @@ class Camera {
         const float FOV = 70.0f;
         const float NEAR_PLANE = 0.1f;
         const float FAR_PLANE = 1000.0f;
-        PointerVector3f forward = PointerVector3f(new Vector3f(0, 0, 1));
+        Vector3f forward = Vector3f(0, 0, 1);
         bool mouseLocked = false;
         Vector2f lastMousePos;
         timeval tv;
         bool setTime = false;
     public:
-        Vector3f * position = new Vector3f(0, 0, 0);
+        Vector3f position = Vector3f(0, 0, 0);
         float pitch = 0;
         float yaw = 0;
         float roll = 0;
@@ -34,10 +34,6 @@ class Camera {
         void input(void);
         glm::mat4 getViewMatrix(void);
         void updateForward(void);
-
-        PointerVector3f getForwardVector(void);
-        PointerVector3f getRightVector(void);
-        PointerVector3f getUpVector(void);
 };
 
 typedef std::shared_ptr<Camera> PointerCamera;

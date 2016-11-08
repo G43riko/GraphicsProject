@@ -19,7 +19,7 @@ class Maths {
                                                     const float &, const float &, const float &);
         static glm::mat4 createViewMatrix(const float &, const float &, const float &, const float &, const float &);
         static glm::mat4 createTransformationMatrix(const float &, const float &, const float &, const float &);
-        static glm::mat4 createTransformationMatrix(Vector2f *, Vector2f *);
+        static glm::mat4 createTransformationMatrix(Vector2f, Vector2f);
         //static glm::mat4 createTransformationMatrix(Transform *);
 };
 
