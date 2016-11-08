@@ -15,6 +15,8 @@ class Material {
         PointerTexture2D specular = nullptr;
         PointerTexture2D alpha = nullptr;
     public:
+        float shineDumber = 10;
+        float reflectivity = 1;
         Material(PointerTexture2D);
         Material(PointerTexture2D, PointerTexture2D);
         PointerTexture2D getDiffuse(void);

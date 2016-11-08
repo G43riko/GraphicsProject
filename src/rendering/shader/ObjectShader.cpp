@@ -25,6 +25,10 @@ public:
         this -> setUniform("viewMatrix");
         this -> setUniform("transformationMatrix");
 
+
+        this -> setUniform("shineDumper");
+        this -> setUniform("reflectivity");
+
         this -> setUniform("textureSampler");
         this -> setUniform("normalSampler");
 

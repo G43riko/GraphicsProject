@@ -6,6 +6,7 @@ in vec3 Tangent;
 
 out vec2 pass_Texture;
 out vec3 toLightVector[8];
+out vec3 toCameraVector;
 
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
@@ -36,5 +37,5 @@ void main() {
         toLightVector[i] = toTangentSpace * (lightPositionEyeSpace[i] - positionRelativeToCam.xyz);
         //toLightVector[i] = lightPositionEyeSpace[i] - worldPosition.xyz;
 
-    //vec3 toCameraVector = toTangentSpace * (-positionRelativeToCam.xyz);
+    toCameraVector = toTangentSpace * (-positionRelativeToCam.xyz);
 }

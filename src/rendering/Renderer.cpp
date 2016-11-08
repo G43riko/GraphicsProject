@@ -187,8 +187,11 @@ void Renderer::prepareModel(PointerRawModel model, GLuint numberOfAttributes){
 }
 
 void Renderer::prepareMaterial(PointerMaterial material, PointerBasicShader shader){
-    if(shader)
+    if(shader){
+        shader -> updateUniformf("shineDumper", material -> shineDumber);
+        shader -> updateUniformf("reflectivity", material -> reflectivity);
         shader -> connectTextures();
+    }
 
     material -> getDiffuse() -> bind(GL_TEXTURE0);
 

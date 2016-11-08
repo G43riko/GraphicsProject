@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "../static_libs/lodepng.h"
+#include <src/static_libs/lodepng.h>
 
 class CubeTexture;
 typedef std::shared_ptr<CubeTexture> PointerCubeTexture;
