@@ -35,8 +35,8 @@ public:
                 unsigned int width;
                 unsigned int height;
                 std::vector<unsigned char> image;
-                unsigned error = lodepng::decode(image, width, height, title + TITLES[i] + ".png");
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT, image.data());
+                unsigned error = lodepng::decode(image, width, height, "res/textures/skies/" + title + TITLES[i] + ".png");
+                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
             }
 
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

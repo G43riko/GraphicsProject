@@ -33,12 +33,15 @@ int main(void){
     //auto barel = ContentLoader::loadTexturePNG("res/textures/barrel.png");
     auto diffuse = ContentLoader::loadTexturePNG("res/textures/texture.png");
     auto normal = ContentLoader::loadTexturePNG("res/textures/textureNormal.png");
+
     auto rawModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ("res/models/box.obj")));
     auto plane = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ("res/models/plane.obj")));
     auto sphere = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj")));
+
     auto model = createMaterialedModel(rawModel, createMaterial(diffuse, normal));
     auto lightModel = createMaterialedModel(sphere, createMaterial(diffuse, normal));
     auto floor = createMaterialedModel(plane, createMaterial(diffuse, normal));
+
     auto entity = createEntity(model, Vector3f(0, 0, -10), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
     auto barrel = createEntity(createMaterialedModel("barrel", loader), Vector3f(20, 5, -20), Vector3f(0.0f), Vector3f(1.0f));
     scene.addEntity(barrel);

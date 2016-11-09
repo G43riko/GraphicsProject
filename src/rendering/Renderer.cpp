@@ -94,15 +94,12 @@ void Renderer::renderSky(PointerCubeTexture sky, PointerRawModel model){
     PointerBasicShader shader = shaders["skyBoxShader"];
     if(!shader)
         return;
-
+    shader -> bind();
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
     prepareModel(model, 1);
     sky -> bind();
-    GLuint count = model -> getVertexCount();
-    glDrawArrays(GL_TRIANGLES, 0, count);
+    glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());
     finishRender(1);
-
-
 
 };
 void Renderer::renderScene(Scene scene){
@@ -112,7 +109,7 @@ void Renderer::renderScene(Scene scene){
 
     renderObjects(scene.getEntities(), scene.getLights());
 
-    //renderSky(scene.getSky(), scene.getSkyModel());
+    renderSky(scene.getSky(), scene.getSkyModel());
 
     if(usePostFx){
         screen.stopRenderToScreen();
@@ -222,11 +219,6 @@ Vector3f Renderer::getEyeSpacePosition(PointerLight light, glm::mat4 view){
     float x = view[0][0] * position.x + view[1][0] * position.y + view[2][0] * position.z + view[3][0];
     float y = view[0][1] * position.x + view[1][1] * position.y + view[2][1] * position.z + view[3][1];
     float z = view[0][2] * position.x + view[1][2] * position.y + view[2][2] * position.z + view[3][2];
-    /*
-    float x = view[0][0] * position.x + view[0][1] * position.y + view[0][2] * position.z + view[0][3];
-    float y = view[1][0] * position.x + view[1][1] * position.y + view[1][2] * position.z + view[1][3];
-    float z = view[2][0] * position.x + view[2][1] * position.y + view[2][2] * position.z + view[2][3];
-    */
 
     return Vector3f(x, y, z);
 };
