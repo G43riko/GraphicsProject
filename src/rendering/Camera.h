@@ -8,6 +8,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../utils/Input.h"
+#include "../rendering/WindowManager.h"
+#include <sys/time.h>
 #include "../utils/Vectors.h"
 #include <math.h>
 

@@ -36,7 +36,7 @@ class Renderer {
         Renderer(Loader, int, int );
         void renderGui(std::vector<GuiTexture>, PointerRawModel);
         void renderScene(Scene);
-        void renderSky(PointerCubeTexture, PointerRawModel);
+        void renderSky(CubeTexture, PointerRawModel);
         void renderObjects(std::vector<PointerEntity>, std::vector<PointerLight>);
         void renderScreen(Screen);
         void setCamera(PointerCamera);

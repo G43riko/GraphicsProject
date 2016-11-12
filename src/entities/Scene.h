@@ -16,14 +16,14 @@ class Scene {
         PointerRawModel guiModel = nullptr;
         PointerRawModel sphereModel = nullptr;
         PointerRawModel skyModel = nullptr;
-        PointerCubeTexture sky = nullptr;
+        CubeTexture sky;
         static std::vector<GLfloat> guiVertices;
         constexpr static float SIZE = 500;
         static std::vector<float> VERTICES;
         std::vector<PointerEntity> entities;
         std::vector<PointerLight> lights;
     public:
-        Scene(Loader, PointerCubeTexture);
+        Scene(Loader, CubeTexture);
         void addLight(PointerLight light){
             lights.push_back(light);
         }
@@ -44,12 +44,12 @@ class Scene {
                 std::cout << "nieje guiModel\n";
             return guiModel;
         };
-        PointerCubeTexture getSky(void){
-            if(!sky)
-                std::cout << "nieje sky\n";
+        CubeTexture getSky(void){
             return sky;
         }
-
+        void cleanUp(){
+            sky.cleanUp();
+        }
         PointerRawModel getSphereModel(void){
             if(!sphereModel)
                 std::cout << "nieje sphereModel\n";

@@ -23,23 +23,23 @@ class Loader {
         PointerRawModel loadToVao(std::vector<GLfloat> positions, int dimensions);
 
         void cleanUp(void);
-private:
-    std::list<GLuint> vaos;
-    std::list<GLuint> vbos;
-    GLuint createVAO(void);
-    void bindIndicesBuffer(std::vector<GLuint>);
-    void storeDataInAttributeList(int, int, std::vector<GLfloat>);
-    void unbindVAO(void);
+    private:
+        std::list<GLuint> vaos;
+        std::list<GLuint> vbos;
+        GLuint createVAO(void);
+        void bindIndicesBuffer(std::vector<GLuint>);
+        void storeDataInAttributeList(int, int, std::vector<GLfloat>);
+        void unbindVAO(void);
 
-    template <typename T> void showBufferData(int size, GLuint id, GLuint type = GL_ARRAY_BUFFER){
-        T * target = new T[size * sizeof(T)];
-        glBindBuffer(type, id);
-        glGetBufferSubData(type, 0, size * sizeof(T), target);
-        std::cout << "načítalo sa " << size << " veci: "<< std::endl;
-        for(int i=0 ; i<size ; i++)
-            std::cout << target[i] << " ";
-        std::cout << std::endl;
-    }
+        template <typename T> void showBufferData(int size, GLuint id, GLuint type = GL_ARRAY_BUFFER){
+            T * target = new T[size * sizeof(T)];
+            glBindBuffer(type, id);
+            glGetBufferSubData(type, 0, size * sizeof(T), target);
+            std::cout << "načítalo sa " << size << " veci: "<< std::endl;
+            for(int i=0 ; i<size ; i++)
+                std::cout << target[i] << " ";
+            std::cout << std::endl;
+        }
 };
 
 #endif //GRAPHICSPROJECT_LOADER_H

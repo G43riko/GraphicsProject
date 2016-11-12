@@ -24,7 +24,7 @@ class Input {
         static bool keys[];
         static bool lastButtons[];
         static bool buttons[];
-
+        static GLFWwindow * window;
         static Vector2f windowCenter;
         static void onKeyDown(GLFWwindow *, int, int, int, int);
         static void onMouseMove(GLFWwindow *, double, double);
@@ -32,7 +32,7 @@ class Input {
     public:
         static Vector2f getWindowCenter(void);
         static Vector2f getMousePosition(void);
-        static void init(void);
+        static void init(GLFWwindow*, int, int);
         static void update(void);
         static void setMousePos(Vector2f);
 
@@ -45,7 +45,16 @@ class Input {
         static bool isButtonDown(int);
         static bool getMouseDown(int);
         static bool getMouseUp(int);
-        static int KEY_W, KEY_A, KEY_S, KEY_D, KEY_Q, KEY_E, KEY_LSHIFT, KEY_SPACE, KEY_P;
+        static const int KEY_W = 87;
+        static const int KEY_A = 65;
+        static const int KEY_S = 83;
+        static const int KEY_D = 68;
+        static const int KEY_Q = 81;
+        static const int KEY_E = 69;
+        static const int KEY_P = 80;
+
+        static const int KEY_LSHIFT   = 16;
+        static const int KEY_SPACE    = 32;
 };
 
 

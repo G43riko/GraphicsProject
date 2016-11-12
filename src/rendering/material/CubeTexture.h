@@ -12,7 +12,6 @@
 #include <src/static_libs/lodepng.h>
 
 class CubeTexture;
-typedef std::shared_ptr<CubeTexture> PointerCubeTexture;
 
 class CubeTexture {
     private:
@@ -29,15 +28,14 @@ class CubeTexture {
         void cleanUp(void){
             glDeleteTextures(1, &textureID);
         }
+        void bind(){
+            glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+        }
 
-    void bind(){
-        glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-    }
-
-    void bind(GLuint num){
-        glActiveTexture(num);
-        bind();
-    }
+        void bind(GLuint num){
+            glActiveTexture(num);
+            bind();
+        }
 };
 
 

@@ -3,8 +3,8 @@
 //
 
 #include "Input.h"
-#include "../rendering/WindowManager.h"
 
+GLFWwindow * Input::window = nullptr;
 Vector2f Input::windowCenter;
 Vector2f Input::mousePos = Vector2f();
 Vector2f Input::getMousePosition(void){
@@ -18,14 +18,15 @@ bool Input::keys[NUM_KEY_CODES] = {false};
 bool Input::lastButtons[NUM_MOUSE_BUTTONS] = {false};
 bool Input::buttons[NUM_MOUSE_BUTTONS] = {false};
 
-void Input::init(){
-    glfwSetKeyCallback(WindowManager::window, Input::onKeyDown);
-    glfwSetCursorPosCallback(WindowManager::window, Input::onMouseMove);
-    Input::windowCenter = Vector2f(WindowManager::width >> 1, WindowManager::height >> 1);
+void Input::init(GLFWwindow* window, int width, int height){
+    Input::window = window;
+    glfwSetKeyCallback(window, Input::onKeyDown);
+    glfwSetCursorPosCallback(window, Input::onMouseMove);
+    Input::windowCenter = Vector2f(width >> 1, height >> 1);
 }
 
 void Input::setMousePos(Vector2f  pos){
-    glfwSetCursorPos(WindowManager::window, pos.x, pos.y);
+    glfwSetCursorPos(Input::window, pos.x, pos.y);
 }
 
 void Input::onKeyDown(GLFWwindow * window, int key, int scanCode, int action, int mods){
@@ -55,7 +56,7 @@ void Input::setMousePos(Vector2f);
 //KEYS
 
 bool Input::isKeyDown(int keyCode){
-    return glfwGetKey(WindowManager::window, keyCode) == GLFW_PRESS;
+    return glfwGetKey(Input::window, keyCode) == GLFW_PRESS;
     //return keys[keyCode];
 }
 
@@ -72,7 +73,7 @@ bool Input::getKeyUp(int keyCode){
 //MOUSE
 
 bool Input::isButtonDown(int buttonCode){
-    return glfwGetMouseButton(WindowManager::window, buttonCode) == GLFW_PRESS;
+    return glfwGetMouseButton(Input::window, buttonCode) == GLFW_PRESS;
     //return buttons[buttonCode];
 }
 bool Input::getMouseDown(int mouseButton){
@@ -82,14 +83,3 @@ bool Input::getMouseDown(int mouseButton){
 bool Input::getMouseUp(int mouseButton){
     return !isButtonDown(mouseButton) && lastButtons[mouseButton];
 }
-
-int Input::KEY_W = 87;
-int Input::KEY_A = 65;
-int Input::KEY_S = 83;
-int Input::KEY_D = 68;
-int Input::KEY_Q = 81;
-int Input::KEY_E = 69;
-int Input::KEY_P = 80;
-
-int Input::KEY_LSHIFT   = 16;
-int Input::KEY_SPACE    = 32;

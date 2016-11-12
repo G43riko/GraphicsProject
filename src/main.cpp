@@ -20,13 +20,12 @@ int main(void){
     //exit(1);
 
     WindowManager::init(800, 600, "Okno", true);
-    Input::init();
+    Input::init(WindowManager::window, WindowManager::width, WindowManager::height);
 
     Loader loader = Loader();
     Renderer renderer = Renderer(loader, WindowManager::width, WindowManager::height);
-    PointerCubeTexture skyBox = ContentLoader::loadCubeTexture("sky");
 
-    Scene scene = Scene(loader, skyBox);
+    Scene scene = Scene(loader, ContentLoader::loadCubeTexture("sky"));
 
 
     //auto barel = ContentLoader::loadTexturePNG("res/textures/barrel.png");
@@ -93,6 +92,7 @@ int main(void){
         WindowManager::update();
     }
     renderer.cleanUp();
+    scene.cleanUp();
     screen.cleanUp();
     loader.cleanUp();
     WindowManager::close();

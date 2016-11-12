@@ -25,23 +25,23 @@
 class ContentLoader {
 public:
     static std::vector<std::string> TITLES;
-    static PointerCubeTexture loadCubeTexture(std::string title){
-            GLuint texture_id;
-            glGenTextures(1, &texture_id);
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
+    static CubeTexture loadCubeTexture(std::string title){
+        GLuint texture_id;
+        glGenTextures(1, &texture_id);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
 
-            for(int i=0 ; i<6 ; i++){
-                unsigned int width;
-                unsigned int height;
-                std::vector<unsigned char> image;
-                unsigned error = lodepng::decode(image, width, height, "res/textures/skies/" + title + TITLES[i] + ".png");
-                glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
-            }
+        for(int i=0 ; i<6 ; i++){
+            unsigned int width;
+            unsigned int height;
+            std::vector<unsigned char> image;
+            unsigned error = lodepng::decode(image, width, height, "res/textures/skies/" + title + TITLES[i] + ".png");
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
+        }
 
-            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        return PointerCubeTexture(new CubeTexture(title, texture_id));
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        return CubeTexture(title, texture_id);
     }
     static PointerTexture2D loadTextureColor(Vector3f color){
         std::vector<unsigned char> image;
@@ -85,8 +85,10 @@ public:
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
         //TODO ako zistiť či ide o GL_RGBA alebo GL_RGB??
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer.data());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer.data());
 
+        //ANISOTROPIC
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16.0f);
 
         //MIPMAING
         glGenerateMipmap(GL_TEXTURE_2D);

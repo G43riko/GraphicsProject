@@ -50,8 +50,7 @@ std::vector<float> Scene::VERTICES = {
         SIZE, -SIZE,  SIZE
 };
 
-Scene::Scene(Loader loader, PointerCubeTexture sky){
-    this -> sky = sky;
+Scene::Scene(Loader loader, CubeTexture sky) : sky(sky){
     guiModel = loader.loadToVao(guiVertices, 2);
     sphereModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj")));
     skyModel = loader.loadToVao(VERTICES, 3);

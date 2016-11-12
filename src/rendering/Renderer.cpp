@@ -90,14 +90,14 @@ void Renderer::renderGui(std::vector<GuiTexture> textures, PointerRawModel model
     glDisable(GL_BLEND);
     finishRender(0);
 }
-void Renderer::renderSky(PointerCubeTexture sky, PointerRawModel model){
+void Renderer::renderSky(CubeTexture sky, PointerRawModel model){
     PointerBasicShader shader = shaders["skyBoxShader"];
     if(!shader)
         return;
     shader -> bind();
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
     prepareModel(model, 1);
-    sky -> bind();
+    sky.bind();
     glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());
     finishRender(1);
 
