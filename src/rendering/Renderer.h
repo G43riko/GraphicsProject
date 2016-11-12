@@ -60,6 +60,7 @@ class Renderer {
     private:
         WaterFrameBuffer wf;
         Fbo fbo;
+        Fbo multiFbo;
         PostProccessing pp;
         std::map<std::string, PointerBasicShader> shaders;
         Light * light = new Light(Vector3f(0, 0, 0), Vector3f(1, 1, 1));

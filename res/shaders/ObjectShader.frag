@@ -3,7 +3,8 @@ in vec2 pass_Texture;
 in vec3 toLightVector[8];
 in vec3 toCameraVector;
 
-out vec4 FragmentColor;
+layout (location = 0) out vec4 FragmentColor;
+layout (location = 1) out vec4 BrightColor;
 
 uniform sampler2D textureSampler;
 uniform sampler2D normalSampler;
@@ -44,5 +45,5 @@ void main() {
     totalDiffuse = max(totalDiffuse, 0.2);
 
     FragmentColor = vec4(totalDiffuse, 1.0) * texture(textureSampler, pass_Texture) + vec4(totalSpecular, 1.0f);
-
+    BrightColor = vec4(1, 0, 1, 1);
 }

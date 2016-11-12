@@ -7,7 +7,8 @@
 
 Renderer::Renderer(Loader loader, int width, int height) :
         screen(Screen(width, height, loader)),
-        fbo(Fbo(1600, 900, Fbo::DEPTH_RENDER_BUFFER)),
+        multiFbo(Fbo(width, height)),
+        fbo(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
         pp(PostProccessing(loader)),
         wf(WaterFrameBuffer()){
     initShaders();
@@ -35,6 +36,10 @@ void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader s
 }
 
 void Renderer::cleanUp(void){
+    fbo.cleanUp();
+    multiFbo.cleanUp();
+    screen.cleanUp();
+
     for (auto it = shaders.begin(); it != shaders.end(); ++it)
         it -> second -> cleanUp();
     delete light;
@@ -104,19 +109,18 @@ void Renderer::renderSky(CubeTexture sky, PointerRawModel model){
 };
 void Renderer::renderScene(Scene scene){
     if(usePostFx){
-        screen.startRenderToScreen();
+        multiFbo.bindFrameBuffer();
     }
-
-    renderObjects(scene.getEntities(), scene.getLights());
 
     renderSky(scene.getSky(), scene.getSkyModel());
+    renderObjects(scene.getEntities(), scene.getLights());
 
     if(usePostFx){
-        screen.stopRenderToScreen();
-        //renderScreen(screen);
-        pp.doPostProcessing(screen.getTexture() -> getId());
+        multiFbo.unbindFrameBuffer();
+        multiFbo.resolveToScreen();
+//        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT1, fbo);
+//        pp.doPostProcessing(fbo.getColourTexture());
     }
-
 
 
     renderGui(textures, scene.getGuiModel());

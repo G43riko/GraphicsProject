@@ -10,3 +10,4 @@ int Fbo::DEPTH_RENDER_BUFFER = 2;
 
 GLuint Fbo::depthBuffer;
 GLuint Fbo::colourBuffer;
+GLuint Fbo::colourBuffer2;

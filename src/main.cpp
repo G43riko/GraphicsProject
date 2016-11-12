@@ -70,7 +70,7 @@ int main(void){
     scene.addLight(light1);
     scene.addEntity(entity);
 
-    //renderer.setPostFx(true);
+    renderer.setPostFx(true);
 
     renderer.addTexture(GuiTexture(diffuse -> getTextureID(), Vector2f(0.5f, 0.5f), Vector2f(0.25f, 0.25f)));
 

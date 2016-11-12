@@ -9,13 +9,20 @@
 #include "../rendering/WindowManager.h"
 
 class Fbo {
+private:
+    bool multisample = false;
 public:
     static int NONE, DEPTH_TEXTURE, DEPTH_RENDER_BUFFER;
-
     Fbo(int width, int height, int depthBufferType) {
         this -> width = width;
         this -> height = height;
         initialiseFrameBuffer(depthBufferType);
+    }
+    Fbo(int width, int height) {
+        this -> width = width;
+        this -> height = height;
+        this -> multisample = true;
+        initialiseFrameBuffer(DEPTH_RENDER_BUFFER);
     }
 
     void cleanUp() {
@@ -24,11 +31,13 @@ public:
         glDeleteTextures(1, &depthTexture);
         glDeleteRenderbuffers(1, &depthBuffer);
         glDeleteRenderbuffers(1, &colourBuffer);
+        glDeleteRenderbuffers(1, &colourBuffer2);
     }
 
     void bindFrameBuffer() {
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBuffer);
         glViewport(0, 0, width, height);
+        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void unbindFrameBuffer() {
@@ -42,17 +51,28 @@ public:
         glReadBuffer(GL_COLOR_ATTACHMENT0);
     }
 
+
+    void resolveToFbo(GLenum readBuffer, Fbo output){
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, output.frameBuffer);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
+        glReadBuffer(readBuffer);
+        glBlitFramebuffer(0, 0, width, height, 0, 0, output.width, output.height, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        unbindFrameBuffer();
+    }
+    void resolveToScreen(){
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+        glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
+        glDrawBuffer(GL_BACK);
+        glBlitFramebuffer(0, 0, width, height,  0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        unbindFrameBuffer();
+    }
+
     int getColourTexture() {
         return colourTexture;
     }
 
     int getDepthTexture() {
         return depthTexture;
-    }
-
-
-    PointerTexture2D createTexture(){
-        return PointerTexture2D(new Texture2D("title", width, height, colourTexture));
     }
 private :
     int width;
@@ -64,10 +84,26 @@ private :
 
     static GLuint depthBuffer;
     static GLuint colourBuffer;
+    static GLuint colourBuffer2;
+
+    void determineDrawBuffer(){
+        std::vector<GLenum> buffer;
+        buffer.push_back(GL_COLOR_ATTACHMENT0);
+        if(multisample)
+            buffer.push_back(GL_COLOR_ATTACHMENT1);
+
+        glDrawBuffers(buffer.size(), buffer.data());
+    }
 
     void initialiseFrameBuffer(int type) {
         createFrameBuffer();
-        createTextureAttachment();
+        if(multisample){
+            createMultisampleColorAttachment(&colourBuffer, GL_COLOR_ATTACHMENT0);
+            createMultisampleColorAttachment(&colourBuffer2, GL_COLOR_ATTACHMENT1);
+        }
+        else
+            createTextureAttachment();
+
         if (type == DEPTH_RENDER_BUFFER) {
             createDepthBufferAttachment();
         } else if (type == DEPTH_TEXTURE) {
@@ -79,19 +115,26 @@ private :
     void createFrameBuffer() {
         glGenFramebuffers(1, &frameBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-        glDrawBuffer(GL_COLOR_ATTACHMENT0);
+//        glDrawBuffer(GL_COLOR_ATTACHMENT0);
+        determineDrawBuffer();
     }
+
+    void createMultisampleColorAttachment(GLuint * buffer, int attach){
+        glGenRenderbuffers(1, buffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, *buffer);
+        glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, width, height);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, attach, GL_RENDERBUFFER, *buffer);
+    };
 
     void createTextureAttachment() {
         glGenTextures(1, &colourTexture);
         glBindTexture(GL_TEXTURE_2D, colourTexture);
-        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_INT, nullptr);//DIFF
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_INT, nullptr);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colourTexture, 0);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, colourTexture, 0);
     }
 
     void createDepthTextureAttachment() {
@@ -106,7 +149,10 @@ private :
     void createDepthBufferAttachment() {
         glGenRenderbuffers(1, &depthBuffer);
         glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+        if(multisample)
+            glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH_COMPONENT24, width, height);
+        else
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
     };
 };

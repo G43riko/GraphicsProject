@@ -64,9 +64,6 @@ class Texture2D {
         int getHeight(void){
             return height;
         };
-        GLuint getId(void){
-            return textureID;
-        };
         void cleanUp(void){
             glDeleteTextures(1, &textureID);
         }

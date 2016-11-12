@@ -15,12 +15,14 @@ private:
 	GLuint framebufferID;
 	GLuint depthRenderBufferID;
 	GLuint textureID;
+
 	PointerTexture2D initTexture(int width, int height){
 		glGenTextures(1, &textureID);
 		PointerTexture2D txt(new Texture2D("FBO", textureID, width, height));
 
-		glBindTexture(GL_TEXTURE_2D, txt -> getId());
+		glBindTexture(GL_TEXTURE_2D, txt -> getTextureID());
 
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_INT, nullptr);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -29,8 +31,7 @@ private:
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_INT, nullptr);
-		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, txt -> getId(), 0);
+		glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, txt -> getTextureID(), 0);
 		return txt;
 	}
     void initDepthBuffer(int width, int height){
@@ -84,7 +85,6 @@ public:
 	PointerTexture2D getTexture() {
 		return texture;
 	}
-
 };
 
 
