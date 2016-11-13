@@ -72,6 +72,7 @@ int main(void){
 
     renderer.setPostFx(true);
 
+    //renderer.addTexture(GuiTexture(0, Vector2f(-0.5f, 0.5f), Vector2f(0.25f, 0.25f)));
     renderer.addTexture(GuiTexture(diffuse -> getTextureID(), Vector2f(0.5f, 0.5f), Vector2f(0.25f, 0.25f)));
 
 

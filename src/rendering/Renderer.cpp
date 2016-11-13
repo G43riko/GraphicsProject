@@ -11,7 +11,9 @@ Renderer::Renderer(Loader loader, int width, int height) :
         fbo(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
         pp(PostProccessing(loader)),
         wf(WaterFrameBuffer()){
+
     initShaders();
+    textures.push_back(GuiTexture(fbo.getColourTexture(), Vector2f(-0.5f, 0.5f), Vector2f(0.25f, 0.25f)));
     setCamera(PointerCamera(new Camera()));
 }
 
@@ -117,8 +119,8 @@ void Renderer::renderScene(Scene scene){
 
     if(usePostFx){
         multiFbo.unbindFrameBuffer();
+        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT1, fbo);
         multiFbo.resolveToScreen();
-//        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT1, fbo);
 //        pp.doPostProcessing(fbo.getColourTexture());
     }
 

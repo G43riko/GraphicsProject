@@ -31,7 +31,7 @@ public:
         glDeleteTextures(1, &depthTexture);
         glDeleteRenderbuffers(1, &depthBuffer);
         glDeleteRenderbuffers(1, &colourBuffer);
-        glDeleteRenderbuffers(1, &colourBuffer2);
+        glDeleteRenderbuffers(1, &colourBuffer2);//TODO nahradiť vectorom
     }
 
     void bindFrameBuffer() {
@@ -62,6 +62,7 @@ public:
     void resolveToScreen(){
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
+        glReadBuffer(GL_COLOR_ATTACHMENT0);//toto som sem pridal aby sa vždy prepol na GL_COLOR_ATTACHMENT0 pri vykreslovaní sceny
         glDrawBuffer(GL_BACK);
         glBlitFramebuffer(0, 0, width, height,  0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         unbindFrameBuffer();
@@ -84,12 +85,12 @@ private :
 
     static GLuint depthBuffer;
     static GLuint colourBuffer;
-    static GLuint colourBuffer2;
+    static GLuint colourBuffer2;//TODO nahradiť vektorom
 
     void determineDrawBuffer(){
         std::vector<GLenum> buffer;
         buffer.push_back(GL_COLOR_ATTACHMENT0);
-        if(multisample)
+        if(multisample)//TODO prerobiť na pridávanie s vektora
             buffer.push_back(GL_COLOR_ATTACHMENT1);
 
         glDrawBuffers(buffer.size(), buffer.data());
@@ -99,7 +100,7 @@ private :
         createFrameBuffer();
         if(multisample){
             createMultisampleColorAttachment(&colourBuffer, GL_COLOR_ATTACHMENT0);
-            createMultisampleColorAttachment(&colourBuffer2, GL_COLOR_ATTACHMENT1);
+            createMultisampleColorAttachment(&colourBuffer2, GL_COLOR_ATTACHMENT1);//TODO pridať načítavanie s vektora
         }
         else
             createTextureAttachment();

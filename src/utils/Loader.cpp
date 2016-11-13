@@ -19,6 +19,16 @@ PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GL
     return createRawModel(vaoID, (int)indices.size());
 }
 
+PointerRawModel Loader::loadToVaoA(GLfloat * vertices,GLfloat * textures, GLfloat * normals, GLuint * indices){
+    GLuint vaoID = createVAO();
+    bindIndicesBufferArray(indices);
+    storeDataInAttributeArray(0, 3, vertices);
+    storeDataInAttributeArray(1, 2, textures);
+    storeDataInAttributeArray(2, 3, normals);
+    unbindVAO();
+    return createRawModel(vaoID, sizeof(indices) / sizeof(GLuint));
+}
+
 PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLfloat> texts, std::vector<GLuint> indices){
     GLuint vaoID = createVAO();
     bindIndicesBuffer(indices);
@@ -70,8 +80,25 @@ void Loader::bindIndicesBuffer(std::vector<GLuint> buffer){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer.size() * sizeof(GLuint), buffer.data(), GL_STATIC_DRAW);
 }
+void Loader::bindIndicesBufferArray(GLuint * buffer){
+    GLuint vboID;
+    vbos.push_front(vboID);
+    glGenBuffers(1, &vboID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(buffer), buffer, GL_STATIC_DRAW);
+}
 
 
+
+void Loader::storeDataInAttributeArray(int attributeNumber, int size, GLfloat * buffer){
+    GLuint vboID;
+    vbos.push_front(vboID);
+    glGenBuffers(1, &vboID);
+    glBindBuffer(GL_ARRAY_BUFFER, vboID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(buffer), buffer, GL_STATIC_DRAW);
+    glVertexAttribPointer(attributeNumber, size, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
 
 void Loader::storeDataInAttributeList(int attributeNumber, int size, std::vector<GLfloat> buffer){
     GLuint vboID;
