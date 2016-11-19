@@ -21,7 +21,7 @@ class FreeMove {
         float speed;
         void move(Vector3f, const float&);
     public:
-        FreeMove(float, int = Input::KEY_W, int = Input::KEY_S, int = Input::KEY_A, int = Input::KEY_D, int = Input::KEY_SPACE, int = Input::KEY_LSHIFT);
+        FreeMove(float, int = GLFW_KEY_W, int = GLFW_KEY_S, int = GLFW_KEY_A, int = GLFW_KEY_D, int = GLFW_KEY_SPACE, int = GLFW_KEY_LEFT_SHIFT);
         void setTarget(Entity &);
         void processInput(Input, float);
 };

@@ -6,23 +6,24 @@
 #define GRAPHICSPROJECT_GUITEXTURE_H
 
 
+#include <GL/glew.h>
 #include "../utils/Vectors.h"
 
 class GuiTexture {
 private:
-    int texture;
+    GLuint texture;
     Vector2f position;
     Vector2f scale;
 public:
-    GuiTexture(int texture, const Vector2f & position, const Vector2f & scale){
+    GuiTexture(GLuint texture, const Vector2f & position, const Vector2f & scale){
         this -> texture = texture;
         this -> position = position;
         this -> scale = scale;
     }
-    int getTexture(){
+    GLuint getTexture(){
         return texture;
     }
-    void setTexture(int id){
+    void setTexture(GLuint id){
         texture = id;
     }
     Vector2f getPosition(){

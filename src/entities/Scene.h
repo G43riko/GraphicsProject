@@ -9,6 +9,7 @@
 #include <src/rendering/model/Entity.h>
 #include "Light.h"
 #include <map>
+#include <src/entities/Particle.h>
 #include <src/rendering/Renderer.h>
 
 class Scene {
@@ -16,8 +17,11 @@ class Scene {
         PointerRawModel guiModel = nullptr;
         PointerRawModel sphereModel = nullptr;
         PointerRawModel skyModel = nullptr;
+        PointerRawModel particleModel = nullptr;
         CubeTexture sky;
+        std::vector<Particle> particles;
         static std::vector<GLfloat> guiVertices;
+        static std::vector<GLfloat> particeVertices;
         constexpr static float SIZE = 500;
         static std::vector<float> VERTICES;
         std::vector<PointerEntity> entities;
@@ -31,6 +35,26 @@ class Scene {
             entities.push_back(entity);
         }
 
+        void update(float delta){
+            auto it = particles.begin();
+            while(it != particles.end()){
+                bool stillAlive = it -> update(delta);
+                if(stillAlive)
+                    it++;
+                else
+                    it = particles.erase(it);
+            }
+
+        }
+
+        void addParticle(Particle particle){
+            particles.push_back(particle);
+        }
+
+        void cleanUp(){
+            sky.cleanUp();
+        }
+
         std::vector<PointerLight> getLights(){
             return lights;
         };
@@ -38,26 +62,23 @@ class Scene {
         std::vector<PointerEntity> getEntities(){
             return entities;
         };
+        std::vector<Particle> getParticles(){
+            return particles;
+        };
 
         PointerRawModel getGuiModel(void){
-            if(!guiModel)
-                std::cout << "nieje guiModel\n";
             return guiModel;
+        };
+        PointerRawModel getParticleModel(void){
+            return particleModel;
         };
         CubeTexture getSky(void){
             return sky;
         }
-        void cleanUp(){
-            sky.cleanUp();
-        }
         PointerRawModel getSphereModel(void){
-            if(!sphereModel)
-                std::cout << "nieje sphereModel\n";
             return sphereModel;
         };
         PointerRawModel getSkyModel(void){
-            if(!skyModel)
-                std::cout << "nieje skyModel\n";
             return skyModel;
         };
 };

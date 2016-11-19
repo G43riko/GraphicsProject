@@ -46,10 +46,10 @@ public:
         shader -> bind();
 
         if(targetWidth != 0)
-            shader -> updateUniformf("targetWidth", targetWidth);
+            shader -> updateUniformi("targetWidth", targetWidth);
 
         if(targetHeight != 0)
-            shader -> updateUniformf("targetHeight", targetHeight);
+            shader -> updateUniformi("targetHeight", targetHeight);
 
         shader -> connectTextures();
 

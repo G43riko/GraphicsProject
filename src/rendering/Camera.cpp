@@ -8,6 +8,7 @@
 Vector3f Camera::UP(0, 1, 0);
 
 Camera::Camera(void) : lastMousePos(Input::getMousePosition()){
+    center = Input::getWindowCenter();
     projectionMatrix = glm::perspectiveFov<float>(FOV,
                                                   static_cast<float>(WindowManager::width),
                                                   static_cast<float>(WindowManager::height),
@@ -43,96 +44,66 @@ bool isNotZero(float val){
 void Camera::input(void){
     float movSpeed = 0.1f;
     float rotSpeed = 0.05f;
-    float SENSITIVITY = 0.02f;
-
-    timeval now;
-    gettimeofday(&now, 0);
-    if(setTime){
-        //std::cout << now.tv_sec - tv.tv_sec << " " << now.tv_usec - tv.tv_usec << std::endl;
-    }
-    setTime = true;
-    tv = now;
+    float SENSITIVITY = 0.002f;
 
     if(mouseLocked) {
-        Vector2f center = Input::getWindowCenter();
         Vector2f deltaPos = Input::getMousePosition() - center;
         bool rotY = deltaPos.x != 0;
         bool rotX = deltaPos.y != 0;
 
-        if(rotY) {
+        if(rotY)
             pitch += deltaPos.y * SENSITIVITY;
-        }
-        if(rotX) {
-            yaw += (deltaPos.x * SENSITIVITY);
-        }
 
-        if(rotY || rotX) {
-            Input::setMousePos(center);
-        }
+        if(rotX)
+            yaw += deltaPos.x * SENSITIVITY;
+
+
+        if(rotY || rotX)
+            center = Input::getMousePosition();
     }
 
-
-
-    if(Input::getKeyDown(Input::KEY_P)) {
+    if(Input::getKeyDown(GLFW_KEY_P)) {
         mouseLocked = !mouseLocked;
         if(mouseLocked)
             Input::setMousePos(Input::getWindowCenter());
-        glfwSetInputMode(WindowManager::window, GLFW_CURSOR, mouseLocked ? GLFW_CURSOR_HIDDEN : GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(WindowManager::window, GLFW_CURSOR, mouseLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
 
 
-    if(Input::isKeyDown(Input::KEY_W)) {
+    if(Input::isKeyDown(GLFW_KEY_W)) {
         //position -> z -= movSpeed;
         position.x += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
         position.z += static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
     }
-    if(Input::isKeyDown(Input::KEY_S)) {
+    if(Input::isKeyDown(GLFW_KEY_S)) {
         //position->z += movSpeed;
         position.x -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
         position.z -= static_cast<float>(-cos(pitch) * cos(yaw) * movSpeed);
     }
 
-
-    if(Input::isKeyDown(Input::KEY_A)) {
+    if(Input::isKeyDown(GLFW_KEY_A)) {
         //position->x -= movSpeed;
         position.z -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
         position.x -= static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
     }
-    if(Input::isKeyDown(Input::KEY_D)) {
+    if(Input::isKeyDown(GLFW_KEY_D)) {
         //position->x += movSpeed;
         position.z += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
         position.x += static_cast<float>(cos(pitch) * cos(yaw) * movSpeed);
     }
 
-    if(Input::isKeyDown(Input::KEY_LSHIFT))
+    if(Input::isKeyDown(GLFW_KEY_LEFT_SHIFT ))
         position.y -= movSpeed;
-    if(Input::isKeyDown(Input::KEY_SPACE))
+    if(Input::isKeyDown(GLFW_KEY_SPACE))
         position.y += movSpeed;
 
-    if(Input::isKeyDown(Input::KEY_Q))
+    if(Input::isKeyDown(GLFW_KEY_Q))
         yaw -= rotSpeed;
-    if(Input::isKeyDown(Input::KEY_E))
+    if(Input::isKeyDown(GLFW_KEY_E))
         yaw += rotSpeed;
 
     //updateForward();
 }
-/*
-PointerVector3f Camera::getForwardVector(void){
-    if(VERTICAL)
-        return PointerVector3f(forward -> getMul(-1) -> normalize());
-
-    //return PointerVector3f(UP.getCross(forward.get()) -> cross(&UP) -> mul(-1) -> normalize());
-    return Vector
-}
-
-PointerVector3f Camera::getRightVector(void){
-    return PointerVector3f(UP.getCross(forward.get()) -> normalize());
-}
-
-PointerVector3f Camera::getUpVector(void){
-    return PointerVector3f(UP.getNormal());
-}
-*/
 
 glm::mat4 Camera::getViewMatrix(void){
     return Maths::createViewMatrix(pitch, yaw, position.x, position.y, position.z);

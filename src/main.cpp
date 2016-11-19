@@ -12,6 +12,7 @@
 #include <src/postProccessing/Fbo.h>
 #include <src/postProccessing/PostProccessing.h>
 #include <src/water/WaterFrameBuffer.h>
+#include <src/entities/Terrain.h>
 #include "rendering/material/Texture2D.cpp"
 #include "rendering/material/Material.h"
 
@@ -59,6 +60,8 @@ int main(void){
 
     auto floorEntity = createEntity(floor, Vector3f(0, -1, 0), Vector3f(), Vector3f(10, 1, 10));
     scene.addEntity(floorEntity);
+//    Terrain t = Terrain(1, 1, loader, diffuse, 10);
+//    scene.addEntity(createEntity(t.getModel(), Vector3f(0, -1, 0), Vector3f(0.0f), Vector3f(1.0f)));
 
     auto screen = Screen(WindowManager::width, WindowManager::height, loader);
     PointerLight light = createLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
@@ -68,27 +71,33 @@ int main(void){
     scene.addEntity(lightEntity);
     scene.addLight(light);
     scene.addLight(light1);
-    scene.addEntity(entity);
+//    scene.addEntity(entity);
 
     renderer.setPostFx(true);
 
-    //renderer.addTexture(GuiTexture(0, Vector2f(-0.5f, 0.5f), Vector2f(0.25f, 0.25f)));
-    renderer.addTexture(GuiTexture(diffuse -> getTextureID(), Vector2f(0.5f, 0.5f), Vector2f(0.25f, 0.25f)));
+    //renderer.addTexture(GuiTexture(diffuse -> getTextureID(), Vector2f(0.5f, 0.5f), Vector2f(0.25f, 0.25f)));
 
 
     float time = 0;
     while (!WindowManager::isCloseRequest()) {
         renderer.prepareRenderer(0, 0, 0, 1);
-        time+= 0.02;
+        time += 0.02f;
         renderer.init3D();
-        light1 -> setPosition(-sin(time) * 20 , 0, -cos(time) * 20 - 20);
-        light -> setPosition(sin(time) * 20 , 0, cos(time) * 20 - 20);
-        entity -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.005f, 0.00f));
+        light1 -> setPosition(static_cast<float>(-sin(time) * 20) , 0, static_cast<float>(-cos(time) * 20 - 20));
+        light -> setPosition(static_cast<float>(sin(time) * 20) , 0, static_cast<float>(cos(time) * 20 - 20));
+//        entity -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.005f, 0.00f));
 
+        scene.update(0.1);
         lightEntity -> getTransform() ->setPosition( light -> getPosition());
-
+        renderer.input();
         renderer.renderScene(scene);
 
+//        if(Input::getKeyUp(GLFW_KEY_G))
+//            scene.addParticle(Particle(Vector3f(0, 0, -10), Vector3f(0, 30, 0), 1, 400, 0, 1));
+
+
+        if(Input::isKeyDown(GLFW_KEY_ESCAPE))
+            glfwSetWindowShouldClose(WindowManager::window, 1);
         Input::update();
         WindowManager::update();
     }

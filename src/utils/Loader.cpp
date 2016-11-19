@@ -19,6 +19,15 @@ PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GL
     return createRawModel(vaoID, (int)indices.size());
 }
 
+PointerRawModel Loader::loadToVao(std::vector<GLfloat> positions, std::vector<GLfloat> texts, std::vector<GLfloat> normals, std::vector<GLuint> indices){
+    GLuint vaoID = createVAO();
+    bindIndicesBuffer(indices);
+    storeDataInAttributeList(0, 3, positions);
+    storeDataInAttributeList(1, 2, texts);
+    storeDataInAttributeList(2, 3, normals);
+    unbindVAO();
+    return createRawModel(vaoID, (int)indices.size());
+}
 PointerRawModel Loader::loadToVaoA(GLfloat * vertices,GLfloat * textures, GLfloat * normals, GLuint * indices){
     GLuint vaoID = createVAO();
     bindIndicesBufferArray(indices);
@@ -53,16 +62,16 @@ PointerRawModel Loader::loadToVao(PointerMesh mesh){
     storeDataInAttributeList(2, 3, mesh -> getNormals());
     storeDataInAttributeList(3, 3, mesh -> getTangents());
     unbindVAO();
-    //mesh -> show();
     return createRawModel(vaoID, (int)mesh -> getIndices().size());
 }
 
 void Loader::cleanUp(void){
-    //TODO nestaci for (GLuint vao : vaos)??
-    for (auto it = vaos.begin(); it != vaos.end(); ++it)
-        glDeleteVertexArrays(1, &(*it));
-    for (auto it = vbos.begin(); it != vbos.end(); ++it)
-        glDeleteBuffers(1, &(*it));
+    //for (auto it = vaos.begin(); it != vaos.end(); ++it)
+    for(GLuint vao : vaos)
+        glDeleteVertexArrays(1, &vao);
+    //for (auto it = vbos.begin(); it != vbos.end(); ++it)
+    for(GLuint vbo : vbos)
+        glDeleteBuffers(1, &vbo);
 }
 
 GLuint Loader::createVAO(void){

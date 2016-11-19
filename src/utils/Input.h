@@ -45,16 +45,6 @@ class Input {
         static bool isButtonDown(int);
         static bool getMouseDown(int);
         static bool getMouseUp(int);
-        static const int KEY_W = 87;
-        static const int KEY_A = 65;
-        static const int KEY_S = 83;
-        static const int KEY_D = 68;
-        static const int KEY_Q = 81;
-        static const int KEY_E = 69;
-        static const int KEY_P = 80;
-
-        static const int KEY_LSHIFT   = 16;
-        static const int KEY_SPACE    = 32;
 };
 
 

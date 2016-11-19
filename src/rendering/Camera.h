@@ -16,6 +16,7 @@
 class Camera {
     private:
         static Vector3f UP;
+        Vector2f center = Vector2f();
         glm::mat4 projectionMatrix;
         bool VERTICAL = true;
         const float FOV = 70.0f;

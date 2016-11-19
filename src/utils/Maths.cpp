@@ -21,6 +21,8 @@ glm::mat4 Maths::createTransformationMatrix(const float &posX, const float &posY
     return translateMatrix * rotationMatrix * scaleMatrix;
 }
 
+
+
 glm::mat4 Maths::createViewMatrix(const float &pitch, const float &yaw, const float &x, const float &y, const float &z){
     glm::mat4 resultMatrix = glm::mat4(1.0f);
     resultMatrix *= glm::rotate(pitch, glm::vec3(1, 0, 0));

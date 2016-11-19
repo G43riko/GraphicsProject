@@ -7,6 +7,11 @@ in vec3 Tangent;
 out vec2 pass_Texture;
 out vec3 toLightVector[8];
 out vec3 toCameraVector;
+out float visibility;
+out float distance;
+
+const float density = 0.007f;
+const float gradient = 1.5f;
 
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
@@ -36,6 +41,11 @@ void main() {
     for(int i=0 ; i<8 ; i++)
         toLightVector[i] = toTangentSpace * (lightPositionEyeSpace[i] - positionRelativeToCam.xyz);
         //toLightVector[i] = lightPositionEyeSpace[i] - worldPosition.xyz;
+
+
+    distance = length(positionRelativeToCam.xyz);
+    visibility = exp(-pow(distance * density, gradient));
+    visibility = clamp(visibility, 0, 1);
 
     toCameraVector = toTangentSpace * (-positionRelativeToCam.xyz);
 }

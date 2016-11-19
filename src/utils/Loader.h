@@ -18,6 +18,7 @@ class Loader {
         PointerRawModel loadToVao(std::vector<GLfloat>);
         PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLuint>);
         PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
+        PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
         PointerRawModel loadToVaoA(GLfloat *,GLfloat *, GLfloat *, GLuint *);
 
         PointerRawModel loadToVao(PointerMesh);

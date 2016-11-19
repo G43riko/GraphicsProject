@@ -28,7 +28,7 @@ Matrix4f Matrix4f::setIdentity(Matrix4f& m) {
     return m;
 }
 
-Matrix4f * Matrix4f::mul(Matrix4f left, Matrix4f right, Matrix4f * dest) {
+Matrix4f * Matrix4f::mul(const Matrix4f & left, Matrix4f right, Matrix4f * dest) {
     if (!dest)
         dest = new Matrix4f();
 
@@ -110,7 +110,7 @@ Matrix4f * Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
     return dest;
 }
 
-Matrix4f * Matrix4f::rotate(float angle, Vector3f axis, Matrix4f * src, Matrix4f * dest) {
+Matrix4f * Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * dest) {
     if (!dest)
         dest = new Matrix4f();
     float c = (float) cos(angle);
@@ -135,18 +135,18 @@ Matrix4f * Matrix4f::rotate(float angle, Vector3f axis, Matrix4f * src, Matrix4f
     float f21 = yz*oneminusc-xs;
     float f22 = axis.z*axis.z*oneminusc+c;
 
-    float t00 = src -> m00 * f00 + src -> m10 * f01 + src -> m20 * f02;
-    float t01 = src -> m01 * f00 + src -> m11 * f01 + src -> m21 * f02;
-    float t02 = src -> m02 * f00 + src -> m12 * f01 + src -> m22 * f02;
-    float t03 = src -> m03 * f00 + src -> m13 * f01 + src -> m23 * f02;
-    float t10 = src -> m00 * f10 + src -> m10 * f11 + src -> m20 * f12;
-    float t11 = src -> m01 * f10 + src -> m11 * f11 + src -> m21 * f12;
-    float t12 = src -> m02 * f10 + src -> m12 * f11 + src -> m22 * f12;
-    float t13 = src -> m03 * f10 + src -> m13 * f11 + src -> m23 * f12;
-    dest -> m20 = src -> m00 * f20 + src -> m10 * f21 + src -> m20 * f22;
-    dest -> m21 = src -> m01 * f20 + src -> m11 * f21 + src -> m21 * f22;
-    dest -> m22 = src -> m02 * f20 + src -> m12 * f21 + src -> m22 * f22;
-    dest -> m23 = src -> m03 * f20 + src -> m13 * f21 + src -> m23 * f22;
+    float t00 = src.m00 * f00 + src.m10 * f01 + src.m20 * f02;
+    float t01 = src.m01 * f00 + src.m11 * f01 + src.m21 * f02;
+    float t02 = src.m02 * f00 + src.m12 * f01 + src.m22 * f02;
+    float t03 = src.m03 * f00 + src.m13 * f01 + src.m23 * f02;
+    float t10 = src.m00 * f10 + src.m10 * f11 + src.m20 * f12;
+    float t11 = src.m01 * f10 + src.m11 * f11 + src.m21 * f12;
+    float t12 = src.m02 * f10 + src.m12 * f11 + src.m22 * f12;
+    float t13 = src.m03 * f10 + src.m13 * f11 + src.m23 * f12;
+    dest -> m20 = src.m00 * f20 + src.m10 * f21 + src.m20 * f22;
+    dest -> m21 = src.m01 * f20 + src.m11 * f21 + src.m21 * f22;
+    dest -> m22 = src.m02 * f20 + src.m12 * f21 + src.m22 * f22;
+    dest -> m23 = src.m03 * f20 + src.m13 * f21 + src.m23 * f22;
     dest -> m00 = t00;
     dest -> m01 = t01;
     dest -> m02 = t02;

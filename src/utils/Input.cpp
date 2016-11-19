@@ -9,7 +9,7 @@ Vector2f Input::windowCenter;
 Vector2f Input::mousePos = Vector2f();
 Vector2f Input::getMousePosition(void){
     return mousePos;
-};
+}
 Vector2f Input::getWindowCenter(void){
     return windowCenter;
 }

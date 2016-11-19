@@ -39,5 +39,6 @@ public:
         }
 
         this -> setUniform("levels");
+        this -> setUniform("options");
     }
 };

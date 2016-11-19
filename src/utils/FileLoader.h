@@ -35,7 +35,7 @@ public:
             unsigned int width;
             unsigned int height;
             std::vector<unsigned char> image;
-            unsigned error = lodepng::decode(image, width, height, "res/textures/skies/" + title + TITLES[i] + ".png");
+            /*unsigned error = */lodepng::decode(image, width, height, "res/textures/skies/" + title + TITLES[i] + ".png");
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
         }
 
@@ -46,21 +46,21 @@ public:
     static PointerTexture2D loadTextureColor(Vector3f color){
         std::vector<unsigned char> image;
         image.clear();
-        image.push_back(color.x);
-        image.push_back(color.y);
-        image.push_back(color.z);
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
         image.push_back(255);
-        image.push_back(color.x);
-        image.push_back(color.y);
-        image.push_back(color.z);
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
         image.push_back(255);
-        image.push_back(color.x);
-        image.push_back(color.y);
-        image.push_back(color.z);
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
         image.push_back(255);
-        image.push_back(color.x);
-        image.push_back(color.y);
-        image.push_back(color.z);
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
         image.push_back(255);
         return initTexture2D("gabo", image, 2, 2);
     }

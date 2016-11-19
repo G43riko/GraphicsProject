@@ -32,9 +32,18 @@ class Vector2f{
         Vector2f(int x, int y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(float val) : Vector2f(val, val){};
         Vector2f * getSub(Vector2f *);
+        friend Vector2f operator * (const Vector2f &c1, const float& val){ return Vector2f(c1.x * val, c1.y * val); }
         friend Vector2f operator - (const Vector2f &c1, const Vector2f &c2){
             return Vector2f(c1.x - c2.x, c1.y - c2.y);
         }
+        Vector2f& operator = (const Vector2f& other){
+            this -> x = other.x;
+            this -> y = other.y;
+            return *this;
+        }
+
+    int getXi(){ return static_cast<int>(x); }
+    int getYi(){ return static_cast<int>(y); }
         //Vector2f(const Vector2f&);
 };
 
@@ -82,6 +91,21 @@ class Vector3f{
             this -> z = other.z;
             return *this;
         }
+
+        int getXi(){ return static_cast<int>(x); }
+        int getYi(){ return static_cast<int>(y); }
+        int getZi(){ return static_cast<int>(z); }
+
+        template <typename T>
+        T getXt(){return static_cast<T>(x); }
+        template <typename T>
+        T getYt(){return static_cast<T>(y); }
+        template <typename T>
+        T getZt(){return static_cast<T>(z); }
+
+        unsigned char getXuc(){ return static_cast<unsigned char>(x); }
+        unsigned char getYuc(){ return static_cast<unsigned char>(y); }
+        unsigned char getZuc(){ return static_cast<unsigned char>(z); }
 
         Vector3f rotate(Quaternion);
 

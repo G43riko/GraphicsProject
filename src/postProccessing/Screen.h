@@ -86,14 +86,6 @@ public:
     }
     //EFFECTS
 
-    void setFilter(float *, int offsetX, int offsetY, float factor, float bias){
-        changed = true;
-        filterOffset.x = offsetX;
-        filterOffset.y = offsetY;
-        filterFactor = factor;
-        filterBias = bias;
-    }
-
     void setGreyscale(bool value = false){
         changed = true;
         greyscale = value;
