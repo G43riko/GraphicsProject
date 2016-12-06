@@ -15,18 +15,11 @@
 
 class Camera {
     private:
-        static Vector3f UP;
-        Vector2f center = Vector2f();
         glm::mat4 projectionMatrix;
         bool VERTICAL = true;
         const float FOV = 70.0f;
         const float NEAR_PLANE = 0.1f;
         const float FAR_PLANE = 1000.0f;
-        Vector3f forward = Vector3f(0, 0, 1);
-        bool mouseLocked = false;
-        Vector2f lastMousePos;
-        timeval tv;
-        bool setTime = false;
     public:
         Vector3f position = Vector3f(0, 0, 0);
         float pitch = 0;
@@ -34,9 +27,7 @@ class Camera {
         float roll = 0;
         Camera(void);
         glm::mat4 getProjectionMatrix(void);
-        void input(void);
         glm::mat4 getViewMatrix(void);
-        void updateForward(void);
 };
 
 typedef std::shared_ptr<Camera> PointerCamera;

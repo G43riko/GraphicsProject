@@ -7,6 +7,7 @@ in vec3 Tangent;
 out vec2 pass_Texture;
 out vec3 toLightVector[8];
 out vec3 toCameraVector;
+out vec3 norm;
 out float visibility;
 out float distance;
 
@@ -28,7 +29,7 @@ void main() {
 
     vec3 surfaceNormal = (transformationMatrix * vec4(Normal, 0.0)).xyz;
 
-    vec3 norm = normalize(surfaceNormal);
+    norm = normalize(surfaceNormal);
     vec3 tang = normalize((modelViewMatrix * vec4(Tangent, 0.0)).xyz);
     vec3 bitang = normalize(cross(norm, tang));
 

@@ -19,13 +19,37 @@ void Transform::move(float x, float y, float z){
     position.z += z;
 }
 
-Matrix4f Transform::getTransformation(void){
-    Matrix4f translationMatrix = *Matrix4f::initTranslation(position.x, position.y, position.z);
-    Matrix4f scaleMatrix = *Matrix4f::initScale(scale.x, scale.y, scale.z);
-    return scaleMatrix * rotation.toRotationMatrix() * translationMatrix;
+Matrix4f Transform::getTransformation(bool pos, bool rot, bool sca){
+    Matrix4f result;
+    Matrix4f::setIdentity(result);
+    if(parent)
+        result = parent -> getTransformation(parentAttributes.x > 0, parentAttributes.y > 0, parentAttributes.z > 0) * result;
+    if(pos)
+        result = Matrix4f::initTranslation(position.x, position.y, position.z) * result;
+    if(rot)
+        result = rotation.toRotationMatrix() * result;
+    if(sca)
+        result = Matrix4f::initScale(scale.x, scale.y, scale.z) * result;
+    return result;
+//    if(parent)
+//        return scaleMatrix * rotation.toRotationMatrix() * translationMatrix * parent->getTransformation();
+//    return scaleMatrix * rotation.toRotationMatrix() * translationMatrix;
 }
 void Transform::setPosition(Vector3f vec){
     position = vec;
+}
+void Transform::setParent(Transform * parent, bool pos, bool rot, bool scale){
+    this -> parent = parent;
+    parentAttributes.x = pos ? 1 : 0;
+    parentAttributes.y = rot ? 1 : 0;
+    parentAttributes.z = scale ? 1 : 0;
+};
+
+Matrix4f Transform::getAverageTransformation(Transform a, Transform b, float ratio){
+    Vector3f pos = linearInterpolation(*a.getPosition(), *b.getPosition(), ratio);
+    Quaternion rot = Quaternion::slerp(*a.getRotation(), *b.getRotation(), ratio); //linearInterpolation(*a.getRotation(), *b.getRotation(), ratio);
+    Vector3f scale = linearInterpolation(*a.getScale(), *b.getScale(), ratio);
+    return Transform(pos, a.getRotation() -> getForward(), scale).getTransformation(true, false, true);
 }
 
 Vector3f * Transform::getPosition(void){return &position;}

@@ -3,6 +3,7 @@
 in vec2 pass_Texture;
 in vec3 toLightVector[8];
 in vec3 toCameraVector;
+in vec3 norm;
 
 in float visibility;
 in float distance;
@@ -74,8 +75,6 @@ void main() {
     FragmentColor = vec4(totalDiffuse, 1.0) * texture + vec4(totalSpecular, 1.0f);
     if((options & flagFlog) == flagFlog)
         FragmentColor = mix(vec4(skyColor, 1), FragmentColor, visibility);
-    BrightColor = vec4(vec3(unitNormal), 1);
+    BrightColor = vec4(norm, 1);
     DistColor = vec4(1 - vec3(distance / 50), 1);
-
-
 }

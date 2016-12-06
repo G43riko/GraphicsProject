@@ -176,29 +176,29 @@ Matrix4f * Matrix4f::scale(Vector3f vec, Matrix4f src, Matrix4f * dest) {
     return dest;
 }
 
-Matrix4f * Matrix4f::initScale(float x, float y, float z){
-    Matrix4f * result = new Matrix4f();
+Matrix4f Matrix4f::initScale(float x, float y, float z){
+    Matrix4f result = Matrix4f();
 
-    result -> m00 = x;    result -> m01 = 0;    result -> m02 = 0;    result -> m03 = 0;
-    result -> m10 = 0;    result -> m11 = y;    result -> m12 = 0;    result -> m13 = 0;
-    result -> m20 = 0;    result -> m21 = 0;    result -> m22 = z;    result -> m23 = 0;
-    result -> m30 = 0;    result -> m31 = 0;    result -> m32 = 0;    result -> m33 = 1;
-
-    return result;
-}
-
-Matrix4f * Matrix4f::initTranslation(float x, float y, float z){
-    Matrix4f * result = new Matrix4f();
-
-    result -> m00 = 1;    result -> m01 = 0;    result -> m02 = 0;    result -> m03 = x;
-    result -> m10 = 0;    result -> m11 = 1;    result -> m12 = 0;    result -> m13 = y;
-    result -> m20 = 0;    result -> m21 = 0;    result -> m22 = 1;    result -> m23 = z;
-    result -> m30 = 0;    result -> m31 = 0;    result -> m32 = 0;    result -> m33 = 1;
+    result.m00 = x;    result.m01 = 0;    result.m02 = 0;    result.m03 = 0;
+    result.m10 = 0;    result.m11 = y;    result.m12 = 0;    result.m13 = 0;
+    result.m20 = 0;    result.m21 = 0;    result.m22 = z;    result.m23 = 0;
+    result.m30 = 0;    result.m31 = 0;    result.m32 = 0;    result.m33 = 1;
 
     return result;
 }
 
-Matrix4f * Matrix4f::initRotation(float x, float y, float z){
+Matrix4f Matrix4f::initTranslation(float x, float y, float z){
+    Matrix4f result = Matrix4f();
+
+    result.m00 = 1;    result.m01 = 0;    result.m02 = 0;    result.m03 = x;
+    result.m10 = 0;    result.m11 = 1;    result.m12 = 0;    result.m13 = y;
+    result.m20 = 0;    result.m21 = 0;    result.m22 = 1;    result.m23 = z;
+    result.m30 = 0;    result.m31 = 0;    result.m32 = 0;    result.m33 = 1;
+
+    return result;
+}
+
+Matrix4f Matrix4f::initRotation(float x, float y, float z){
     Matrix4f rx = Matrix4f();
     Matrix4f ry = Matrix4f();
     Matrix4f rz = Matrix4f();
@@ -222,8 +222,9 @@ Matrix4f * Matrix4f::initRotation(float x, float y, float z){
     ry.m20 = sin(y); ry.m21 = 0;      ry.m22 = cos(y); ry.m23 = 0;
     ry.m30 = 0;      ry.m31 = 0;      ry.m32 = 0;      ry.m33 = 1;
 
-    Matrix4f * result = mul(ry, rx);
-    return mul(rz, *result, result);
+    Matrix4f m;
+    Matrix4f * result = mul(ry, rx, &m);
+    return *mul(rz, *result, result);
 }
 
 Matrix4f * Matrix4f::initPerspective(float fov, float aspectRatio, float zNear, float zFar){

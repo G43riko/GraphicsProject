@@ -6,7 +6,8 @@
 
 GLFWwindow * Input::window = nullptr;
 Vector2f Input::windowCenter;
-Vector2f Input::mousePos = Vector2f();
+Vector2f Input::mouseScrollOffset;
+Vector2f Input::mousePos;
 Vector2f Input::getMousePosition(void){
     return mousePos;
 }
@@ -22,13 +23,17 @@ void Input::init(GLFWwindow* window, int width, int height){
     Input::window = window;
     glfwSetKeyCallback(window, Input::onKeyDown);
     glfwSetCursorPosCallback(window, Input::onMouseMove);
+    glfwSetScrollCallback(window, Input::onMouseScroll);
     Input::windowCenter = Vector2f(width >> 1, height >> 1);
 }
 
 void Input::setMousePos(Vector2f  pos){
     glfwSetCursorPos(Input::window, pos.x, pos.y);
 }
-
+void Input::onMouseScroll(GLFWwindow * window, double posX, double posY){
+    mouseScrollOffset.x += posX;
+    mouseScrollOffset.y += posY;
+}
 void Input::onKeyDown(GLFWwindow * window, int key, int scanCode, int action, int mods){
     if(action == GLFW_PRESS){
         keys[key] = true;

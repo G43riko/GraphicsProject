@@ -64,9 +64,9 @@ public:
     static Matrix4f * rotate(float, Vector3f, Matrix4f, Matrix4f * = nullptr);
     static Matrix4f * scale(Vector3f, Matrix4f, Matrix4f *);
 
-    static Matrix4f * initScale(float, float, float);
-    static Matrix4f * initTranslation(float, float, float);
-    static Matrix4f * initRotation(float, float, float);
+    static Matrix4f initScale(float, float, float);
+    static Matrix4f initTranslation(float, float, float);
+    static Matrix4f initRotation(float, float, float);
     static Matrix4f * initPerspective(float, float, float, float);
     static Matrix4f * initOrthographic(float, float, float, float, float, float);
 

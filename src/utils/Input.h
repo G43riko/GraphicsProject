@@ -24,10 +24,12 @@ class Input {
         static bool keys[];
         static bool lastButtons[];
         static bool buttons[];
+        static Vector2f mouseScrollOffset;
         static GLFWwindow * window;
         static Vector2f windowCenter;
         static void onKeyDown(GLFWwindow *, int, int, int, int);
         static void onMouseMove(GLFWwindow *, double, double);
+        static void onMouseScroll(GLFWwindow *, double, double);
         static Vector2f mousePos;
     public:
         static Vector2f getWindowCenter(void);
@@ -35,7 +37,9 @@ class Input {
         static void init(GLFWwindow*, int, int);
         static void update(void);
         static void setMousePos(Vector2f);
-
+        static Vector2f getMouseScroll(void){
+            return mouseScrollOffset;
+        }
         //KEYS
         static bool isKeyDown(int);
         static bool getKeyDown(int);

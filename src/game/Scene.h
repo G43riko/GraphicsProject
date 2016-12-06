@@ -7,13 +7,16 @@
 
 
 #include <src/rendering/model/Entity.h>
-#include "Light.h"
+#include "src/entities/Light.h"
+#include "GameObject.h"
 #include <map>
+#include <algorithm>
 #include <src/entities/Particle.h>
 #include <src/rendering/Renderer.h>
 
 class Scene {
     private:
+        constexpr static float SIZE = 500;
         PointerRawModel guiModel = nullptr;
         PointerRawModel sphereModel = nullptr;
         PointerRawModel skyModel = nullptr;
@@ -22,12 +25,13 @@ class Scene {
         std::vector<Particle> particles;
         static std::vector<GLfloat> guiVertices;
         static std::vector<GLfloat> particeVertices;
-        constexpr static float SIZE = 500;
         static std::vector<float> VERTICES;
         std::vector<PointerEntity> entities;
         std::vector<PointerLight> lights;
+        std::vector<PointerGameObject> objects;
     public:
         Scene(Loader, CubeTexture);
+
         void addLight(PointerLight light){
             lights.push_back(light);
         }
@@ -35,21 +39,47 @@ class Scene {
             entities.push_back(entity);
         }
 
-        void update(float delta){
-            auto it = particles.begin();
-            while(it != particles.end()){
-                bool stillAlive = it -> update(delta);
-                if(stillAlive)
-                    it++;
-                else
-                    it = particles.erase(it);
-            }
-
-        }
-
         void addParticle(Particle particle){
             particles.push_back(particle);
         }
+        void addObject(PointerGameObject object){
+            objects.push_back(object);
+            entities.push_back(object->getObject());
+        }
+
+        void update(float delta){
+            if(particles.size()){
+                auto itPart = particles.begin();
+                while(itPart != particles.end()){
+                    bool stillAlive = itPart -> update(delta);
+                    if(stillAlive)
+                        itPart++;
+                    else
+                        itPart = particles.erase(itPart);
+                }
+            }
+            if(objects.size()){
+                auto itObj = objects.begin();
+                while(itObj != objects.end()){
+                    itObj -> get() -> update(delta);
+                    itObj++;
+                }
+            }
+            if(entities.size()){
+                auto itEnt = entities.begin();
+                while(itEnt != entities.end()){
+                    if(itEnt -> get() -> isAlive())
+                        itEnt++;
+                    else
+                        itEnt = entities.erase(itEnt);
+                }
+            }
+        }
+
+//        PointerEntity removeEntity(PointerEntity element){
+//            entities.erase(std::remove(entities.begin(), entities.end(), element), entities.end());
+//        }
+
 
         void cleanUp(){
             sky.cleanUp();
@@ -61,6 +91,9 @@ class Scene {
 
         std::vector<PointerEntity> getEntities(){
             return entities;
+        };
+        std::vector<PointerGameObject> getObjects(){
+            return objects;
         };
         std::vector<Particle> getParticles(){
             return particles;

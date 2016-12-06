@@ -312,7 +312,6 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerLight> ligh
         return;
     shader -> bind();
 
-    actualCamera -> input();
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
     //shader -> updateUniform2f("levels", 4);
 
@@ -335,7 +334,6 @@ void Renderer::renderEntity(PointerEntity entity){
         return;
     shader -> bind();
 
-    actualCamera -> input();
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
     //shader -> updateUniform2f("levels", 4);
 
@@ -370,7 +368,7 @@ void Renderer::render(PointerMaterialedModel materialedModel){
 }
 
 void Renderer::input(void) {
-    actualCamera -> input();
+    //actualCamera -> input();
 
     if(Input::getKeyUp(GLFW_KEY_1))
         toggleOption(Renderer::FLAG_LIGHT);

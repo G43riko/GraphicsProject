@@ -14,6 +14,7 @@
 class Entity {
     private:
         int id;
+        bool alive = true;
         PointerMaterialedModel model;
         Transform transform = Transform();
 
@@ -25,6 +26,9 @@ class Entity {
 
         PointerMaterialedModel getModel(void);
         Transform * getTransform(void);
+
+        void setAlive(bool);
+        bool isAlive(void);
 };
 typedef std::shared_ptr<Entity> PointerEntity;
 

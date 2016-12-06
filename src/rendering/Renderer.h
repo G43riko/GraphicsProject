@@ -10,7 +10,7 @@
 #include "model/MaterialedModel.h"
 #include "model/Entity.h"
 #include "../entities/Light.h"
-#include "../entities/Scene.h"
+#include "../game/Scene.h"
 #include <iostream>
 #include "Camera.h"
 #include <glm/mat4x4.hpp>
@@ -75,6 +75,10 @@ class Renderer {
         const static unsigned char FLAG_LIGHT = 0x04; // hex for 0000 0100
         const static unsigned char FLAG_SPECULAR = 0x08; // hex for 0000 1000
         const static unsigned char FLAG_FOG = 0x10; // hex for 0001 0000
+
+        PointerCamera getActualCamera(void){
+            return actualCamera;
+        }
     private:
 
         unsigned char options = FLAG_TEXTURE | FLAG_NORMAL_MAP | FLAG_LIGHT | FLAG_SPECULAR | FLAG_FOG;

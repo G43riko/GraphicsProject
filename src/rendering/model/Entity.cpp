@@ -29,3 +29,10 @@ PointerMaterialedModel Entity::getModel(void){
 Transform * Entity::getTransform(void){
     return &transform;
 }
+
+void Entity::setAlive(bool value){
+    alive = value;
+}
+bool Entity::isAlive(void){
+    return alive;
+}

@@ -31,11 +31,9 @@ class Vector2f{
         Vector2f(double x, double y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(int x, int y) : Vector2f(static_cast<float>(x), static_cast<float>(y)){};
         Vector2f(float val) : Vector2f(val, val){};
-        Vector2f * getSub(Vector2f *);
         friend Vector2f operator * (const Vector2f &c1, const float& val){ return Vector2f(c1.x * val, c1.y * val); }
-        friend Vector2f operator - (const Vector2f &c1, const Vector2f &c2){
-            return Vector2f(c1.x - c2.x, c1.y - c2.y);
-        }
+        friend Vector2f operator - (const Vector2f &c1, const Vector2f &c2){return Vector2f(c1.x - c2.x, c1.y - c2.y); }
+        friend Vector2f operator + (const Vector2f &c1, const Vector2f &c2){return Vector2f(c1.x + c2.x, c1.y + c2.y); }
         Vector2f& operator = (const Vector2f& other){
             this -> x = other.x;
             this -> y = other.y;
