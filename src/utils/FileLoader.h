@@ -151,6 +151,12 @@ public:
             Vector3f vertex2 = Vector3f(atof(ver2[0].c_str()), atof(ver2[1].c_str()), atof(ver2[2].c_str()));;
             Vector3f vertex3 = Vector3f(atof(ver3[0].c_str()), atof(ver3[1].c_str()), atof(ver3[2].c_str()));;
 
+            if(fileName == "res/models/axe.obj" && false) {
+                vertex1.show();
+                vertex2.show();
+                vertex3.show();
+            }
+
             PointerVertex v0 = processVertex(vertex1, vertices, indices);
             PointerVertex v1 = processVertex(vertex2, vertices, indices);
             PointerVertex v2 = processVertex(vertex3, vertices, indices);
@@ -164,7 +170,13 @@ public:
         std::vector<GLuint> indicesFinal;
         std::vector<GLfloat> normalsFinal;
         std::vector<GLfloat> tangentsFinal;
+
+        if(fileName == "res/models/axe.obj" && false){
+            for(int i=0 ; i<vertices.size() ; i++)
+                printf("x: %f\n", vertices.at(i) -> position.x);
+        }
         convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal, tangentsFinal);
+//            printf("x: %f\n", verticesFinal[i]);
         return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices));
         //float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray, normalsArray, tangentsArray);
         // ModelData data = new ModelData(verticesArray, texturesArray,

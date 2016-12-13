@@ -37,7 +37,12 @@ void Input::onMouseScroll(GLFWwindow * window, double posX, double posY){
 void Input::onKeyDown(GLFWwindow * window, int key, int scanCode, int action, int mods){
     if(action == GLFW_PRESS){
         keys[key] = true;
+
     }
+    if(key == GLFW_KEY_KP_ADD)
+        mouseScrollOffset.y += 1;
+    else if(key == GLFW_KEY_KP_SUBTRACT)
+        mouseScrollOffset.y -= 1;
     else if(action == GLFW_RELEASE){
         keys[key] = false;
     }

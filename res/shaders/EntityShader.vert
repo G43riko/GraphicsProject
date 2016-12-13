@@ -5,13 +5,13 @@ in vec3 Normal;
 
 out vec2 pass_Texture;
 out vec3 surfaceNormal;
-out vec3 toLightVector;
+out vec3 toLightVector[8];
 
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
-uniform vec3 lightPosition;
+uniform vec3 lightPosition[8];
 
 void main() {
   pass_Texture = Texture;
@@ -19,6 +19,7 @@ void main() {
   gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
   surfaceNormal = (transformationMatrix * vec4(Normal, 0.0)).xyz;
-  toLightVector = lightPosition - worldPosition.xyz;
+  for(int i=0 ; i<8 ; i++)
+    toLightVector[i] = lightPosition[i] - worldPosition.xyz;
 
 }

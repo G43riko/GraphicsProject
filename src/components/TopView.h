@@ -9,26 +9,24 @@
 #include <src/rendering/Camera.h>
 #include <src/rendering/model/Entity.h>
 #include <src/game/GameObject.h>
+#include "BasicView.h"
 
-class TopView {
+class TopView : public BasicView{
 private:
-    PointerCamera camera;
     Vector3f realPosition;
     float speed = 1;
-    float velocityPower = 0.25f;
+    float velocityPower = 0.05f;
     float height;
-    GameObject * player;
 public:
-    TopView(PointerCamera camera, float height, GameObject * player = nullptr){
-        this -> camera = camera;
-        this -> player = player;
+    TopView(PointerCamera camera, float height, GameObject * player = nullptr) : BasicView(camera, player, "topView"){
         this -> height = height;
         realPosition = camera -> position;
         camera -> position.y = height;
         camera -> pitch = M_PI_2;
+        player->getObject()->immortal = true;
     }
 
-    void input(){
+    void input(void){
         Vector3f position = realPosition;
         float rotSpeed = 0.2;
         if(Input::isKeyDown(GLFW_KEY_W)) {
@@ -72,8 +70,11 @@ public:
         if(Input::isKeyDown(GLFW_KEY_DOWN)) {
             camera -> pitch -= 0.1f;
         }
+        camera -> pitch = clamp(camera -> pitch , 0.07f, 1.54f);
         Vector3f * playerPos = player -> getObject() -> getTransform() ->getPosition();
         float tmpHeight = height - Input::getMouseScroll().y;
+        if(tmpHeight < 3)
+            tmpHeight = 3;
         position.y = playerPos -> y + tmpHeight * sin(camera -> pitch);
         position.z = playerPos -> z + tmpHeight * cos(-camera -> yaw) * cos(camera -> pitch);
         position.x = playerPos -> x + tmpHeight * sin(-camera -> yaw) * cos(camera -> pitch);

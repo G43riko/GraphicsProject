@@ -68,7 +68,7 @@ class Renderer {
         //DEPRECATED
         void render(PointerRawModel);
         void render(PointerMaterialedModel);
-        void renderEntity(PointerEntity);
+        void renderEntity(PointerEntity, std::vector<PointerLight>);
         void renderObject(PointerEntity, std::vector<PointerLight>);
         const static unsigned char FLAG_TEXTURE = 0x01; // hex for 0000 0001
         const static unsigned char FLAG_NORMAL_MAP = 0x02; // hex for 0000 0010
@@ -97,7 +97,7 @@ class Renderer {
         bool usePostFx = false;
         std::vector<GuiTexture> textures;
         //PRIVATE METHODS
-        void updateLightUniforms(PointerLight, PointerBasicShader, int);
+        void updateLightUniforms(PointerLight, PointerBasicShader, int, bool = true);
         Vector3f getEyeSpacePosition(PointerLight, glm::mat4);
         void prepareModel(PointerRawModel, GLuint);
         void prepareMaterial(PointerMaterial, PointerBasicShader);

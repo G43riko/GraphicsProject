@@ -92,6 +92,11 @@ Quaternion Quaternion::operator * (const Quaternion& r){
     return Quaternion(_x, _y, _z, _w);
 }
 
+Quaternion Quaternion::operator *= (const Quaternion& r){
+    *this = *this * r;
+    return *this;
+}
+
 Quaternion Quaternion::operator * (const Vector3f& v){
     const float _w = - (x * v.x) - (y * v.y) - (z * v.z);
     const float _x =   (w * v.x) + (y * v.z) - (z * v.y);

@@ -31,7 +31,7 @@ Transform * Entity::getTransform(void){
 }
 
 void Entity::setAlive(bool value){
-    alive = value;
+    alive = immortal || value;
 }
 bool Entity::isAlive(void){
     return alive;

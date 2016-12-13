@@ -28,6 +28,9 @@ class Camera {
         Camera(void);
         glm::mat4 getProjectionMatrix(void);
         glm::mat4 getViewMatrix(void);
+        void show(){
+            printf("pitch: %f, yaw: %f, roll: %f\n", pitch, yaw, roll);
+        }
 };
 
 typedef std::shared_ptr<Camera> PointerCamera;

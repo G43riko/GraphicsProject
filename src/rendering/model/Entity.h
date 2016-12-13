@@ -19,6 +19,7 @@ class Entity {
         Transform transform = Transform();
 
     public:
+        bool immortal = false;
         Entity(PointerMaterialedModel, const Vector3f &, const Vector3f &, const Vector3f &);
         int getId(void);
 

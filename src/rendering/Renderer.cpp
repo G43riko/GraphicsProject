@@ -7,7 +7,7 @@
 
 Renderer::Renderer(Loader loader, int width, int height) :
         screen(Screen(width, height, loader)),
-        multiFbo(Fbo(width, height, Fbo::DEPTH_RENDER_BUFFER, 4)),
+        multiFbo(Fbo(width, height, Fbo::DEPTH_RENDER_BUFFER,1)),
         fbo(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
         fbo2(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
         fbo3(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
@@ -16,9 +16,9 @@ Renderer::Renderer(Loader loader, int width, int height) :
 
     initShaders();
 
-    textures.push_back(GuiTexture(fbo.getColourTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
-    textures.push_back(GuiTexture(fbo2.getColourTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
-    textures.push_back(GuiTexture(fbo3.getColourTexture(), Vector2f(-0.25f, 0.75f), Vector2f(0.25f, 0.25f)));
+//    textures.push_back(GuiTexture(fbo.getColourTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
+//    textures.push_back(GuiTexture(fbo2.getColourTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
+//    textures.push_back(GuiTexture(fbo3.getColourTexture(), Vector2f(-0.25f, 0.75f), Vector2f(0.25f, 0.25f)));
     setCamera(PointerCamera(new Camera()));
 }
 
@@ -178,7 +178,9 @@ void Renderer::renderScene(Scene scene){
 
 
     renderSky(scene.getSky(), scene.getSkyModel());
-    renderObjects(scene.getEntities(), scene.getLights());
+    //renderObjects(scene.getEntities(), scene.getLights());
+    for(PointerEntity p : scene.getEntities())
+        renderEntity(p, scene.getLights());
 
     if(scene.getParticles().size())
         renderParticles(scene.getParticles(), scene.getParticleModel());
@@ -198,6 +200,7 @@ void Renderer::renderScene(Scene scene){
 
 void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<PointerLight> lights){
     PointerBasicShader shader = shaders["objectShader"];
+    int items = 3;
     if(!shader){
         std::cerr << "Nenašiel sa shader" << std::endl;
         return;
@@ -220,10 +223,10 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
         shader -> updateUniform4m("transformationMatrix", entities[i] -> getTransform() -> getTransformation());
         if(options & FLAG_TEXTURE)
             prepareMaterial(entities[i] -> getModel() -> getMaterial(), shader);
-        prepareModel(model, 4);
+        prepareModel(model, items);
         glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     }
-    finishRender(4);
+    finishRender(items);
 }
 
 void Renderer::renderScreen(Screen screen) {
@@ -284,13 +287,12 @@ void Renderer::finishRender(GLuint numberOfAttributes){
     glBindVertexArray(0);
 }
 
-void Renderer::updateLightUniforms(PointerLight light, PointerBasicShader shader, int index){
-    shader -> updateUniform3f("lightPositionEyeSpace[" + std::to_string(index) + "]",
-                              getEyeSpacePosition(light, actualCamera -> getViewMatrix()));
-    shader -> updateUniform3f("lightColor[" + std::to_string(index) + "]",
-                              light -> getColor());
-    shader -> updateUniform3f("attenuation[" + std::to_string(index) + "]",
-                              light -> getAttenuation());
+void Renderer::updateLightUniforms(PointerLight light, PointerBasicShader shader, int index, bool eyeSpace){
+    Vector3f position = eyeSpace ? getEyeSpacePosition(light, actualCamera -> getViewMatrix()) : light->getPosition();
+    std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
+    shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);
+    shader -> updateUniform3f("lightColor[" + std::to_string(index) + "]", light -> getColor());
+    shader -> updateUniform3f("attenuation[" + std::to_string(index) + "]", light -> getAttenuation());
 }
 
 Vector3f Renderer::getEyeSpacePosition(PointerLight light, glm::mat4 view){
@@ -328,7 +330,7 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerLight> ligh
     finishRender(4);
 }
 
-void Renderer::renderEntity(PointerEntity entity){
+void Renderer::renderEntity(PointerEntity entity, std::vector<PointerLight> lights){
     PointerBasicShader shader = shaders["entityShader"];
     if(!shader)
         return;
@@ -337,8 +339,10 @@ void Renderer::renderEntity(PointerEntity entity){
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
     //shader -> updateUniform2f("levels", 4);
 
-    shader -> updateUniform3f("lightPosition", light -> getPosition());
-    shader -> updateUniform3f("lightColor", light -> getColor());
+//    shader -> updateUniform3f("lightPosition", light -> getPosition());
+//    shader -> updateUniform3f("lightColor", light -> getColor());
+    for(unsigned int i=0 ; i<lights.size() ; i++)
+        updateLightUniforms(lights[i], shader, i, false);
 
     PointerRawModel model = entity -> getModel() -> getModel();
     glEnable(GL_TEXTURE);

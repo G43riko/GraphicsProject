@@ -18,6 +18,9 @@ private:
 
 
 public:
+    void setRotation(Quaternion q){
+        rotation = q;
+    }
     void init(const Vector3f &, const Vector3f &, const Vector3f &);
     Transform(){};
     Transform(Vector3f, Vector3f, Vector3f);

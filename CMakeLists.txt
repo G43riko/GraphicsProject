@@ -121,7 +121,7 @@ set(GL_MAIN_SRC src/main.cpp
                 src/components/FpsView.h
                 src/game/Ball.cpp
                 src/game/Ball.h
-                src/game/GameObject.h src/components/KeyFrame.cpp src/components/KeyFrame.h src/game/Animation.cpp src/game/Animation.h)
+                src/game/GameObject.h src/components/KeyFrame.cpp src/components/KeyFrame.h src/game/Animation.cpp src/game/Animation.h src/game/Arrow.cpp src/game/Arrow.h src/game/Environment.cpp src/game/Environment.h src/components/BasicView.h)
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)

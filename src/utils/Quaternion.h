@@ -41,6 +41,7 @@ class Quaternion : public Vector4f{
             w = result.w;
         }
         Quaternion operator * (const Quaternion&);
+        Quaternion operator *= (const Quaternion&);
         Quaternion operator * (const Vector3f&);
 
     static Quaternion slerp(Quaternion qa, Quaternion qb, double t) {

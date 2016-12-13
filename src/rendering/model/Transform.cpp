@@ -31,9 +31,6 @@ Matrix4f Transform::getTransformation(bool pos, bool rot, bool sca){
     if(sca)
         result = Matrix4f::initScale(scale.x, scale.y, scale.z) * result;
     return result;
-//    if(parent)
-//        return scaleMatrix * rotation.toRotationMatrix() * translationMatrix * parent->getTransformation();
-//    return scaleMatrix * rotation.toRotationMatrix() * translationMatrix;
 }
 void Transform::setPosition(Vector3f vec){
     position = vec;

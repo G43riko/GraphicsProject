@@ -13,9 +13,9 @@ class Ball : public GameObject{
     static float GRAVITY_EFFECT;
     static float DEFRACTION_EFFECT;
 
-    static std::vector<Ball*> balls;
-    float size = 1;
 public:
+    constexpr static float size = 1;
+    static std::vector<Ball*> balls;
     Ball(PointerEntity object);
     void update(float);
 
@@ -26,21 +26,21 @@ public:
 
         for (Ball * b : balls) {
             Vector3f * ballPos = b -> object -> getTransform() -> getPosition();
-            if (collision(*thisPos, *ballPos, el -> size) == 1) {
-                b -> getObject() -> setAlive(false);
-//                Vector3f center = (*thisPos + *ballPos) / 2;
-//                b -> velocity.x -= (thisPos -> x - center.x);
-//                b -> velocity.z -= (thisPos -> z - center.z);
-//
-//                el -> velocity.x -= ballPos -> x - center.x;
-//                el -> velocity.z -= ballPos -> z - center.z;
+            if (collision(*thisPos, *ballPos, el -> size)) {
+//                b -> getObject() -> setAlive(false);
+                Vector3f center = (*thisPos + *ballPos) / 2;
+                b -> velocity.x -= (thisPos -> x - center.x);
+                b -> velocity.z -= (thisPos -> z - center.z);
+
+                el -> velocity.x -= ballPos -> x - center.x;
+                el -> velocity.z -= ballPos -> z - center.z;
             }
         }
     }
 
     static bool collision(Vector3f posA, Vector3f posB, float size){
         float dist = (posA - posB).getLength();
-        return (dist <= size*16) && (dist != 0);
+        return (dist <= size * 16) && (dist != 0);
 
     }
     static void checkBorder(Transform * a, Vector3f * velocity, float size, Vector2f pos, Vector2f scale){

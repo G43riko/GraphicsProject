@@ -21,8 +21,11 @@ class EntityShader : public BasicShader{
             this -> setUniform("viewMatrix");
             this -> setUniform("transformationMatrix");
 
-            this -> setUniform("lightColor");
-            this -> setUniform("lightPosition");
+            for(int i=0 ; i<MAX_LIGHTS ; i++){
+                this -> setUniform("lightPosition[" + std::to_string(i) + "]");
+                this -> setUniform("lightColor[" + std::to_string(i)+ "]");
+                this -> setUniform("attenuation[" + std::to_string(i)+ "]");
+            }
 
             this -> setUniform("levels");
         }
