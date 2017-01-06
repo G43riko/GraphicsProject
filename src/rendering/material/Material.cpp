@@ -33,3 +33,14 @@ PointerTexture2D Material::getSpecular(void){
 PointerTexture2D Material::getAlpha(void){
     return alpha;
 }
+
+
+void Material::setEnvironmentalMap(CubeTexture * texture){
+    this -> environmentalMap = texture;
+}
+CubeTexture Material::getEnvironmentalMap(void){
+    return *(this -> environmentalMap);
+}
+bool Material::hasEnvironmentalMap(void){
+    return this -> environmentalMap != nullptr;
+}

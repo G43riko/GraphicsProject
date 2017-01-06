@@ -4,8 +4,13 @@
 
 #include "Matrix4f.h"
 
+int Matrix4f::counter = 0;
+int Matrix4f::minus = 0;
 Matrix4f::Matrix4f(){
     setIdentity(*this);
+    Matrix4f::counter++;
+    created = true;
+//    std::cout << "tvorim: " << Matrix4f::counter << "\n";
 }
 
 Matrix4f Matrix4f::setIdentity(Matrix4f& m) {
@@ -69,21 +74,22 @@ Matrix4f * Matrix4f::mul(const Matrix4f & left, Matrix4f right, Matrix4f * dest)
     return dest;
 }
 
-Vector4f * Matrix4f::transform(Matrix4f left, Vector4f right, Vector4f * dest) {
-    if (!dest)
-        dest = new Vector4f();
+Vector4f Matrix4f::transform(Matrix4f left, Vector4f right, Vector4f * dest) {
+    Vector4f res = Vector4f();
 
     float x = left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w;
     float y = left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w;
     float z = left.m02 * right.x + left.m12 * right.y + left.m22 * right.z + left.m32 * right.w;
     float w = left.m03 * right.x + left.m13 * right.y + left.m23 * right.z + left.m33 * right.w;
 
-    dest -> x = x;
-    dest -> y = y;
-    dest -> z = z;
-    dest -> w = w;
+    res.x = x;
+    res.y = y;
+    res.z = z;
+    res.w = w;
 
-    return dest;
+    if(dest)
+        *dest = res;
+    return res;
 }
 
 Matrix4f * Matrix4f::translate(Vector3f vec, Matrix4f src, Matrix4f * dest) {
@@ -203,23 +209,23 @@ Matrix4f Matrix4f::initRotation(float x, float y, float z){
     Matrix4f ry = Matrix4f();
     Matrix4f rz = Matrix4f();
 
-    x = TO_RADIANS(x);
-    y = TO_RADIANS(y);
-    z = TO_RADIANS(z);
+    x = static_cast<float>(TO_RADIANS(x));
+    y = static_cast<float>(TO_RADIANS(y));
+    z = static_cast<float>(TO_RADIANS(z));
 
-    rz.m00 = cos(z); rz.m01 = -sin(z);rz.m02 = 0;      rz.m03 = 0;
-    rz.m10 = sin(z); rz.m11 = cos(z); rz.m12 = 0;      rz.m13 = 0;
+    rz.m00 = cosF(z); rz.m01 = -sinF(z);rz.m02 = 0;      rz.m03 = 0;
+    rz.m10 = sinF(z); rz.m11 = cosF(z); rz.m12 = 0;      rz.m13 = 0;
     rz.m20 = 0;      rz.m21 = 0;      rz.m22 = 1;      rz.m23 = 0;
     rz.m30 = 0;      rz.m31 = 0;      rz.m32 = 0;      rz.m33 = 1;
 
     rx.m00 = 1;      rx.m01 = 0;      rx.m02 = 0;      rx.m03 = 0;
-    rx.m10 = 0;      rx.m11 = cos(x); rx.m12 = -sin(x);rx.m13 = 0;
-    rx.m20 = 0;      rx.m21 = sin(x); rx.m22 = cos(x); rx.m23 = 0;
+    rx.m10 = 0;      rx.m11 = cosF(x); rx.m12 = -sinF(x);rx.m13 = 0;
+    rx.m20 = 0;      rx.m21 = sinF(x); rx.m22 = cosF(x); rx.m23 = 0;
     rx.m30 = 0;      rx.m31 = 0;      rx.m32 = 0;      rx.m33 = 1;
 
-    ry.m00 = cos(y); ry.m01 = 0;      ry.m02 = -sin(y);ry.m03 = 0;
+    ry.m00 = cosF(y); ry.m01 = 0;      ry.m02 = -sinF(y);ry.m03 = 0;
     ry.m10 = 0;      ry.m11 = 1;      ry.m12 = 0;      ry.m13 = 0;
-    ry.m20 = sin(y); ry.m21 = 0;      ry.m22 = cos(y); ry.m23 = 0;
+    ry.m20 = sinF(y); ry.m21 = 0;      ry.m22 = cosF(y); ry.m23 = 0;
     ry.m30 = 0;      ry.m31 = 0;      ry.m32 = 0;      ry.m33 = 1;
 
     Matrix4f m;

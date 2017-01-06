@@ -25,17 +25,17 @@ float Terrain::getHeight(int x, int z, float ** map, int size){
 PointerRawModel Terrain::generateTerrain(Loader loader, float ** map, GLuint size){
     GLuint VERTEX_COUNT = size;
 
-    int count = VERTEX_COUNT * VERTEX_COUNT;
+    //int count = VERTEX_COUNT * VERTEX_COUNT;
 //    float * vertices = new float[count * 3];
 //    float * normals = new float[count * 3];
 //    float * textures = new float[count * 2];
-    int number = 6 * (VERTEX_COUNT - 1) * (VERTEX_COUNT - 1);
+    //int number = 6 * (VERTEX_COUNT - 1) * (VERTEX_COUNT - 1);
 //    GLuint * indices = new GLuint[number];
     std::vector<float> vertices, normals, textures;
     std::vector<GLuint> indices;
     int vertexPointer = 0;
-    for(int i=0 ; i<VERTEX_COUNT ; i++){
-        for(int j=0 ; j<VERTEX_COUNT ; j++){
+    for(unsigned int i=0 ; i<VERTEX_COUNT ; i++){
+        for(unsigned int j=0 ; j<VERTEX_COUNT ; j++){
             vertices.push_back((float)j / ((float)VERTEX_COUNT - 1) * SIZE);
             vertices.push_back(getHeight(j, i, map, size));
             vertices.push_back((float)i / ((float)VERTEX_COUNT - 1) * SIZE);
@@ -48,9 +48,9 @@ PointerRawModel Terrain::generateTerrain(Loader loader, float ** map, GLuint siz
             vertexPointer++;
         }
     }
-    int pointer = 0;
-    for(int gz=0 ; gz<VERTEX_COUNT-1 ; gz++){
-        for(int gx=0 ; gx<VERTEX_COUNT-1 ; gx++){
+//    int pointer = 0;
+    for(unsigned int gz=0 ; gz<VERTEX_COUNT-1 ; gz++){
+        for(unsigned int gx=0 ; gx<VERTEX_COUNT-1 ; gx++){
             GLuint topLeft = gz * VERTEX_COUNT + gx;
             GLuint topRight = topLeft + 1;
             GLuint bottomLeft = (gz + 1) * VERTEX_COUNT + gx;
@@ -65,7 +65,7 @@ PointerRawModel Terrain::generateTerrain(Loader loader, float ** map, GLuint siz
     }
     printf("v: %zu, t: %zu, n: %zu, i: %zu\n", vertices.size(), textures.size(), normals.size(), indices.size());
     PointerRawModel result = loader.loadToVao(vertices, textures, normals, indices);
-    for(int i=0 ; i<size ; i++)
+    for(unsigned int i=0 ; i<size ; i++)
         delete[] map[i];
 
     delete[] map;
@@ -73,7 +73,7 @@ PointerRawModel Terrain::generateTerrain(Loader loader, float ** map, GLuint siz
 }
 float** Terrain::create(GLuint x2, GLuint y2){
     float ** map = new float * [x2];
-    for(int i=0 ; i<x2 ; i++)
+    for(unsigned int i=0 ; i<x2 ; i++)
         map[i] = new float[y2];
 
     map[0][0] 		    = static_cast<float>(rand() / RAND_MAX);

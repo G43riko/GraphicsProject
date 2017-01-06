@@ -4,15 +4,9 @@
 
 
 #include "utils.h"
-
+int IdGenerator::counter = 0;
 int IdGenerator::getId(void){
-    int result = rand();
-    while(ides.find(result) != ides.end())
-        result = rand();
-
-    ides.insert(result);
-    return result;
+    return counter++;
 }
-std::set<int> IdGenerator::ides = std::set<int>();
 
 

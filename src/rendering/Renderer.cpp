@@ -16,10 +16,12 @@ Renderer::Renderer(Loader loader, int width, int height) :
 
     initShaders();
 
-//    textures.push_back(GuiTexture(fbo.getColourTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
+    //textures.push_back(GuiTexture(fbo.getColourTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
 //    textures.push_back(GuiTexture(fbo2.getColourTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
 //    textures.push_back(GuiTexture(fbo3.getColourTexture(), Vector2f(-0.25f, 0.75f), Vector2f(0.25f, 0.25f)));
     setCamera(PointerCamera(new Camera()));
+
+    shadows = new ShadowMaster(getActualCamera());
 }
 
 void Renderer::setCamera(PointerCamera camera){
@@ -61,6 +63,7 @@ void Renderer::initShaders(void){
     addShader("colorShader", PointerBasicShader(new ColorShader()));
     addShader("skyBoxShader", PointerBasicShader(new SkyBoxShader()));
     addShader("particleShader", PointerBasicShader(new ParticleShader()));
+    addShader("shadowShader", PointerBasicShader(new ShadowShader()));
 
 }
 
@@ -115,7 +118,7 @@ void Renderer::renderParticles(std::vector<Particle> particles, PointerRawModel 
     prepareModel(model, 1);
 //    glEnable(GL_BLEND);
 //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDepthMask(false);
+    glDepthMask(GL_FALSE);
 
     glm::mat4 viewMatrix = actualCamera -> getViewMatrix();
 
@@ -144,7 +147,7 @@ void Renderer::renderParticles(std::vector<Particle> particles, PointerRawModel 
 //        mat.m20 = viewMatrix[2][0];
 //        mat.m21 = viewMatrix[2][1];
 //        mat.m22 = viewMatrix[2][2];
-        Matrix4f::rotate(TO_RADIANS(p.getRotation()), Vector3f(0, 0, 1), mat, &mat);
+        Matrix4f::rotate(static_cast<float>(TO_RADIANS(p.getRotation())), Vector3f(0, 0, 1), mat, &mat);
         Matrix4f::scale(Vector3f(p.getScale()), mat, &mat);
         Matrix4f::mul(Matrix4f(viewMatrix), mat, &mat);
         shader -> updateUniform4m("modelViewMatrix", mat);
@@ -154,7 +157,7 @@ void Renderer::renderParticles(std::vector<Particle> particles, PointerRawModel 
     }
 
     finishRender(1);
-    glDepthMask(true);
+    glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 
 }
@@ -170,20 +173,48 @@ void Renderer::renderSky(CubeTexture sky, PointerRawModel model){
     glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());
     finishRender(1);
 }
+void Renderer::renderShadows(PointerEntity entity, PointerLight sun){
+    PointerBasicShader shader = shaders["shadowShader"];
+    if(!shader)
+        return;
+    shadows -> render(entity, sun);
+    shader -> bind();
+
+    //prepareMaterial(entity -> getModel() -> getMaterial(), shader);
+
+    glBindVertexArray(entity -> getModel() -> getModel() -> getVaoID());
+    glEnableVertexAttribArray(0);
+
+    Matrix4f modelMatrix = entity -> getTransform() -> getTransformation();
+    shader -> updateUniform4m("mpvMatrix", Matrix4f(actualCamera -> getProjectionMatrix()) * Matrix4f(actualCamera -> getViewMatrix()) * modelMatrix);
+
+    glDrawElements(GL_TRIANGLES, entity -> getModel() -> getModel() -> getVertexCount(), GL_UNSIGNED_INT, 0);
+
+    shadows -> finish();
+    glDisableVertexAttribArray(1);
+    glBindVertexArray(0);
+}
 
 void Renderer::renderScene(Scene scene){
-    if(usePostFx)
+    if(usePostFx){
         multiFbo.bindFrameBuffer();
-
-
+    }
 
     renderSky(scene.getSky(), scene.getSkyModel());
     //renderObjects(scene.getEntities(), scene.getLights());
-    for(PointerEntity p : scene.getEntities())
+    for(PointerEntity p : scene.getEntities()){
         renderEntity(p, scene.getLights());
+    }
 
-    if(scene.getParticles().size())
+    if(sun){
+        for(PointerEntity p : scene.getEntities()){
+            renderShadows(p, sun);
+        }
+    }
+
+    if(scene.getParticles().size()){
         renderParticles(scene.getParticles(), scene.getParticleModel());
+    }
 
     if(usePostFx){
         multiFbo.unbindFrameBuffer();
@@ -194,13 +225,14 @@ void Renderer::renderScene(Scene scene){
 //        pp.doPostProcessing(fbo.getColourTexture());
     }
 
-    if(textures.size())
+    if(textures.size()){
         renderGui(textures, scene.getGuiModel());
+    }
 }
 
 void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<PointerLight> lights){
     PointerBasicShader shader = shaders["objectShader"];
-    int items = 3;
+    GLuint items = 3;
     if(!shader){
         std::cerr << "Nenašiel sa shader" << std::endl;
         return;
@@ -251,7 +283,7 @@ void Renderer::renderScreen(Screen screen) {
     finishRender(0);
 }
 
-void Renderer::prepareRenderer(GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1){
+void Renderer::prepareRenderer(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
     glClearColor(red, green, blue, alpha);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -271,6 +303,12 @@ void Renderer::prepareMaterial(PointerMaterial material, PointerBasicShader shad
         shader -> connectTextures();
 
         material -> getDiffuse() -> bind(GL_TEXTURE0);
+
+
+        if(options & FLAG_ENVIRONMENTAL){
+            if(material -> hasEnvironmentalMap())
+                material -> getEnvironmentalMap().bind(1);
+        }
 
         if(options & FLAG_NORMAL_MAP){
             PointerTexture2D normal = material -> getNormal();
@@ -337,6 +375,7 @@ void Renderer::renderEntity(PointerEntity entity, std::vector<PointerLight> ligh
     shader -> bind();
 
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
+    shader -> updateUniform3f("cameraPosition", actualCamera -> position);
     //shader -> updateUniform2f("levels", 4);
 
 //    shader -> updateUniform3f("lightPosition", light -> getPosition());

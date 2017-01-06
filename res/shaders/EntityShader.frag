@@ -2,10 +2,13 @@
 in vec2 pass_Texture;
 in vec3 surfaceNormal;
 in vec3 toLightVector[8];
+in vec3 reflectedVector;
+in vec3 refractedVector;
 
 out vec4 FragmentColor;
 
 uniform sampler2D textureSampler;
+uniform samplerCube environmentalMap;
 uniform vec3 lightColor[8];
 uniform int levels;
 
@@ -27,4 +30,10 @@ void main() {
     }
 
     FragmentColor = vec4(totalDifuse, 1.0) * texture(textureSampler, pass_Texture);
+    /*
+    vec4 reflectedColor = texture(environmentalMap, reflectedVector);
+    vec4 refractedColor = texture(environmentalMap, refractedVector);
+    vec4 environmentalColor = mix(reflectedColor, refractedColor, 0);
+    FragmentColor = mix(FragmentColor, environmentalColor, 0.6);
+    */
 }

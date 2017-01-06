@@ -36,30 +36,31 @@ public:
                 el -> velocity.z -= ballPos -> z - center.z;
             }
         }
+        return false;
     }
 
     static bool collision(Vector3f posA, Vector3f posB, float size){
         float dist = (posA - posB).getLength();
-        return (dist <= size * 16) && (dist != 0);
+        return (dist <= size * 16) && (!eq(dist, 0));
 
     }
     static void checkBorder(Transform * a, Vector3f * velocity, float size, Vector2f pos, Vector2f scale){
         Vector2f max = pos + scale;
         if (a -> getPosition() -> x + size > max.x) {
             a -> getPosition() -> x = max.x - size;
-            velocity -> x = -abs(velocity -> x);
+            velocity -> x = (float)-abs((int)velocity -> x);
         }
         if (a -> getPosition() -> x - size < pos.x) {
             a -> getPosition() -> x = pos.x + size;
-            velocity -> x = abs(velocity -> x);
+            velocity -> x = (float)abs((int)velocity -> x);
         }
         if (a -> getPosition() -> z + size > max.y) {
             a -> getPosition() -> z = max.y - size;
-            velocity -> z = -abs(velocity -> z);
+            velocity -> z = (float)-abs((int)velocity -> z);
         }
         if (a -> getPosition() -> z - size < pos.y) {
             a -> getPosition() -> z = pos.y + size;
-            velocity -> z = abs(velocity -> z);
+            velocity -> z = (float)abs((int)velocity -> z);
         }
 
     }

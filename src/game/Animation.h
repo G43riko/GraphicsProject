@@ -42,10 +42,6 @@ class Animation {
 
         frames.push_back(frame);
     }
-
-    Matrix4f getTransformation(){
-
-    }
 };
 
 

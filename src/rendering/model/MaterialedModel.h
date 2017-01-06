@@ -19,6 +19,8 @@ public:
 
     PointerRawModel getModel(void);
     PointerMaterial getMaterial(void);
+
+
 };
 typedef std::shared_ptr<MaterialedModel> PointerMaterialedModel;
 PointerMaterialedModel createMaterialedModel(PointerRawModel, PointerMaterial);

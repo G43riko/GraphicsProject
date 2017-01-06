@@ -27,7 +27,6 @@ class Entity {
 
         PointerMaterialedModel getModel(void);
         Transform * getTransform(void);
-
         void setAlive(bool);
         bool isAlive(void);
 };

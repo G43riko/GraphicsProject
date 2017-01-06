@@ -40,11 +40,11 @@ void Transform::setParent(Transform * parent, bool pos, bool rot, bool scale){
     parentAttributes.x = pos ? 1 : 0;
     parentAttributes.y = rot ? 1 : 0;
     parentAttributes.z = scale ? 1 : 0;
-};
+}
 
 Matrix4f Transform::getAverageTransformation(Transform a, Transform b, float ratio){
     Vector3f pos = linearInterpolation(*a.getPosition(), *b.getPosition(), ratio);
-    Quaternion rot = Quaternion::slerp(*a.getRotation(), *b.getRotation(), ratio); //linearInterpolation(*a.getRotation(), *b.getRotation(), ratio);
+    //Quaternion rot = Quaternion::slerp(*a.getRotation(), *b.getRotation(), ratio); //linearInterpolation(*a.getRotation(), *b.getRotation(), ratio);
     Vector3f scale = linearInterpolation(*a.getScale(), *b.getScale(), ratio);
     return Transform(pos, a.getRotation() -> getForward(), scale).getTransformation(true, false, true);
 }

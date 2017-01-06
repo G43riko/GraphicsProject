@@ -9,12 +9,14 @@
 #include <string.h>
 #include <memory>
 #include <math.h>
+#include "../utils/utils.h"
+
 
 
 class Vector3f;
+class Vector4f;
 typedef std::shared_ptr<Vector3f> PointerVector3f;
 class Quaternion;
-
 class Vector2f{
     public:
         float x, y;
@@ -42,6 +44,14 @@ class Vector2f{
 
     int getXi(){ return static_cast<int>(x); }
     int getYi(){ return static_cast<int>(y); }
+
+    float lengthSquared() {
+        return x * x + y * y;
+    }
+
+    float length() {
+        return static_cast<float>(sqrt(lengthSquared()));
+    }
         //Vector2f(const Vector2f&);
 };
 
@@ -58,10 +68,12 @@ class Vector3f{
         Vector3f(Vector3f* vec) : Vector3f(vec -> x, vec -> y, vec -> z){};
         Vector3f(float val) : Vector3f(val, val, val){};
         Vector3f(const Vector3f& vec) : Vector3f(vec.x, vec.y, vec.z){};
+        Vector3f(const Vector4f vec);
         Vector3f normalize(void);
         Vector3f getNormal(void);
         Vector3f cross(Vector3f *);
         Vector3f getCross(Vector3f *);
+        Vector3f getCross(Vector3f);
 
         Vector3f& operator *= (const float& val){ this -> x *= val, this -> y *= val, this -> z *= val;return *this; }
         Vector3f operator *= (const Vector3f& v){ this -> x *= v.x, this -> y *= v.y, this -> z *= v.z;return *this; }
@@ -116,16 +128,21 @@ class Vector3f{
 
 class Vector4f{
     public:
+        static int count;
         float x, y, z, w;
         Vector4f(void) : Vector4f(0, 0, 0, 0){};
-        Vector4f(float val) : x(val), y(val), z(val), w(val){};
-        Vector4f(const Vector4f& v) : x(v.x), y(v.y), z(v.z), w(v.w){};
+        Vector4f(float val) : Vector4f(val, val, val, val){};
+        Vector4f(const Vector4f& v) : Vector4f(v.x, v.y, v.z, v.w){};
         Vector4f(float x, float y, float z, float w){
             this -> x = x;
             this -> y = y;
             this -> z = z;
             this -> w = w;
+            Vector4f::count++;
         };
+        ~Vector4f(){
+            Vector4f::count--;
+        }
         Vector4f normalize(void){
             float len = length();
             x /= len;
@@ -188,7 +205,6 @@ template <typename T>class GVector{
             std::cout << "]" << std::endl;
         }
 };
-
 
 
 #endif //GRAPHICSPROJECT_VECTORS_H

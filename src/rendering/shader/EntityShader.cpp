@@ -10,6 +10,11 @@ class EntityShader : public BasicShader{
             compileShader();
         };
 
+        void connectTextures(void){
+            updateUniformi("textureSampler", 0);
+            updateUniformi("environmentalMap", 1);
+        }
+
         void setAllAttributes(void){
             this -> bindAttribute(0, "Position");
             this -> bindAttribute(1, "Texture");
@@ -17,6 +22,8 @@ class EntityShader : public BasicShader{
 
         };
         void setAllUniforms(void){
+
+
             this -> setUniform("projectionMatrix");
             this -> setUniform("viewMatrix");
             this -> setUniform("transformationMatrix");
@@ -28,5 +35,8 @@ class EntityShader : public BasicShader{
             }
 
             this -> setUniform("levels");
+
+            this -> setUniform("environmentalMap");
+            this -> setUniform("cameraPosition");
         }
 };

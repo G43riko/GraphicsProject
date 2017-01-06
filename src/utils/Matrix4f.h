@@ -14,27 +14,16 @@
 
 class Matrix4f {
 public:
+    static int counter;
+    static int minus;
+    bool created = false;
     float m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;
-
+    ~Matrix4f(){
+        //Matrix4f::counter--;
+        Matrix4f::minus++;
+        //std::cout << "nicim: " << Matrix4f::minus <<  (created ? " som " : " niesom ") << "\n";
+    }
     Matrix4f(void);
-//    Matrix4f(const glm::mat4 &mat){
-//        m00 = mat[0][0];
-//        m01 = mat[0][1];
-//        m02 = mat[0][2];
-//        m03 = mat[0][3];
-//        m10 = mat[1][0];
-//        m11 = mat[1][1];
-//        m12 = mat[1][2];
-//        m13 = mat[1][3];
-//        m20 = mat[2][0];
-//        m21 = mat[2][1];
-//        m22 = mat[2][2];
-//        m23 = mat[2][3];
-//        m30 = mat[3][0];
-//        m31 = mat[3][1];
-//        m32 = mat[3][2];
-//        m33 = mat[3][3];
-//    };
     Matrix4f(const glm::mat4 mat){
         m00 = mat[0][0];
         m10 = mat[0][1];
@@ -52,13 +41,36 @@ public:
         m13 = mat[3][1];
         m23 = mat[3][2];
         m33 = mat[3][3];
+        Matrix4f::counter++;
+        created = true;
+//        std::cout << "tvorim: " << Matrix4f::counter << "\n";
     };
 
+    static glm::mat4 toGlmMatrix(Matrix4f mat){
+        glm::mat4 res;
+        res[0][0] = mat.m00;;
+        res[0][1] = mat.m10;;
+        res[0][2] = mat.m20;;
+        res[0][3] = mat.m30;;
+        res[1][0] = mat.m01;;
+        res[1][1] = mat.m11;;
+        res[1][2] = mat.m21;;
+        res[1][3] = mat.m31;;
+        res[2][0] = mat.m02;;
+        res[2][1] = mat.m12;;
+        res[2][2] = mat.m22;;
+        res[2][3] = mat.m32;;
+        res[3][0] = mat.m03;;
+        res[3][1] = mat.m13;;
+        res[3][2] = mat.m23;;
+        res[3][3] = mat.m33;;
+        return res;
+    }
 
     static Matrix4f setIdentity(Matrix4f&);
 
     static Matrix4f * mul(const Matrix4f &, Matrix4f, Matrix4f * = nullptr);
-    static Vector4f * transform(Matrix4f, Vector4f, Vector4f * = nullptr);
+    static Vector4f transform(Matrix4f, Vector4f, Vector4f * = nullptr);
     static Matrix4f * translate(Vector3f, Matrix4f, Matrix4f * = nullptr);
     static Matrix4f * translate(Vector2f, Matrix4f, Matrix4f * = nullptr);
     static Matrix4f * rotate(float, Vector3f, Matrix4f, Matrix4f * = nullptr);

@@ -26,13 +26,13 @@ class Quaternion : public Vector4f{
         Quaternion conjugate(void);
         void rotate(const Vector3f & vec){
             Quaternion result = *this;
-            if(vec.x != 0)
+            if(!eq(vec.x, 0))
                 result = result * Quaternion(Vector3f(1, 0, 0), vec.x);
 
-            if(vec.y != 0)
+            if(!eq(vec.y, 0))
                 result = result * Quaternion(Vector3f(0, 1, 0), vec.y);
 
-            if(vec.z != 0)
+            if(!eq(vec.z, 0))
                 result = result * Quaternion(Vector3f(0, 0, 1), vec.z);
 
             x = result.x;
@@ -47,7 +47,7 @@ class Quaternion : public Vector4f{
     static Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
         Quaternion qm = Quaternion();
         double cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y + qa.z * qb.z;
-        if (abs(cosHalfTheta) >= 1.0){
+        if (abs((int)cosHalfTheta) >= 1.0){
             qm.w = qa.w;
             qm.x = qa.x;
             qm.y = qa.y;
@@ -57,18 +57,18 @@ class Quaternion : public Vector4f{
         double halfTheta = acos(cosHalfTheta);
         double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
         if (fabs(sinHalfTheta) < 0.001){
-            qm.w = (qa.w * 0.5 + qb.w * 0.5);
-            qm.x = (qa.x * 0.5 + qb.x * 0.5);
-            qm.y = (qa.y * 0.5 + qb.y * 0.5);
-            qm.z = (qa.z * 0.5 + qb.z * 0.5);
+            qm.w = (float)(qa.w * 0.5 + qb.w * 0.5);
+            qm.x = (float)(qa.x * 0.5 + qb.x * 0.5);
+            qm.y = (float)(qa.y * 0.5 + qb.y * 0.5);
+            qm.z = (float)(qa.z * 0.5 + qb.z * 0.5);
             return qm;
         }
         double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
         double ratioB = sin(t * halfTheta) / sinHalfTheta;
-        qm.w = (qa.w * ratioA + qb.w * ratioB);
-        qm.x = (qa.x * ratioA + qb.x * ratioB);
-        qm.y = (qa.y * ratioA + qb.y * ratioB);
-        qm.z = (qa.z * ratioA + qb.z * ratioB);
+        qm.w = (float)(qa.w * ratioA + qb.w * ratioB);
+        qm.x = (float)(qa.x * ratioA + qb.x * ratioB);
+        qm.y = (float)(qa.y * ratioA + qb.y * ratioB);
+        qm.z = (float)(qa.z * ratioA + qb.z * ratioB);
         return qm;
     }
 

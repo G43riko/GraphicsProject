@@ -9,6 +9,11 @@ GLFWwindow* WindowManager::window;
 int WindowManager::width;
 int WindowManager::height;
 
+
+float WindowManager::getRation(void){
+    return (float) width / (float) height;
+}
+
 bool WindowManager::isCloseRequest(void){
     return glfwWindowShouldClose(WindowManager::window);
 }

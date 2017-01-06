@@ -18,6 +18,7 @@ class WindowManager {
         static void update(void);
         static int width;
         static int height;
+        static float getRation(void);
         static GLFWwindow* window;
     private:
         static const int contentAttributesMinorVersion = 3;

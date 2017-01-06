@@ -17,10 +17,10 @@ class Camera {
     private:
         glm::mat4 projectionMatrix;
         bool VERTICAL = true;
+    public:
         const float FOV = 70.0f;
         const float NEAR_PLANE = 0.1f;
         const float FAR_PLANE = 1000.0f;
-    public:
         Vector3f position = Vector3f(0, 0, 0);
         float pitch = 0;
         float yaw = 0;

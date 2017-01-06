@@ -10,7 +10,7 @@ std::vector<Ball*> Ball::balls;
 
 Ball::Ball(PointerEntity object) : GameObject(object){
         balls.push_back(this);
-};
+}
 
 void Ball::update(float delta){
     if(!getObject() -> isAlive())

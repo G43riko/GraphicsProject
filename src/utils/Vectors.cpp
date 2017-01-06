@@ -23,6 +23,7 @@ Vector3f::Vector3f(std::string data){
     y = static_cast<float>(atof(currentLine.c_str()));
     currentLine = strtok(NULL, " ");
     z = static_cast<float>(atof(currentLine.c_str()));
+    Vector3f::count++;
 }
 
 float Vector3f::getLength(void){
@@ -67,11 +68,20 @@ Vector3f Vector3f::getCross(Vector3f * v){
     return Vector3f(x_, y_, z_);
 }
 
+Vector3f Vector3f::getCross(Vector3f v){
+    float x_ = y * v.z - z * v.y;
+    float y_ = z * v.x - x * v.z;
+    float z_ = x * v.y - y * v.x;
+
+    return Vector3f(x_, y_, z_);
+}
+
 Vector3f Vector3f::getNormal(void){
     Vector3f result = Vector3f(x, y, z).normalize();
     return result;
 }
 
+Vector3f::Vector3f(const Vector4f vec) : Vector3f(vec.x, vec.y, vec.z){}
 
 Vector3f Vector3f::rotate(Quaternion rotation){
     Quaternion w = rotation * (*this) * rotation.conjugate();
@@ -98,6 +108,7 @@ void Vector2f::show(bool endLine){
  * Vector4f
  ***********************/
 
+int Vector4f::count = 0;
 
 /************************
  * OTHER
