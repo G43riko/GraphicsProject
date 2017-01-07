@@ -9,7 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
-#include "../rendering/model/Transform.h"
+#include "Transform.h"
 #include <glm/gtx/transform.hpp>
 
 

@@ -7,7 +7,7 @@
 
 
 #include <GL/glew.h>
-#include "../utils/Vectors.h"
+#include "../../utils/Vectors.h"
 
 class GuiTexture {
 private:

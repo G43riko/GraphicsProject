@@ -16,9 +16,14 @@ uniform vec3 cameraPosition;
 
 uniform vec3 lightPosition[8];
 
+uniform vec4 plane;
+
 void main() {
     pass_Texture = Texture;
     vec4 worldPosition = transformationMatrix * vec4(Position, 1.0);
+
+    gl_ClipDistance[0] = dot(worldPosition, plane);
+
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
     surfaceNormal = (transformationMatrix * vec4(Normal, 0.0)).xyz;

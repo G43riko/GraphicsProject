@@ -7,11 +7,11 @@
 
 
 #include <src/rendering/model/Entity.h>
-#include "src/entities/Light.h"
+#include "src/components/lights/Light.h"
 #include "GameObject.h"
 #include <map>
 #include <algorithm>
-#include <src/entities/Particle.h>
+#include <src/components/particles/Particle.h>
 #include <src/rendering/Renderer.h>
 
 class Scene {

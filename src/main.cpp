@@ -11,8 +11,8 @@
 #include <vector>
 #include <src/components/postProccessing/Fbo.h>
 #include <src/components/postProccessing/PostProccessing.h>
-#include <src/water/WaterFrameBuffer.h>
-#include <src/entities/Terrain.h>
+#include <src/components/water/WaterFrameBuffer.h>
+#include <src/components/terrain/Terrain.h>
 #include <src/components/movement/FpsView.h>
 #include <src/components/movement/TopView.h>
 #include <src/game/Ball.h>
@@ -22,9 +22,10 @@
 #include <src/game/Environment.h>
 #include <src/game/Arrow.h>
 #include <src/components/shadows/ShadowMaster.h>
+#include <src/components/terrain/HeightGenerator.h>
 
 int main(void){
-    WindowManager::init(800, 600, "Okno", false);
+    WindowManager::init(800, 600, "Okno", true);
     Input::init(WindowManager::window, WindowManager::width, WindowManager::height);
 
     Loader loader = Loader();
@@ -51,7 +52,7 @@ int main(void){
     auto teaEntity = createEntity(teaModel, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
     teaMaterial -> setEnvironmentalMap(&skyTexture);
     scene.addEntity(teaEntity);
-    auto barrel = createEntity(barrelModel, Vector3f(0, 0, 0), Vector3f(0.0f, 0.0f, (float)(M_PI / 2)), Vector3f(0.1f, 1.0f, 0.1f));
+    auto barrel = createEntity(barrelModel, Vector3f(0, 1, 0), Vector3f(0.0f, 0.0f, (float)(M_PI / 2)), Vector3f(0.1f, 1.0f, 0.1f));
     scene.addEntity(barrel);
 
     scene.addEntity(createEntity(model, Vector3f(5, 3, -10), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
@@ -60,10 +61,11 @@ int main(void){
     scene.addEntity(createEntity(model, Vector3f(5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
     scene.addEntity(createEntity(model, Vector3f(-5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
 
-    auto floorEntity = createEntity(floor, Vector3f(0, -1, 0), Vector3f(), Vector3f(10, 1, 10));
-    scene.addEntity(floorEntity);
-//    Terrain t = Terrain(1, 1, loader, diffuse, 10);
-//    scene.addEntity(createEntity(t.getModel(), Vector3f(0, -1, 0), Vector3f(0.0f), Vector3f(1.0f)));
+//    auto floorEntity = createEntity(floor, Vector3f(0, -1, 0), Vector3f(), Vector3f(10, 1, 10));
+//    scene.addEntity(floorEntity);
+
+    Terrain t = Terrain(1, 1, loader, diffuse, 100, 128, 5, 40);
+    scene.addEntity(createEntity(t.getModel(), Vector3f(-50, 1, -50), Vector3f(0.0f), Vector3f(1.0f)));
 
     auto screen = Screen(WindowManager::width, WindowManager::height, loader);
     PointerLight sun = createLight(Vector3f(10000000, 15000000, -10000000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
@@ -71,16 +73,16 @@ int main(void){
     PointerLight light1 = createLight(Vector3f(200, 10,  200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
 
     scene.addLight(sun);
-    scene.addLight(light);
-    scene.addLight(light1);
+//    scene.addLight(light);
+//    scene.addLight(light1);
 
 
     //renderer.setSun(sun);
-    renderer.setPostFx(true);
+    //renderer.setPostFx(true);
 
 
-    ShadowMaster shadows = ShadowMaster(renderer.getActualCamera());
-    //renderer.addTexture(GuiTexture(shadows.getShadowMap(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
+    //ShadowMaster shadows = ShadowMaster(renderer.getActualCamera());
+    //renderer.addTexture(GuiTexture(shadowMaster.getShadowMap(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
     //renderer.addTexture(GuiTexture(diffuse->getTextureID(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
 
 
@@ -91,13 +93,13 @@ int main(void){
     double currentTime = glfwGetTime();
     int fps = 0;
     while (!WindowManager::isCloseRequest()) {
-        barrel -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.05f, 0.0f));
         fps++;
         if(glfwGetTime() - currentTime > 1.0){
             printf("FPS: %d\n", fps);
             fps = 0;
             currentTime = glfwGetTime();
         }
+        barrel -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.05f, 0.0f));
         teaEntity -> getTransform() -> getRotation() -> rotate(Vector3f(0.0f, 0.005f, 0.0f));
 
         renderer.prepareRenderer(0, 0, 0, 1);

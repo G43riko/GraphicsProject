@@ -33,9 +33,8 @@ Matrix4f Matrix4f::setIdentity(Matrix4f& m) {
     return m;
 }
 
-Matrix4f * Matrix4f::mul(const Matrix4f & left, Matrix4f right, Matrix4f * dest) {
-    if (!dest)
-        dest = new Matrix4f();
+Matrix4f Matrix4f::mul(const Matrix4f & left, Matrix4f right, Matrix4f * dest) {
+    Matrix4f res = Matrix4f();
 
     float m00 = left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02 + left.m30 * right.m03;
     float m01 = left.m01 * right.m00 + left.m11 * right.m01 + left.m21 * right.m02 + left.m31 * right.m03;
@@ -54,26 +53,27 @@ Matrix4f * Matrix4f::mul(const Matrix4f & left, Matrix4f right, Matrix4f * dest)
     float m32 = left.m02 * right.m30 + left.m12 * right.m31 + left.m22 * right.m32 + left.m32 * right.m33;
     float m33 = left.m03 * right.m30 + left.m13 * right.m31 + left.m23 * right.m32 + left.m33 * right.m33;
 
-    dest -> m00 = m00;
-    dest -> m01 = m01;
-    dest -> m02 = m02;
-    dest -> m03 = m03;
-    dest -> m10 = m10;
-    dest -> m11 = m11;
-    dest -> m12 = m12;
-    dest -> m13 = m13;
-    dest -> m20 = m20;
-    dest -> m21 = m21;
-    dest -> m22 = m22;
-    dest -> m23 = m23;
-    dest -> m30 = m30;
-    dest -> m31 = m31;
-    dest -> m32 = m32;
-    dest -> m33 = m33;
+    res.m00 = m00;
+    res.m01 = m01;
+    res.m02 = m02;
+    res.m03 = m03;
+    res.m10 = m10;
+    res.m11 = m11;
+    res.m12 = m12;
+    res.m13 = m13;
+    res.m20 = m20;
+    res.m21 = m21;
+    res.m22 = m22;
+    res.m23 = m23;
+    res.m30 = m30;
+    res.m31 = m31;
+    res.m32 = m32;
+    res.m33 = m33;
 
-    return dest;
+    if (dest)
+        *dest = res;
+    return res;
 }
-
 Vector4f Matrix4f::transform(Matrix4f left, Vector4f right, Vector4f * dest) {
     Vector4f res = Vector4f();
 
@@ -92,33 +92,36 @@ Vector4f Matrix4f::transform(Matrix4f left, Vector4f right, Vector4f * dest) {
     return res;
 }
 
-Matrix4f * Matrix4f::translate(Vector3f vec, Matrix4f src, Matrix4f * dest) {
-    if (!dest)
-        dest = new Matrix4f();
+Matrix4f Matrix4f::translate(Vector3f vec, Matrix4f src, Matrix4f * dest) {
+    Matrix4f res = Matrix4f();
 
-    dest -> m30 += src.m00 * vec.x + src.m10 * vec.y + src.m20 * vec.z;
-    dest -> m31 += src.m01 * vec.x + src.m11 * vec.y + src.m21 * vec.z;
-    dest -> m32 += src.m02 * vec.x + src.m12 * vec.y + src.m22 * vec.z;
-    dest -> m33 += src.m03 * vec.x + src.m13 * vec.y + src.m23 * vec.z;
+    res.m30 += src.m00 * vec.x + src.m10 * vec.y + src.m20 * vec.z;
+    res.m31 += src.m01 * vec.x + src.m11 * vec.y + src.m21 * vec.z;
+    res.m32 += src.m02 * vec.x + src.m12 * vec.y + src.m22 * vec.z;
+    res.m33 += src.m03 * vec.x + src.m13 * vec.y + src.m23 * vec.z;
 
-    return dest;
+
+    if (dest)
+        *dest = res;
+    return res;
 }
 
-Matrix4f * Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
-    if (!dest)
-        dest = new Matrix4f();
+Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
+    Matrix4f res = Matrix4f();
 
-    dest -> m30 += src.m00 * vec.x + src.m10 * vec.y;
-    dest -> m31 += src.m01 * vec.x + src.m11 * vec.y;
-    dest -> m32 += src.m02 * vec.x + src.m12 * vec.y;
-    dest -> m33 += src.m03 * vec.x + src.m13 * vec.y;
+    res.m30 += src.m00 * vec.x + src.m10 * vec.y;
+    res.m31 += src.m01 * vec.x + src.m11 * vec.y;
+    res.m32 += src.m02 * vec.x + src.m12 * vec.y;
+    res.m33 += src.m03 * vec.x + src.m13 * vec.y;
 
-    return dest;
+    if (dest)
+        *dest = res;
+    return res;
 }
 
-Matrix4f * Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * dest) {
-    if (!dest)
-        dest = new Matrix4f();
+Matrix4f Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * dest) {
+    Matrix4f res = Matrix4f();
+
     float c = (float) cos(angle);
     float s = (float) sin(angle);
     float oneminusc = 1.0f - c;
@@ -149,37 +152,43 @@ Matrix4f * Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f *
     float t11 = src.m01 * f10 + src.m11 * f11 + src.m21 * f12;
     float t12 = src.m02 * f10 + src.m12 * f11 + src.m22 * f12;
     float t13 = src.m03 * f10 + src.m13 * f11 + src.m23 * f12;
-    dest -> m20 = src.m00 * f20 + src.m10 * f21 + src.m20 * f22;
-    dest -> m21 = src.m01 * f20 + src.m11 * f21 + src.m21 * f22;
-    dest -> m22 = src.m02 * f20 + src.m12 * f21 + src.m22 * f22;
-    dest -> m23 = src.m03 * f20 + src.m13 * f21 + src.m23 * f22;
-    dest -> m00 = t00;
-    dest -> m01 = t01;
-    dest -> m02 = t02;
-    dest -> m03 = t03;
-    dest -> m10 = t10;
-    dest -> m11 = t11;
-    dest -> m12 = t12;
-    dest -> m13 = t13;
-    return dest;
+    res.m20 = src.m00 * f20 + src.m10 * f21 + src.m20 * f22;
+    res.m21 = src.m01 * f20 + src.m11 * f21 + src.m21 * f22;
+    res.m22 = src.m02 * f20 + src.m12 * f21 + src.m22 * f22;
+    res.m23 = src.m03 * f20 + src.m13 * f21 + src.m23 * f22;
+    res.m00 = t00;
+    res.m01 = t01;
+    res.m02 = t02;
+    res.m03 = t03;
+    res.m10 = t10;
+    res.m11 = t11;
+    res.m12 = t12;
+    res.m13 = t13;
+
+    if (dest)
+        *dest = res;
+    return res;
 }
 
-Matrix4f * Matrix4f::scale(Vector3f vec, Matrix4f src, Matrix4f * dest) {
-    if (!dest)
-        dest = new Matrix4f();
-    dest -> m00 = src.m00 * vec.x;
-    dest -> m01 = src.m01 * vec.x;
-    dest -> m02 = src.m02 * vec.x;
-    dest -> m03 = src.m03 * vec.x;
-    dest -> m10 = src.m10 * vec.y;
-    dest -> m11 = src.m11 * vec.y;
-    dest -> m12 = src.m12 * vec.y;
-    dest -> m13 = src.m13 * vec.y;
-    dest -> m20 = src.m20 * vec.z;
-    dest -> m21 = src.m21 * vec.z;
-    dest -> m22 = src.m22 * vec.z;
-    dest -> m23 = src.m23 * vec.z;
-    return dest;
+Matrix4f Matrix4f::scale(Vector3f vec, Matrix4f src, Matrix4f * dest) {
+    Matrix4f res = Matrix4f();
+
+    res.m00 = src.m00 * vec.x;
+    res.m01 = src.m01 * vec.x;
+    res.m02 = src.m02 * vec.x;
+    res.m03 = src.m03 * vec.x;
+    res.m10 = src.m10 * vec.y;
+    res.m11 = src.m11 * vec.y;
+    res.m12 = src.m12 * vec.y;
+    res.m13 = src.m13 * vec.y;
+    res.m20 = src.m20 * vec.z;
+    res.m21 = src.m21 * vec.z;
+    res.m22 = src.m22 * vec.z;
+    res.m23 = src.m23 * vec.z;
+
+    if (dest)
+        *dest = res;
+    return res;
 }
 
 Matrix4f Matrix4f::initScale(float x, float y, float z){
@@ -229,38 +238,38 @@ Matrix4f Matrix4f::initRotation(float x, float y, float z){
     ry.m30 = 0;      ry.m31 = 0;      ry.m32 = 0;      ry.m33 = 1;
 
     Matrix4f m;
-    Matrix4f * result = mul(ry, rx, &m);
-    return *mul(rz, *result, result);
+    Matrix4f result = mul(ry, rx, &m);
+    return mul(rz, result, &result);
 }
 
-Matrix4f * Matrix4f::initPerspective(float fov, float aspectRatio, float zNear, float zFar){
+Matrix4f Matrix4f::initPerspective(float fov, float aspectRatio, float zNear, float zFar){
     float tanHalfFOV = static_cast<float>(tan(fov / 2));
     float zRange = zNear - zFar;
-    Matrix4f * result = new Matrix4f();
-    result -> m00 = 0;  result -> m01 = 0;  result -> m02 = 0;  result -> m03 = 0;
-    result -> m10 = 0;  result -> m11 = 0;  result -> m12 = 0;  result -> m13 = 0;
-    result -> m20 = 0;  result -> m21 = 0;  result -> m22 = 0;  result -> m23 = 0;
-    result -> m30 = 0;  result -> m31 = 0;  result -> m32 = 0;  result -> m33 = 0;
+    Matrix4f result = Matrix4f();
+    result.m00 = 0;  result.m01 = 0;  result.m02 = 0;  result.m03 = 0;
+    result.m10 = 0;  result.m11 = 0;  result.m12 = 0;  result.m13 = 0;
+    result.m20 = 0;  result.m21 = 0;  result.m22 = 0;  result.m23 = 0;
+    result.m30 = 0;  result.m31 = 0;  result.m32 = 0;  result.m33 = 0;
 
-    result -> m00 = 1.0f/(tanHalfFOV * aspectRatio);
-    result -> m11 = 1.0f / tanHalfFOV;
-    result -> m22 = -(zNear+zFar) / zRange;
-    result -> m32 = 1;
-    result -> m23 = 2 * zFar * zNear / zRange;
+    result.m00 = 1.0f/(tanHalfFOV * aspectRatio);
+    result.m11 = 1.0f / tanHalfFOV;
+    result.m22 = -(zNear+zFar) / zRange;
+    result.m32 = 1;
+    result.m23 = 2 * zFar * zNear / zRange;
 
     return result;
 }
 
-Matrix4f * Matrix4f::initOrthographic(float left, float right, float bottom, float top, float near, float far){
+Matrix4f Matrix4f::initOrthographic(float left, float right, float bottom, float top, float near, float far){
     float width = right - left;
     float height = top - bottom;
     float depth = far - near;
 
-    Matrix4f * result = new Matrix4f();
-    result -> m00 = 2 / width;  result -> m01 = 0;          result -> m02 = 0;          result -> m03 = -(right + left) / width;
-    result -> m10 = 0;          result -> m11 = 2 / height; result -> m12 = 0;          result -> m13 = -(top + bottom) / height;
-    result -> m20 = 0;          result -> m21 = 0;          result -> m22 = -2 / depth; result -> m23 = -(far + near) / depth;
-    result -> m30 = 0;          result -> m31 = 0;          result -> m32 = 0;          result -> m33 = 1;
+    Matrix4f result = Matrix4f();
+    result.m00 = 2 / width;  result.m01 = 0;          result.m02 = 0;          result.m03 = -(right + left) / width;
+    result.m10 = 0;          result.m11 = 2 / height; result.m12 = 0;          result.m13 = -(top + bottom) / height;
+    result.m20 = 0;          result.m21 = 0;          result.m22 = -2 / depth; result.m23 = -(far + near) / depth;
+    result.m30 = 0;          result.m31 = 0;          result.m32 = 0;          result.m33 = 1;
 
     return result;
 }

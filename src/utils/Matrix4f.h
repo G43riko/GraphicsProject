@@ -69,26 +69,26 @@ public:
 
     static Matrix4f setIdentity(Matrix4f&);
 
-    static Matrix4f * mul(const Matrix4f &, Matrix4f, Matrix4f * = nullptr);
+    static Matrix4f mul(const Matrix4f &, Matrix4f, Matrix4f * = nullptr);
     static Vector4f transform(Matrix4f, Vector4f, Vector4f * = nullptr);
-    static Matrix4f * translate(Vector3f, Matrix4f, Matrix4f * = nullptr);
-    static Matrix4f * translate(Vector2f, Matrix4f, Matrix4f * = nullptr);
-    static Matrix4f * rotate(float, Vector3f, Matrix4f, Matrix4f * = nullptr);
-    static Matrix4f * scale(Vector3f, Matrix4f, Matrix4f *);
+    static Matrix4f translate(Vector3f, Matrix4f, Matrix4f * = nullptr);
+    static Matrix4f translate(Vector2f, Matrix4f, Matrix4f * = nullptr);
+    static Matrix4f rotate(float, Vector3f, Matrix4f, Matrix4f * = nullptr);
+    static Matrix4f scale(Vector3f, Matrix4f, Matrix4f *);
 
     static Matrix4f initScale(float, float, float);
     static Matrix4f initTranslation(float, float, float);
     static Matrix4f initRotation(float, float, float);
-    static Matrix4f * initPerspective(float, float, float, float);
-    static Matrix4f * initOrthographic(float, float, float, float, float, float);
+    static Matrix4f initPerspective(float, float, float, float);
+    static Matrix4f initOrthographic(float, float, float, float, float, float);
 
     Matrix4f InitRotationFromVectors(Vector3f &, Vector3f&, Vector3f&);
 
     Matrix4f operator * (const Matrix4f& matrix){
-        return *mul(*this, matrix);
+        return mul(*this, matrix);
     }
     Matrix4f operator *= (const Matrix4f& matrix){
-        return *mul(*this, matrix, this);
+        return mul(*this, matrix, this);
     }
     void show(bool formate = true){
         std::cout << std::fixed << std::setprecision(6);

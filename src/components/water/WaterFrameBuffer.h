@@ -7,14 +7,13 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <src/rendering/WindowManager.h>
 
 class WaterFrameBuffer {
-    protected:
-        const static int REFLECTION_WIDTH = 320;
-        const static int REFRACTION_WIDTH = 1280;
     private:
-        const static int REFLECTION_HEIGHT = 180;
-
+        const static int REFLECTION_WIDTH = 320 * 8;
+        const static int REFLECTION_HEIGHT = 180 * 8;
+        const static int REFRACTION_WIDTH = 1280;
         const static int REFRACTION_HEIGHT = 720;
 
         GLuint reflectionFrameBuffer;
@@ -41,15 +40,19 @@ class WaterFrameBuffer {
 
         void bindReflectionFrameBuffer() {//call before rendering to this FBO
             bindFrameBuffer(reflectionFrameBuffer, REFLECTION_WIDTH, REFLECTION_HEIGHT);
+            glViewport(0, 0, REFLECTION_WIDTH, REFLECTION_HEIGHT);
+            glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
         void bindRefractionFrameBuffer() {//call before rendering to this FBO
             bindFrameBuffer(refractionFrameBuffer, REFRACTION_WIDTH, REFRACTION_HEIGHT);
+            glViewport(0, 0, REFRACTION_WIDTH, REFRACTION_HEIGHT);
+            glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
         void unbindCurrentFrameBuffer() {//call to switch to default frame buffer
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glViewport(0, 0, 1600, 900);
+            glViewport(0, 0, WindowManager::width, WindowManager::height);
         }
 
         GLuint getReflectionTexture() {//get the resulting texture

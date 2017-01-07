@@ -7,7 +7,7 @@
 
 
 #include <src/utils/Vectors.h>
-#include "../utils/utils.h"
+#include "src/utils/utils.h"
 class Light {
     public:
         Light(const Vector3f & position, const Vector3f & color, const Vector3f & attenuation){

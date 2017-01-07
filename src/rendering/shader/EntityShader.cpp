@@ -23,6 +23,7 @@ class EntityShader : public BasicShader{
         };
         void setAllUniforms(void){
 
+            this -> setUniform("plane");
 
             this -> setUniform("projectionMatrix");
             this -> setUniform("viewMatrix");

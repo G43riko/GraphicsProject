@@ -92,36 +92,38 @@ set(GL_MAIN_SRC src/main.cpp
                 src/rendering/model/Mesh.cpp
                 src/rendering/model/RawModel.cpp
                 src/rendering/model/Entity.cpp
-                src/rendering/model/Transform.cpp
+        src/utils/Transform.cpp
                 src/rendering/model/MaterialedModel.cpp
         src/components/postProccessing/Fbo.cpp
         src/components/postProccessing/ImageRenderer.cpp
                 src/rendering/shader/BasicShader.cpp
         src/components/postProccessing/ToFrameBufferRendering.cpp
                 src/game/Scene.cpp
-                src/entities/Light.cpp
+        src/components/lights/Light.cpp
                 src/components/FreeMove.cpp
                 src/static_libs/stb_image.h
                 src/static_libs/stb_image.c
                 src/static_libs/lodepng.cpp
                 src/static_libs/lodepng.h
-                src/water/WaterFrameBuffer.cpp
-                src/water/WaterFrameBuffer.h
+        src/components/water/WaterFrameBuffer.cpp
+        src/components/water/WaterFrameBuffer.h
         src/components/postProccessing/Filter.cpp
         src/components/postProccessing/Filter.h
                 src/rendering/material/CubeTexture.cpp
                 src/rendering/material/CubeTexture.h
-                src/entities/Terrain.cpp
-                src/entities/Terrain.h
-                src/entities/Particle.cpp
-                src/entities/Particle.h
+        src/components/terrain/Terrain.cpp
+        src/components/terrain/Terrain.h
+        src/components/particles/Particle.cpp
+        src/components/particles/Particle.h
         src/components/movement/TopView.cpp
         src/components/movement/TopView.h
         src/components/movement/FpsView.cpp
         src/components/movement/FpsView.h
                 src/game/Ball.cpp
                 src/game/Ball.h
-                src/game/GameObject.h src/components/KeyFrame.cpp src/components/KeyFrame.h src/game/Animation.cpp src/game/Animation.h src/game/Arrow.cpp src/game/Arrow.h src/game/Environment.cpp src/game/Environment.h src/components/movement/BasicView.h src/components/shadows/ShadowBox.cpp src/components/shadows/ShadowBox.h src/components/shadows/ShadowMaster.cpp src/components/shadows/ShadowMaster.h)
+        src/rendering/RenderUtil.cpp src/rendering/RenderUtil.h
+        src/components/gui/GuiMaster.cpp src/components/gui/GuiMaster.h
+                src/game/GameObject.h src/components/KeyFrame.cpp src/components/KeyFrame.h src/game/Animation.cpp src/game/Animation.h src/game/Arrow.cpp src/game/Arrow.h src/game/Environment.cpp src/game/Environment.h src/components/movement/BasicView.h src/components/shadows/ShadowBox.cpp src/components/shadows/ShadowBox.h src/components/shadows/ShadowMaster.cpp src/components/shadows/ShadowMaster.h src/components/particles/ParticleMaster.cpp src/components/particles/ParticleMaster.h src/components/terrain/HeightsGenerator.h src/components/terrain/HeightGenerator.cpp src/components/terrain/HeightGenerator.h src/components/sky/SkyBoxMaster.cpp src/components/sky/SkyBoxMaster.h src/components/entities/EntityMaster.cpp src/components/entities/EntityMaster.h src/components/water/WaterMaster.cpp src/components/water/WaterMaster.h )
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)
@@ -140,11 +142,11 @@ set(SOURCE_FILES    src/main.cpp
                     src/rendering/model/MaterialedModel.cpp
                     src/rendering/model/Entity.cpp
                     src/utils/Maths.cpp
-                    src/rendering/model/Transform.cpp
+        src/utils/Transform.cpp
                     src/rendering/Camera.cpp
                     src/utils/Input.cpp
                     src/rendering/model/Mesh.cpp
                     src/rendering/shader/EntityShader.cpp
-        src/rendering/shader/ObjectShader.cpp src/utils/Matrix4f.cpp src/utils/Matrix4f.h src/utils/Quaternion.cpp src/utils/Quaternion.h src/rendering/GuiTexture.cpp src/rendering/GuiTexture.h src/rendering/shader/VerticalBlurShader.cpp src/rendering/shader/HorizontalBlurShader.cpp src/rendering/shader/CombineShader.cpp src/rendering/shader/ColorShader.cpp src/rendering/shader/SkyBoxShader.cpp src/rendering/shader/SkyBoxRenderer.cpp src/rendering/shader/SkyBoxRenderer.h src/rendering/shader/ParticleShader.cpp src/utils/ResourcesManager.h src/rendering/shader/ShadowShader.cpp)
+        src/rendering/shader/ObjectShader.cpp src/utils/Matrix4f.cpp src/utils/Matrix4f.h src/utils/Quaternion.cpp src/utils/Quaternion.h src/components/gui/GuiTexture.cpp src/components/gui/GuiTexture.h src/rendering/shader/VerticalBlurShader.cpp src/rendering/shader/HorizontalBlurShader.cpp src/rendering/shader/CombineShader.cpp src/rendering/shader/ColorShader.cpp src/rendering/shader/SkyBoxShader.cpp src/rendering/shader/SkyBoxRenderer.cpp src/rendering/shader/SkyBoxRenderer.h src/rendering/shader/ParticleShader.cpp src/utils/ResourcesManager.h src/rendering/shader/ShadowShader.cpp src/rendering/shader/WaterShader.cpp)
 
 add_executable(GraphicsProject ${SOURCE_FILES})

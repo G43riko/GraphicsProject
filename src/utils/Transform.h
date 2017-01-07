@@ -5,7 +5,7 @@
 #ifndef GRAPHICSPROJECT_TRANSFORM_H
 #define GRAPHICSPROJECT_TRANSFORM_H
 
-#include "../../utils/Quaternion.h"
+#include "Quaternion.h"
 #include "src/utils/Maths.h"
 
 class Transform {
