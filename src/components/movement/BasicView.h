@@ -19,7 +19,7 @@ public:
         this -> camera = camera;
         this -> player = player;
     }
-    virtual void input(void){};
+    virtual void update(float delta){};
 };
 
 #endif //GRAPHICSPROJECT_BASICVIEW_H

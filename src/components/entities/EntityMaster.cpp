@@ -5,12 +5,14 @@
 #include <src/rendering/Camera.h>
 #include "EntityMaster.h"
 
-void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vector<PointerLight> lights, PointerCamera camera, int options, Vector4f clipPlane){
+void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vector<PointerLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Matrix4f toShadowSpace, int shadowMap){
     if(entities.empty()){
         return;
     }
     shader -> bind();
-
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, shadowMap);
+    shader -> updateUniform4m("toShadowSpace", toShadowSpace);
     shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
     shader -> updateUniform3f("cameraPosition", camera -> position);
     //shader -> updateUniform2f("levels", 4);

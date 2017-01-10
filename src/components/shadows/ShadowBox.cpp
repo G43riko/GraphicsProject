@@ -6,18 +6,18 @@
 
 const Vector4f ShadowBox::UP = Vector4f(0.0f, 1.0f, 0.0f, 0.0f);
 const Vector4f ShadowBox::FORWARD = Vector4f(0.0f, 0.0f, -1.0f, 0.0f);
- const float ShadowBox::SHADOW_DISTANCE = 100.0f;
+const float ShadowBox::SHADOW_DISTANCE = 100.0f;
+
 void ShadowBox::update(void) {
     Matrix4f rotation = calculateCameraRotationMatrix();
-    Vector3f forwardVector = Vector3f(Matrix4f::transform(rotation, FORWARD, nullptr));
+    Vector3f forwardVector = Vector3f(Matrix4f::transform(rotation, FORWARD));
 
     Vector3f toFar = Vector3f(forwardVector) * SHADOW_DISTANCE;
     Vector3f toNear = Vector3f(forwardVector) * cam -> NEAR_PLANE;
     Vector3f centerNear = toNear + cam -> position;
     Vector3f centerFar = toFar + cam -> position;
 
-    Vector4f * points = calculateFrustumVertices(rotation, forwardVector, centerNear,
-                                                 centerFar);
+    Vector4f * points = calculateFrustumVertices(rotation, forwardVector, centerNear, centerFar);
 
     bool first = true;
     //for (Vector4f point : points) {

@@ -23,8 +23,8 @@ class HeightGenerator {
             return a * (1.0f - f) + b * f;
         }
         float getInterpolateNoise(float x, float y){
-            int intX = (int)x;
-            int intY = (int)y;
+            unsigned  int intX = (unsigned int)x;
+            unsigned int intY = (unsigned int)y;
             float fractX = x - intX;
             float fractY = y - intY;
 
@@ -59,10 +59,10 @@ class HeightGenerator {
              */
             float total = 0;
             float d = (float) pow(2, OCTAVES-1);
-            for(int i=0;i<OCTAVES;i++){
+            for(unsigned int i=0;i<OCTAVES;i++){
                 float freq = (float) (pow(2, i) / d);
                 float amp = (float) pow(ROUGHNESS, i) * amplitude;
-                total += getInterpolateNoise((x+xOffset)*freq, (z + zOffset)*freq) * amp;
+                total += getInterpolateNoise((x + xOffset) * freq, (z + zOffset) * freq) * amp;
             }
             return total;
         }

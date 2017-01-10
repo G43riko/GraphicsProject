@@ -4,7 +4,7 @@
 
 #include "GuiMaster.h"
 
-void GuiMaster::renderGui(std::vector<GuiTexture> textures, PointerRawModel model){
+void GuiMaster::renderGui(std::vector<GuiTexture> textures){
     if(textures.empty()){
         return;
     }

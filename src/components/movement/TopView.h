@@ -26,7 +26,7 @@ public:
         player->getObject()->immortal = true;
     }
 
-    void input(void){
+    void update(float delta){
         Vector3f position = realPosition;
         //float rotSpeed = 0.2;
         if(Input::isKeyDown(GLFW_KEY_W)) {

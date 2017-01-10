@@ -3,7 +3,8 @@
 //
 
 #include "Particle.h"
-Particle::Particle(const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale){
+Particle::Particle(PointerParticleTexture texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale)
+    :texture(texture){
     this -> position = position;
     this -> velocity = velocity;
     this -> gravityEffect = gravityEffect;

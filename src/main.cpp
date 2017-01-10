@@ -64,7 +64,7 @@ int main(void){
 //    auto floorEntity = createEntity(floor, Vector3f(0, -1, 0), Vector3f(), Vector3f(10, 1, 10));
 //    scene.addEntity(floorEntity);
 
-    Terrain t = Terrain(1, 1, loader, diffuse, 100, 128, 5, 40);
+    Terrain t = Terrain(loader, diffuse, 100, 128, 5, 40);
     scene.addEntity(createEntity(t.getModel(), Vector3f(-50, 1, -50), Vector3f(0.0f), Vector3f(1.0f)));
 
     auto screen = Screen(WindowManager::width, WindowManager::height, loader);
@@ -77,7 +77,7 @@ int main(void){
 //    scene.addLight(light1);
 
 
-    //renderer.setSun(sun);
+    renderer.setSun(sun);
     //renderer.setPostFx(true);
 
 
@@ -92,30 +92,44 @@ int main(void){
 
     double currentTime = glfwGetTime();
     int fps = 0;
+    float delta = 1;
     while (!WindowManager::isCloseRequest()) {
         fps++;
+        if(Input::getKeyDown(GLFW_KEY_X)){
+            delta = delta == 1.0f ? 0.2f : 1.0f;
+        }
         if(glfwGetTime() - currentTime > 1.0){
             printf("FPS: %d\n", fps);
             fps = 0;
             currentTime = glfwGetTime();
         }
-        barrel -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.05f, 0.0f));
-        teaEntity -> getTransform() -> getRotation() -> rotate(Vector3f(0.0f, 0.005f, 0.0f));
 
+        barrel -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.05f, 0.0f) * delta);
+        teaEntity -> getTransform() -> getRotation() -> rotate(Vector3f(0.0f, 0.005f, 0.0f) * delta);
+//        if(Input::isKeyDown(GLFW_KEY_Y)){
+//            printf("pridavam casticu\n");
+//            scene.addParticle(Particle(Vector3f(), Vector3f(0.0f, 1.0f, 0.0f), 1, 2.0f, 0, 1));
+//        }
         renderer.prepareRenderer(0, 0, 0, 1);
-        time += 0.02f;
+        time += 0.02f * delta;
         renderer.init3D();
         light1 -> setPosition(static_cast<float>(-sin(time) * 20) , 0, static_cast<float>(-cos(time) * 20 - 20));
         light -> setPosition(static_cast<float>(sin(time) * 20) , 0, static_cast<float>(cos(time) * 20 - 20));
 
-        scene.update(1);
+        scene.update(delta);
+        view -> update(delta);
         renderer.input();
-        view -> input();
+        renderer.update(delta);
         renderer.renderScene(scene);
+        ParticleTexture text = ParticleTexture(nullptr, 2, 3);
+        if(Input::isKeyDown(GLFW_KEY_F)){
+            scene.addParticle(Particle(nullptr, Vector3f(0.0f, 0.0f, -2.0f), Vector3f(0.0f, 0.1f, 0.0f), 0, 2000, 0, 1));
+        }
 
 
-        if(Input::isKeyDown(GLFW_KEY_ESCAPE))
+        if(Input::isKeyDown(GLFW_KEY_ESCAPE)){
             glfwSetWindowShouldClose(WindowManager::window, 1);
+        }
         Input::update();
         WindowManager::update();
     }

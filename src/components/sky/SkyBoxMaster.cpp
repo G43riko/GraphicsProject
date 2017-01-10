@@ -4,7 +4,7 @@
 
 #include "SkyBoxMaster.h"
 
-void SkyBoxMaster::renderSky(CubeTexture sky, PointerRawModel model, PointerCamera camera){
+void SkyBoxMaster::renderSky(CubeTexture sky, PointerCamera camera){
     shader -> bind();
     shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
     utils -> prepareModel(model, 1);

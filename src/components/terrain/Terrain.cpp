@@ -4,47 +4,46 @@
 
 #include "Terrain.h"
 
-Vector3f Terrain::calculateNormal(int x, int z, float ** map, int size){
-    float heightL = getHeight(x - 1, z, map, size);
-    float heightR = getHeight(x + 1, z, map, size);
-    float heightD = getHeight(x, z - 1, map, size);
-    float heightU = getHeight(x, z + 1, map, size);
+Vector3f Terrain::calculateNormal(int x, int z){
+    float heightL = getTerrainHeight(x - 1, z);
+    float heightR = getTerrainHeight(x + 1, z);
+    float heightD = getTerrainHeight(x, z - 1);
+    float heightU = getTerrainHeight(x, z + 1);
     return Vector3f(heightL - heightR, 2.0f, heightD - heightU).normalize();
 }
 
-
-float Terrain::getHeight(int x, int z, float ** map, int size){
-    if(x < 0 || z < 0 || x >= size || z >= size)
+float Terrain::getTerrainHeight(int x, int z){
+    if(x < 0 || z < 0 || x >= vertices || z >= vertices)
         return 0;
     float height = map[x][z];
     return height;
 }
 
-PointerRawModel Terrain::generateTerrain(Loader loader, float ** map, GLuint size, int vertexCount, int textMulti){
-    std::vector<float> vertices, normals, textures;
+PointerRawModel Terrain::generateTerrain(Loader loader, int textMulti){
+    std::vector<float> verticesVector, normals, textures;
     std::vector<GLuint> indices;
-    for(unsigned int i=0 ; i<vertexCount ; i++){
-        for(unsigned int j=0 ; j<vertexCount ; j++){
+    for(unsigned int i=0 ; i<vertices ; i++){
+        for(unsigned int j=0 ; j<vertices ; j++){
             map[j][i] = generator.generateHeight(j, i);
 
-            vertices.push_back((float)j / (vertexCount - 1) * size);
-            vertices.push_back(map[j][i]);
-            vertices.push_back((float)i / (vertexCount - 1) * size);
+            verticesVector.push_back((float)j / (vertices - 1) * size);
+            verticesVector.push_back(map[j][i]);
+            verticesVector.push_back((float)i / (vertices - 1) * size);
 
-            textures.push_back((float)j / (vertexCount - 1) * textMulti);
-            textures.push_back((float)i / (vertexCount - 1) * textMulti);
+            textures.push_back((float)j / (vertices - 1) * textMulti);
+            textures.push_back((float)i / (vertices - 1) * textMulti);
         }
     }
-    for(unsigned int gz=0 ; gz<vertexCount ; gz++){
-        for(unsigned int gx=0 ; gx<vertexCount ; gx++){
-            Vector3f normal = calculateNormal(gx, gz, map, vertexCount);
+    for(unsigned int gz=0 ; gz<vertices ; gz++){
+        for(unsigned int gx=0 ; gx<vertices ; gx++){
+            Vector3f normal = calculateNormal(gx, gz);
             normals.push_back(normal.x);
             normals.push_back(normal.y);
             normals.push_back(normal.z);
-            if(gz < vertexCount - 1 && gx < vertexCount - 1){
-                GLuint topLeft = gz * vertexCount + gx;
+            if(gz < vertices - 1 && gx < vertices - 1){
+                GLuint topLeft = gz * vertices + gx;
                 GLuint topRight = topLeft + 1;
-                GLuint bottomLeft = (gz + 1) * vertexCount + gx;
+                GLuint bottomLeft = (gz + 1) * vertices + gx;
                 GLuint bottomRight = bottomLeft + 1;
                 indices.push_back(topLeft);
                 indices.push_back(bottomLeft);
@@ -55,5 +54,5 @@ PointerRawModel Terrain::generateTerrain(Loader loader, float ** map, GLuint siz
             }
         }
     }
-    return loader.loadToVao(vertices, textures, normals, indices);
+    return loader.loadToVao(verticesVector, textures, normals, indices);
 }

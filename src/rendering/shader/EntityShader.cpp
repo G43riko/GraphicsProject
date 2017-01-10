@@ -13,6 +13,7 @@ class EntityShader : public BasicShader{
         void connectTextures(void){
             updateUniformi("textureSampler", 0);
             updateUniformi("environmentalMap", 1);
+            updateUniformi("shadowMap", 2);
         }
 
         void setAllAttributes(void){
@@ -28,6 +29,10 @@ class EntityShader : public BasicShader{
             this -> setUniform("projectionMatrix");
             this -> setUniform("viewMatrix");
             this -> setUniform("transformationMatrix");
+
+            this -> setUniform("toShadowSpace");
+            this -> setUniform("shadowMap");
+
 
             for(int i=0 ; i<MAX_LIGHTS ; i++){
                 this -> setUniform("lightPosition[" + std::to_string(i) + "]");

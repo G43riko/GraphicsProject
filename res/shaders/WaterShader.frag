@@ -15,10 +15,10 @@ uniform sampler2D depthMap;
 
 uniform vec3 lightColor[8];
 uniform float moveFactor;
-
-const float waveStrength = 0.02;
-const float shineDumper = 20.0;
-const float reflectivity = 0.6;
+uniform float refractiveRation;
+uniform float waveStrength;
+uniform float shineDumper;
+uniform float reflectivity;
 
 void main(void) {
     vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
@@ -40,7 +40,7 @@ void main(void) {
 //    vec2 totalDistortion = distortion1 + distortion2;
 	vec2 distortedTexCoords = texture(dudvMap, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg*0.1;
 	distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+moveFactor);
-	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength /** clamp(waterDepth / 20.0f, 0.0f, 1.0f)*/;
+	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength * clamp(waterDepth, 0.0f, 1.0f);
 
     refractTextCoords += totalDistortion;
     refractTextCoords = clamp(refractTextCoords, 0.0001, 0.999);
@@ -51,7 +51,7 @@ void main(void) {
 
     vec3 viewVector = normalize(toCameraVector);
     float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
-    refractiveFactor = pow(refractiveFactor, 3);
+    refractiveFactor = pow(refractiveFactor, refractiveRation);
 
     vec4 reflectColor = texture(reflectionTexture, reflectTextCoords);
     vec4 refractColor = texture(refractionTexture, refractTextCoords);
@@ -65,7 +65,7 @@ void main(void) {
         vec3 reflectedLight = reflect(normalize(fromLightVector[i]), normal);
         float specular = max(dot(reflectedLight, viewVector), 0.0);
         specular = pow(specular, shineDumper);
-        totalSpecular += lightColor[i] * specular * reflectivity /** clamp(waterDepth / 5.0f, 0.0f, 1.0f)*/;
+        totalSpecular += lightColor[i] * specular * reflectivity * clamp(waterDepth, 0.0f, 1.0f);
     }
 
 

@@ -21,10 +21,10 @@ public:
         center = Input::getMousePosition();
     }
 
-    void input(void){
-        float movSpeed = 0.1f;
-        float rotSpeed = 0.05f;
-        float SENSITIVITY = 0.002f;
+    void update(float delta){
+        float movSpeed = 0.1f * delta;
+        float rotSpeed = 0.05f * delta;
+        float SENSITIVITY = 0.002f * delta;
         float yaw = camera -> yaw;
         float pitch = camera -> pitch;
         Vector3f position = camera -> position;

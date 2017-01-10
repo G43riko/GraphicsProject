@@ -54,6 +54,7 @@ class Renderer {
         void renderScreen(Screen screen);
         void updateProjectionMatrix(PointerCamera, PointerBasicShader = nullptr);
         void init3D(void);
+        void update(float delta);
         void input(void);
         void addShader(std::string key, PointerBasicShader shader);
         void cleanUp(void);

@@ -2,6 +2,7 @@
 in vec2 pass_Texture;
 in vec3 surfaceNormal;
 in vec3 toLightVector[8];
+in vec4 shadowCoords;
 in vec3 reflectedVector;
 in vec3 refractedVector;
 
@@ -9,11 +10,19 @@ out vec4 FragmentColor;
 
 uniform sampler2D textureSampler;
 uniform samplerCube environmentalMap;
+uniform sampler2D shadowMap;
 uniform vec3 lightColor[8];
 uniform int levels;
 
 void main() {
     //FragmentColor = vec4(vec3(0.0f, 1.0f, 1.0f), 1.0f);
+
+    float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
+    float lightFactor = 1.0f;
+    //SHADOWS
+    if(shadowCoords.z > objectNearestLight){
+        lightFactor = 1.0 - 0.4;
+    }
 
     vec3 unitNormal = normalize(surfaceNormal);
     vec3 totalDifuse = vec3(0);
@@ -28,6 +37,7 @@ void main() {
         }
         totalDifuse += brightness * lightColor[i];
     }
+    totalDifuse *= lightFactor;
 
     FragmentColor = vec4(totalDifuse, 1.0) * texture(textureSampler, pass_Texture);
     /*
@@ -36,4 +46,5 @@ void main() {
     vec4 environmentalColor = mix(reflectedColor, refractedColor, 0);
     FragmentColor = mix(FragmentColor, environmentalColor, 0.6);
     */
+
 }

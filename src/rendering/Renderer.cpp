@@ -16,17 +16,18 @@ Renderer::Renderer(Loader loader, int width, int height) :
         utils = RenderUtil();
     initShaders();
 
-    textures.push_back(GuiTexture(wf.getRefractionDepthTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
-    textures.push_back(GuiTexture(wf.getRefractionTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
-    textures.push_back(GuiTexture(wf.getReflectionTexture(), Vector2f(-0.25f, 0.75f), Vector2f(0.25f, 0.25f)));
+//    textures.push_back(GuiTexture(wf.getRefractionDepthTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
+//    textures.push_back(GuiTexture(wf.getRefractionTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
     setCamera(PointerCamera(new Camera()));
 
     shadowMaster    = new ShadowMaster(&utils, shaders["shadowShader"], getActualCamera());
-    guiMaster       = new GuiMaster(&utils, shaders["guiShader"]);
-    skyBoxMaster    = new SkyBoxMaster(&utils, shaders["skyBoxShader"]);
-    particleMaster  = new ParticleMaster(&utils, shaders["particleShader"]);
+    guiMaster       = new GuiMaster(&utils, shaders["guiShader"], loader);
+    skyBoxMaster    = new SkyBoxMaster(&utils, shaders["skyBoxShader"], loader);
+    particleMaster  = new ParticleMaster(&utils, shaders["particleShader"], loader);
     entityMaster    = new EntityMaster(&utils, shaders["entityShader"]);
     waterMaster    = new WaterMaster(&utils, shaders["waterShader"], loader);
+
+    textures.push_back(GuiTexture(shadowMaster->getShadowMap(), Vector2f(-1, 1), Vector2f(1)));
 }
 void Renderer::prepareRenderer(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
     glClearColor(red, green, blue, alpha);
@@ -106,27 +107,29 @@ void Renderer::renderScene(Scene scene){
     }
 
     //renderObjects(scene.getEntities(), scene.getLights());
-    skyBoxMaster -> renderSky(scene.getSky(), scene.getSkyModel(), actualCamera);
-    entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, -5, 0, 15));
+    skyBoxMaster -> renderSky(scene.getSky(), actualCamera);
+    shadowMaster -> renderShadows(scene.getEntities(), sun, actualCamera);
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, 1, 0, -waterMaster -> getWaterHeight()), shadowMaster->getToShadowMapSpaceMatrix(), shadowMaster->getShadowMap());
+    //glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
+
+    waterMaster -> starRenderReflection(actualCamera);
     glEnable(GL_CLIP_DISTANCE0);
-    wf.bindReflectionFrameBuffer();
-    float distance = 2 * (actualCamera->position.y - waterMaster->getWaterHeight());
-    actualCamera -> position.y -= distance;
-    actualCamera -> pitch *= -1;
-    entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, 1, 0, -waterMaster -> getWaterHeight()));
-    actualCamera -> pitch *= -1;
-    actualCamera -> position.y += distance;
-    wf.unbindCurrentFrameBuffer();
+    glDisable(GL_CLIP_DISTANCE0);
+    skyBoxMaster -> renderSky(scene.getSky(), actualCamera);
+    glEnable(GL_CLIP_DISTANCE0);
+    entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, 1, 0, -waterMaster -> getWaterHeight()), shadowMaster->getToShadowMapSpaceMatrix(), shadowMaster->getShadowMap());
 
-    wf.bindRefractionFrameBuffer();
-    entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, -1, 0, waterMaster -> getWaterHeight() + 1.0f));
-    wf.unbindCurrentFrameBuffer();
+
+    waterMaster -> starRenderRefraction(actualCamera);
+    entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, -1, 0, waterMaster -> getWaterHeight() + 1.0f), shadowMaster->getToShadowMapSpaceMatrix(), shadowMaster->getShadowMap());
+    waterMaster -> finishRender();
     glDisable(GL_CLIP_DISTANCE0);
 
-    shadowMaster -> renderShadows(scene.getEntities(), sun, actualCamera);
-    particleMaster -> renderParticles(scene.getParticles(), scene.getParticleModel(), actualCamera);
-    waterMaster -> render(actualCamera, scene.getLights(), wf);
+
+    particleMaster -> renderParticles(scene.getParticles(), actualCamera);
+    waterMaster -> render(actualCamera, scene.getLights());
     if(usePostFx){
         multiFbo.unbindFrameBuffer();
         multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT1, fbo);
@@ -136,7 +139,7 @@ void Renderer::renderScene(Scene scene){
 //        pp.doPostProcessing(fbo.getColourTexture());
     }
 
-    guiMaster -> renderGui(textures, scene.getGuiModel());
+    guiMaster -> renderGui(textures);
 }
 
 void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<PointerLight> lights){
@@ -234,6 +237,11 @@ void Renderer::render(PointerMaterialedModel materialedModel){
     utils.prepareModel(model, 1);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     utils.finishRender(1);
+}
+void Renderer::update(float delta) {
+    if(waterMaster){
+        waterMaster -> update(delta);
+    }
 }
 
 void Renderer::input(void) {

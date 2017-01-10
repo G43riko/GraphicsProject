@@ -14,9 +14,13 @@ class GuiMaster {
 private:
     PointerBasicShader shader;
     RenderUtil * utils;
+    PointerRawModel model;
 public:
-    void renderGui(std::vector<GuiTexture> textures, PointerRawModel model);
-    GuiMaster(RenderUtil * utils, PointerBasicShader shader) : shader(shader), utils(utils){}
+    void renderGui(std::vector<GuiTexture> textures);
+    GuiMaster(RenderUtil * utils, PointerBasicShader shader, Loader loader) : shader(shader), utils(utils){
+        std::vector<float> vertices = {-1, 1, -1, -1, 1, 1, 1, -1};
+        model = loader.loadToVao(vertices, 2);
+    }
 };
 
 

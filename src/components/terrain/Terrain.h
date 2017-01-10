@@ -15,33 +15,51 @@
 
 class Terrain {
 public:
-    Terrain(int gridX, int gridZ, Loader loader, PointerTexture2D texture, GLuint size, int vertices, float height, int textures) : texture(texture), x(gridX * size), z(gridZ * size), generator(HeightGenerator(height)){
-        float ** map = new float * [vertices];
-        for(unsigned int i=0 ; i<vertices ; i++)
-            map[i] = new float[vertices];
-
-        PointerRawModel m = generateTerrain(loader, map, size, vertices, textures);
+    ~Terrain(){
+        clearMap();
+    }
+    Terrain(Loader loader, PointerTexture2D texture, GLuint size, int vertices, float height, int textures) : texture(texture), generator(HeightGenerator(height)){
+        initMap(vertices, vertices);
+        this -> vertices = vertices;
+        this -> size = size;
+        PointerRawModel m = generateTerrain(loader, textures);
         model = createMaterialedModel(m, createMaterial(texture));
 
-        for(unsigned int i=0 ; i<vertices ; i++)
-            delete[] map[i];
-        delete[] map;
+
     }
 
     PointerMaterialedModel getModel() {
         return model;
     }
+    float getHeight(int surX, int surZ){
+
+        return getTerrainHeight(surX / size, surZ / size);
+    };
 
 private:
-    static float ** mapa;
+    GLuint size;
+    void clearMap(){
+        for(unsigned int i=0 ; i<vertices ; i++)
+            delete[] map[i];
+        delete[] map;
+    }
+
+    void initMap(int x, int y){
+        if(map){
+            clearMap();
+        }
+        map = new float * [x];
+        for(unsigned int i=0 ; i<x; i++)
+            map[i] = new float[y];
+    }
+    int vertices;
+    float ** map = nullptr;
     PointerTexture2D texture;
     HeightGenerator generator;
-    float x;
-    float z;
     PointerMaterialedModel model;
-    float getHeight(int x, int z, float ** map, int size);
-    Vector3f calculateNormal(int x, int z, float ** map, int size);
-    PointerRawModel generateTerrain(Loader loader, float ** map, GLuint size, int vertexCount, int textMulti);
+    float getTerrainHeight(int x, int z);
+    Vector3f calculateNormal(int x, int z);
+    PointerRawModel generateTerrain(Loader loader, int textMulti);
 };
 
 

@@ -56,34 +56,34 @@ public:
         float x = (minX + maxX) / 2.0f;
         float y = (minY + maxY) / 2.0f;
         float z = (minZ + maxZ) / 2.0f;
-        Vector4f cen = Vector4f(x, y, z, 1);
         Matrix4f invertedLight = Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(*lightViewMatrix)));
-        return Vector3f(Matrix4f::transform(invertedLight, cen, nullptr));
+        return Vector3f(Matrix4f::transform(invertedLight, Vector4f(x, y, z, 1)));
     }
 
     Vector4f calculateLightSpaceFrustumCorner(Vector3f startPoint, Vector3f direction, float width) {
         Vector3f point = startPoint + Vector3f(direction.x * width, direction.y * width, direction.z * width);
         Vector4f point4f = Vector4f(point.x, point.y, point.z, 1.0f);
-        Matrix4f::transform(*lightViewMatrix, point4f, &point4f);
-        return point4f;
+        return Matrix4f::transform(*lightViewMatrix, point4f);;
     }
 
     Matrix4f calculateCameraRotationMatrix() {
+        return Matrix4f::initRotation(TO_RADIANS(-cam -> pitch), TO_RADIANS(-cam -> yaw), 0);
+
+        /*
         Matrix4f rotation = Matrix4f();
         Matrix4f::rotate(static_cast<float>(TO_RADIANS(-cam -> yaw)), Vector3f(0, 1, 0), rotation, &rotation);
         Matrix4f::rotate(static_cast<float>(TO_RADIANS(-cam -> pitch)), Vector3f(1, 0, 0), rotation, &rotation);
         return rotation;
+         */
     }
+
     void calculateWidthsAndHeights() {
         farWidth = (float) (SHADOW_DISTANCE * tan(TO_RADIANS(cam -> FOV)));
         nearWidth = (float) (cam -> NEAR_PLANE * tan(TO_RADIANS(cam -> FOV)));
-        farHeight = farWidth / getAspectRatio();
-        nearHeight = nearWidth / getAspectRatio();
+        farHeight = farWidth / WindowManager::getRation();
+        nearHeight = nearWidth / WindowManager::getRation();
     }
 
-    float getAspectRatio() {
-        return WindowManager::getRation();
-    }
 
     float getWidth() {
         return maxX - minX;

@@ -12,7 +12,7 @@ private:
     PointerBasicShader shader;
     RenderUtil * utils;
 public:
-    void renderEntities(std::vector<PointerEntity> entities, std::vector<PointerLight> lights, PointerCamera camera, int options, Vector4f clipPlane);
+    void renderEntities(std::vector<PointerEntity> entities, std::vector<PointerLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Matrix4f toShadowSpace, int shadowMap);
     void renderEntity(PointerEntity entity, std::vector<PointerLight> lights, PointerCamera camera, int options, Vector4f clipPlane);
     EntityMaster(RenderUtil * utils, PointerBasicShader shader) : shader(shader), utils(utils){}
 };

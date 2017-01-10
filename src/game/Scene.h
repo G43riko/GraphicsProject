@@ -16,16 +16,9 @@
 
 class Scene {
     private:
-        constexpr static float SIZE = 500;
-        PointerRawModel guiModel = nullptr;
         PointerRawModel sphereModel = nullptr;
-        PointerRawModel skyModel = nullptr;
-        PointerRawModel particleModel = nullptr;
         CubeTexture sky;
         std::vector<Particle> particles;
-        static std::vector<GLfloat> guiVertices;
-        static std::vector<GLfloat> particeVertices;
-        static std::vector<float> VERTICES;
         std::vector<PointerEntity> entities;
         std::vector<PointerLight> lights;
         std::vector<PointerGameObject> objects;
@@ -41,6 +34,9 @@ class Scene {
 
         void addParticle(Particle particle){
             particles.push_back(particle);
+//            if(particles2.find(particle.getTexture()) == particles2.end()){
+//                //neexistuje
+//            }
         }
         void addObject(PointerGameObject object){
             objects.push_back(object);
@@ -99,20 +95,11 @@ class Scene {
             return particles;
         };
 
-        PointerRawModel getGuiModel(void){
-            return guiModel;
-        };
-        PointerRawModel getParticleModel(void){
-            return particleModel;
-        };
         CubeTexture getSky(void){
             return sky;
-        }
+        };
         PointerRawModel getSphereModel(void){
             return sphereModel;
-        };
-        PointerRawModel getSkyModel(void){
-            return skyModel;
         };
 };
 

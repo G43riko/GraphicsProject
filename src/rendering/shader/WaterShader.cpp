@@ -28,6 +28,11 @@ public:
         this -> setUniform("projectionMatrix");
         this -> setUniform("viewMatrix");
         this -> setUniform("modelMatrix");
+        this -> setUniform("tiling");
+        this -> setUniform("refractiveRation");
+        this -> setUniform("waveStrength");
+        this -> setUniform("shineDumper");
+        this -> setUniform("reflectivity");
 
         this -> setUniform("reflectionTexture");
         this -> setUniform("refractionTexture");

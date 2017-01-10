@@ -10,11 +10,58 @@
 
 class SkyBoxMaster {
 private:
+    constexpr static float SIZE = 500;
     PointerBasicShader shader;
     RenderUtil * utils;
+    PointerRawModel model;
 public:
-    void renderSky(CubeTexture sky, PointerRawModel model, PointerCamera camera);
-    SkyBoxMaster(RenderUtil * utils, PointerBasicShader shader) : shader(shader), utils(utils){}
+    void renderSky(CubeTexture sky, PointerCamera camera);
+    SkyBoxMaster(RenderUtil * utils, PointerBasicShader shader, Loader loader) : shader(shader), utils(utils){
+        std::vector<float> vertices = {
+            -SIZE,  SIZE, -SIZE,
+            -SIZE, -SIZE, -SIZE,
+             SIZE, -SIZE, -SIZE,
+             SIZE, -SIZE, -SIZE,
+             SIZE,  SIZE, -SIZE,
+            -SIZE,  SIZE, -SIZE,
+
+            -SIZE, -SIZE,  SIZE,
+            -SIZE, -SIZE, -SIZE,
+            -SIZE,  SIZE, -SIZE,
+            -SIZE,  SIZE, -SIZE,
+            -SIZE,  SIZE,  SIZE,
+            -SIZE, -SIZE,  SIZE,
+
+             SIZE, -SIZE, -SIZE,
+             SIZE, -SIZE,  SIZE,
+             SIZE,  SIZE,  SIZE,
+             SIZE,  SIZE,  SIZE,
+             SIZE,  SIZE, -SIZE,
+             SIZE, -SIZE, -SIZE,
+
+            -SIZE, -SIZE,  SIZE,
+            -SIZE,  SIZE,  SIZE,
+             SIZE,  SIZE,  SIZE,
+             SIZE,  SIZE,  SIZE,
+             SIZE, -SIZE,  SIZE,
+            -SIZE, -SIZE,  SIZE,
+
+            -SIZE,  SIZE, -SIZE,
+             SIZE,  SIZE, -SIZE,
+             SIZE,  SIZE,  SIZE,
+             SIZE,  SIZE,  SIZE,
+            -SIZE,  SIZE,  SIZE,
+            -SIZE,  SIZE, -SIZE,
+
+            -SIZE, -SIZE, -SIZE,
+            -SIZE, -SIZE,  SIZE,
+             SIZE, -SIZE, -SIZE,
+             SIZE, -SIZE, -SIZE,
+            -SIZE, -SIZE,  SIZE,
+             SIZE, -SIZE,  SIZE
+        };
+        model = loader.loadToVao(vertices, 3);
+    }
 };
 
 
