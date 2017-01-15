@@ -11,22 +11,27 @@
 
 class Material {
     private:
-        CubeTexture * environmentalMap = nullptr;
+        PointerCubeTexture environmentalMap = nullptr;
         PointerTexture2D diffuse = nullptr;
         PointerTexture2D normal = nullptr;
         PointerTexture2D specular = nullptr;
         PointerTexture2D alpha = nullptr;
+        PointerTexture2D bump = nullptr;
     public:
-        void setEnvironmentalMap(CubeTexture * texture);
-        CubeTexture getEnvironmentalMap(void);
+        void setEnvironmentalMap(PointerCubeTexture texture);
+        PointerCubeTexture getEnvironmentalMap(void);
         float shineDumber = 10;
         float reflectivity = 1;
+
         Material(PointerTexture2D diffuse);
         Material(PointerTexture2D diffuse, PointerTexture2D normal);
+
         PointerTexture2D getDiffuse(void);
         PointerTexture2D getNormal(void);
         PointerTexture2D getSpecular(void);
         PointerTexture2D getAlpha(void);
+        PointerTexture2D getBump(void);
+
         bool hasEnvironmentalMap(void);
 };
 typedef std::shared_ptr<Material> PointerMaterial;

@@ -121,7 +121,7 @@ class Vector3f{
 
         float getLength(void);
         void show(bool = true);
-
+        std::string toString(void);
 };
 
 

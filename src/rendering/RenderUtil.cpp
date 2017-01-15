@@ -23,7 +23,7 @@ void RenderUtil::prepareMaterial(PointerMaterial material, PointerBasicShader sh
 
         if(options & Renderer::FLAG_ENVIRONMENTAL){
             if(material -> hasEnvironmentalMap())
-                material -> getEnvironmentalMap().bind(1);
+                material -> getEnvironmentalMap() -> bind(GL_TEXTURE1);
         }
 
         if(options & Renderer::FLAG_NORMAL_MAP){
@@ -41,15 +41,15 @@ void RenderUtil::finishRender(GLuint numberOfAttributes){
     glBindVertexArray(0);
 }
 
-void RenderUtil::updateLightUniforms(PointerLight light, PointerBasicShader shader, PointerCamera camera, int index, bool eyeSpace){
+void RenderUtil::updateLightUniforms(PointerPointLight light, PointerBasicShader shader, PointerCamera camera, int index, bool eyeSpace){
     Vector3f position = eyeSpace ? getEyeSpacePosition(light, camera -> getViewMatrix()) : light->getPosition();
     std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
     shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);
-    shader -> updateUniform3f("lightColor[" + std::to_string(index) + "]", light -> getColor());
+    shader -> updateUniform3f("lightColor[" + std::to_string(index) + "]", light->getDiffuseColor());
     shader -> updateUniform3f("attenuation[" + std::to_string(index) + "]", light -> getAttenuation());
 }
 
-Vector3f RenderUtil::getEyeSpacePosition(PointerLight light, glm::mat4 view){
+Vector3f RenderUtil::getEyeSpacePosition(PointerPointLight light, glm::mat4 view){
     Vector3f position = light -> getPosition();
 
     float x = view[0][0] * position.x + view[1][0] * position.y + view[2][0] * position.z + view[3][0];

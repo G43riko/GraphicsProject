@@ -7,7 +7,9 @@
 
 
 #include <src/utils/Vectors.h>
-#include <src/game/Scene.h>
+#include "ParticleManager.h"
+
+class ParticleManager;
 
 class ParticleSystemSimple {
 private:
@@ -15,38 +17,30 @@ private:
     float speed;
     float gravityComplient;
     float lifeLength;
-    Scene * scene;
+    ParticleManager *parent;
     PointerParticleTexture texture;
 public:
-    ParticleSystemSimple(PointerParticleTexture texture, Scene * scene, float pps, float speed, float gravityComplient, float lifeLength) : texture(texture){
-        this -> scene = scene;
-        this -> pps = pps;
-        this -> speed = speed;
-        this -> gravityComplient = gravityComplient;
-        this -> lifeLength = lifeLength;
+    ParticleSystemSimple(PointerParticleTexture texture, ParticleManager *parent, float pps, float speed, float gravityComplient, float lifeLength) : texture(texture) {
+        this->parent = parent;
+        this->pps = pps;
+        this->speed = speed;
+        this->gravityComplient = gravityComplient;
+        this->lifeLength = lifeLength;
     }
 
-void update(float delta, Vector3f systemCenter){
+    void update(float delta, Vector3f systemCenter) {
         float particlesToCreate = pps * delta;
         int count = (int) floor(particlesToCreate);
-        float partialParticle = (float)fmod(particlesToCreate, 1);
-        for(int i=0;i<count;i++){
+        float partialParticle = (float) fmod(particlesToCreate, 1);
+        for (int i = 0; i < count; i++) {
             emitParticle(systemCenter);
         }
-        if(((double) rand() / (RAND_MAX)) + 1 < partialParticle){
+        if (((double) rand() / (RAND_MAX)) + 1 < partialParticle) {
             emitParticle(systemCenter);
         }
     }
 
-void emitParticle(Vector3f center){
-        float dirX = (float) (((double) rand() / (RAND_MAX)) + 1) * 2.0f - 1.0f;
-        float dirZ = (float) (((double) rand() / (RAND_MAX)) + 1) * 2.0f - 1.0f;
-        Vector3f velocity = Vector3f(dirX, 1.0f, dirZ);
-        velocity.normalize();
-        scene -> addParticle(Particle(texture, Vector3f(center), velocity * speed, gravityComplient, lifeLength, 0, 1));
-    }
+    void emitParticle(Vector3f center);
 };
-
-typedef std::shared_ptr<ParticleSystemSimple> PointerParticleSystemSimple;
 
 #endif //GRAPHICSPROJECT_PARTICLESYSTEMSIMPLE_H

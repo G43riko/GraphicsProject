@@ -4,7 +4,7 @@
 
 #include "WaterMaster.h"
 
-void WaterMaster::render(PointerCamera camera, std::vector<PointerLight> lights){
+void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> lights){
     shader -> bind();
     shader -> connectTextures();
 

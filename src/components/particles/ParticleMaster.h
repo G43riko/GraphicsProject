@@ -7,6 +7,7 @@
 
 #include <src/rendering/RenderUtil.h>
 #include "Particle.h"
+#include "ParticleManager.h"
 
 class ParticleMaster {
 private:
@@ -14,7 +15,8 @@ private:
     PointerBasicShader shader;
     RenderUtil * utils;
 public:
-    void renderParticles(std::vector<Particle> sky, PointerCamera camera);
+    void renderParticles(ParticlesList particles, PointerCamera camera);
+    void renderParticles(std::vector<Particle> particles, PointerCamera camera);
     ParticleMaster(RenderUtil * utils, PointerBasicShader shader, Loader loader) : shader(shader), utils(utils){
         std::vector<float> vertices = {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
         model = loader.loadToVao(vertices, 2);

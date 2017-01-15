@@ -6,17 +6,26 @@ in vec4 shadowCoords;
 in vec3 reflectedVector;
 in vec3 refractedVector;
 
+struct DirLight {
+    vec3 direction;
+    vec3 diffuseColor;
+    vec3 specularColor;
+};
+
 out vec4 FragmentColor;
+out vec4 Normals;
+out vec4 Texture;
 
 uniform sampler2D textureSampler;
 uniform samplerCube environmentalMap;
 uniform sampler2D shadowMap;
 uniform vec3 lightColor[8];
+uniform DirLight sun;
 uniform int levels;
 
+const vec3 ambientLight = vec3(1, 0.9, 1);
 void main() {
     //FragmentColor = vec4(vec3(0.0f, 1.0f, 1.0f), 1.0f);
-
     float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
     float lightFactor = 1.0f;
     //SHADOWS
@@ -26,11 +35,20 @@ void main() {
 
     vec3 unitNormal = normalize(surfaceNormal);
     vec3 totalDifuse = vec3(0);
+
+//    DirLight sun = DirLight(vec3(-1, -1, 1), vec3(1), vec3(0));
+//
+//    /*DERECTIONAL LIGHT*/
+//    vec3 lightDir = normalize(-sun.direction);
+//    float diff = max(dot(unitNormal, lightDir), 0.0);
+//    totalDifuse = sun.diffuseColor * diff;
+
+    /*POINT LIGHTS*/
     for(int i=0 ; i<8 ; i++){
         vec3 unitLightVector = normalize(toLightVector[i]);
 
         float nDot1 = dot(unitNormal, unitLightVector);
-        float brightness = max(nDot1, 0.1);
+        float brightness = nDot1;
         if(levels > 0){
             float level = floor(brightness * levels);
             brightness = level / levels;
@@ -38,8 +56,13 @@ void main() {
         totalDifuse += brightness * lightColor[i];
     }
     totalDifuse *= lightFactor;
+    totalDifuse = max(totalDifuse, 0.1);
+    vec4 diffuseColor = texture(textureSampler, pass_Texture);
 
-    FragmentColor = vec4(totalDifuse, 1.0) * texture(textureSampler, pass_Texture);
+
+    FragmentColor = vec4(totalDifuse * ambientLight, 1.0) * diffuseColor;
+    Normals = abs(vec4(unitNormal, 1.0));
+    Texture = diffuseColor;
     /*
     vec4 reflectedColor = texture(environmentalMap, reflectedVector);
     vec4 refractedColor = texture(environmentalMap, refractedVector);

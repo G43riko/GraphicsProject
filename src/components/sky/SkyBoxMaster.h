@@ -15,7 +15,7 @@ private:
     RenderUtil * utils;
     PointerRawModel model;
 public:
-    void renderSky(CubeTexture sky, PointerCamera camera);
+    void renderSky(PointerCubeTexture sky, PointerCamera camera);
     SkyBoxMaster(RenderUtil * utils, PointerBasicShader shader, Loader loader) : shader(shader), utils(utils){
         std::vector<float> vertices = {
             -SIZE,  SIZE, -SIZE,

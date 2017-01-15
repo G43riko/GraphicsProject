@@ -29,33 +29,51 @@ private:
     RenderUtil * utils;
     float distance;
 public:
-    void render(PointerCamera camera, std::vector<PointerLight> lights);
+    void render(PointerCamera camera, std::vector<PointerPointLight> lights);
     WaterMaster(RenderUtil * utils, PointerBasicShader shader, Loader loader) : shader(shader), utils(utils){
         std::vector<float> vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
         quad = loader.loadToVao(vertices, 2);
-    }
+    };
     void update(float delta){
         moveFactor += waterSpeed * delta;
-    }
+    };
 
     float getWaterHeight(void){
         return water.getHeight();
-    }
+    };
 
     void starRenderReflection(PointerCamera camera){
         fbo.bindReflectionFrameBuffer();
         distance = 2 * (camera -> position.y - water.getHeight());
         camera -> position.y -= distance;
         camera -> pitch *= -1;
-    }
+    };
     void starRenderRefraction(PointerCamera camera){
         camera -> pitch *= -1;
         camera -> position.y += distance;
         fbo.bindRefractionFrameBuffer();
-    }
+    };
     void finishRender(void){
         fbo.unbindCurrentFrameBuffer();
-    }
+    };
+    void setTiling(int tiling){
+        this -> tiling = tiling;
+    };
+    void setWaveStrength(float waveStrength){
+        this -> waveStrength = waveStrength;
+    };
+    void setShineDumper(float shineDumper){
+        this -> shineDumper = shineDumper;
+    };
+    void setReflectivity(float reflectivity){
+        this -> reflectivity = reflectivity;
+    };
+    void setWaterSpeed(float waterSpeed){
+        this -> waterSpeed = waterSpeed;
+    };
+    void setRefractiveRation(float refractiveRation){
+        this -> refractiveRation = refractiveRation;
+    };
 };
 
 

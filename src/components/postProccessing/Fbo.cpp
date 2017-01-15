@@ -61,11 +61,11 @@ void Fbo::resolveToScreen(void){
     unbindFrameBuffer();
 }
 
-int Fbo::getColourTexture(void) {
+GLuint Fbo::getColourTexture(void) {
     return colourTexture;
 }
 
-int Fbo::getDepthTexture(void) {
+GLuint Fbo::getDepthTexture(void) {
     return depthTexture;
 }
 
@@ -98,7 +98,7 @@ void Fbo::createFrameBuffer(void) {
     determineDrawBuffer();
 }
 
-void Fbo::createMultisampleColorAttachment(GLuint * buffer, int attach){
+void Fbo::createMultisampleColorAttachment(GLuint * buffer, GLuint attach){
     glGenRenderbuffers(1, buffer);
     glBindRenderbuffer(GL_RENDERBUFFER, *buffer);
     glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_RGBA8, width, height);

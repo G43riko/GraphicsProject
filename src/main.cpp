@@ -1,5 +1,4 @@
 
-
 #include "rendering/WindowManager.cpp"
 #include "rendering/Renderer.cpp"
 #include "rendering/model/Mesh.h"
@@ -23,17 +22,52 @@
 #include <src/game/Arrow.h>
 #include <src/components/shadows/ShadowMaster.h>
 #include <src/components/terrain/HeightGenerator.h>
+#include <src/components/entities/EntityManager.h>
+#include <src/components/particles/ParticleManager.h>
+#include <src/core/BasicEngine.h>
+#include <src/core/MainApplication.h>
+#include <src/GUI/MainGui.h>
 
-int main(void){
-    WindowManager::init(800, 600, "Okno", true);
+//BasicEngine * engine;
+//MainGui  * gui;
+//static gpointer threadOpenGl(gpointer user_data){
+//    engine -> start();
+//}
+//
+//static gpointer threadGtk(gpointer user_data){
+//    gui -> init();
+//}
+
+int main(int argc, char *argv[]){
+//    engine = new BasicEngine(new MainApplication(), 800, 600);
+//    gui = new MainGui();
+//
+//    GThread * threadOGL, * threadGTK;
+//
+//    threadOGL = g_thread_new(NULL, threadOpenGl, nullptr);
+//    threadGTK = g_thread_new(NULL, threadGtk, nullptr);
+//
+//
+//    g_thread_join(threadOGL);
+//    g_thread_join(threadGTK);
+//
+//    delete engine;
+//    delete gui;
+//
+//    return 0;
+    BasicEngine engine = BasicEngine(new MainApplication(), 800, 600);
+    engine.start();
+    return 0;
+    /*
+    WindowManager::init(800, 600, "Okno", false);
     Input::init(WindowManager::window, WindowManager::width, WindowManager::height);
 
     Loader loader = Loader();
     Renderer renderer = Renderer(loader, WindowManager::width, WindowManager::height);
-
     auto skyTexture = ContentLoader::loadCubeTexture("sky");
     Scene scene = Scene(loader, skyTexture);
 
+    auto particleTexture = ContentLoader::loadTexturePNG("res/textures/particle_1.png");
     auto diffuse = ContentLoader::loadTexturePNG("res/textures/texture.png");
     auto normal = ContentLoader::loadTexturePNG("res/textures/textureNormal.png");
     auto rawModel = loader.loadToVao(ContentLoader::loadOBJ("res/models/box.obj"));
@@ -68,18 +102,18 @@ int main(void){
     scene.addEntity(createEntity(t.getModel(), Vector3f(-50, 1, -50), Vector3f(0.0f), Vector3f(1.0f)));
 
     auto screen = Screen(WindowManager::width, WindowManager::height, loader);
-    PointerLight sun = createLight(Vector3f(10000000, 15000000, -10000000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
-    PointerLight light = createLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
-    PointerLight light1 = createLight(Vector3f(200, 10,  200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
+    PointerPointLight sun = createPointLight(Vector3f(10000000, 15000000, -10000000), Vector3f(1.3f, 1.3f, 1.3f),
+                                        Vector3f(1.0f, 0.0f, 0.0f));
+    PointerPointLight light = createPointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
+    PointerPointLight light1 = createPointLight(Vector3f(200, 10, 200), Vector3f(0.5f, 0.0f, 0.8f),
+                                           Vector3f(1.0f, 0.1f, 0.02f));
 
-    scene.addLight(sun);
+//    scene.addLight(sun);
 //    scene.addLight(light);
 //    scene.addLight(light1);
 
-
     renderer.setSun(sun);
     //renderer.setPostFx(true);
-
 
     //ShadowMaster shadows = ShadowMaster(renderer.getActualCamera());
     //renderer.addTexture(GuiTexture(shadowMaster.getShadowMap(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
@@ -89,6 +123,9 @@ int main(void){
     BasicView * view = new FpsView(renderer.getActualCamera(), false);
 //    BasicView * view = new TopView(renderer.getActualCamera(), 30, &ball);
     float time = 0;
+
+//    scene.loadParticleTexture(particleTexture, 4, 4);
+//    scene.createParticleSystem(particleTexture, 5, 0.2, 0.03f, 40);
 
     double currentTime = glfwGetTime();
     int fps = 0;
@@ -113,17 +150,16 @@ int main(void){
         renderer.prepareRenderer(0, 0, 0, 1);
         time += 0.02f * delta;
         renderer.init3D();
-        light1 -> setPosition(static_cast<float>(-sin(time) * 20) , 0, static_cast<float>(-cos(time) * 20 - 20));
-        light -> setPosition(static_cast<float>(sin(time) * 20) , 0, static_cast<float>(cos(time) * 20 - 20));
+        light1 -> setPosition(static_cast<float>(-sin(time) * 20) , 3, static_cast<float>(-cos(time) * 20 - 20));
+        light -> setPosition(static_cast<float>(sin(time) * 20) , 3, static_cast<float>(cos(time) * 20 - 20));
 
         scene.update(delta);
         view -> update(delta);
         renderer.input();
         renderer.update(delta);
         renderer.renderScene(scene);
-        ParticleTexture text = ParticleTexture(nullptr, 2, 3);
         if(Input::isKeyDown(GLFW_KEY_F)){
-            scene.addParticle(Particle(nullptr, Vector3f(0.0f, 0.0f, -2.0f), Vector3f(0.0f, 0.1f, 0.0f), 0, 2000, 0, 1));
+            scene.createParticle(particleTexture, Vector3f(0.0f, 2.0f, -2.0f), Vector3f(random(-0.02, 0.02), random(0.01, 0.1), random(-0.02, 0.02)), 0, 100, 0, 1);
         }
 
 
@@ -142,4 +178,5 @@ int main(void){
     std::cout << "vectors4f: " << Vector4f::count << std::endl;
     std::cout << "Matrices4f: " << Matrix4f::counter << " / " << Matrix4f::minus << std::endl;
     return 0;
+     */
 }

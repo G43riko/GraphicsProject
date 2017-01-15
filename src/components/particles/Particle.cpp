@@ -17,6 +17,7 @@ bool Particle::update(float delta){
     velocity.y += gravityEffect * delta * GRAVITY;
     position += velocity * delta;
     elapsedTime += delta;
+    updateTextureCoordInfo();
     return elapsedTime < lifeLength;
 }
 Vector3f Particle::getPosition(void){

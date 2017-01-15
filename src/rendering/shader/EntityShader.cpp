@@ -33,6 +33,9 @@ class EntityShader : public BasicShader{
             this -> setUniform("toShadowSpace");
             this -> setUniform("shadowMap");
 
+            this -> setUniform("sun");
+
+
 
             for(int i=0 ; i<MAX_LIGHTS ; i++){
                 this -> setUniform("lightPosition[" + std::to_string(i) + "]");

@@ -7,12 +7,13 @@
 
 #include <map>
 #include <string>
-#include "../../utils/Vectors.h"
-#include "../../utils/FileLoader.h"
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <src/utils/Matrix4f.h>
+#include <src/utils/FileLoader.h>
+#include <src/components/lights/SpotLight.h>
+#include <src/components/lights/DirectionalLight.h>
 
 class BasicShader{
     private:
@@ -46,6 +47,9 @@ class BasicShader{
         void updateUniformb(std::string, bool);
         void updateUniform4m(const std::string, const glm::mat4);
         void updateUniform4m(const std::string, const Matrix4f);
+        void updateDirLight(const std::string, DirectionalLight);
+        void updatePointLight(const std::string, PointLight);
+        void updateSpotLight(const std::string, SpotLight);
     protected:
         virtual void setAllAttributes(void) = 0;
         virtual void setAllUniforms(void) = 0;

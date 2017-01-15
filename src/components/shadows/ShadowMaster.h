@@ -6,8 +6,9 @@
 #define GRAPHICSPROJECT_SHADOWMASTER_H
 
 
-#include "../../rendering/RenderUtil.h"
+#include <src/components/entities/EntityManager.h>
 #include <src/components/postProccessing/Fbo.h>
+#include <src/rendering/RenderUtil.h>
 #include "ShadowBox.h"
 #include "ShadowFrameBuffer.h"
 
@@ -29,14 +30,16 @@ private:
     Matrix4f updateLightViewMatrix(Vector3f direction, Vector3f center);
     void prepare(Vector3f lightPosition, ShadowBox box);
     Matrix4f updateOrthoProjectionMatrix(float width, float height, float length);
-    void finish();
+    //void finish();
 public:
-    ShadowMaster(RenderUtil * utils, PointerBasicShader shader, PointerCamera camera) : shader(shader), utils(utils), box(ShadowBox(&lightViewMatrix, camera)){}
-    void renderShadows(std::vector<PointerEntity> entities, PointerLight sun, PointerCamera camera);
-    void renderShadow(PointerEntity entity, PointerLight sun, PointerCamera camera);
+    ShadowMaster(RenderUtil * utils, PointerBasicShader shader, PointerCamera camera) : shader(shader), utils(utils), box(ShadowBox(&lightViewMatrix, camera)){};
+
+    void renderShadows(EntitiesList entities, PointerPointLight sun, PointerCamera camera);
+    void renderShadows(std::vector<PointerEntity> entities, PointerPointLight sun, PointerCamera camera);
+    void renderShadow(PointerEntity entity, PointerPointLight sun, PointerCamera camera);
 
     Matrix4f getToShadowMapSpaceMatrix(void);
-    int getShadowMap(void);
+    GLuint getShadowMap(void);
 };
 
 #endif //GRAPHICSPROJECT_SHADOWMASTER_H

@@ -39,5 +39,9 @@ class CubeTexture {
 };
 
 
+typedef std::shared_ptr<CubeTexture> PointerCubeTexture;
+PointerCubeTexture createCubeTexture(std::string title, GLuint textureID);
+
+
 
 #endif //GRAPHICSPROJECT_CUBETEXTURE_H

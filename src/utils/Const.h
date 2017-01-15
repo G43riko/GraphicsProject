@@ -15,6 +15,6 @@
 #define EXTENSION_VERTEX ".vert"
 #define EXTENSION_GEOMETRY ".geom"
 
-#define GRAVITY -5;
+#define GRAVITY -1;
 
 #endif //GRAPHICSPROJECT_CONST_H

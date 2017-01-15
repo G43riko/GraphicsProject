@@ -4,7 +4,46 @@
 
 #include "ShadowMaster.h"
 
-void ShadowMaster::renderShadows(std::vector<PointerEntity> entities, PointerLight sun, PointerCamera camera){
+void ShadowMaster::renderShadows(EntitiesList entities, PointerPointLight sun, PointerCamera camera){
+    if(entities.empty() || !sun){
+        return;
+    }
+    shader -> bind();
+    glEnableVertexAttribArray(0);
+
+    fbo.bindFrameBuffer();
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+    glEnable(GL_DEPTH_TEST);
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+
+    box.update();
+    prepare(sun -> getPosition() , box);
+
+    shader -> updateUniform4m("mvpMatrix", projectionViewMatrix);
+
+    for (auto it = entities.begin(); it != entities.end(); ++it){ //pre všetky materialy
+        if(it -> second.size()){
+            auto itEnt = it->second.begin();
+
+            while(itEnt != it->second.end()){ //prejde všetky entity
+                glBindVertexArray(itEnt ->get() -> getModel() -> getModel() -> getVaoID());
+                Matrix4f modelMatrix = itEnt -> get() -> getTransform() -> getTransformation();
+                shader -> updateUniform4m("mpvMatrix", Matrix4f(camera -> getProjectionMatrix()) * Matrix4f(camera -> getViewMatrix()) * modelMatrix);
+
+                glDrawElements(GL_TRIANGLES, itEnt ->get() -> getModel() -> getModel() -> getVertexCount(), GL_UNSIGNED_INT, 0);
+                itEnt++;
+            }
+        }
+    }
+    fbo.unbindFrameBuffer();
+    glDisableVertexAttribArray(1);
+    glBindVertexArray(0);
+}
+
+void ShadowMaster::renderShadows(std::vector<PointerEntity> entities, PointerPointLight sun, PointerCamera camera){
     if(entities.empty() || !sun){
         return;
     }
@@ -37,7 +76,7 @@ void ShadowMaster::renderShadows(std::vector<PointerEntity> entities, PointerLig
     glBindVertexArray(0);
 }
 
-void ShadowMaster::renderShadow(PointerEntity entity, PointerLight sun, PointerCamera camera){
+void ShadowMaster::renderShadow(PointerEntity entity, PointerPointLight sun, PointerCamera camera){
     if(!sun){
         return;
     }
@@ -96,7 +135,7 @@ Matrix4f ShadowMaster::updateOrthoProjectionMatrix(float width, float height, fl
     return result;
 }
 /*
-void ShadowMaster::render(PointerEntity entitie, PointerLight sun){
+void ShadowMaster::render(PointerEntity entitie, PointerPointLight sun){
     box.update();
     prepare(sun -> getPosition() * -1, box);
 }
@@ -106,9 +145,9 @@ Matrix4f ShadowMaster::getToShadowMapSpaceMatrix(void){
     return offset * projectionViewMatrix;
 }
 
-int ShadowMaster::getShadowMap() {
+GLuint ShadowMaster::getShadowMap() {
     //return fbo.getDepthBuffer();
-//    return fbo.getColourTexture();
-    return fbo.getDepthTexture();
+    return fbo.getColourTexture();
+//    return fbo.getDepthTexture();
 //    return fbo.getShadowMap();
 }

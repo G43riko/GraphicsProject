@@ -19,13 +19,15 @@
 #include <string.h>
 #include <glm/vec3.hpp>
 #include <glm/vec2.hpp>
+#include <map>
 #include "../static_libs/lodepng.h"
 #include "../rendering/material/CubeTexture.h"
 
 class ContentLoader {
 public:
+    static std::map<std::string, PointerTexture2D> loadedTestures;
     static std::vector<std::string> TITLES;
-    static CubeTexture loadCubeTexture(std::string title);
+    static PointerCubeTexture loadCubeTexture(std::string title);
     static PointerTexture2D loadTextureColor(Vector3f color);
     static PointerTexture2D loadTexturePNG(std::string fileName);
     static PointerMesh loadOBJ(std::string fileName);

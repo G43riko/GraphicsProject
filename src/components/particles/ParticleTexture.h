@@ -7,12 +7,13 @@
 
 
 #include <src/rendering/material/Texture2D.h>
+#include <src/utils/FileLoader.h>
 
 class ParticleTexture {
 public:
     PointerTexture2D texture;
-    int rows;
-    int columns;
+    const int rows;
+    const int columns;
     ParticleTexture(PointerTexture2D texture, int rows, int columns) : texture(texture), rows(rows), columns(columns){}
 };
 typedef std::shared_ptr<ParticleTexture> PointerParticleTexture;

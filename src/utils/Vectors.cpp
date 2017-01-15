@@ -34,12 +34,13 @@ Vector3f::~Vector3f(void){
     Vector3f::count--;
 }
 
-
+std::string Vector3f::toString(void){
+    return "[" + std::to_string(x) + " x " + std::to_string(y) + " x " + std::to_string(z) + "]";
+}
 void Vector3f::show(bool endLine){
-    std::cout << "[" << x << " x " << y << " x " << z << "]";
+    std::cout << toString();
     if(endLine)
         std::cout << std::endl;
-
 }
 
 Vector3f Vector3f::normalize(void){

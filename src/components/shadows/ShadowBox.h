@@ -67,7 +67,7 @@ public:
     }
 
     Matrix4f calculateCameraRotationMatrix() {
-        return Matrix4f::initRotation(TO_RADIANS(-cam -> pitch), TO_RADIANS(-cam -> yaw), 0);
+        return Matrix4f::initRotation((float)(TO_RADIANS(-cam -> pitch)), (float)(TO_RADIANS(-cam -> yaw)), 0);
 
         /*
         Matrix4f rotation = Matrix4f();

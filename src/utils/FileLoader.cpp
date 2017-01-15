@@ -5,7 +5,7 @@
 #ifndef GRAPHICSPROJECT_CONTENTLOADER_H
 
 #include "FileLoader.h"
-
+std::map<std::string, PointerTexture2D> ContentLoader::loadedTestures = std::map<std::string, PointerTexture2D>();
 std::vector<std::string> ContentLoader::TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
 
 /*
@@ -30,7 +30,7 @@ void ContentLoader::loadTextFile(std::string fileName, std::string *content){
  * TEXTURES
  */
 
-CubeTexture ContentLoader::loadCubeTexture(std::string title){
+PointerCubeTexture ContentLoader::loadCubeTexture(std::string title){
     GLuint texture_id;
     glGenTextures(1, &texture_id);
     glActiveTexture(GL_TEXTURE0);
@@ -46,40 +46,46 @@ CubeTexture ContentLoader::loadCubeTexture(std::string title){
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    return CubeTexture(title, texture_id);
+    return createCubeTexture(title, texture_id);
 }
 
 PointerTexture2D ContentLoader::loadTextureColor(Vector3f color){
-    std::vector<unsigned char> image;
-    image.clear();
-    image.push_back(color.getXuc());
-    image.push_back(color.getYuc());
-    image.push_back(color.getZuc());
-    image.push_back(255);
-    image.push_back(color.getXuc());
-    image.push_back(color.getYuc());
-    image.push_back(color.getZuc());
-    image.push_back(255);
-    image.push_back(color.getXuc());
-    image.push_back(color.getYuc());
-    image.push_back(color.getZuc());
-    image.push_back(255);
-    image.push_back(color.getXuc());
-    image.push_back(color.getYuc());
-    image.push_back(color.getZuc());
-    image.push_back(255);
-    return initTexture2D("gabo", image, 2, 2);
+    if(loadedTestures.find(color.toString()) == loadedTestures.end()){
+        std::vector<unsigned char> image;
+        image.clear();
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
+        image.push_back(255);
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
+        image.push_back(255);
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
+        image.push_back(255);
+        image.push_back(color.getXuc());
+        image.push_back(color.getYuc());
+        image.push_back(color.getZuc());
+        image.push_back(255);
+        loadedTestures[color.toString()] = initTexture2D("gabo", image, 2, 2);
+    }
+    return loadedTestures[color.toString()];
 }
 
 PointerTexture2D ContentLoader::loadTexturePNG(std::string fileName){
-    unsigned int width;
-    unsigned int height;
-    std::vector<unsigned char> image;
-    unsigned error = lodepng::decode(image, width, height, fileName);
-    if(error != 0) {
-        std::cout << "error " << error << ": " << lodepng_error_text(error) << std::endl;
+    if(loadedTestures.find(fileName) == loadedTestures.end()) {
+        unsigned int width;
+        unsigned int height;
+        std::vector<unsigned char> image;
+        unsigned error = lodepng::decode(image, width, height, fileName);
+        if (error != 0) {
+            std::cout << "error " << error << ": " << lodepng_error_text(error) << std::endl;
+        }
+        loadedTestures[fileName] = initTexture2D(fileName, image, width, height);
     }
-    return initTexture2D(fileName, image, width, height);
+    return loadedTestures[fileName];
 }
 
 PointerTexture2D ContentLoader::initTexture2D(std::string title, std::vector<unsigned char> buffer, int width, int height){

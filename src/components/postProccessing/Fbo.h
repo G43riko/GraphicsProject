@@ -26,7 +26,7 @@ private :
     void determineDrawBuffer(void);
     void initialiseFrameBuffer(int);
     void createFrameBuffer(void);
-    void createMultisampleColorAttachment(GLuint *, int);
+    void createMultisampleColorAttachment(GLuint *, GLuint);
     void createTextureAttachment(void);
     void createDepthTextureAttachment(void);
     void createDepthBufferAttachment(void);
@@ -45,9 +45,9 @@ public:
     void bindToRead(void);
     void resolveToFbo(GLenum readBuffer, Fbo output);
     void resolveToScreen(void);
-    int getColourTexture(void);
-    int getDepthTexture(void);
-    int getDepthBuffer(void){
+    GLuint getColourTexture(void);
+    GLuint getDepthTexture(void);
+    GLuint getDepthBuffer(void){
         return depthBuffer;
     }
 };

@@ -3,3 +3,7 @@
 //
 
 #include "CubeTexture.h"
+
+PointerCubeTexture createCubeTexture(std::string title, GLuint textureID){
+    return PointerCubeTexture(new CubeTexture(title, textureID));
+}

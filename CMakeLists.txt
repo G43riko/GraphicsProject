@@ -26,6 +26,16 @@ include(shaders)
 # DEPENDENCIES
 #
 
+#>>>>>>GTK
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
+
+include_directories(${GTK3_INCLUDE_DIRS})
+link_directories(${GTK3_LIBRARY_DIRS})
+
+add_definitions(${GTK3_CFLAGS_OTHER})
+#<<<<<<<<GTK
+
 # Set up external dependencies for Windows users
 if (MINGW)
     set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/dependencies/include/")
@@ -43,6 +53,7 @@ set(STRICT_COMPILE_FLAGS "-Wpedantic -Wall -Wno-c++98-compat -Wfloat-equal -Wext
 if (USE_STRICT_COMPILE_WARNINGS)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${STRICT_COMPILE_FLAGS}")
 endif ()
+
 
 # Find required packages
 find_package(GLFW3 REQUIRED)
@@ -65,7 +76,7 @@ add_library(libGraphics STATIC
 # Make sure GLM uses radians and static GLEW library
 target_compile_definitions(libGraphics PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC )
 # Link to GLFW, GLEW and OpenGL
-target_link_libraries(libGraphics PUBLIC ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES})
+target_link_libraries(libGraphics PUBLIC ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GTK3_LIBRARIES})
 # Pass on include directories
 target_include_directories(libGraphics PUBLIC
         src/lib
@@ -75,8 +86,13 @@ target_include_directories(libGraphics PUBLIC
         ${GLM_INCLUDE_DIRS}
         ${OPENGL_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR})
+        ${CMAKE_CURRENT_BINARY_DIR}
+        ${GTK3_INCLUDE_DIRS})
 #<<moje
+
+
+
+
 
 #>>zaciatok projektu
 #####TUTO TREBA PRIDAŤ AK BUDE CHÝBAŤ UNDEFINED REFERENCE
@@ -99,7 +115,7 @@ set(GL_MAIN_SRC src/main.cpp
                 src/rendering/shader/BasicShader.cpp
         src/components/postProccessing/ToFrameBufferRendering.cpp
                 src/game/Scene.cpp
-        src/components/lights/Light.cpp
+        src/components/lights/PointLight.cpp
                 src/components/FreeMove.cpp
                 src/static_libs/stb_image.h
                 src/static_libs/stb_image.c
@@ -123,7 +139,7 @@ set(GL_MAIN_SRC src/main.cpp
                 src/game/Ball.h
         src/rendering/RenderUtil.cpp src/rendering/RenderUtil.h
         src/components/gui/GuiMaster.cpp src/components/gui/GuiMaster.h
-                src/game/GameObject.h src/components/KeyFrame.cpp src/components/KeyFrame.h src/game/Animation.cpp src/game/Animation.h src/game/Arrow.cpp src/game/Arrow.h src/game/Environment.cpp src/game/Environment.h src/components/movement/BasicView.h src/components/shadows/ShadowBox.cpp src/components/shadows/ShadowBox.h src/components/shadows/ShadowMaster.cpp src/components/shadows/ShadowMaster.h src/components/particles/ParticleMaster.cpp src/components/particles/ParticleMaster.h src/components/terrain/HeightsGenerator.h src/components/terrain/HeightGenerator.cpp src/components/terrain/HeightGenerator.h src/components/sky/SkyBoxMaster.cpp src/components/sky/SkyBoxMaster.h src/components/entities/EntityMaster.cpp src/components/entities/EntityMaster.h src/components/water/WaterMaster.cpp src/components/water/WaterMaster.h src/components/shadows/ShadowFrameBuffer.cpp src/components/shadows/ShadowFrameBuffer.h src/components/particles/ParticleSystemSimple.cpp src/components/particles/ParticleSystemSimple.h src/components/particles/ParticleSystemComplex.cpp src/components/particles/ParticleSystemComplex.h src/components/Master.cpp src/components/Master.h src/components/particles/ParticleTexture.cpp src/components/particles/ParticleTexture.h src/components/particles/ParticleManager.cpp src/components/particles/ParticleManager.h src/components/entities/EntityManager.cpp src/components/entities/EntityManager.h src/components/Object.cpp src/components/Object.h)
+                src/game/GameObject.h src/components/KeyFrame.cpp src/components/KeyFrame.h src/game/Animation.cpp src/game/Animation.h src/game/Arrow.cpp src/game/Arrow.h src/game/Environment.cpp src/game/Environment.h src/components/movement/BasicView.h src/components/shadows/ShadowBox.cpp src/components/shadows/ShadowBox.h src/components/shadows/ShadowMaster.cpp src/components/shadows/ShadowMaster.h src/components/particles/ParticleMaster.cpp src/components/particles/ParticleMaster.h src/components/terrain/HeightsGenerator.h src/components/terrain/HeightGenerator.cpp src/components/terrain/HeightGenerator.h src/components/sky/SkyBoxMaster.cpp src/components/sky/SkyBoxMaster.h src/components/entities/EntityMaster.cpp src/components/entities/EntityMaster.h src/components/water/WaterMaster.cpp src/components/water/WaterMaster.h src/components/shadows/ShadowFrameBuffer.cpp src/components/shadows/ShadowFrameBuffer.h src/components/particles/ParticleSystemSimple.cpp src/components/particles/ParticleSystemSimple.h src/components/particles/ParticleSystemComplex.cpp src/components/particles/ParticleSystemComplex.h src/components/Master.cpp src/components/Master.h src/components/particles/ParticleTexture.cpp src/components/particles/ParticleTexture.h src/components/particles/ParticleManager.cpp src/components/particles/ParticleManager.h src/components/entities/EntityManager.cpp src/components/entities/EntityManager.h src/components/Object.cpp src/components/Object.h src/core/BasicEngine.h src/core/BasicApplication.h src/core/BasicRenderer.h src/core/BasicCamera.h src/core/MainApplication.cpp src/core/MainApplication.h src/core/MainRenderer.cpp src/core/MainRenderer.h src/core/BasicScene.h src/components/lights/DirectionalLight.cpp src/components/lights/DirectionalLight.h src/components/lights/SpotLight.cpp src/components/lights/SpotLight.h src/GUI/MainGui.cpp src/GUI/MainGui.h src/GUI/GtkHandler.h)
 add_executable(gl_main ${GL_MAIN_SRC})
 target_link_libraries(gl_main libGraphics)
 install(TARGETS gl_main DESTINATION .)
@@ -147,6 +163,6 @@ set(SOURCE_FILES    src/main.cpp
                     src/utils/Input.cpp
                     src/rendering/model/Mesh.cpp
                     src/rendering/shader/EntityShader.cpp
-        src/rendering/shader/ObjectShader.cpp src/utils/Matrix4f.cpp src/utils/Matrix4f.h src/utils/Quaternion.cpp src/utils/Quaternion.h src/components/gui/GuiTexture.cpp src/components/gui/GuiTexture.h src/rendering/shader/VerticalBlurShader.cpp src/rendering/shader/HorizontalBlurShader.cpp src/rendering/shader/CombineShader.cpp src/rendering/shader/ColorShader.cpp src/rendering/shader/SkyBoxShader.cpp src/rendering/shader/SkyBoxRenderer.cpp src/rendering/shader/SkyBoxRenderer.h src/rendering/shader/ParticleShader.cpp src/utils/ResourcesManager.h src/rendering/shader/ShadowShader.cpp src/rendering/shader/WaterShader.cpp)
+        src/rendering/shader/ObjectShader.cpp src/utils/Matrix4f.cpp src/utils/Matrix4f.h src/utils/Quaternion.cpp src/utils/Quaternion.h src/components/gui/GuiTexture.cpp src/components/gui/GuiTexture.h src/rendering/shader/VerticalBlurShader.cpp src/rendering/shader/HorizontalBlurShader.cpp src/rendering/shader/CombineShader.cpp src/rendering/shader/ColorShader.cpp src/rendering/shader/SkyBoxShader.cpp src/rendering/shader/SkyBoxRenderer.cpp src/rendering/shader/SkyBoxRenderer.h src/rendering/shader/ParticleShader.cpp src/utils/ResourcesManager.h src/rendering/shader/ShadowShader.cpp src/rendering/shader/WaterShader.cpp src/rendering/shader/DeferredShader.cpp)
 
 add_executable(GraphicsProject ${SOURCE_FILES})

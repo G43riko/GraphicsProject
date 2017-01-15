@@ -4,6 +4,6 @@
 
 #include "Scene.h"
 
-Scene::Scene(Loader loader, CubeTexture sky) : sky(sky){
-    sphereModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj")));
+Scene::Scene(Loader loader, PointerCubeTexture sky) : sky(sky){
+//    sphereModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj")));
 }

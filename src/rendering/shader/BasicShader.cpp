@@ -3,6 +3,7 @@
 //
 
 #ifndef GRAPHICSPROJECT_BASICSHADER_H
+
 #include "BasicShader.h"
 
 int BasicShader::MAX_LIGHTS = 8;
@@ -115,6 +116,24 @@ void BasicShader::updateUniform4m(const std::string name, const Matrix4f matrix)
 
 void BasicShader::updateUniform3f(const std::string name, const Vector3f & value){
     glUniform3f(uniforms[name], value.x, value.y, value.z);
+}
+
+
+void BasicShader::updateDirLight(const std::string name, DirectionalLight light){
+    updateUniform3f(name + ".direction", light.getDirection());
+    updateUniform3f(name + ".diffuseColor", light.getDiffuseColor());
+    updateUniform3f(name + ".specularColor", light.getSpecularColor());
+}
+void BasicShader::updatePointLight(const std::string name, PointLight light){
+    updateUniform3f(name + ".position", light.getPosition());
+    updateUniform3f(name + ".diffuseColor", light.getDiffuseColor());
+    updateUniform3f(name + ".specularColor", light.getSpecularColor());
+}
+void BasicShader::updateSpotLight(const std::string name, SpotLight light){
+    updateUniform3f(name + ".direction", light.getDirection());
+    updateUniform3f(name + ".position", light.getPosition());
+    updateUniform3f(name + ".diffuseColor", light.getDiffuseColor());
+    updateUniform3f(name + ".specularColor", light.getSpecularColor());
 }
 
 #endif

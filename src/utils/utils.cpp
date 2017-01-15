@@ -10,3 +10,7 @@ int IdGenerator::getId(void){
 }
 
 
+double random(double LO, double HI){
+    return LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
+    //return min + fmod(rand(), max - min + 1);
+}

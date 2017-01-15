@@ -39,12 +39,12 @@ public:
 private:
     GLuint size;
     void clearMap(){
-        for(unsigned int i=0 ; i<vertices ; i++)
+        for(int i=0 ; i<vertices ; i++)
             delete[] map[i];
         delete[] map;
     }
 
-    void initMap(int x, int y){
+    void initMap(unsigned int x, unsigned int y){
         if(map){
             clearMap();
         }

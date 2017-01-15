@@ -9,7 +9,6 @@
 #include "model/RawModel.h"
 #include "model/MaterialedModel.h"
 #include "model/Entity.h"
-#include "../components/lights/Light.h"
 #include "../game/Scene.h"
 #include <iostream>
 #include "Camera.h"
@@ -27,6 +26,7 @@
 #include "shader/ParticleShader.cpp"
 #include "shader/SkyBoxShader.cpp"
 #include "shader/WaterShader.cpp"
+#include "shader/DeferredShader.cpp"
 #include "shader/ColorShader.cpp"
 #include "shader/ShadowShader.cpp"
 #include "../components/postProccessing/PostProccessing.h"
@@ -38,6 +38,7 @@
 #include "../components/particles/ParticleMaster.h"
 #include "../components/entities/EntityMaster.h"
 #include "../components/water/WaterMaster.h"
+#include "../components/lights/PointLight.h"
 
 class Screen;
 class Scene;
@@ -45,12 +46,9 @@ class Scene;
 class Renderer {
     public:
         Renderer(Loader, int, int );
-        //void renderGui(std::vector<GuiTexture> textures, PointerRawModel model);
-        //void renderParticles(std::vector<Particle> particles, PointerRawModel model);
+        void renderSceneDeferred(Scene scene);
         void renderScene(Scene scene);
-        //void renderShadows(PointerEntity entity, PointerLight sun);
-        //void renderEntity(PointerEntity entity, std::vector<PointerLight> lights);
-        void renderObjects(std::vector<PointerEntity>, std::vector<PointerLight>);
+        void renderObjects(std::vector<PointerEntity>, std::vector<PointerPointLight>);
         void renderScreen(Screen screen);
         void updateProjectionMatrix(PointerCamera, PointerBasicShader = nullptr);
         void init3D(void);
@@ -65,6 +63,12 @@ class Renderer {
         void setPostFx(bool val){
             usePostFx = val;
         }
+        void setShadow(bool val){
+            useShadows = val;
+        }
+        void setWater(bool val){
+            useWaters = val;
+        }
         void turnOnOption(unsigned char val){
             options |= val;
         }
@@ -77,22 +81,44 @@ class Renderer {
         //DEPRECATED
         void render(PointerRawModel);
         void render(PointerMaterialedModel);
-        void renderObject(PointerEntity, std::vector<PointerLight>);
-        const static unsigned char FLAG_TEXTURE = 0x01; // hex for 0000 0001
-        const static unsigned char FLAG_NORMAL_MAP = 0x02; // hex for 0000 0010
-        const static unsigned char FLAG_LIGHT = 0x04; // hex for 0000 0100
-        const static unsigned char FLAG_SPECULAR = 0x08; // hex for 0000 1000
-        const static unsigned char FLAG_FOG = 0x10; // hex for 0001 0000
-        const static unsigned char FLAG_ENVIRONMENTAL = 0x20; // hex for 0010 0000
+        void renderObject(PointerEntity, std::vector<PointerPointLight>);
+
+        const static unsigned char FLAG_TEXTURE         = 0x01; // hex for 0000 0001
+        const static unsigned char FLAG_NORMAL_MAP      = 0x02; // hex for 0000 0010
+        const static unsigned char FLAG_LIGHT           = 0x04; // hex for 0000 0100
+        const static unsigned char FLAG_SPECULAR        = 0x08; // hex for 0000 1000
+        const static unsigned char FLAG_FOG             = 0x10; // hex for 0001 0000
+        const static unsigned char FLAG_ENVIRONMENTAL   = 0x20; // hex for 0010 0000
+        const static unsigned char FLAG_WATER           = 0x40; // hex for 0100 0000
+        const static unsigned char FLAG_SHADOW          = 0x80; // hex for 1000 0000
 
         void prepareRenderer(GLfloat red  = 0, GLfloat green  = 0, GLfloat blue  = 0, GLfloat alpha = 1);
         PointerCamera getActualCamera(void){
             return actualCamera;
         }
-        void setSun(PointerLight sun){
+        void setSun(PointerPointLight sun){
             this -> sun = sun;
         }
+        WaterMaster * getWater(void){
+            return waterMaster;
+        }
     private:
+    /*
+        Vector3f getOptions(void){
+            Vector3f options;
+            options.x =
+                    unsigned char options = FLAG_TEXTURE | FLAG_NORMAL_MAP | FLAG_LIGHT | FLAG_SPECULAR | FLAG_FOG;
+            return options;
+        }
+        */
+        bool useShadows = false;
+        bool useWaters = true;
+        bool usePostFx = false;
+        bool useTextures = false;
+        bool useNormals = false;
+        bool useLights = false;
+        bool useSpeculars = false;
+        bool useEnviromentals = false;
         WaterMaster * waterMaster;
         EntityMaster * entityMaster;
         ParticleMaster * particleMaster;
@@ -100,7 +126,7 @@ class Renderer {
         SkyBoxMaster * skyBoxMaster;
         ShadowMaster * shadowMaster = nullptr;
         void setCamera(PointerCamera);
-        PointerLight sun = nullptr;
+        PointerPointLight sun = nullptr;
     //        const unsigned char option6 = 0x20; // hex for 0010 0000
     //        const unsigned char option7 = 0x40; // hex for 0100 0000
     //        const unsigned char option8 = 0x80; // hex for 1000 0000
@@ -114,8 +140,7 @@ class Renderer {
         WaterFrameBuffer wf;
 
         std::map<std::string, PointerBasicShader> shaders;
-        Light * light = new Light(Vector3f(0, 0, 0), Vector3f(1, 1, 1));
-        bool usePostFx = false;
+        PointLight * light = new PointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1));
         std::vector<GuiTexture> textures;
         //PRIVATE METHODS
 };

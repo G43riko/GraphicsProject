@@ -58,6 +58,9 @@ class Texture2D {
         GLuint getTextureID(void);
         void bind(void);
         void bind(GLuint);
+        std::string getTitle(void){
+            return title;
+        };
         int getWidth(void){
             return width;
         };
