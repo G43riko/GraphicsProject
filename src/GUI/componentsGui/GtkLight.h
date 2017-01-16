@@ -1,0 +1,8 @@
+//
+// Created by gabriel on 16.1.2017.
+//
+
+#ifndef GRAPHICSPROJECT_GTKLIGHT_H
+#define GRAPHICSPROJECT_GTKLIGHT_H
+
+#endif //GRAPHICSPROJECT_GTKLIGHT_H

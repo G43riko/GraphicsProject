@@ -2,6 +2,7 @@
 // Created by gabriel on 14.1.2017.
 //
 #include "BasicShader.h"
+#include <iostream>
 
 
 class DeferredShader : public BasicShader{
@@ -22,5 +23,9 @@ public:
         this -> setUniform("projectionMatrix");
         this -> setUniform("viewMatrix");
         this -> setUniform("transformationMatrix");
+        for(int i=0 ; i<64 ; i++){
+            this -> setUniform("samples[" + std::to_string(i) + "]");
+        }
+
     }
 };

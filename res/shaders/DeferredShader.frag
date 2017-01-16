@@ -11,6 +11,7 @@ out vec4 Diffuse;
 uniform sampler2D textureSampler;
 uniform mat4 projectionMatrix;
 uniform vec3 cameraPosition;
+uniform vec3 samples[64];
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
@@ -51,6 +52,7 @@ void main(){
     FragmentColor *= lightFactor;
 
 
+
     /*SSAO*/
     /*
     vec3 randnum = vec3(rand(pass_Texture), rand(pass_Texture), rand(pass_Texture));
@@ -60,13 +62,10 @@ void main(){
     mat3 TBN = mat3(tangent, bitang, normal);
 
     float occlusion = 0;
-    vec3[1] samples = vec3[](vec3(1, 1, 1));
     float radius = 0.5;
     float bias = 0.025;
     for(int i=0 ; i<64 ; i++){
-
-        vec3 randd = vec3(rand(pass_Texture * i), rand(pass_Texture * i), rand(pass_Texture * i));
-        vec3 res = TBN * randd;
+        vec3 res = TBN * samples[i];
         res = Position.xyz + res * radius;
 
         vec4 offset = vec4(res, 1.0);

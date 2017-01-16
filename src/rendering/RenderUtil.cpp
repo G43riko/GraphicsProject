@@ -34,6 +34,29 @@ void RenderUtil::prepareMaterial(PointerMaterial material, PointerBasicShader sh
     }
 }
 
+void RenderUtil::prepareMaterial(PointerMaterial material, BasicShader * shader, int options){
+    if(shader){
+        if(options & Renderer::FLAG_SPECULAR){
+            shader -> updateUniformf("shineDumper", material -> shineDumber);
+            shader -> updateUniformf("reflectivity", material -> reflectivity);
+        }
+        shader -> connectTextures();
+
+        material -> getDiffuse() -> bind(GL_TEXTURE0);
+
+        if(options & Renderer::FLAG_ENVIRONMENTAL){
+            if(material -> hasEnvironmentalMap())
+                material -> getEnvironmentalMap() -> bind(GL_TEXTURE1);
+        }
+
+        if(options & Renderer::FLAG_NORMAL_MAP){
+            PointerTexture2D normal = material -> getNormal();
+            if(normal)
+                normal -> bind(GL_TEXTURE1);
+        }
+    }
+}
+
 void RenderUtil::finishRender(GLuint numberOfAttributes){
     for(GLuint i=0 ; i<=numberOfAttributes ; i++)
         glDisableVertexAttribArray(i);
@@ -42,6 +65,14 @@ void RenderUtil::finishRender(GLuint numberOfAttributes){
 }
 
 void RenderUtil::updateLightUniforms(PointerPointLight light, PointerBasicShader shader, PointerCamera camera, int index, bool eyeSpace){
+    Vector3f position = eyeSpace ? getEyeSpacePosition(light, camera -> getViewMatrix()) : light->getPosition();
+    std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
+    shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);
+    shader -> updateUniform3f("lightColor[" + std::to_string(index) + "]", light->getDiffuseColor());
+    shader -> updateUniform3f("attenuation[" + std::to_string(index) + "]", light -> getAttenuation());
+}
+
+void RenderUtil::updateLightUniforms(PointerPointLight light, BasicShader * shader, PointerCamera camera, int index, bool eyeSpace){
     Vector3f position = eyeSpace ? getEyeSpacePosition(light, camera -> getViewMatrix()) : light->getPosition();
     std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
     shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);

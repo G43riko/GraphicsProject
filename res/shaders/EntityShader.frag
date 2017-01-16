@@ -6,10 +6,33 @@ in vec4 shadowCoords;
 in vec3 reflectedVector;
 in vec3 refractedVector;
 
-struct DirLight {
+struct Material{
+    sampler2D diffuseSampler;
+    sampler2D normalSampler;
+    sampler2D alphaSampler;
+    sampler2D reflectSampler;
+    samplerCube environmentalMap;
+    int hasNormalMap;
+    int hasAlphaMap;
+    int hasReflectMap;
+    int hasEnvironmentalMap;
+    float shineDumper;
+    float reflectivity;
+};
+
+struct Options{
+    int renderShadow;
+};
+
+struct Light{
+    int type;
     vec3 direction;
     vec3 diffuseColor;
     vec3 specularColor;
+    vec3 position;
+    vec3 attenuation;
+    float cutOff;
+    float outerCutOff;
 };
 
 out vec4 FragmentColor;
@@ -20,7 +43,6 @@ uniform sampler2D textureSampler;
 uniform samplerCube environmentalMap;
 uniform sampler2D shadowMap;
 uniform vec3 lightColor[8];
-uniform DirLight sun;
 uniform int levels;
 
 const vec3 ambientLight = vec3(1, 0.9, 1);
@@ -28,10 +50,10 @@ void main() {
     //FragmentColor = vec4(vec3(0.0f, 1.0f, 1.0f), 1.0f);
     float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
     float lightFactor = 1.0f;
-    //SHADOWS
-    if(shadowCoords.z > objectNearestLight){
-        lightFactor = 1.0 - 0.4;
-    }
+//    //SHADOWS
+//    if(shadowCoords.z > objectNearestLight){
+//        lightFactor = 1.0 - 0.4;
+//    }
 
     vec3 unitNormal = normalize(surfaceNormal);
     vec3 totalDifuse = vec3(0);

@@ -7,16 +7,25 @@
 
 #include "../../rendering/RenderUtil.h"
 #include "EntityManager.h"
+#include <src/rendering/shader/EntityShader.cpp>
 
 class EntityMaster {
 private:
-    PointerBasicShader shader;
-    RenderUtil * utils;
+    BasicShader * shader = new EntityShader();
 public:
     void renderEntities(EntitiesList entities, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Matrix4f toShadowSpace, GLuint shadowMap);
     void renderEntities(std::vector<PointerEntity> entities, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Matrix4f toShadowSpace, GLuint shadowMap);
     void renderEntity(PointerEntity entity, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane);
-    EntityMaster(RenderUtil * utils, PointerBasicShader shader) : shader(shader), utils(utils){}
+    EntityMaster(PointerCamera camera){
+        RenderUtil::updateProjectionMatrix(shader, camera);
+    };
+    void cleanUp(void){
+        shader -> cleanUp();
+        delete shader;
+    };
+    BasicShader * getShader(void){
+        return shader;
+    };
 };
 
 

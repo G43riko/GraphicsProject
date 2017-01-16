@@ -39,12 +39,16 @@ public:
     Fbo(int width, int height, int depthBufferType):Fbo(width, height, depthBufferType, 1){}
     Fbo(int width, int height, int depthBufferType, int buffersCount);
 
+
+    unsigned int getBuffersCount(void){
+        return buffersCount;
+    }
     void cleanUp(void);
     void bindFrameBuffer(void);
     void unbindFrameBuffer(void);
     void bindToRead(void);
     void resolveToFbo(GLenum readBuffer, Fbo output);
-    void resolveToScreen(void);
+    void resolveToScreen(GLenum buffer = GL_COLOR_ATTACHMENT0);
     GLuint getColourTexture(void);
     GLuint getDepthTexture(void);
     GLuint getDepthBuffer(void){

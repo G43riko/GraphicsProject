@@ -120,20 +120,26 @@ void BasicShader::updateUniform3f(const std::string name, const Vector3f & value
 
 
 void BasicShader::updateDirLight(const std::string name, DirectionalLight light){
+    updateUniformi(name + ".type", 1);
     updateUniform3f(name + ".direction", light.getDirection());
     updateUniform3f(name + ".diffuseColor", light.getDiffuseColor());
     updateUniform3f(name + ".specularColor", light.getSpecularColor());
 }
 void BasicShader::updatePointLight(const std::string name, PointLight light){
+    updateUniformi(name + ".type", 2);
     updateUniform3f(name + ".position", light.getPosition());
     updateUniform3f(name + ".diffuseColor", light.getDiffuseColor());
     updateUniform3f(name + ".specularColor", light.getSpecularColor());
+    updateUniform3f(name + ".attenuation", light.getAttenuation());
 }
 void BasicShader::updateSpotLight(const std::string name, SpotLight light){
+    updateUniformi(name + ".type", 3);
     updateUniform3f(name + ".direction", light.getDirection());
     updateUniform3f(name + ".position", light.getPosition());
     updateUniform3f(name + ".diffuseColor", light.getDiffuseColor());
-    updateUniform3f(name + ".specularColor", light.getSpecularColor());
+    updateUniform3f(name + ".attenuation", light.getAttenuation());
+    updateUniformf(name + ".outerCutOff", light.getOuterCutOff());
+    updateUniformf(name + ".cutOff", light.getCutOff());
 }
 
 #endif

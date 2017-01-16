@@ -12,5 +12,7 @@ class ContrastShader : public BasicShader{
         void setAllAttributes(void){
             this -> bindAttribute(0, "position");
         };
-        void setAllUniforms(void){}
+        void setAllUniforms(void){
+            this -> setUniform("contrast");
+        }
 };

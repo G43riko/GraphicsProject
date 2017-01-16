@@ -9,7 +9,7 @@ void ParticleMaster::renderParticles(ParticlesList particles, PointerCamera came
         return;
     }
     shader -> bind();
-    utils -> prepareModel(model, 1);
+    RenderUtil::prepareModel(model, 1);
     glm::mat4 viewMatrix = camera -> getViewMatrix();
 
     glEnable(GL_TEXTURE_2D);
@@ -48,7 +48,7 @@ void ParticleMaster::renderParticles(ParticlesList particles, PointerCamera came
         }
     }
 
-    utils -> finishRender(1);
+    RenderUtil::finishRender(1);
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 }
@@ -57,7 +57,7 @@ void ParticleMaster::renderParticles(std::vector<Particle> particles, PointerCam
         return;
     }
     shader -> bind();
-    utils -> prepareModel(model, 1);
+    RenderUtil::prepareModel(model, 1);
     glm::mat4 viewMatrix = camera -> getViewMatrix();
 
     glEnable(GL_BLEND);
@@ -85,7 +85,7 @@ void ParticleMaster::renderParticles(std::vector<Particle> particles, PointerCam
 
     }
 
-    utils -> finishRender(1);
+    RenderUtil::finishRender(1);
     glDepthMask(GL_TRUE);
     glDisable(GL_BLEND);
 }

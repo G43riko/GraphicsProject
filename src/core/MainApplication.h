@@ -10,13 +10,12 @@
 #include <src/components/terrain/Terrain.h>
 #include <src/components/movement/BasicView.h>
 #include <src/components/movement/FpsView.h>
-#include <src/GUI/MainGui.h>
+#include <src/GUI/BasicGtkGui.h>
 #include "BasicApplication.h"
 
 class MainApplication : public BasicApplication{
 private:
     Renderer  * renderer = nullptr;
-    Scene * scene = nullptr;
 
 //    MainGui gui;
 
@@ -25,6 +24,7 @@ private:
     PointerEntity teaEntity = nullptr;
     PointerTexture2D particleTexture;
 public:
+    Scene * scene = nullptr;
     Renderer * getMainRenderer(void){
         return renderer;
     }
@@ -68,15 +68,18 @@ public:
     }
 
     void init(void) override {
-        printf("initializujem\n");
+        printf("MainApplication::init - start: %lf\n", glfwGetTime());
 //        gui.init();
 
         renderer = new Renderer(getLoader(), WindowManager::width, WindowManager::height);
+        printf("MainApplication::init - after  new Renderer: %lf\n", glfwGetTime());
         scene = new Scene(getLoader());
+        printf("MainApplication::init - after  new Scene: %lf\n", glfwGetTime());
 
 
 
         auto screen = Screen(WindowManager::width, WindowManager::height, getLoader());
+        printf("MainApplication::init - after  auto screen = Screen: %lf\n", glfwGetTime());
         PointerPointLight sun = createPointLight(Vector3f(10000000, 15000000, -10000000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
         PointerPointLight light = createPointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
         PointerPointLight light1 = createPointLight(Vector3f(200, 10, 200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
@@ -87,6 +90,7 @@ public:
 //        renderer -> setPostFx(true);
 
         setView(new FpsView(renderer -> getActualCamera(), false));
+        printf("MainApplication::init - end: %lf\n", glfwGetTime());
     };
     void update(float delta) override {
         if(Input::getKeyDown(GLFW_KEY_X)){
@@ -115,8 +119,8 @@ public:
         printf("FPS: %d\n", fps);
     }
     void render(void) override {
-
         renderer -> renderScene(*scene);
+//        renderer -> renderSceneDeferred(*scene);
     };
     void cleanUp(void) override {
         localCleanUp();

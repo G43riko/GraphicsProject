@@ -18,7 +18,7 @@ class PostProccessing {
     public:
         PostProccessing(Loader loader){
             quad = loader.loadToVao(POSITIONS, 2);
-            contrastChanger = new Filter(PointerBasicShader(new ContrastShader()), 1600, 900);
+            contrastChanger = new Filter(PointerBasicShader(new ContrastShader()));
 
             hBlur = new Filter(PointerBasicShader(new HorizontalBlurShader()), 160, 90);
             hBlur -> setTargetWidth(1600);
@@ -31,10 +31,11 @@ class PostProccessing {
 
         void doPostProcessing(int colorTexture){
             start();
-            hBlur -> render(colorTexture);
-            vBlur -> render(hBlur->getOutputTexture());
-            contrastChanger -> render(vBlur->getOutputTexture());
-            combineFilter -> render(colorTexture, contrastChanger -> getOutputTexture());
+//            hBlur -> render(colorTexture);
+//            vBlur -> render(hBlur->getOutputTexture());
+            contrastChanger -> render(colorTexture);
+//            contrastChanger -> render(vBlur->getOutputTexture());
+//            combineFilter -> render(colorTexture, contrastChanger -> getOutputTexture());
             end();
         }
 

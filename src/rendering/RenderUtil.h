@@ -13,12 +13,18 @@
 
 class RenderUtil {
 public:
-    Vector3f getEyeSpacePosition(PointerPointLight, glm::mat4);
-    void prepareModel(PointerRawModel, GLuint);
-    void prepareMaterial(PointerMaterial material, PointerBasicShader shader, int options);
-    void finishRender(GLuint);
+    static Vector3f getEyeSpacePosition(PointerPointLight, glm::mat4);
+    static void prepareModel(PointerRawModel, GLuint);
+    static void prepareMaterial(PointerMaterial material, PointerBasicShader shader, int options);
+    static void prepareMaterial(PointerMaterial material, BasicShader * shader, int options);
+    static void finishRender(GLuint);
+    static void updateLightUniforms(PointerPointLight light, PointerBasicShader shader, PointerCamera camera, int index, bool eyeSpace = true);
+    static void updateLightUniforms(PointerPointLight light, BasicShader *shader, PointerCamera camera, int index, bool eyeSpace = true);
 
-    void updateLightUniforms(PointerPointLight light, PointerBasicShader shader, PointerCamera camera, int index, bool eyeSpace = true);
+    inline static void updateProjectionMatrix(BasicShader * shader,  PointerCamera camera){
+        shader -> bind();
+        shader -> updateUniform4m("projectionMatrix", camera -> getProjectionMatrix());
+    }
 };
 
 

@@ -9,7 +9,7 @@ void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
     shader -> connectTextures();
 
     for(unsigned int i=0 ; i<lights.size() ; i++){
-        utils -> updateLightUniforms(lights[i], shader, camera, i, false);
+        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
 
     glActiveTexture(GL_TEXTURE0);
@@ -37,7 +37,7 @@ void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
     moveFactor = (float)fmod(moveFactor, 1);
     shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
 
-    utils -> prepareModel(quad, 1);
+    RenderUtil::prepareModel(quad, 1);
 
     Matrix4f modelMatrix = Maths::createTransformationMatrix(water.getX(), water.getHeight(), water.getZ(),
                                                              0, 0, 0,
@@ -46,5 +46,5 @@ void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
     glDrawArrays(GL_TRIANGLES, 0, quad -> getVertexCount());
 
     glDisable(GL_BLEND);
-    utils -> finishRender(1);
+    RenderUtil::finishRender(1);
 }

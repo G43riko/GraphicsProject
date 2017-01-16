@@ -10,8 +10,8 @@ void SkyBoxMaster::renderSky(PointerCubeTexture sky, PointerCamera camera){
     }
     shader -> bind();
     shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
-    utils -> prepareModel(model, 1);
+    RenderUtil::prepareModel(model, 1);
     sky -> bind();
     glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());
-    utils -> finishRender(1);
+    RenderUtil::finishRender(1);
 }

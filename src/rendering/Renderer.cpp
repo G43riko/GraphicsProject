@@ -3,6 +3,7 @@
 //
 
 #include "Renderer.h"
+#include "../components/postProccessing/PostFxMaster.h"
 
 
 Renderer::Renderer(Loader loader, int width, int height) :
@@ -13,7 +14,10 @@ Renderer::Renderer(Loader loader, int width, int height) :
         fbo3(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
         pp(PostProccessing(loader)),
         wf(WaterFrameBuffer()){
+    printf("------------------------------------------\n");
+    printf("Renderer::Renderer - start: %lf\n", glfwGetTime());
     initShaders();
+    printf("Renderer::Renderer - after initShaders: %lf\n", glfwGetTime());
 
 //    textures.push_back(GuiTexture(wf.getRefractionDepthTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
 //    textures.push_back(GuiTexture(wf.getRefractionTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
@@ -21,16 +25,37 @@ Renderer::Renderer(Loader loader, int width, int height) :
     textures.push_back(GuiTexture(fbo.getColourTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
     textures.push_back(GuiTexture(fbo2.getColourTexture(), Vector2f(0.25f, 0.75f), Vector2f(0.25f, 0.25f)));
     textures.push_back(GuiTexture(fbo3.getColourTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
+    printf("Renderer::Renderer - create gui textures: %lf\n", glfwGetTime());
     setCamera(PointerCamera(new Camera()));
+    printf("Renderer::Renderer - setCamera: %lf\n", glfwGetTime());
 
-    shadowMaster    = new ShadowMaster(&utils, shaders["shadowShader"], getActualCamera());
-    guiMaster       = new GuiMaster(&utils, shaders["guiShader"], loader);
-    skyBoxMaster    = new SkyBoxMaster(&utils, shaders["skyBoxShader"], loader);
-    particleMaster  = new ParticleMaster(&utils, shaders["particleShader"], loader);
-    entityMaster    = new EntityMaster(&utils, shaders["entityShader"]);
-    waterMaster     = new WaterMaster(&utils, shaders["waterShader"], loader);
+//    if(useShadows){
+        shadowMaster    = new ShadowMaster(shaders["shadowShader"], getActualCamera());
+//    };
+    if(useGuis){
+        guiMaster       = new GuiMaster(shaders["guiShader"], loader);
+    };
+    if(useSkybox){
+        skyBoxMaster    = new SkyBoxMaster(actualCamera, loader);
+    };
+    if(useParticles){
+        particleMaster  = new ParticleMaster(shaders["particleShader"], loader);
+    };
+    if(useEntities){
+        entityMaster    = new EntityMaster(actualCamera);
+    };
+    if(useWaters){
+        waterMaster     = new WaterMaster(actualCamera, loader);
+    };
+//    if(usePostFx){
+        postFxMaster    = new PostFxMaster(loader, false, width, height);
+        postFxMaster -> addFbo("fbo1", width, height, Fbo::DEPTH_TEXTURE);
+//    };
+    printf("Renderer::Renderer - initShaders: %lf\n", glfwGetTime());
+
 
 //    textures.push_back(GuiTexture(shadowMaster->getShadowMap(), Vector2f(-1, 1), Vector2f(1)));
+    printf("------------------------------------------\n");
 }
 void Renderer::prepareRenderer(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
     glClearColor(red, green, blue, alpha);
@@ -43,6 +68,8 @@ void Renderer::setCamera(PointerCamera camera){
 }
 
 void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader shader){
+
+
     if(shader){
         shader -> bind();
         shader -> updateUniform4m("projectionMatrix", camera -> getProjectionMatrix());
@@ -55,6 +82,15 @@ void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader s
             }
         }
     }
+    if(waterMaster){
+        RenderUtil::updateProjectionMatrix(waterMaster -> getShader(), camera);
+    };
+    if(skyBoxMaster){
+        RenderUtil::updateProjectionMatrix(skyBoxMaster -> getShader(), camera);
+    };
+    if(entityMaster){
+        RenderUtil::updateProjectionMatrix(entityMaster -> getShader(), camera);
+    };
 }
 
 void Renderer::cleanUp(void){
@@ -65,19 +101,61 @@ void Renderer::cleanUp(void){
 
     for (auto it = shaders.begin(); it != shaders.end(); ++it)
         it -> second -> cleanUp();
+
     delete light;
+
+    if(shadowMaster){
+        shadowMaster -> cleanUp();
+        delete shadowMaster;
+    }
+    if(guiMaster) {
+        guiMaster -> cleanUp();
+        delete guiMaster;
+    }
+    if(skyBoxMaster) {
+        skyBoxMaster -> cleanUp();
+        delete skyBoxMaster;
+    }
+    if(particleMaster) {
+        particleMaster -> cleanUp();
+        delete particleMaster;
+    }
+    if(entityMaster) {
+        entityMaster -> cleanUp();
+        delete entityMaster;
+    }
+    if(postFxMaster) {
+        postFxMaster -> cleanUp();
+        delete postFxMaster;
+    }
+    if(waterMaster) {
+        waterMaster -> cleanUp();
+        delete waterMaster;
+    }
 }
 
 void Renderer::initShaders(void){
-    addShader("guiShader", PointerBasicShader(new GuiShader()));
-    addShader("entityShader", PointerBasicShader(new EntityShader()));
-    addShader("postFxShader", PointerBasicShader(new PostFxShader()));
-    addShader("objectShader", PointerBasicShader(new ObjectShader()));
-    addShader("colorShader", PointerBasicShader(new ColorShader()));
-    addShader("skyBoxShader", PointerBasicShader(new SkyBoxShader()));
-    addShader("particleShader", PointerBasicShader(new ParticleShader()));
-    addShader("shadowShader", PointerBasicShader(new ShadowShader()));
-    addShader("waterShader", PointerBasicShader(new WaterShader()));
+    if(useGuis){
+        addShader("guiShader", PointerBasicShader(new GuiShader()));
+    };
+//    addShader("entityShader", PointerBasicShader(new EntityShader()));
+    if(usePostFx){
+        addShader("postFxShader", PointerBasicShader(new PostFxShader()));
+    };
+//    addShader("objectShader", PointerBasicShader(new ObjectShader()));
+//    addShader("colorShader", PointerBasicShader(new ColorShader()));
+//    if(useSkybox){
+//        addShader("skyBoxShader", PointerBasicShader(new SkyBoxShader()));
+//    };
+    if(useParticles){
+        addShader("particleShader", PointerBasicShader(new ParticleShader()));
+    };
+    if(useShadows){
+        addShader("shadowShader", PointerBasicShader(new ShadowShader()));
+    };
+//    if(useWaters){
+//        addShader("waterShader", PointerBasicShader(new WaterShader()));
+//    };
     addShader("deferredShader", PointerBasicShader(new DeferredShader()));
 
 }
@@ -110,6 +188,13 @@ void Renderer::renderSceneDeferred(Scene scene){
     PointerBasicShader shader = shaders["deferredShader"];
 
     shader -> bind();
+//
+//    std::vector<Vector3f> kernel = getKerner();
+//    for(int i=0 ; i<64 ; i++){
+//        shader -> updateUniform3f("samples[" + std::to_string(i) + "]", kernel[i]);
+//    }
+
+
     shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
     shader -> updateUniform3f("cameraPosition", actualCamera -> position);
     glEnable(GL_TEXTURE);
@@ -120,8 +205,8 @@ void Renderer::renderSceneDeferred(Scene scene){
             auto itEnt = it->second.begin();
 
             PointerRawModel model = it->first -> getModel();
-            utils.prepareModel(model, 3);
-            utils.prepareMaterial(it->first-> getMaterial(), shader, options);
+            RenderUtil::prepareModel(model, 3);
+            RenderUtil::prepareMaterial(it->first-> getMaterial(), shader, options);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
                 shader -> updateUniform4m("transformationMatrix", itEnt -> get() -> getTransform() -> getTransformation());
@@ -131,7 +216,7 @@ void Renderer::renderSceneDeferred(Scene scene){
             }
         }
     }
-    utils.finishRender(3);
+    RenderUtil::finishRender(3);
 
     multiFbo.unbindFrameBuffer();
     multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT1, fbo);
@@ -140,6 +225,7 @@ void Renderer::renderSceneDeferred(Scene scene){
     multiFbo.resolveToScreen();
 //        pp.doPostProcessing(fbo.getColourTexture());
 
+
     guiMaster -> renderGui(textures);
 }
 
@@ -147,9 +233,12 @@ void Renderer::renderScene(Scene scene){
     if(usePostFx){
         multiFbo.bindFrameBuffer();
     }
+    postFxMaster->startRender();
 
     //renderObjects(scene.getEntities(), scene.getLights());
-    skyBoxMaster -> renderSky(scene.getSky(), actualCamera);
+    if(useSkybox){
+        skyBoxMaster -> renderSky(scene.getSky(), actualCamera);
+    }
 
     if(useShadows){
         shadowMaster -> renderShadows(scene.getEntities(), sun, actualCamera);
@@ -163,7 +252,9 @@ void Renderer::renderScene(Scene scene){
         waterMaster -> starRenderReflection(actualCamera);
         glEnable(GL_CLIP_DISTANCE0);
         glDisable(GL_CLIP_DISTANCE0);
-        skyBoxMaster -> renderSky(scene.getSky(), actualCamera);
+        if(useSkybox){
+            skyBoxMaster -> renderSky(scene.getSky(), actualCamera);
+        }
         glEnable(GL_CLIP_DISTANCE0);
         entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, 1, 0, -waterMaster -> getWaterHeight()), shadowMaster->getToShadowMapSpaceMatrix(), shadowMaster->getShadowMap());
 
@@ -172,16 +263,25 @@ void Renderer::renderScene(Scene scene){
         entityMaster -> renderEntities(scene.getEntities(), scene.getLights(), actualCamera, options, Vector4f(0, -1, 0, waterMaster -> getWaterHeight() + 1.0f), shadowMaster->getToShadowMapSpaceMatrix(), shadowMaster->getShadowMap());
         waterMaster -> finishRender();
         glDisable(GL_CLIP_DISTANCE0);
+
+        waterMaster -> render(actualCamera, scene.getLights());
     }
 
-    waterMaster -> render(actualCamera, scene.getLights());
 
     particleMaster -> renderParticles(scene.getParticles(), actualCamera);
+
+    if(postFxMaster->getUsingPostFx()){
+        postFxMaster->stopRender();
+        postFxMaster->resolveToFbo(GL_COLOR_ATTACHMENT0, "fbo1");
+        postFxMaster->doPostProcessing("fbo1");
+    }
+
     if(usePostFx){
         multiFbo.unbindFrameBuffer();
-        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT1, fbo);
-        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT2, fbo2);
-        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT3, fbo3);
+//        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT0, fbo);
+//        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT1, fbo);
+//        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT2, fbo2);
+//        multiFbo.resolveToFbo(GL_COLOR_ATTACHMENT3, fbo3);
         multiFbo.resolveToScreen();
 //        pp.doPostProcessing(fbo.getColourTexture());
     }
@@ -204,7 +304,7 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
 
     if(options & FLAG_LIGHT){
         for(unsigned int i=0 ; i<lights.size() ; i++)
-            utils.updateLightUniforms(lights[i], shader, actualCamera, i);
+            RenderUtil::updateLightUniforms(lights[i], shader, actualCamera, i);
     }
 
     glEnable(GL_TEXTURE);
@@ -213,11 +313,11 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
 
         shader -> updateUniform4m("transformationMatrix", entities[i] -> getTransform() -> getTransformation());
         if(options & FLAG_TEXTURE)
-            utils.prepareMaterial(entities[i] -> getModel() -> getMaterial(), shader, options);
-        utils.prepareModel(model, items);
+            RenderUtil::prepareMaterial(entities[i] -> getModel() -> getMaterial(), shader, options);
+        RenderUtil::prepareModel(model, items);
         glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     }
-    utils.finishRender(items);
+    RenderUtil::finishRender(items);
 }
 
 void Renderer::renderScreen(Screen screen) {
@@ -228,7 +328,7 @@ void Renderer::renderScreen(Screen screen) {
 
     screen.setUniforms(shader);
 
-    utils.prepareModel(screen.getModel(), 0);
+    RenderUtil::prepareModel(screen.getModel(), 0);
     glDisable(GL_DEPTH_TEST);
 
     glActiveTexture(GL_TEXTURE0);
@@ -239,7 +339,7 @@ void Renderer::renderScreen(Screen screen) {
 
     //shader -> unbind();
     glEnable(GL_DEPTH_TEST);
-    utils.finishRender(0);
+    RenderUtil::finishRender(0);
 }
 
 
@@ -256,34 +356,34 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerPointLight>
     //shader -> updateUniform2f("levels", 4);
 
     for(unsigned int i=0 ; i<lights.size() ; i++)
-        utils.updateLightUniforms(lights[i], shader, actualCamera, i);
+        RenderUtil::updateLightUniforms(lights[i], shader, actualCamera, i);
 
     PointerRawModel model = object -> getModel() -> getModel();
     glEnable(GL_TEXTURE);
 
     shader -> updateUniform4m("transformationMatrix", object->getTransform()->getTransformation());
-    utils.prepareMaterial(object -> getModel() -> getMaterial(), shader, options);
-    utils.prepareModel(model, 4);
+    RenderUtil::prepareMaterial(object -> getModel() -> getMaterial(), shader, options);
+    RenderUtil::prepareModel(model, 4);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-    utils.finishRender(4);
+    RenderUtil::finishRender(4);
 }
 
 
 
 void Renderer::render(PointerRawModel model){
-    utils.prepareModel(model, 0);
+    RenderUtil::prepareModel(model, 0);
     //glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());// - pri použíťí index baferu sa nepoužíva
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-    utils.finishRender(0);
+    RenderUtil::finishRender(0);
 }
 
 void Renderer::render(PointerMaterialedModel materialedModel){
     PointerRawModel model = materialedModel -> getModel();
     glEnable(GL_TEXTURE);
-    utils.prepareMaterial(materialedModel -> getMaterial(), nullptr, options);
-    utils.prepareModel(model, 1);
+    RenderUtil::prepareMaterial(materialedModel -> getMaterial(), nullptr, options);
+    RenderUtil::prepareModel(model, 1);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-    utils.finishRender(1);
+    RenderUtil::finishRender(1);
 }
 void Renderer::update(float delta) {
     if(waterMaster){

@@ -20,7 +20,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, shadowMap);
     for(unsigned int i=0 ; i<lights.size() ; i++){
-        utils -> updateLightUniforms(lights[i], shader, camera, i, false);
+        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
 
     glEnable(GL_TEXTURE);
@@ -29,8 +29,8 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
             auto itEnt = it->second.begin();
 
             PointerRawModel model = it->first -> getModel();
-            utils -> prepareModel(model, 3);
-            utils -> prepareMaterial(it->first-> getMaterial(), shader, options);
+            RenderUtil::prepareModel(model, 3);
+            RenderUtil::prepareMaterial(it->first-> getMaterial(), shader, options);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
                 shader -> updateUniform4m("transformationMatrix", itEnt -> get() -> getTransform() -> getTransformation());
@@ -40,7 +40,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
             }
         }
     }
-    utils -> finishRender(3);
+    RenderUtil::finishRender(3);
 }
 
 void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Matrix4f toShadowSpace, GLuint shadowMap){
@@ -56,7 +56,7 @@ void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vect
     //shader -> updateUniform2f("levels", 4);
     shader -> updateUniform4f("plane", clipPlane);
     for(unsigned int i=0 ; i<lights.size() ; i++){
-        utils -> updateLightUniforms(lights[i], shader, camera, i, false);
+        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
 
     for(PointerEntity entity : entities){
@@ -65,12 +65,12 @@ void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vect
 
         shader -> updateUniform4m("transformationMatrix", entity -> getTransform() -> getTransformation());
 
-        utils -> prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
-        utils -> prepareModel(model, 3);
+        RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
+        RenderUtil::prepareModel(model, 3);
 
         glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     }
-    utils -> finishRender(3);
+    RenderUtil::finishRender(3);
 }
 void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane){
     shader -> bind();
@@ -80,7 +80,7 @@ void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLi
     //shader -> updateUniform2f("levels", 4);
 
     for(unsigned int i=0 ; i<lights.size() ; i++){
-        utils -> updateLightUniforms(lights[i], shader, camera, i, false);
+        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
 
     PointerRawModel model = entity -> getModel() -> getModel();
@@ -88,10 +88,10 @@ void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLi
 
     shader -> updateUniform4m("transformationMatrix", entity -> getTransform() -> getTransformation());
 
-    utils -> prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
-    utils -> prepareModel(model, 3);
+    RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
+    RenderUtil::prepareModel(model, 3);
 
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
 
-    utils -> finishRender(3);
+    RenderUtil::finishRender(3);
 }

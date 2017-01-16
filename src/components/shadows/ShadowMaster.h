@@ -15,7 +15,6 @@
 class ShadowMaster {
 private:
     PointerBasicShader shader;
-    RenderUtil * utils;
     static constexpr int SHADOW_MAP_SIZE = 2048;
     Fbo fbo = Fbo(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
 //    ShadowFrameBuffer fbo = ShadowFrameBuffer(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
@@ -32,7 +31,7 @@ private:
     Matrix4f updateOrthoProjectionMatrix(float width, float height, float length);
     //void finish();
 public:
-    ShadowMaster(RenderUtil * utils, PointerBasicShader shader, PointerCamera camera) : shader(shader), utils(utils), box(ShadowBox(&lightViewMatrix, camera)){};
+    ShadowMaster(PointerBasicShader shader, PointerCamera camera) : shader(shader), box(ShadowBox(&lightViewMatrix, camera)){};
 
     void renderShadows(EntitiesList entities, PointerPointLight sun, PointerCamera camera);
     void renderShadows(std::vector<PointerEntity> entities, PointerPointLight sun, PointerCamera camera);
@@ -40,6 +39,7 @@ public:
 
     Matrix4f getToShadowMapSpaceMatrix(void);
     GLuint getShadowMap(void);
+    void cleanUp(void){};
 };
 
 #endif //GRAPHICSPROJECT_SHADOWMASTER_H

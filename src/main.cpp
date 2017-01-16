@@ -26,10 +26,10 @@
 #include <src/components/particles/ParticleManager.h>
 #include <src/core/BasicEngine.h>
 #include <src/core/MainApplication.h>
-#include <src/GUI/MainGui.h>
+#include <src/GUI/BasicGtkGui.h>
 
 //BasicEngine * engine;
-//MainGui  * gui;
+//BasicGtkGui  * gui;
 //static gpointer threadOpenGl(gpointer user_data){
 //    engine -> start();
 //}
@@ -40,7 +40,7 @@
 
 int main(int argc, char *argv[]){
 //    engine = new BasicEngine(new MainApplication(), 800, 600);
-//    gui = new MainGui();
+//    gui = new BasicGtkGui();
 //
 //    GThread * threadOGL, * threadGTK;
 //

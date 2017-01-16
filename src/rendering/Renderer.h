@@ -17,15 +17,15 @@
 #include "../components/postProccessing/Screen.h"
 #include "../components/gui/GuiTexture.h"
 #include <glm/gtx/string_cast.hpp>
+#include <src/components/postProccessing/PostFxMaster.h>
 
 #include "../components/particles/Particle.h"
-#include "shader/EntityShader.cpp"
+//#include "shader/EntityShader.cpp"
 #include "shader/PostFxShader.cpp"
 #include "shader/ObjectShader.cpp"
 #include "shader/GuiShader.cpp"
 #include "shader/ParticleShader.cpp"
-#include "shader/SkyBoxShader.cpp"
-#include "shader/WaterShader.cpp"
+//#include "shader/WaterShader.cpp"
 #include "shader/DeferredShader.cpp"
 #include "shader/ColorShader.cpp"
 #include "shader/ShadowShader.cpp"
@@ -69,6 +69,9 @@ class Renderer {
         void setWater(bool val){
             useWaters = val;
         }
+        void setSky(bool val){
+            useSkybox = val;
+        }
         void turnOnOption(unsigned char val){
             options |= val;
         }
@@ -95,13 +98,16 @@ class Renderer {
         void prepareRenderer(GLfloat red  = 0, GLfloat green  = 0, GLfloat blue  = 0, GLfloat alpha = 1);
         PointerCamera getActualCamera(void){
             return actualCamera;
-        }
+        };
         void setSun(PointerPointLight sun){
             this -> sun = sun;
-        }
-        WaterMaster * getWater(void){
+        };
+        WaterMaster * getWaterMaster(void){
             return waterMaster;
-        }
+        };
+        PostFxMaster * getPostFxMaster(void){
+            return postFxMaster;
+        };
     private:
     /*
         Vector3f getOptions(void){
@@ -111,19 +117,25 @@ class Renderer {
             return options;
         }
         */
+        Loader * loader = nullptr;
         bool useShadows = false;
+        bool useEntities = true;
+        bool useParticles = true;
+        bool useSkybox = true;
         bool useWaters = true;
         bool usePostFx = false;
+        bool useGuis = true;
         bool useTextures = false;
         bool useNormals = false;
         bool useLights = false;
         bool useSpeculars = false;
         bool useEnviromentals = false;
-        WaterMaster * waterMaster;
-        EntityMaster * entityMaster;
-        ParticleMaster * particleMaster;
-        GuiMaster * guiMaster;
-        SkyBoxMaster * skyBoxMaster;
+        WaterMaster * waterMaster = nullptr;
+        EntityMaster * entityMaster = nullptr;
+        ParticleMaster * particleMaster = nullptr;
+        GuiMaster * guiMaster = nullptr;
+        SkyBoxMaster * skyBoxMaster = nullptr;
+        PostFxMaster * postFxMaster = nullptr;
         ShadowMaster * shadowMaster = nullptr;
         void setCamera(PointerCamera);
         PointerPointLight sun = nullptr;
@@ -133,7 +145,6 @@ class Renderer {
         PointerCamera actualCamera = nullptr;
         unsigned char options = FLAG_TEXTURE | FLAG_NORMAL_MAP | FLAG_LIGHT | FLAG_SPECULAR | FLAG_FOG;
         Screen screen;
-        RenderUtil utils;
         Fbo multiFbo;
         Fbo fbo, fbo2, fbo3;
         PostProccessing pp;

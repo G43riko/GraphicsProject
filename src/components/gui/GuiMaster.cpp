@@ -9,7 +9,7 @@ void GuiMaster::renderGui(std::vector<GuiTexture> textures){
         return;
     }
     shader -> bind();
-    utils -> prepareModel(model, 1);
+    RenderUtil::prepareModel(model, 1);
 
     glEnable(GL_TEXTURE_2D);
     glDisable(GL_DEPTH_TEST);
@@ -24,5 +24,5 @@ void GuiMaster::renderGui(std::vector<GuiTexture> textures){
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
 
-    utils -> finishRender(1);
+    RenderUtil::finishRender(1);
 }

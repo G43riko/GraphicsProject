@@ -22,6 +22,10 @@ class WaterTile {
             return size;
         }
 
+        void setHeight(float height){
+            this -> height = height;
+        }
+
         float getHeight() {
             return height;
         }

@@ -8,6 +8,7 @@
 
 #include <src/rendering/RenderUtil.h>
 #include "WaterTile.h"
+#include <src/rendering/shader/WaterShader.cpp>
 #include "WaterFrameBuffer.h"
 
 class WaterMaster {
@@ -25,21 +26,23 @@ private:
     PointerTexture2D dudvMap = ContentLoader::loadTexturePNG("res/textures/waterDUDV.png");
     PointerTexture2D normalMap = ContentLoader::loadTexturePNG("res/textures/matchingNormalMap.png");
 
-    PointerBasicShader shader;
-    RenderUtil * utils;
+    BasicShader * shader = new WaterShader();
     float distance;
 public:
     void render(PointerCamera camera, std::vector<PointerPointLight> lights);
-    WaterMaster(RenderUtil * utils, PointerBasicShader shader, Loader loader) : shader(shader), utils(utils){
+    WaterMaster(PointerCamera camera, Loader loader){
         std::vector<float> vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
         quad = loader.loadToVao(vertices, 2);
+        RenderUtil::updateProjectionMatrix(shader, camera);
     };
+
+
     void update(float delta){
         moveFactor += waterSpeed * delta;
     };
-
-    float getWaterHeight(void){
-        return water.getHeight();
+    void cleanUp(void){
+        shader -> cleanUp();
+        delete shader;
     };
 
     void starRenderReflection(PointerCamera camera){
@@ -56,7 +59,36 @@ public:
     void finishRender(void){
         fbo.unbindCurrentFrameBuffer();
     };
-    void setTiling(int tiling){
+    /******************GETTERS******************/
+    BasicShader * getShader(void){
+        return shader;
+    };
+    float getTilig(void){
+        return tiling;
+    };
+    float getWaveStrenght(void){
+        return waveStrength;
+    };
+    float getShineDumper(void){
+        return tiling;
+    };
+    float getReflectivity(void){
+        return reflectivity;
+    };
+    float getWaterSpeed(void){
+        return waterSpeed;
+    };
+    float getRefractiveRation(void){
+        return refractiveRation;
+    };
+    float getWaterHeight(void){
+        return water.getHeight();
+    };
+    /******************SETTER******************/
+    void setWaterHeight(float height){
+        water.setHeight(height);
+    }
+    void setTiling(float tiling){
         this -> tiling = tiling;
     };
     void setWaveStrength(float waveStrength){

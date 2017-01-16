@@ -13,14 +13,14 @@ class ParticleMaster {
 private:
     PointerRawModel model;
     PointerBasicShader shader;
-    RenderUtil * utils;
 public:
     void renderParticles(ParticlesList particles, PointerCamera camera);
     void renderParticles(std::vector<Particle> particles, PointerCamera camera);
-    ParticleMaster(RenderUtil * utils, PointerBasicShader shader, Loader loader) : shader(shader), utils(utils){
+    ParticleMaster(PointerBasicShader shader, Loader loader) : shader(shader){
         std::vector<float> vertices = {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
         model = loader.loadToVao(vertices, 2);
-    }
+    };
+    void cleanUp(void){};
 };
 
 

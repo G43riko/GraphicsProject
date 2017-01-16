@@ -52,10 +52,10 @@ void Fbo::resolveToFbo(GLenum readBuffer, Fbo output){
     glBlitFramebuffer(0, 0, width, height, 0, 0, output.width, output.height, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
     unbindFrameBuffer();
 }
-void Fbo::resolveToScreen(void){
+void Fbo::resolveToScreen(GLenum buffer){
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
-    glReadBuffer(GL_COLOR_ATTACHMENT0);//toto som sem pridal aby sa vždy prepol na GL_COLOR_ATTACHMENT0 pri vykreslovaní sceny
+    glReadBuffer(buffer);//toto som sem pridal aby sa vždy prepol na GL_COLOR_ATTACHMENT0 pri vykreslovaní sceny
     glDrawBuffer(GL_BACK);
     glBlitFramebuffer(0, 0, width, height,  0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     unbindFrameBuffer();
