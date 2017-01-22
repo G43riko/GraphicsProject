@@ -14,6 +14,8 @@
 #include "src/GUI/componentsGui/GtkPostFx.h"
 #include "src/GUI/componentsGui/GtkRenderer.h"
 
+class BasicEngine;
+
 class BasicGtkGui {
 private:
     GtkScene * scene = nullptr;
@@ -23,13 +25,42 @@ private:
     GtkWidget * window = nullptr;
     GtkWidget * mainPanel = nullptr;
     GtkWidget * actualPanel = nullptr;
-
+    GtkWidget * introPanel = nullptr;
+    GtkWidget * resX = nullptr;
+    GtkWidget * resY = nullptr;
+    GtkWidget * stopButton = nullptr;
+    GtkWidget * startButton = nullptr;
+    GtkWidget * resolutionPanel = nullptr;
+    BasicEngine * engine;
+    static void gameStart(GtkWidget *widget, gpointer data);
+    static void gameStop(GtkWidget *widget, gpointer data);
+    static void engineExit(GtkWidget *widget, gpointer data);
+    static void changeFullScreen(GtkWidget *widget, gpointer data);
+    bool exitRequest = false;
 public:
+    inline bool getExitRequest(void){
+        return exitRequest;
+    }
+    void initAndShowIntroView(void);
+    BasicGtkGui(BasicEngine * engine) : engine(engine){};
     void setRenderer(GtkRenderer * renderer){
         if(this -> renderer == nullptr){
             this -> renderer = renderer;
             gtk_container_add(GTK_CONTAINER(mainPanel), renderer->getPanel());
         }
+    };
+    void showIntro(void){
+        if(actualPanel){
+            gtk_widget_hide(actualPanel);
+            if(actualPanel == introPanel){
+                hideWindow();
+                actualPanel = nullptr;
+                return;
+            }
+        }
+        actualPanel = introPanel;
+        gtk_widget_show_all(actualPanel);
+        showWindow();
     };
     void showRenderer(void){
         if(actualPanel){
@@ -156,7 +187,8 @@ public:
 
 
         //GtkWidget * tree = gtk_tree_view_new_with_model()
-
+        initAndShowIntroView();
+        showIntro();
         return 0;
     };
 

@@ -50,13 +50,58 @@ public:
         calculateWidthsAndHeights();
     }
 
-    void update(void);
+    void update(void){
+        Matrix4f rotation = calculateCameraRotationMatrix();
+        Vector3f forwardVector = Matrix4f::transform(rotation, FORWARD);
+        Vector3f toFar = forwardVector * SHADOW_DISTANCE;
+        Vector3f toNear = forwardVector * cam -> NEAR_PLANE;
+        Vector3f centerNear = toNear + cam -> position;
+        Vector3f centerFar = toFar + cam -> position;
+        Vector4f* points = calculateFrustumVertices(rotation, forwardVector, centerNear,
+                                                     centerFar);
+
+        bool first = true;
+        //for (Vector4f point : points) {
+        for(int i=0 ; i<8 ; i++){
+            Vector4f point = points[i];
+            if (first) {
+                minX = point.x;
+                maxX = point.x;
+                minY = point.y;
+                maxY = point.y;
+                minZ = point.z;
+                maxZ = point.z;
+                first = false;
+                continue;
+            }
+            if (point.x > maxX) {
+                maxX = point.x;
+            } else if (point.x < minX) {
+                minX = point.x;
+            }
+            if (point.y > maxY) {
+                maxY = point.y;
+            } else if (point.y < minY) {
+                minY = point.y;
+            }
+            if (point.z > maxZ) {
+                maxZ = point.z;
+            } else if (point.z < minZ) {
+                minZ = point.z;
+            }
+        }
+        maxZ += OFFSET;
+
+    };
 
     Vector3f getCenter() {
         float x = (minX + maxX) / 2.0f;
         float y = (minY + maxY) / 2.0f;
         float z = (minZ + maxZ) / 2.0f;
         Matrix4f invertedLight = Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(*lightViewMatrix)));
+//        Vector4f cen = Vector4f(x, y, z, 1);
+//        Matrix4f invertedLight = Matrix4f();
+//        Matrix4f.invert(lightViewMatrix, invertedLight);
         return Vector3f(Matrix4f::transform(invertedLight, Vector4f(x, y, z, 1)));
     }
 
@@ -67,7 +112,8 @@ public:
     }
 
     Matrix4f calculateCameraRotationMatrix() {
-        return Matrix4f::initRotation((float)(TO_RADIANS(-cam -> pitch)), (float)(TO_RADIANS(-cam -> yaw)), 0);
+        //return Matrix4f::initRotation((float)(TO_RADIANS(-cam -> pitch)), (float)(TO_RADIANS(-cam -> yaw)), 0);
+        return Matrix4f::initRotation((float)(-cam -> pitch), (float)(-cam -> yaw), 0);
 
         /*
         Matrix4f rotation = Matrix4f();
@@ -79,7 +125,8 @@ public:
 
     void calculateWidthsAndHeights() {
         farWidth = (float) (SHADOW_DISTANCE * tan(TO_RADIANS(cam -> FOV)));
-        nearWidth = (float) (cam -> NEAR_PLANE * tan(TO_RADIANS(cam -> FOV)));
+        nearWidth = (float) (cam -> NEAR_PLANE
+                             * tan(TO_RADIANS(cam -> FOV)));
         farHeight = farWidth / WindowManager::getRation();
         nearHeight = nearWidth / WindowManager::getRation();
     }

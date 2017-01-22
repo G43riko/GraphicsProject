@@ -9,18 +9,25 @@
 #include <vector>
 #include "GuiTexture.h"
 #include "../../rendering/RenderUtil.h"
+#include <src/rendering/shader/GuiShader.cpp>
 
 class GuiMaster {
 private:
-    PointerBasicShader shader;
+    BasicShader  * shader = new GuiShader();
     PointerRawModel model;
 public:
     void renderGui(std::vector<GuiTexture> textures);
-    GuiMaster( PointerBasicShader shader, Loader loader) : shader(shader){
+    GuiMaster(PointerCamera camera, Loader loader){
         std::vector<float> vertices = {-1, 1, -1, -1, 1, 1, 1, -1};
         model = loader.loadToVao(vertices, 2);
     };
-    void cleanUp(void){};
+    void cleanUp(void){
+        shader -> cleanUp();
+        delete shader;
+    };
+    BasicShader * getShader(void){
+        return shader;
+    };
 };
 
 

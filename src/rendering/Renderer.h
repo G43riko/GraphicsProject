@@ -18,12 +18,13 @@
 #include "../components/gui/GuiTexture.h"
 #include <glm/gtx/string_cast.hpp>
 #include <src/components/postProccessing/PostFxMaster.h>
+#include <src/game/Scene.h>
 
 #include "../components/particles/Particle.h"
 //#include "shader/EntityShader.cpp"
 #include "shader/PostFxShader.cpp"
 #include "shader/ObjectShader.cpp"
-#include "shader/GuiShader.cpp"
+//#include "shader/GuiShader.cpp"
 #include "shader/ParticleShader.cpp"
 //#include "shader/WaterShader.cpp"
 #include "shader/DeferredShader.cpp"
@@ -108,6 +109,12 @@ class Renderer {
         PostFxMaster * getPostFxMaster(void){
             return postFxMaster;
         };
+        bool isUsePostFx(void){
+            return usePostFx;
+        };
+        bool isUseSky(void){
+            return useSkybox;
+        };
     private:
     /*
         Vector3f getOptions(void){
@@ -144,7 +151,7 @@ class Renderer {
     //        const unsigned char option8 = 0x80; // hex for 1000 0000
         PointerCamera actualCamera = nullptr;
         unsigned char options = FLAG_TEXTURE | FLAG_NORMAL_MAP | FLAG_LIGHT | FLAG_SPECULAR | FLAG_FOG;
-        Screen screen;
+//        Screen screen;
         Fbo multiFbo;
         Fbo fbo, fbo2, fbo3;
         PostProccessing pp;

@@ -39,6 +39,19 @@ class GtkHandler{
         static inline GtkWidget * createSlider(double min, double max, double step){
             return createSlider(min, max, step, min);
         };
+
+        static inline GtkWidget * createCheckBox(bool checked, char * label = nullptr, GCallback callback = nullptr, gpointer data = nullptr,  GtkContainer * parent = nullptr){
+            GtkWidget * result = label ? gtk_check_button_new_with_label(label) : gtk_check_button_new();
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(result), checked);
+            if(callback){
+                g_signal_connect(result, "toggled", callback, data);
+            }
+            if(parent){
+                gtk_container_add (parent, result);
+            }
+            return result;
+        }
+
         static inline GtkWidget * initWindow(){
             GtkWidget * window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
             gtk_window_set_default_size(GTK_WINDOW(window), 400, 300);

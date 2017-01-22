@@ -32,6 +32,7 @@ public:
         panel = GtkHandler::createBox(GTK_ORIENTATION_VERTICAL, 20);
 
         usePostFx = gtk_check_button_new_with_label("Používat PostFx");
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(usePostFx), master->getUsingPostFx());
         g_signal_connect(usePostFx, "toggled", G_CALLBACK(GtkPostFx::postFxChange), this);
         gtk_container_add (GTK_CONTAINER (panel), usePostFx);
 

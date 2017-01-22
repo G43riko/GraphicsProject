@@ -91,7 +91,6 @@ Vector4f Matrix4f::transform(Matrix4f left, Vector4f right, Vector4f * dest) {
         *dest = res;
     return res;
 }
-/*
 Matrix4f Matrix4f::translate(Vector3f vec, Matrix4f src, Matrix4f * dest) {
     Matrix4f res = Matrix4f();
 
@@ -105,6 +104,7 @@ Matrix4f Matrix4f::translate(Vector3f vec, Matrix4f src, Matrix4f * dest) {
         *dest = res;
     return res;
 }
+/*
 
 Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
     Matrix4f res = Matrix4f();
@@ -119,6 +119,7 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
     return res;
 }
 
+ */
 Matrix4f Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * dest) {
     Matrix4f res = Matrix4f();
 
@@ -169,7 +170,6 @@ Matrix4f Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * d
         *dest = res;
     return res;
 }
- */
 
 Matrix4f Matrix4f::scale(Vector3f vec, Matrix4f src, Matrix4f * dest) {
     Matrix4f res = Matrix4f();

@@ -14,15 +14,18 @@ void ShadowMaster::renderShadows(EntitiesList entities, PointerPointLight sun, P
     fbo.bindFrameBuffer();
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_DEPTH_BUFFER_BIT);
 
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_DEPTH_BUFFER_BIT);
 
 
     box.update();
-    prepare(sun -> getPosition() , box);
+    prepare(sun -> getPosition() * -1, box);
+    if(Input::getKeyDown(GLFW_KEY_L)){
+        camera ->position.show();
+    }
 
-    shader -> updateUniform4m("mvpMatrix", projectionViewMatrix);
+    //shader -> updateUniform4m("mvpMatrix", projectionViewMatrix);
 
     for (auto it = entities.begin(); it != entities.end(); ++it){ //pre všetky materialy
         if(it -> second.size()){
@@ -30,9 +33,7 @@ void ShadowMaster::renderShadows(EntitiesList entities, PointerPointLight sun, P
 
             while(itEnt != it->second.end()){ //prejde všetky entity
                 glBindVertexArray(itEnt ->get() -> getModel() -> getModel() -> getVaoID());
-                Matrix4f modelMatrix = itEnt -> get() -> getTransform() -> getTransformation();
-                shader -> updateUniform4m("mpvMatrix", Matrix4f(camera -> getProjectionMatrix()) * Matrix4f(camera -> getViewMatrix()) * modelMatrix);
-
+                shader -> updateUniform4m("mpvMatrix", projectionViewMatrix * itEnt -> get() -> getTransform() -> getTransformation());
                 glDrawElements(GL_TRIANGLES, itEnt ->get() -> getModel() -> getModel() -> getVertexCount(), GL_UNSIGNED_INT, 0);
                 itEnt++;
             }
@@ -109,20 +110,43 @@ Matrix4f ShadowMaster::createOffset(void){
      Matrix4f::scale(Vector3f(0.5f, 0.5f, 0.5f), offset, &offset);
     return offset;
 }
-
 Matrix4f ShadowMaster::updateLightViewMatrix(Vector3f direction, Vector3f center) {
     direction.normalize();
     center *= -1;
-    float pitch = (float)acos(Vector2f(direction.x, direction.z).length());
-    Matrix4f result = Matrix4f::initRotation(pitch, 0, 0);
-    float yaw = (float)(TO_DEGREES(atan(direction.x / direction.z)));
+    Matrix4f::setIdentity(lightViewMatrix);
+    float pitch = (float) acos(Vector2f(direction.x, direction.z).length());
+    Matrix4f::rotate(pitch, Vector3f(1, 0, 0), lightViewMatrix, &lightViewMatrix);
+    float yaw = (float) (TO_DEGREES(((float) atan(direction.x / direction.z))));
     yaw = direction.z > 0 ? yaw - 180 : yaw;
-    return Matrix4f::initTranslation(center.x, center.y, center.z) * Matrix4f::initRotation(0, -(float)(TO_RADIANS(yaw)), 0) * result;
+//    lightViewMatrix *= Matrix4f::initRotation(0, -yaw, 0);
+
+    Matrix4f::rotate(-(float)(TO_RADIANS(yaw)), Vector3f(0, 1, 0), lightViewMatrix, &lightViewMatrix);
+    Matrix4f::translate(center, lightViewMatrix, &lightViewMatrix);
+
+    return lightViewMatrix;
 }
+//Matrix4f ShadowMaster::updateLightViewMatrix(Vector3f direction, Vector3f center) {
+//    printf("DIR: \n");
+//    direction.show();
+//    printf("CENTER: \n");
+//    center.show();
+//    direction.normalize();
+//    center *= -1;
+//    float pitch = (float)acos(Vector2f(direction.x, direction.z).length());
+//    float yaw = (float)(TO_DEGREES(atan(direction.x / direction.z)));
+//    yaw = direction.z > 0 ? yaw - 180 : yaw;
+//    //return Matrix4f::initTranslation(center.x, center.y, center.z) * Matrix4f::initRotation(0, -(float)(TO_RADIANS(yaw)), 0) * result;
+//    Matrix4f result = Matrix4f::initTranslation(center.x, center.y, center.z) * Matrix4f::initRotation(0, -(yaw), 0) * Matrix4f::initRotation(pitch, 0, 0);
+//    printf("RESULT: \n");
+//    result.show();
+//
+//    return result;
+//}
 
 void ShadowMaster::prepare(Vector3f lightPosition, ShadowBox box) {
     projectionMatrix = updateOrthoProjectionMatrix(box.getWidth(), box.getHeight(), box.getLength());
     lightViewMatrix = updateLightViewMatrix(lightPosition, box.getCenter());
+
     projectionViewMatrix = projectionMatrix * lightViewMatrix;
 }
 
@@ -147,7 +171,7 @@ Matrix4f ShadowMaster::getToShadowMapSpaceMatrix(void){
 
 GLuint ShadowMaster::getShadowMap() {
     //return fbo.getDepthBuffer();
-    return fbo.getColourTexture();
+//    return fbo.getColourTexture();
 //    return fbo.getDepthTexture();
-//    return fbo.getShadowMap();
+    return fbo.getShadowMap();
 }

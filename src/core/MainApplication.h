@@ -13,6 +13,8 @@
 #include <src/GUI/BasicGtkGui.h>
 #include "BasicApplication.h"
 
+#include <src/rendering/shader/WireframeShader.cpp>
+
 class MainApplication : public BasicApplication{
 private:
     Renderer  * renderer = nullptr;
@@ -54,7 +56,7 @@ public:
         teaMaterial -> setEnvironmentalMap(skyTexture);
 
         scene -> addEntity(teaEntity);
-        barrel = createEntity(barrelModel, Vector3f(0, 1, 0), Vector3f(0.0f, 0.0f, (float)(M_PI / 2)), Vector3f(0.1f, 1.0f, 0.1f));
+        barrel = createEntity(barrelModel, Vector3f(0, 4, 0), Vector3f(0.0f, 0.0f, (float)(M_PI / 2)), Vector3f(0.1f, 1.0f, 0.1f));
         scene -> addEntity(barrel);
 
         scene -> addEntity(createEntity(model, Vector3f(5, 3, -10), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
@@ -62,6 +64,7 @@ public:
         scene -> addEntity(createEntity(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
         scene -> addEntity(createEntity(model, Vector3f(5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
         scene -> addEntity(createEntity(model, Vector3f(-5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+
 
         Terrain t = Terrain(getLoader(), diffuse, 100, 128, 5, 40);
         scene -> addEntity(createEntity(t.getModel(), Vector3f(-50, 1, -50), Vector3f(0.0f), Vector3f(1.0f)));
@@ -80,7 +83,7 @@ public:
 
         auto screen = Screen(WindowManager::width, WindowManager::height, getLoader());
         printf("MainApplication::init - after  auto screen = Screen: %lf\n", glfwGetTime());
-        PointerPointLight sun = createPointLight(Vector3f(10000000, 15000000, -10000000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
+        PointerPointLight sun = createPointLight(Vector3f(100000, 100000, -100000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
         PointerPointLight light = createPointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
         PointerPointLight light1 = createPointLight(Vector3f(200, 10, 200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
 
@@ -89,20 +92,19 @@ public:
 
 //        renderer -> setPostFx(true);
 
-        setView(new FpsView(renderer -> getActualCamera(), false));
+        setView(new FpsView(renderer -> getActualCamera(), true));
         printf("MainApplication::init - end: %lf\n", glfwGetTime());
     };
     void update(float delta) override {
         if(Input::getKeyDown(GLFW_KEY_X)){
             delta = eq(delta, 1.0f) ? 0.2f : 1.0f;
         }
-//        barrel -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.05f, 0.0f) * delta);
-//        teaEntity -> getTransform() -> getRotation() -> rotate(Vector3f(0.0f, 0.005f, 0.0f) * delta);
+        barrel -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.05f, 0.0f) * delta);
+        teaEntity -> getTransform() -> getRotation() -> rotate(Vector3f(0.0f, 0.005f, 0.0f) * delta);
 
         renderer -> prepareRenderer(0, 0, 0, 1);
         time += 0.02f * delta;
         renderer -> init3D();
-
         scene -> update(delta);
         getView().update(delta);
         renderer -> input();
@@ -116,7 +118,7 @@ public:
         }
     };
     void onSecondElapse(int fps) override{
-        printf("FPS: %d\n", fps);
+//        printf("FPS: %d\n", fps);
     }
     void render(void) override {
         renderer -> renderScene(*scene);
@@ -124,6 +126,7 @@ public:
     };
     void cleanUp(void) override {
         localCleanUp();
+        printf("maže sa renderer v main application\n");
         renderer -> cleanUp();
         delete renderer;
 
@@ -134,31 +137,3 @@ public:
 
 
 #endif //GRAPHICSPROJECT_MAINAPPLICATION_H
-
-
-/*
-class MainApplication : public BasicApplication{
-private:
-    Renderer  * renderer = nullptr;
-    Scene * scene = nullptr;
-public:
-    void init(void) override {
-        renderer = new Renderer(getLoader(), WindowManager::width, WindowManager::height);
-        scene = new Scene(getLoader(), ContentLoader::loadCubeTexture("sky"));
-
-
-    };
-    void update(float delta) override {
-    };
-    void render(void) override {
-
-    };
-    void cleanUp(void) override {
-        renderer -> cleanUp();
-        delete renderer;
-
-        scene -> cleanUp();
-        delete scene;
-    };
-};
- */

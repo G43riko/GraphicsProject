@@ -16,6 +16,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/SkyBoxRenderer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/BasicShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/HorizontalBlurShader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/WireframeShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/SkyBoxRenderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/shader/EntityShader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/RenderUtil.cpp" isTestSource="false" />
@@ -109,6 +110,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkHandler.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/GUI/MainGui.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/BasicGtkGui.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/BasicGtkGui.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/componentsGui/GtkLight.h" isTestSource="false" />
@@ -158,15 +160,20 @@
       <sourceFolder url="file://$MODULE_DIR$/src/lib/shader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lib/mesh.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/core/BasicEngine.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/BasicApplication.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/GameObject.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/MainRenderer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/GameComponent.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/core/BasicCamera.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/core/MainApplication.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/core/MainApplication.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/core/BasicRenderer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/core/MainRenderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/core/BasicScene.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/core/MainRenderer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/core/BasicApplication.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/GameObject.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/GameComponent.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/static_libs/tiny_obj_loader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.h" isTestSource="false" />

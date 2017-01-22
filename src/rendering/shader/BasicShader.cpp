@@ -25,10 +25,13 @@ BasicShader::~BasicShader(void){
 }
 
 void BasicShader::cleanUp(){
-    glDeleteProgram(this -> shader);
-    glDeleteShader(this -> vertexShader);
-    glDeleteShader(this -> fragmentShader);
-    //glDeleteShader(this -> geometryShader);
+    if(this){
+        glDeleteProgram(this -> shader);
+        glDeleteShader(this -> vertexShader);
+        glDeleteShader(this -> fragmentShader);
+        //glDeleteShader(this -> geometryShader);
+    }
+
 }
 
 void BasicShader::compileShader(){

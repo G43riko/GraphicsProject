@@ -50,7 +50,7 @@ void main() {
     //FragmentColor = vec4(vec3(0.0f, 1.0f, 1.0f), 1.0f);
     float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
     float lightFactor = 1.0f;
-//    //SHADOWS
+    //SHADOWS
 //    if(shadowCoords.z > objectNearestLight){
 //        lightFactor = 1.0 - 0.4;
 //    }

@@ -7,74 +7,77 @@
 
 #include "BasicRenderer.h"
 #include "BasicScene.h"
+#include <src/components/movement/BasicView.h>
 
 class BasicApplication{
 private:
-    bool running = false;
-    Loader * loader = nullptr;
+    bool l_running = false;
+    Loader * l_loader = nullptr;
 
-    BasicRenderer * renderer = nullptr;
-    BasicScene * scene = nullptr;
-    BasicView * view = nullptr;
+    BasicRenderer * l_renderer = nullptr;
+    BasicScene * l_scene = nullptr;
+    BasicView * l_view = nullptr;
 protected:
-    void setRenderer(BasicRenderer * renderer){
-        if(this -> renderer == nullptr){
-            this -> renderer = renderer;
+    void setRenderer(BasicRenderer * l_renderer){
+        if(this -> l_renderer == nullptr){
+            this -> l_renderer = l_renderer;
         }
     };
-    void setView(BasicView * view){
-        if(this -> view == nullptr){
-            this -> view = view;
+    void setView(BasicView * l_view){
+        if(this -> l_view == nullptr){
+            this -> l_view = l_view;
         }
     };
-    void setScene(BasicScene * renderer){
-        if(this -> scene == nullptr){
-            this -> scene = scene;
+    void setScene(BasicScene * l_scene){
+        if(this -> l_scene == nullptr){
+            this -> l_scene = l_scene;
         }
     };
     void stop(void){
-        running = true;
+        l_running = true;
     };
 
     BasicView& getView(void){
-        return *view;
+        return *l_view;
     };
     BasicRenderer *getRenderer(void){
-        return renderer;
+        return l_renderer;
     };
     BasicScene *getScene(void){
-        return scene;
+        return l_scene;
     };
     Loader getLoader(void){
-        return *loader;
+        return *l_loader;
     };
     void localCleanUp(void){
-        if(this -> renderer){
-            renderer -> cleanUp();
-            delete renderer;
+        if(this -> l_renderer){
+            printf("maže sa renderer v basic application\n");
+            l_renderer -> cleanUp();
+            delete l_renderer;
         }
-        if(this -> view){
-            view -> cleanUp();
-            delete view;
+        if(this -> l_view){
+            l_view -> cleanUp();
+            delete l_view;
         }
-        if(this -> scene){
-            scene -> cleanUp();
-            delete scene;
+        if(this -> l_scene){
+            l_scene -> cleanUp();
+            delete l_scene;
         }
     };
 public:
     virtual ~BasicApplication(){};
     void setLoader(Loader * loader){
-        if(this -> loader == nullptr){
-            this -> loader = loader;
-        }
+        this -> l_loader = loader;
+//        if(this -> loader == nullptr){
+//            this -> loader = loader;
+//        }
     };
     bool isRunning(void){
-        return running;
+        return l_running;
     };
     void start(void){
         printf("startujem\n");
-        running = true;
+        l_running = true;
     };
     virtual void loadContent(void){};
     virtual void init(void) = 0;

@@ -164,6 +164,14 @@ class Vector4f{
         float length() {
             return static_cast<float>(sqrt(lengthSquared()));
         }
+        void show(bool endLine = true){
+            std::cout << toString();
+            if(endLine)
+                std::cout << std::endl;
+        }
+        std::string toString(void){
+            return "[" + std::to_string(x) + " x " + std::to_string(y) + " x " + std::to_string(z) + " x " + std::to_string(w) + "]";
+        }
 };
 
 template <typename T>class GVector{
