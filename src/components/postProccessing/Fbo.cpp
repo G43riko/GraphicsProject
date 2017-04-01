@@ -19,8 +19,11 @@ void Fbo::cleanUp(void) {
     glDeleteTextures(1, &colourTexture);
     glDeleteTextures(1, &depthTexture);
     glDeleteRenderbuffers(1, &depthBuffer);
-    for(unsigned int i=0 ; i<buffersCount ; i++)
+
+    for(unsigned int i=0 ; i<buffersCount ; i++){
         glDeleteRenderbuffers(1, &colorBuffers[i]);
+    }
+
     delete[] colorBuffers;
 
 //        glDeleteRenderbuffers(1, &colourBuffer);

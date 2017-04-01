@@ -17,9 +17,9 @@ class BasicRenderer {
 private:
     BasicCamera camera;
     PointerDirectionalLight sun = nullptr;
-    Vector3f ambientColor = Vector3f(1.0, 1.0, 1.0);
+    Vector3f ambientColor = Vector3f(DEFAULT_AMBIENT_RED, DEFAULT_AMBIENT_GREEN, DEFAULT_AMBIENT_BLUE);
     RenderUtil utils;
-    unsigned char options = 0;
+    int options = 0;
 protected:
     void turnOnOption(unsigned char val){
         options |= val;
@@ -31,11 +31,14 @@ protected:
         options ^= val;
     }
     bool getOption(unsigned char val){
-        return options & val;
+        return (char)options & val;
     }
 public:
     virtual ~BasicRenderer(){};
-    virtual void prepareRenderer(GLfloat red  = 0, GLfloat green  = 0, GLfloat blue  = 0, GLfloat alpha = 1){
+    virtual void prepareRenderer(GLfloat red    = DEFAULT_BACKGROUND_RED,
+                                 GLfloat green  = DEFAULT_BACKGROUND_GREEN,
+                                 GLfloat blue   = DEFAULT_BACKGROUND_BLUE,
+                                 GLfloat alpha  = DEFAULT_BACKGROUND_ALPHA){
         glClearColor(red, green, blue, alpha);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     };

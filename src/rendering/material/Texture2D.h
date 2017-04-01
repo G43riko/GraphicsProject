@@ -5,6 +5,7 @@
 #ifndef GRAPHICSPROJECT_TEXTURE2D_H
 #define GRAPHICSPROJECT_TEXTURE2D_H
 
+#include <src/utils/Const.h>
 #include <GL/glew.h>
 #include <iostream>
 #include <memory>
@@ -16,8 +17,8 @@ class TextureData{
         GLenum type;
     public:
         TextureData(GLuint id, GLenum type){
-            this -> id = id;
-            this -> type = type;
+            this -> id      = id;
+            this -> type    = type;
         }
         void setFilter(GLint filter){//GL_LINEAR, GL_NEAREST
             glTexParameteri(type, GL_TEXTURE_MAG_FILTER, filter);
@@ -72,7 +73,7 @@ class Texture2D {
         }
 };
 typedef std::shared_ptr<Texture2D> PointerTexture2D;
-PointerTexture2D initTexture2D(std::string, std::vector<unsigned char>, int, int);
+//PointerTexture2D initTexture2D(std::string, std::vector<unsigned char>, int, int);
 PointerTexture2D createTexture2D(std::string, GLuint, int, int);
 PointerTexture2D createTexture2D(GLuint);
 

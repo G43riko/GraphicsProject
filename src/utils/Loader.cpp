@@ -66,12 +66,12 @@ PointerRawModel Loader::loadToVao(PointerMesh mesh){
 }
 
 void Loader::cleanUp(void){
-    //for (auto it = vaos.begin(); it != vaos.end(); ++it)
-    for(GLuint vao : vaos)
+    for(GLuint vao : vaos){
         glDeleteVertexArrays(1, &vao);
-    //for (auto it = vbos.begin(); it != vbos.end(); ++it)
-    for(GLuint vbo : vbos)
+    }
+    for(GLuint vbo : vbos){
         glDeleteBuffers(1, &vbo);
+    }
 }
 
 GLuint Loader::createVAO(void){

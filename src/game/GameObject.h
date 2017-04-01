@@ -15,7 +15,12 @@ public:
     GameObject(PointerEntity object){
         this -> object = object;
     }
-    virtual void update(float delta){}
+    virtual void update(float delta){
+        object -> move(velocity.x, velocity.y, velocity.z);
+    }
+    void setVelocity(const Vector3f & value){
+        velocity = value;
+    }
 
     PointerEntity getObject(void){
         return object;

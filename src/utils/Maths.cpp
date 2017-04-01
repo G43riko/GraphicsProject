@@ -25,12 +25,15 @@ glm::mat4 Maths::createTransformationMatrix(const float &posX, const float &posY
 
 glm::mat4 Maths::createViewMatrix(const float &pitch, const float &yaw, const float &roll, const float &x, const float &y, const float &z){
     glm::mat4 resultMatrix = glm::mat4(1.0f);
-    if(!eq(pitch, 0))
+    if(NEQ(pitch, 0)){
         resultMatrix *= glm::rotate(pitch, glm::vec3(1, 0, 0));
-    if(!eq(yaw, 0))
+    }
+    if(NEQ(yaw, 0)){
         resultMatrix *= glm::rotate(yaw, glm::vec3(0, 1, 0));
-    if(!eq(roll, 0))
+    }
+    if(NEQ(roll, 0)){
         resultMatrix *= glm::rotate(roll, glm::vec3(0, 0, 1));
+    }
     resultMatrix *= glm::translate(glm::vec3(-x, -y, -z));
     return resultMatrix;
 }

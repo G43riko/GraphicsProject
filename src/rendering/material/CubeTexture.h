@@ -19,8 +19,8 @@ class CubeTexture {
         std::string title;
     public:
         CubeTexture(std::string title, GLuint textureID){
-            this -> textureID = textureID;
-            this -> title = title;
+            this -> textureID   = textureID;
+            this -> title       = title;
         };
         GLuint getId(void){
             return textureID;

@@ -40,7 +40,7 @@ class GtkHandler{
             return createSlider(min, max, step, min);
         };
 
-        static inline GtkWidget * createCheckBox(bool checked, char * label = nullptr, GCallback callback = nullptr, gpointer data = nullptr,  GtkContainer * parent = nullptr){
+        static inline GtkWidget * createCheckBox(bool checked, const char * label = nullptr, GCallback callback = nullptr, gpointer data = nullptr,  GtkContainer * parent = nullptr){
             GtkWidget * result = label ? gtk_check_button_new_with_label(label) : gtk_check_button_new();
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(result), checked);
             if(callback){
@@ -61,7 +61,7 @@ class GtkHandler{
     //        gtk_window_set_resizable(GTK_WINDOW(window), false);
             return window;
         };
-        static inline GtkWidget * createButton(char * label){
+        static inline GtkWidget * createButton(const char * label){
             GtkWidget * button = gtk_button_new_with_label(label);
             return button;
         };

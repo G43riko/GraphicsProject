@@ -14,10 +14,9 @@
 class Entity {
     private:
         int id;
-        bool alive = true;
-        PointerMaterialedModel model;
-        Transform transform = Transform();
-
+        bool alive                      = true;
+        PointerMaterialedModel model    = nullptr;
+        Transform transform             = Transform();
     public:
         bool immortal = false;
         Entity(PointerMaterialedModel, const Vector3f &, const Vector3f &, const Vector3f &);

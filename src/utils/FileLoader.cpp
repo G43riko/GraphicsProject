@@ -4,10 +4,8 @@
 
 #ifndef GRAPHICSPROJECT_CONTENTLOADER_H
 
+#include <src/rendering/Camera.h>
 #include "FileLoader.h"
-std::map<std::string, PointerTexture2D> ContentLoader::loadedTestures = std::map<std::string, PointerTexture2D>();
-std::vector<std::string> ContentLoader::TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
-
 /*
  * TEXT FILES
  */
@@ -30,86 +28,55 @@ void ContentLoader::loadTextFile(std::string fileName, std::string *content){
  * TEXTURES
  */
 
-PointerCubeTexture ContentLoader::loadCubeTexture(std::string title){
-    GLuint texture_id;
-    glGenTextures(1, &texture_id);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, texture_id);
 
+
+CubeImageData * ContentLoader::loadCubeTexture(std::string title){
+    CubeImageData * datas = new CubeImageData[6];
+    std::vector<std::string> TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
     for(int i=0 ; i<6 ; i++){
-        unsigned int width;
-        unsigned int height;
-        std::vector<unsigned char> image;
-        /*unsigned error = */lodepng::decode(image, width, height, "res/textures/skies/" + title + TITLES[i] + ".png");
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
+        DEBUG("načitava sa: " << std::string("res/textures/skies/" + title + TITLES[i] + ".png").c_str());
+        lodepng::decode(datas[i].data, datas[i].width, datas[i].height, "res/textures/skies/" + title + TITLES[i] + ".png");
     }
-
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    return createCubeTexture(title, texture_id);
+    datas[0].title = title;
+    return datas;
 }
 
-PointerTexture2D ContentLoader::loadTextureColor(Vector3f color){
-    if(loadedTestures.find(color.toString()) == loadedTestures.end()){
-        std::vector<unsigned char> image;
-        image.clear();
-        image.push_back(color.getXuc());
-        image.push_back(color.getYuc());
-        image.push_back(color.getZuc());
-        image.push_back(255);
-        image.push_back(color.getXuc());
-        image.push_back(color.getYuc());
-        image.push_back(color.getZuc());
-        image.push_back(255);
-        image.push_back(color.getXuc());
-        image.push_back(color.getYuc());
-        image.push_back(color.getZuc());
-        image.push_back(255);
-        image.push_back(color.getXuc());
-        image.push_back(color.getYuc());
-        image.push_back(color.getZuc());
-        image.push_back(255);
-        loadedTestures[color.toString()] = initTexture2D("gabo", image, 2, 2);
-    }
-    return loadedTestures[color.toString()];
+CubeImageData ContentLoader::loadTextureColor(Vector3f color){
+    CubeImageData result;
+    result.width = 2;
+    result.height = 2;
+    result.title = color.toString();
+
+
+    result.data.clear();
+    result.data.push_back(color.getXuc());
+    result.data.push_back(color.getYuc());
+    result.data.push_back(color.getZuc());
+    result.data.push_back(255);
+    result.data.push_back(color.getXuc());
+    result.data.push_back(color.getYuc());
+    result.data.push_back(color.getZuc());
+    result.data.push_back(255);
+    result.data.push_back(color.getXuc());
+    result.data.push_back(color.getYuc());
+    result.data.push_back(color.getZuc());
+    result.data.push_back(255);
+    result.data.push_back(color.getXuc());
+    result.data.push_back(color.getYuc());
+    result.data.push_back(color.getZuc());
+    result.data.push_back(255);
+
+    return result;
 }
 
-PointerTexture2D ContentLoader::loadTexturePNG(std::string fileName){
-    if(loadedTestures.find(fileName) == loadedTestures.end()) {
-        unsigned int width;
-        unsigned int height;
-        std::vector<unsigned char> image;
-        unsigned error = lodepng::decode(image, width, height, fileName);
-        if (error != 0) {
-            std::cout << "error " << error << ": " << lodepng_error_text(error) << std::endl;
-        }
-        loadedTestures[fileName] = initTexture2D(fileName, image, width, height);
+CubeImageData ContentLoader::loadTexturePNG(std::string fileName){
+    CubeImageData result;
+    result.title = fileName;
+    unsigned error = lodepng::decode(result.data, result.width, result.height, fileName);
+    if (error != 0) {
+        std::cout << "error [" << fileName << "] " << error << ": " << lodepng_error_text(error) << std::endl;
     }
-    return loadedTestures[fileName];
-}
-
-PointerTexture2D ContentLoader::initTexture2D(std::string title, std::vector<unsigned char> buffer, int width, int height){
-    GLuint texture_id;
-    glGenTextures(1, &texture_id);
-    glBindTexture(GL_TEXTURE_2D, texture_id);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-    //TODO ako zistiť či ide o GL_RGBA alebo GL_RGB??
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer.data());
-
-    //ANISOTROPIC
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 16.0f);
-
-    //MIPMAING
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -2.4f);
-
-    return PointerTexture2D(new Texture2D(title, texture_id, width, height));
+    return result;
 }
 
 /*
@@ -190,7 +157,7 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
 
     if(fileName == "res/models/axe.obj" && false){
         for(unsigned int i=0 ; i<vertices.size() ; i++)
-            printf("x: %f\n", vertices.at(i) -> position.x);
+            DEBUG("x: " << vertices.at(i) -> position.x);
     }
     convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal, tangentsFinal);
 //            printf("x: %f\n", verticesFinal[i]);
@@ -309,26 +276,5 @@ float ContentLoader::convertDataToArrays(std::vector<PointerVertex> vertices,
     }
     return furthestPoint;
 }
-
-/*
- * DEPRECATED
- */
-
-/*
-
-PointerTexture2D ContentLoader::loadTexture(std::string fileName, unsigned int width, unsigned int height){
-    //std::ifstream ifs(fileName, std::ios::binary);
-    std::ifstream ifs(fileName, std::ios::binary);
-
-
-    if(!ifs.is_open())
-        Logger::error(ERROR_MISSING_FILE + fileName);
-    std::vector<unsigned char> buffer(width * height * 4);
-    ifs.read(reinterpret_cast<char*>(buffer.data()), buffer.size());
-    ifs.close();
-
-    return initTexture2D(fileName, buffer, width, height);
-}
-*/
 
 #endif

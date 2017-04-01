@@ -29,7 +29,7 @@ class BasicShader{
     public:
         BasicShader(const std::string, const std::string);
         BasicShader(const std::string shader) : BasicShader(shader, shader){};
-        ~BasicShader(void);
+        virtual ~BasicShader(void);
         static int MAX_LIGHTS;
         virtual void connectTextures(void);
         void bind(void);

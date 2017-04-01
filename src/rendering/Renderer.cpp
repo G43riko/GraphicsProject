@@ -5,6 +5,13 @@
 #include "Renderer.h"
 #include "../components/postProccessing/PostFxMaster.h"
 
+#define CLEAN_UP(x) if(x) {x -> cleanUp(); delete x; }
+
+#define SHADOW_SHADER "shadowShader"
+#define OBJECT_SHADER "objectShader"
+#define POSTFX_SHADER "postFxShader"
+#define PARTICLE_SHADER "particleShader"
+#define DEFERRED_SHADER "deferredShader"
 
 Renderer::Renderer(Loader loader, int width, int height) :
 //        screen(Screen(width, height, loader)),
@@ -14,10 +21,10 @@ Renderer::Renderer(Loader loader, int width, int height) :
         fbo3(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
         pp(PostProccessing(loader)),
         wf(WaterFrameBuffer()){
-    printf("------------------------------------------\n");
-    printf("Renderer::Renderer - start: %lf\n", glfwGetTime());
+    DEBUG("------------------------------------------");
+    DEBUG("Renderer::Renderer - start: " << glfwGetTime());
     initShaders();
-    printf("Renderer::Renderer - after initShaders: %lf\n", glfwGetTime());
+    DEBUG("Renderer::Renderer - after initShaders: " << glfwGetTime());
 
 //    textures.push_back(GuiTexture(wf.getRefractionDepthTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
 //    textures.push_back(GuiTexture(wf.getRefractionTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
@@ -26,12 +33,12 @@ Renderer::Renderer(Loader loader, int width, int height) :
 //    textures.push_back(GuiTexture(fbo2.getColourTexture(), Vector2f(0.25f, 0.75f), Vector2f(0.25f, 0.25f)));
 //    textures.push_back(GuiTexture(fbo3.getColourTexture(), Vector2f(-0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
 
-    printf("Renderer::Renderer - create gui textures: %lf\n", glfwGetTime());
+    DEBUG("Renderer::Renderer - create gui textures: " << glfwGetTime());
     setCamera(PointerCamera(new Camera()));
-    printf("Renderer::Renderer - setCamera: %lf\n", glfwGetTime());
+    DEBUG("Renderer::Renderer - setCamera: " << glfwGetTime());
 
 //    if(useShadows){
-        shadowMaster    = new ShadowMaster(shaders["shadowShader"], getActualCamera());
+        shadowMaster    = new ShadowMaster(shaders[SHADOW_SHADER], getActualCamera());
 //    };
     if(useGuis){
         guiMaster       = new GuiMaster(actualCamera, loader);
@@ -40,7 +47,7 @@ Renderer::Renderer(Loader loader, int width, int height) :
         skyBoxMaster    = new SkyBoxMaster(actualCamera, loader);
     };
     if(useParticles){
-        particleMaster  = new ParticleMaster(shaders["particleShader"], loader);
+        particleMaster  = new ParticleMaster(shaders[PARTICLE_SHADER], loader);
     };
     if(useEntities){
         entityMaster    = new EntityMaster(actualCamera);
@@ -52,11 +59,11 @@ Renderer::Renderer(Loader loader, int width, int height) :
         postFxMaster    = new PostFxMaster(loader, false, width, height);
         postFxMaster -> addFbo("fbo1", width, height, Fbo::DEPTH_TEXTURE);
 //    };
-    printf("Renderer::Renderer - initShaders: %lf\n", glfwGetTime());
+    DEBUG("Renderer::Renderer - initShaders: " << glfwGetTime());
 
 
 //    textures.push_back(GuiTexture(shadowMaster->getShadowMap(), Vector2f(-1, 1), Vector2f(1)));
-    printf("------------------------------------------\n");
+    DEBUG("------------------------------------------");
 }
 void Renderer::prepareRenderer(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha){
     glClearColor(red, green, blue, alpha);
@@ -73,13 +80,13 @@ void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader s
 
     if(shader){
         shader -> bind();
-        shader -> updateUniform4m("projectionMatrix", camera -> getProjectionMatrix());
+        shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
     }
     else {
         for (auto it = shaders.begin(); it != shaders.end(); ++it){
-            if (it->second->hasUniform("projectionMatrix")) {
+            if (it->second->hasUniform(PROJECTION_MATRIX)) {
                 it->second->bind();
-                it->second->updateUniform4m("projectionMatrix", camera->getProjectionMatrix());
+                it->second->updateUniform4m(PROJECTION_MATRIX, camera->getProjectionMatrix());
             }
         }
     }
@@ -100,58 +107,42 @@ void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader s
 void Renderer::cleanUp(void){
     fbo.cleanUp();
     fbo2.cleanUp();
+    fbo3.cleanUp();
+    pp.cleanUp();
+    wf.cleanUp();
     multiFbo.cleanUp();
+
 //    screen.cleanUp();
 
-    for (auto it = shaders.begin(); it != shaders.end(); ++it)
+    for (auto it = shaders.begin(); it != shaders.end(); ++it){
         it -> second -> cleanUp();
+    }
+    shaders.clear();
 
     delete light;
-
-    if(shadowMaster){
-        shadowMaster -> cleanUp();
-        delete shadowMaster;
-    }
-    if(guiMaster) {
-        guiMaster -> cleanUp();
-        delete guiMaster;
-    }
-    if(skyBoxMaster) {
-        skyBoxMaster -> cleanUp();
-        delete skyBoxMaster;
-    }
-    if(particleMaster) {
-        particleMaster -> cleanUp();
-        delete particleMaster;
-    }
-    if(entityMaster) {
-        entityMaster -> cleanUp();
-        delete entityMaster;
-    }
-    if(postFxMaster) {
-        postFxMaster -> cleanUp();
-        delete postFxMaster;
-    }
-    if(waterMaster) {
-        waterMaster -> cleanUp();
-        delete waterMaster;
-    }
+    CLEAN_UP(shadowMaster);
+    CLEAN_UP(guiMaster);
+    CLEAN_UP(skyBoxMaster);
+    CLEAN_UP(entityMaster);
+    CLEAN_UP(particleMaster);
+    CLEAN_UP(postFxMaster);
+    CLEAN_UP(waterMaster);
 }
 
 void Renderer::initShaders(void){
     if(useParticles){
-        addShader("particleShader", PointerBasicShader(new ParticleShader()));
+        addShader(PARTICLE_SHADER, PointerBasicShader(new ParticleShader()));
     };
     if(useShadows){
-        addShader("shadowShader", PointerBasicShader(new ShadowShader()));
+        addShader(SHADOW_SHADER, PointerBasicShader(new ShadowShader()));
     };
-    addShader("deferredShader", PointerBasicShader(new DeferredShader()));
+    addShader(DEFERRED_SHADER, PointerBasicShader(new DeferredShader()));
 
 }
 
 void Renderer::addShader(std::string key, PointerBasicShader shader){
     shaders[key] = shader;
-    if(actualCamera && shader -> hasUniform("projectionMatrix"))
+    if(actualCamera && shader -> hasUniform(PROJECTION_MATRIX))
         updateProjectionMatrix(actualCamera, shader);
 }
 
@@ -174,11 +165,11 @@ void Renderer::renderSceneDeferred(Scene scene){
     multiFbo.bindFrameBuffer();
     skyBoxMaster -> renderSky(scene.getSky(), actualCamera);
 
-    PointerBasicShader shader = shaders["deferredShader"];
+    PointerBasicShader shader = shaders[DEFERRED_SHADER];
 
     shader -> bind();
 
-    shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
+    shader -> updateUniform4m(VIEW_MATRIX, actualCamera -> getViewMatrix());
     shader -> updateUniform3f("cameraPosition", actualCamera -> position);
     glEnable(GL_TEXTURE);
     EntitiesList entities = scene.getEntities();
@@ -192,7 +183,7 @@ void Renderer::renderSceneDeferred(Scene scene){
             RenderUtil::prepareMaterial(it->first-> getMaterial(), shader, options);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
-                shader -> updateUniform4m("transformationMatrix", itEnt -> get() -> getTransform() -> getTransformation());
+                shader -> updateUniform4m(TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 itEnt++;
@@ -271,7 +262,7 @@ void Renderer::renderScene(Scene scene){
 }
 
 void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<PointerPointLight> lights){
-    PointerBasicShader shader = shaders["objectShader"];
+    PointerBasicShader shader = shaders[OBJECT_SHADER];
     GLuint items = 3;
     if(!shader){
         std::cerr << "Nenašiel sa shader" << std::endl;
@@ -281,7 +272,7 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
     shader -> bind();
 
     shader -> updateUniformi("options", options);
-    shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
+    shader -> updateUniform4m(VIEW_MATRIX, actualCamera -> getViewMatrix());
 
     if(options & FLAG_LIGHT){
         for(unsigned int i=0 ; i<lights.size() ; i++)
@@ -292,7 +283,7 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
     for(unsigned int i=0 ; i< entities.size() ; i++){
         PointerRawModel model = entities[i] -> getModel() -> getModel();
 
-        shader -> updateUniform4m("transformationMatrix", entities[i] -> getTransform() -> getTransformation());
+        shader -> updateUniform4m(TRANSFORMATION_MATRIX, entities[i] -> getTransform() -> getTransformation());
         if(options & FLAG_TEXTURE)
             RenderUtil::prepareMaterial(entities[i] -> getModel() -> getMaterial(), shader, options);
         RenderUtil::prepareModel(model, items);
@@ -306,7 +297,7 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
  ***************************/
 
 void Renderer::renderScreen(Screen screen) {
-    PointerBasicShader shader = shaders["postFxShader"];
+    PointerBasicShader shader = shaders[POSTFX_SHADER];
     if(!shader)
         return;
     shader -> bind();
@@ -319,7 +310,7 @@ void Renderer::renderScreen(Screen screen) {
     glActiveTexture(GL_TEXTURE0);
     screen.getTexture() -> bind();
 
-    shader -> updateUniform4m("transformationMatrix", screen.getTransformationMatrix());
+    shader -> updateUniform4m(TRANSFORMATION_MATRIX, screen.getTransformationMatrix());
     glDrawArrays(GL_TRIANGLE_STRIP, 0, screen.getModel() -> getVertexCount());
 
     //shader -> unbind();
@@ -328,12 +319,12 @@ void Renderer::renderScreen(Screen screen) {
 }
 
 void Renderer::renderObject(PointerEntity object, std::vector<PointerPointLight> lights){
-    PointerBasicShader shader = shaders["objectShader"];
+    PointerBasicShader shader = shaders[OBJECT_SHADER];
     if(!shader)
         return;
     shader -> bind();
 
-    shader -> updateUniform4m("viewMatrix", actualCamera -> getViewMatrix());
+    shader -> updateUniform4m(VIEW_MATRIX, actualCamera -> getViewMatrix());
     //shader -> updateUniform2f("levels", 4);
 
     for(unsigned int i=0 ; i<lights.size() ; i++)
@@ -342,7 +333,7 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerPointLight>
     PointerRawModel model = object -> getModel() -> getModel();
     glEnable(GL_TEXTURE);
 
-    shader -> updateUniform4m("transformationMatrix", object->getTransform()->getTransformation());
+    shader -> updateUniform4m(TRANSFORMATION_MATRIX, object->getTransform()->getTransformation());
     RenderUtil::prepareMaterial(object -> getModel() -> getMaterial(), shader, options);
     RenderUtil::prepareModel(model, 4);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);

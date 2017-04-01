@@ -14,6 +14,7 @@
 #include "BasicApplication.h"
 
 #include <src/rendering/shader/WireframeShader.cpp>
+#include <src/rendering/material/TextureManager.h>
 
 class MainApplication : public BasicApplication{
 private:
@@ -24,6 +25,7 @@ private:
     float time = 0;
     PointerEntity barrel = nullptr;
     PointerEntity teaEntity = nullptr;
+    PointerMaterialedModel ball = nullptr;
     PointerTexture2D particleTexture;
 public:
     Scene * scene = nullptr;
@@ -31,23 +33,25 @@ public:
         return renderer;
     }
     void loadContent() override {
-
-        printf("načítavam content\n");
-        auto skyTexture = ContentLoader::loadCubeTexture("sky");
+        DEBUG("načítavam content");
+        auto skyTexture = TextureManager::createCubeTexture("sky");
         scene->setSky(skyTexture);
 
-        particleTexture = ContentLoader::loadTexturePNG("res/textures/particle_1.png");
-        auto diffuse = ContentLoader::loadTexturePNG("res/textures/texture.png");
-        auto normal = ContentLoader::loadTexturePNG("res/textures/textureNormal.png");
+        particleTexture = TextureManager::createTexture2D("res/textures/particle_1.png");
+        auto diffuse = TextureManager::createTexture2D("res/textures/texture.png");
+        auto normal = TextureManager::createTexture2D("res/textures/textureNormal.png");
         auto rawModel = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/box.obj"));
         auto plane = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/plane.obj"));
-        auto green = ContentLoader::loadTexturePNG("res/textures/green.png");
+        auto sphere = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj"));
+        auto green = TextureManager::createTexture2D("res/textures/green.png");
         auto tea = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/tea.obj"));
 
         auto teaMaterial = createMaterial(green);
         auto teaModel = createMaterialedModel(tea, teaMaterial);
+        auto material = createMaterial(diffuse, normal);
 
-        auto model = createMaterialedModel(rawModel, createMaterial(diffuse, normal));
+        ball = createMaterialedModel(sphere, material);
+        auto model = createMaterialedModel(rawModel, material);
         auto floor = createMaterialedModel(plane, createMaterial(diffuse, normal));
         auto barrelModel = createMaterialedModel("barrel", getLoader());
 
@@ -71,18 +75,18 @@ public:
     }
 
     void init(void) override {
-        printf("MainApplication::init - start: %lf\n", glfwGetTime());
+        DEBUG("MainApplication::init - start: " << glfwGetTime());
 //        gui.init();
 
         renderer = new Renderer(getLoader(), WindowManager::width, WindowManager::height);
-        printf("MainApplication::init - after  new Renderer: %lf\n", glfwGetTime());
+        DEBUG("MainApplication::init - after  new Renderer: " << glfwGetTime());
         scene = new Scene(getLoader());
-        printf("MainApplication::init - after  new Scene: %lf\n", glfwGetTime());
+        DEBUG("MainApplication::init - after  new Scene: " << glfwGetTime());
 
 
 
         auto screen = Screen(WindowManager::width, WindowManager::height, getLoader());
-        printf("MainApplication::init - after  auto screen = Screen: %lf\n", glfwGetTime());
+        DEBUG("MainApplication::init - after  auto screen = Screen: " << glfwGetTime());
         PointerPointLight sun = createPointLight(Vector3f(100000, 100000, -100000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
         PointerPointLight light = createPointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
         PointerPointLight light1 = createPointLight(Vector3f(200, 10, 200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
@@ -93,11 +97,11 @@ public:
 //        renderer -> setPostFx(true);
 
         setView(new FpsView(renderer -> getActualCamera(), true));
-        printf("MainApplication::init - end: %lf\n", glfwGetTime());
+        DEBUG("MainApplication::init - end: " << glfwGetTime());
     };
     void update(float delta) override {
         if(Input::getKeyDown(GLFW_KEY_X)){
-            delta = eq(delta, 1.0f) ? 0.2f : 1.0f;
+            delta = EQ(delta, 1.0f) ? 0.2f : 1.0f;
         }
         barrel -> getTransform() -> getRotation() -> rotate(Vector3f(0.00f, 0.05f, 0.0f) * delta);
         teaEntity -> getTransform() -> getRotation() -> rotate(Vector3f(0.0f, 0.005f, 0.0f) * delta);
@@ -114,21 +118,34 @@ public:
         }
 
         if(Input::isKeyDown(GLFW_KEY_ESCAPE)){
-            glfwSetWindowShouldClose(WindowManager::window, 1);
+            //glfwSetWindowShouldClose(WindowManager::window, 1);
+            stop();
+        }
+
+        if(Input::getMouseDown(0)){
+            PointerGameObject entity = PointerGameObject(new GameObject(createEntity(ball, renderer -> getActualCamera() -> position, Vector3f(), Vector3f(1))));
+            entity->setVelocity(renderer->getActualCamera() ->getForward());
+            scene->addObject(entity);
         }
     };
+
     void onSecondElapse(int fps) override{
 //        printf("FPS: %d\n", fps);
-    }
+    };
     void render(void) override {
+
         renderer -> renderScene(*scene);
 //        renderer -> renderSceneDeferred(*scene);
     };
     void cleanUp(void) override {
         localCleanUp();
-        printf("maže sa renderer v main application\n");
+        DEBUG("maže sa renderer v main application");
+        getLoader().cleanUp();
+//        ContentLoader::clearTextures();
+        TextureManager::cleanUp();
         renderer -> cleanUp();
         delete renderer;
+        renderer = nullptr;
 
         scene -> cleanUp();
         delete scene;

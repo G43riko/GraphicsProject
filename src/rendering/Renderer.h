@@ -124,33 +124,34 @@ class Renderer {
             return options;
         }
         */
-        Loader * loader = nullptr;
-        bool useShadows = false;
-        bool useEntities = true;
-        bool useParticles = true;
-        bool useSkybox = true;
-        bool useWaters = true;
-        bool usePostFx = false;
-        bool useGuis = true;
-        bool useTextures = false;
-        bool useNormals = false;
-        bool useLights = false;
-        bool useSpeculars = false;
-        bool useEnviromentals = false;
-        WaterMaster * waterMaster = nullptr;
-        EntityMaster * entityMaster = nullptr;
+        bool useShadows         = false;
+        bool useEntities        = true;
+        bool useParticles       = true;
+        bool useSkybox          = true;
+        bool useWaters          = true;
+        bool usePostFx          = false;
+        bool useGuis            = true;
+        bool useTextures        = false;
+        bool useNormals         = false;
+        bool useLights          = false;
+        bool useSpeculars       = false;
+        bool useEnviromentals   = false;
+
+        Loader * loader                 = nullptr;
+        GuiMaster * guiMaster           = nullptr;
+        WaterMaster * waterMaster       = nullptr;
+        SkyBoxMaster * skyBoxMaster     = nullptr;
+        PostFxMaster * postFxMaster     = nullptr;
+        ShadowMaster * shadowMaster     = nullptr;
+        EntityMaster * entityMaster     = nullptr;
         ParticleMaster * particleMaster = nullptr;
-        GuiMaster * guiMaster = nullptr;
-        SkyBoxMaster * skyBoxMaster = nullptr;
-        PostFxMaster * postFxMaster = nullptr;
-        ShadowMaster * shadowMaster = nullptr;
         void setCamera(PointerCamera);
         PointerPointLight sun = nullptr;
     //        const unsigned char option6 = 0x20; // hex for 0010 0000
     //        const unsigned char option7 = 0x40; // hex for 0100 0000
     //        const unsigned char option8 = 0x80; // hex for 1000 0000
         PointerCamera actualCamera = nullptr;
-        unsigned char options = FLAG_TEXTURE | FLAG_NORMAL_MAP | FLAG_LIGHT | FLAG_SPECULAR | FLAG_FOG;
+        int options = FLAG_TEXTURE | FLAG_NORMAL_MAP | FLAG_LIGHT | FLAG_SPECULAR | FLAG_FOG;
 //        Screen screen;
         Fbo multiFbo;
         Fbo fbo, fbo2, fbo3;

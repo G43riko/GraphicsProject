@@ -11,15 +11,20 @@ Camera::Camera(void){
                                                   static_cast<float>(WindowManager::height),
                                                   NEAR_PLANE,
                                                   FAR_PLANE);
+    picker = new MousePicker(this);
+}
+Vector3f Camera::getForward(void){
+    return picker -> getCurrentRay();
 }
 glm::mat4 Camera::getProjectionMatrix(void){
     return projectionMatrix;
 }
-
+void Camera::cleanUp(void){
+    delete picker;
+}
 float toRadians(float val){
     return static_cast<float>(val * (M_PI / 180));
 }
-
 
 bool isNotZero(float val){
     return val > 0 || val < 0;

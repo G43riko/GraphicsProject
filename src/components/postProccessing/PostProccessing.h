@@ -40,10 +40,26 @@ class PostProccessing {
         }
 
         void cleanUp(){
-            contrastChanger -> cleanUp();
-            delete contrastChanger;
-            delete vBlur;
-            delete hBlur;
+            if(contrastChanger){
+                contrastChanger -> cleanUp();
+                delete contrastChanger;
+                contrastChanger = nullptr;
+            }
+            if(vBlur){
+                vBlur -> cleanUp();
+                delete vBlur;
+                vBlur = nullptr;
+            }
+            if(hBlur){
+                hBlur -> cleanUp();
+                delete hBlur;
+                hBlur = nullptr;
+            }
+            if(combineFilter){
+                combineFilter -> cleanUp();
+                delete combineFilter;
+                combineFilter = nullptr;
+            }
         }
 private:
     std::vector<float> POSITIONS{ -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f};

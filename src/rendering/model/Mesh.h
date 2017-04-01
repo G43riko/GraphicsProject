@@ -17,10 +17,10 @@ typedef std::shared_ptr<Mesh> PointerMesh;
 class Mesh {
     private:
         std::vector<GLfloat> vertices;
-        std::vector<GLfloat> uvs;
-        std::vector<GLfloat> normals;
         std::vector<GLfloat> tangents;
+        std::vector<GLfloat> normals;
         std::vector<GLuint> indices;
+        std::vector<GLfloat> uvs;
     public:
         static PointerMesh plane;
         static PointerMesh cube;

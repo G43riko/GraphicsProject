@@ -39,10 +39,12 @@ void Input::onKeyDown(GLFWwindow * window, int key, int scanCode, int action, in
         keys[key] = true;
 
     }
-    if(key == GLFW_KEY_KP_ADD)
+    if(key == GLFW_KEY_KP_ADD){
         mouseScrollOffset.y += 1;
-    else if(key == GLFW_KEY_KP_SUBTRACT)
+    }
+    else if(key == GLFW_KEY_KP_SUBTRACT){
         mouseScrollOffset.y -= 1;
+    }
     else if(action == GLFW_RELEASE){
         keys[key] = false;
     }
@@ -56,11 +58,13 @@ void Input::onMouseMove(GLFWwindow * window, double posX, double posY){
 }
 
 void Input::update(void){
-    for(int i = 0; i < NUM_KEY_CODES; i++)
+    for(int i = 0; i < NUM_KEY_CODES; i++){
         lastKeys[i] = isKeyDown(i);
+    }
 
-    for(int i = 0; i < NUM_MOUSE_BUTTONS; i++)
+    for(int i = 0; i < NUM_MOUSE_BUTTONS; i++){
         lastButtons[i] = isButtonDown(i);
+    }
 }
 void Input::setMousePos(Vector2f);
 //KEYS

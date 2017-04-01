@@ -19,7 +19,7 @@ class HeightGenerator {
 
     float interpolate(float a, float b, float blend){
             double theta = blend * M_PI;
-            float f = (1.0f - cosF(theta)) * 0.5f;
+            float f = (1.0f - COSF(theta)) * 0.5f;
             return a * (1.0f - f) + b * f;
         }
         float getInterpolateNoise(float x, float y){

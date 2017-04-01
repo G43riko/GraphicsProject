@@ -32,27 +32,27 @@ public:
         if(Input::isKeyDown(GLFW_KEY_W)) {
             position.z -= speed;
             realPosition.z -= speed;
-            player -> getVelocity() -> z -= velocityPower * cosF(camera -> yaw);
-            player -> getVelocity() -> x += velocityPower * sinF(camera -> yaw);
+            player -> getVelocity() -> z -= velocityPower * COSF(camera -> yaw);
+            player -> getVelocity() -> x += velocityPower * SINF(camera -> yaw);
         }
         if(Input::isKeyDown(GLFW_KEY_S)) {
             position.z += speed;
             realPosition.z += speed;
-            player -> getVelocity() -> z += velocityPower * cosF(camera -> yaw);
-            player -> getVelocity() -> x -= velocityPower * sinF(camera -> yaw);
+            player -> getVelocity() -> z += velocityPower * COSF(camera -> yaw);
+            player -> getVelocity() -> x -= velocityPower * SINF(camera -> yaw);
         }
 
         if(Input::isKeyDown(GLFW_KEY_A)) {
             position.x -= speed;
             realPosition.x -= speed;
-            player -> getVelocity() -> x -= velocityPower * cosF(camera -> yaw);
-            player -> getVelocity() -> z -= velocityPower * sinF(camera -> yaw);
+            player -> getVelocity() -> x -= velocityPower * COSF(camera -> yaw);
+            player -> getVelocity() -> z -= velocityPower * SINF(camera -> yaw);
         }
         if(Input::isKeyDown(GLFW_KEY_D)) {
             position.x += speed;
             realPosition.x += speed;
-            player -> getVelocity() -> x += velocityPower * cosF(camera -> yaw);
-            player -> getVelocity() -> z += velocityPower * sinF(camera -> yaw);
+            player -> getVelocity() -> x += velocityPower * COSF(camera -> yaw);
+            player -> getVelocity() -> z += velocityPower * SINF(camera -> yaw);
         }
 
         if(Input::isKeyDown(GLFW_KEY_LEFT)) {
@@ -70,14 +70,14 @@ public:
         if(Input::isKeyDown(GLFW_KEY_DOWN)) {
             camera -> pitch -= 0.1f;
         }
-        camera -> pitch = clamp(camera -> pitch , 0.07f, 1.54f);
+        camera -> pitch = CLAMP(camera -> pitch , 0.07f, 1.54f);
         Vector3f * playerPos = player -> getObject() -> getTransform() ->getPosition();
         float tmpHeight = height - Input::getMouseScroll().y;
         if(tmpHeight < 3)
             tmpHeight = 3;
-        position.y = playerPos -> y + tmpHeight * sinF(camera -> pitch);
-        position.z = playerPos -> z + tmpHeight * cosF(-camera -> yaw) * cosF(camera -> pitch);
-        position.x = playerPos -> x + tmpHeight * sinF(-camera -> yaw) * cosF(camera -> pitch);
+        position.y = playerPos -> y + tmpHeight * SINF(camera -> pitch);
+        position.z = playerPos -> z + tmpHeight * COSF(-camera -> yaw) * COSF(camera -> pitch);
+        position.x = playerPos -> x + tmpHeight * SINF(-camera -> yaw) * COSF(camera -> pitch);
         camera -> position = position;
     }
 };

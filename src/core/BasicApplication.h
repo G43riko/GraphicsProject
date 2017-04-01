@@ -34,7 +34,7 @@ protected:
         }
     };
     void stop(void){
-        l_running = true;
+        l_running = false;
     };
 
     BasicView& getView(void){
@@ -51,7 +51,7 @@ protected:
     };
     void localCleanUp(void){
         if(this -> l_renderer){
-            printf("maže sa renderer v basic application\n");
+            DEBUG("maže sa renderer v basic application\n");
             l_renderer -> cleanUp();
             delete l_renderer;
         }
@@ -76,7 +76,7 @@ public:
         return l_running;
     };
     void start(void){
-        printf("startujem\n");
+        PRINT("startujem");
         l_running = true;
     };
     virtual void loadContent(void){};

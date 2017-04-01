@@ -31,15 +31,16 @@ public:
 
         if(mouseLocked) {
             Vector2f deltaPos = Input::getMousePosition() - center;
-            bool rotY = !eq(deltaPos.x, 0);
-            bool rotX = !eq(deltaPos.y, 0);
+            bool rotY = NEZ(deltaPos.x);
+            bool rotX = NEZ(deltaPos.y);
 
-            if(rotY)
+            if(rotY){
                 pitch += deltaPos.y * SENSITIVITY;
+            }
 
-            if(rotX)
+            if(rotX){
                 yaw += deltaPos.x * SENSITIVITY;
-
+            }
 
             if(rotY || rotX)
                 center = Input::getMousePosition();
@@ -56,8 +57,8 @@ public:
         if(Input::isKeyDown(GLFW_KEY_W)) {
             //position -> z -= movSpeed;
             if(player){
-                player -> getVelocity() -> z -= velocityPower * cosF(camera -> yaw);
-                player -> getVelocity() -> x += velocityPower * sinF(camera -> yaw);
+                player -> getVelocity() -> z -= velocityPower * COSF(camera -> yaw);
+                player -> getVelocity() -> x += velocityPower * SINF(camera -> yaw);
             }
             else{
                 position.x += static_cast<float>(cos(camera -> pitch) * sin(yaw) * movSpeed);
@@ -67,8 +68,8 @@ public:
         if(Input::isKeyDown(GLFW_KEY_S)) {
             //position->z += movSpeed;
             if(player){
-                player -> getVelocity() -> z += velocityPower * cosF(camera -> yaw);
-                player -> getVelocity() -> x -= velocityPower * sinF(camera -> yaw);
+                player -> getVelocity() -> z += velocityPower * COSF(camera -> yaw);
+                player -> getVelocity() -> x -= velocityPower * SINF(camera -> yaw);
             }
             else{
                 position.x -= static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
@@ -80,20 +81,20 @@ public:
             //position->x -= movSpeed;
 
             if(player){
-                player -> getVelocity() -> x -= velocityPower * cosF(camera -> yaw);
-                player -> getVelocity() -> z -= velocityPower * sinF(camera -> yaw);
+                player -> getVelocity() -> x -= velocityPower * COSF(camera -> yaw);
+                player -> getVelocity() -> z -= velocityPower * SINF(camera -> yaw);
             }
             else{
-                position.z -= static_cast<float>(cos(pitch) * sinF(yaw) * movSpeed);
-                position.x -= static_cast<float>(cos(pitch) * cosF(yaw) * movSpeed);
+                position.z -= static_cast<float>(cos(pitch) * SINF(yaw) * movSpeed);
+                position.x -= static_cast<float>(cos(pitch) * COSF(yaw) * movSpeed);
             }
         }
         if(Input::isKeyDown(GLFW_KEY_D)) {
             //position->x += movSpeed;
 
             if(player){
-                player -> getVelocity() -> x += velocityPower * cosF(camera -> yaw);
-                player -> getVelocity() -> z += velocityPower * sinF(camera -> yaw);
+                player -> getVelocity() -> x += velocityPower * COSF(camera -> yaw);
+                player -> getVelocity() -> z += velocityPower * SINF(camera -> yaw);
             }
             else{
                 position.z += static_cast<float>(cos(pitch) * sin(yaw) * movSpeed);
@@ -111,14 +112,18 @@ public:
             if(Input::isKeyDown(GLFW_KEY_SPACE))
                 position.y += movSpeed;
         }
-        if(Input::isKeyDown(GLFW_KEY_Q))
+        if(Input::isKeyDown(GLFW_KEY_Q)){
             yaw -= rotSpeed;
-        if(Input::isKeyDown(GLFW_KEY_E))
+        }
+        if(Input::isKeyDown(GLFW_KEY_E)){
             yaw += rotSpeed;
+        }
 
         camera -> yaw = yaw;
         camera -> pitch = pitch;
         camera -> position = position;
+
+        camera -> updateForward();
     }
 };
 

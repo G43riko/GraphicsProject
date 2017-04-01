@@ -9,6 +9,7 @@
 #include <src/rendering/RenderUtil.h>
 #include "WaterTile.h"
 #include <src/rendering/shader/WaterShader.cpp>
+#include <src/rendering/material/TextureManager.h>
 #include "WaterFrameBuffer.h"
 
 class WaterMaster {
@@ -23,8 +24,8 @@ private:
     PointerRawModel quad;
     WaterFrameBuffer fbo = WaterFrameBuffer();
     WaterTile water = WaterTile(0, 0, 1.5f);
-    PointerTexture2D dudvMap = ContentLoader::loadTexturePNG("res/textures/waterDUDV.png");
-    PointerTexture2D normalMap = ContentLoader::loadTexturePNG("res/textures/matchingNormalMap.png");
+    PointerTexture2D dudvMap = TextureManager::createTexture2D("res/textures/waterDUDV.png");
+    PointerTexture2D normalMap = TextureManager::createTexture2D("res/textures/matchingNormalMap.png");
 
     BasicShader * shader = new WaterShader();
     float distance;

@@ -13,36 +13,27 @@
 #include "src/GUI/componentsGui/GtkWater.h"
 #include "src/GUI/componentsGui/GtkPostFx.h"
 #include "src/GUI/componentsGui/GtkRenderer.h"
+#include "GtkIntroGui.h"
 
 class BasicEngine;
 
 class BasicGtkGui {
 private:
-    GtkScene * scene = nullptr;
-    GtkWater * water = nullptr;
-    GtkPostFx * postFx = nullptr;
-    GtkRenderer * renderer = nullptr;
-    GtkWidget * window = nullptr;
-    GtkWidget * mainPanel = nullptr;
+    GtkScene * scene        = nullptr;
+    GtkWater * water        = nullptr;
+    GtkPostFx * postFx      = nullptr;
+    GtkRenderer * renderer  = nullptr;
+    GtkWidget * window      = nullptr;
+    GtkWidget * mainPanel   = nullptr;
     GtkWidget * actualPanel = nullptr;
-    GtkWidget * introPanel = nullptr;
-    GtkWidget * resX = nullptr;
-    GtkWidget * resY = nullptr;
-    GtkWidget * stopButton = nullptr;
-    GtkWidget * startButton = nullptr;
-    GtkWidget * resolutionPanel = nullptr;
-    BasicEngine * engine;
-    static void gameStart(GtkWidget *widget, gpointer data);
-    static void gameStop(GtkWidget *widget, gpointer data);
-    static void engineExit(GtkWidget *widget, gpointer data);
-    static void changeFullScreen(GtkWidget *widget, gpointer data);
-    bool exitRequest = false;
+    GtkIntroGui introGui;
 public:
-    inline bool getExitRequest(void){
-        return exitRequest;
-    }
-    void initAndShowIntroView(void);
-    BasicGtkGui(BasicEngine * engine) : engine(engine){};
+    inline void appIsRunning(bool value){ introGui.appIsRunning(value); }
+    inline bool getExitRequest(void){return introGui.getExitRequest(); }
+    inline bool getFullscreen(void){ return introGui.getFullscreen(); }
+    inline int getResX(void){ return introGui.getResX(); }
+    inline int getResY(void){ return introGui.getResY(); }
+    BasicGtkGui(BasicEngine * engine) : introGui(GtkIntroGui(engine)){};
     void setRenderer(GtkRenderer * renderer){
         if(this -> renderer == nullptr){
             this -> renderer = renderer;
@@ -52,13 +43,13 @@ public:
     void showIntro(void){
         if(actualPanel){
             gtk_widget_hide(actualPanel);
-            if(actualPanel == introPanel){
+            if(actualPanel == introGui.getPanel()){
                 hideWindow();
                 actualPanel = nullptr;
                 return;
             }
         }
-        actualPanel = introPanel;
+        actualPanel = introGui.getPanel();
         gtk_widget_show_all(actualPanel);
         showWindow();
     };
@@ -166,6 +157,7 @@ public:
         gtk_init(nullptr, nullptr);
 
 
+        introGui.initAndShowIntroView();
 //        GtkBuilder *builder;
 //        builder = gtk_builder_new();
 //        gtk_builder_add_from_file(builder, "res/test.glade", 0);
@@ -187,7 +179,10 @@ public:
 
 
         //GtkWidget * tree = gtk_tree_view_new_with_model()
-        initAndShowIntroView();
+//        initAndShowIntroView();
+
+        gtk_container_add(GTK_CONTAINER(mainPanel), introGui.getPanel());
+
         showIntro();
         return 0;
     };

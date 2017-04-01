@@ -2,13 +2,14 @@
 // Created by gabriel on 24.9.2016.
 //
 
+#include <src/rendering/material/TextureManager.h>
 #include "MaterialedModel.h"
 
 PointerMaterialedModel createMaterialedModel(std::string fileName, Loader loader){
-    auto diffuse = ContentLoader::loadTexturePNG("res/textures/" + fileName + ".png");
-    auto normal = ContentLoader::loadTexturePNG("res/textures/" + fileName + "Normal.png");
-    auto rawModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ("res/models/" + fileName + ".obj")));
-    return PointerMaterialedModel(new MaterialedModel(rawModel, createMaterial(diffuse, normal)));
+    auto diffuse = TextureManager::createTexture2D(TEXTURES_FOLDER + fileName + TEXTURES_EXTENSION);
+//    auto normal = TextureManager::createTexture2D("res/textures/" + fileName + "Normal.png");
+    auto rawModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ(MODELS_FOLDER + fileName + MODELS_EXTENSION)));
+    return PointerMaterialedModel(new MaterialedModel(rawModel, createMaterial(diffuse/*, normal*/)));
 }
 
 PointerMaterialedModel createMaterialedModel(PointerRawModel model, PointerMaterial material){

@@ -5,6 +5,35 @@
 #ifndef GRAPHICSPROJECT_BASICENGINE_H
 #define GRAPHICSPROJECT_BASICENGINE_H
 
+#include <memory>
+#include <vector>
+
+#include <src/rendering/WindowManager.h>
+#include <src/utils/Input.h>
+#include <src/rendering/Renderer.h>
+#include <src/rendering/model/Mesh.h>
+#include <src/utils/Loader.h>
+#include <src/components/postProccessing/Screen.h>
+
+#include <src/components/postProccessing/Fbo.h>
+#include <src/components/postProccessing/PostProccessing.h>
+#include <src/components/water/WaterFrameBuffer.h>
+#include <src/components/terrain/Terrain.h>
+#include <src/components/movement/FpsView.h>
+#include <src/components/movement/TopView.h>
+#include <src/game/Ball.h>
+#include <src/rendering/material/Material.h>
+#include <time.h>
+#include <src/game/Environment.h>
+#include <src/game/Arrow.h>
+#include <src/components/shadows/ShadowMaster.h>
+#include <src/components/terrain/HeightGenerator.h>
+#include <src/components/entities/EntityManager.h>
+#include <src/components/particles/ParticleManager.h>
+#include <src/core/MainApplication.h>
+#include <src/GUI/BasicGtkGui.h>
+#include <src/utils/Vectors.h>
+#include <src/rendering/material/Texture2D.h>
 
 #include <src/GUI/BasicGtkGui.h>
 #include "BasicApplication.h"
@@ -12,11 +41,11 @@
 
 class BasicEngine {
     private:
-        long fpsCounter = 0;
-        BasicApplication * app = nullptr;
-        Loader * loader = new Loader();
-        BasicGtkGui gui = BasicGtkGui(this);
-        bool running = false;
+        long fpsCounter         = 0;
+        BasicApplication * app  = nullptr;
+        Loader * loader         = new Loader();
+        BasicGtkGui gui         = BasicGtkGui(this);
+        bool running            = false;
         int width;
         int height;
 
@@ -28,7 +57,7 @@ class BasicEngine {
         };
 
         void init(void){
-            printf("BasicEngine::init - start: %lf\n", glfwGetTime());
+            DEBUG("BasicEngine::init - start: " << glfwGetTime());
             gui.init();
 //            WindowManager::init(width, height, "GEngine", false);
 //            Input::init(WindowManager::window, WindowManager::width, WindowManager::height);
@@ -42,11 +71,11 @@ class BasicEngine {
 //            gui.setWater(new GtkWater(((MainApplication * )app)->getMainRenderer()->getWaterMaster()));
 //            gui.setPostFx(new GtkPostFx(((MainApplication * )app) ->getMainRenderer()->getPostFxMaster()));
 //            gui.setRenderer(new GtkRenderer(((MainApplication * )app) ->getMainRenderer()));
-            printf("BasicEngine::init - end: %lf\n", glfwGetTime());
+            DEBUG("BasicEngine::init - end: " << glfwGetTime());
         };
 
         void showStatus(void){
-            printf("frames: %ld, elapsedTime: %lf\n", fpsCounter, glfwGetTime());
+            DEBUG("frames: " << fpsCounter << ", elapsedTime: " << glfwGetTime());
         }
 
         void update(float delta){
@@ -75,14 +104,11 @@ class BasicEngine {
         };
     public:
         void appStart(void){
-            WindowManager::init(width, height, "GEngine", false);
+            std::cout << "x: " << gui.getResX() << ", y: " << gui.getResY() << "\n";
+            WindowManager::init(gui.getResX(), gui.getResY(), "GEngine", gui.getFullscreen());
             Input::init(WindowManager::window, WindowManager::width, WindowManager::height);
-            if(!loader){
-                printf("nieje loader\n");
-            }
-            else{
-                printf("je loader\n");
-            }
+
+            gui.appIsRunning(true);
 
             app -> setLoader(loader);
             app -> init();
@@ -96,7 +122,9 @@ class BasicEngine {
 
             running = true;
         };
+
         void appStop(void){
+            gui.appIsRunning(false);
             running = false;
 
             app -> cleanUp();
@@ -106,43 +134,47 @@ class BasicEngine {
         };
 
         void setUpApp(BasicApplication * app){
+            //zmažeme staru aplikáciu ak existovala
             if(this -> app){
                 this -> app -> cleanUp();
                 delete this -> app;
             }
+
+            //vytvorime novu
             this -> app = app;
         };
 
         BasicEngine(BasicApplication * app, int width, int height) : app(app), width(width), height(height){
-            printf("BasicEngine::BasicEngine %lf\n", glfwGetTime());
+            DEBUG("BasicEngine::BasicEngine" << glfwGetTime());
         };
 
         void start(void){
-            printf("BasicEngine::start - start: %lf\n", glfwGetTime());
+            DEBUG("BasicEngine::start - start: " << glfwGetTime());
             float delta = 1;
             int fps = 0;
 
 
             double currentTime = glfwGetTime();
             init();
-            //while (/*running || *//*app -> isRunning() && */!WindowManager::isCloseRequest()) {
             while(!gui.getExitRequest()){
                 if(app && running){
                     fps++;
                     if(glfwGetTime() - currentTime > 1.0){
-                            app -> onSecondElapse(fps);
+                        app -> onSecondElapse(fps);
                         fps = 0;
                         currentTime = glfwGetTime();
                     }
-                    if(WindowManager::isCloseRequest()){
+                    if(WindowManager::isCloseRequest() || !app->isRunning()){
                         appStop();
                     }
                 }
                 update(delta);
             }
             cleanUp();
-            printf("BasicEngine::start - end : %lf\n", glfwGetTime());
+            DEBUG("BasicEngine::start - end : " << glfwGetTime());
         };
+    inline int getResX(void){return width;}
+    inline int getResY(void){return height;}
 };
 
 

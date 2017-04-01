@@ -21,7 +21,7 @@ private:
         COMBINED_FILTER,
     };
 
-    float contrast = 0.7;
+    float contrast = 0.7f;
 
     Fbo * mainFbo;
     bool usingPostFx;

@@ -15,33 +15,28 @@
 
 class RenderInterface{
 private:
-    Loader * loader;
-
-    WaterMaster * waterMaster = nullptr;
-    EntityMaster * entityMaster = nullptr;
+    Loader * loader                 = nullptr;
+    GuiMaster * guiMaster           = nullptr;
+    WaterMaster * waterMaster       = nullptr;
+    EntityMaster * entityMaster     = nullptr;
+    SkyBoxMaster * skyBoxMaster     = nullptr;
+    PostFxMaster * postFxMaster     = nullptr;
+    ShadowMaster * shadowMaster     = nullptr;
     ParticleMaster * particleMaster = nullptr;
-    GuiMaster * guiMaster = nullptr;
-    SkyBoxMaster * skyBoxMaster = nullptr;
-    PostFxMaster * postFxMaster = nullptr;
-    ShadowMaster * shadowMaster = nullptr;
 
-    bool useShadow = false;
-    bool useParticle = true;
-    bool useSkybox = true;
-    bool useWater = true;
-    bool usePostFx = false;
-    bool useGui = true;
-    bool useTexture = false;
-    bool useNormal = false;
-    bool useLight = false;
-    bool useSpecular = false;
-    bool useEnviromental = false;
+    bool useShadow          = false;
+    bool useParticle        = true;
+    bool useSkybox          = true;
+    bool useWater           = true;
+    bool usePostFx          = false;
+    bool useGui             = true;
+    bool useTexture         = false;
+    bool useNormal          = false;
+    bool useLight           = false;
+    bool useSpecular        = false;
+    bool useEnviromental    = false;
 public:
-    WaterMaster * getWaterMaster(void){
-
-    }
-
-
+    WaterMaster * getWaterMaster(void){}
 /**************************************************GETTERS**************************************************/
 bool isUseShadows(){
     return useShadow;

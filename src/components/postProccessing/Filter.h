@@ -65,7 +65,9 @@ public:
 
     void  cleanUp(){
         renderer.cleanUp();
-        shader -> cleanUp();
+        if(shader){
+            shader -> cleanUp();
+        }
     }
 };
 

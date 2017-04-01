@@ -11,31 +11,32 @@
 #include <random>
 #include <src/utils/Vectors.h>
 
+
+#define ERROR(x) std::cerr << x << std::endl
+#define PRINT(x) std::cout << x << std::endl
+#define DEBUG(x) //std::cerr << x << std::endl
+
+#define SINI (a) (int)sin(num)
+#define SINF(a) (float)sin(a)
+#define COSI(a) (int)cos(num)
+#define COSF(a) (float)cos(a)
+
+//Equal
+#define EQ(a, b) !(a < b || a > b)
+
+//Not Equal
+#define NEQ(a, b) !EQ(a, b)
+
+//Equal Zero
+#define NZ(a) EQ(a, 0)
+
+//Not Equal Zero
+#define NEZ(a) !NZ(a)
+
+//Linerar Interpolation
+#define LERP(a, b, c) (a + c * (b - a));
+
 class Vector3f;
-
-template<typename T>
-inline int sinI(T num){return (int)sin(num); }
-
-template<typename T>
-inline float sinF(T num){return (float)sin(num); }
-
-template<typename T>
-inline int cosI(T num){return (int)cos(num); }
-
-template<typename T>
-inline float cosF(T num){return (float)cos(num); }
-
-template<typename T>
-inline bool eq(float a, T b){return !(a < b || a >= b); }
-
-template<typename T>
-inline bool gq(float a, T b){return !(a < b || a >= b); }
-
-
-inline float lerp(float a, float b, float f){
-    return a + f * (b - a);
-}
-
 std::vector<Vector3f> getKerner(void);
 
 double random(double min, double max);

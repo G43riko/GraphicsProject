@@ -33,8 +33,11 @@ class ImageRenderer {
         }
 
         void cleanUp() {
-            if (fbo)
+            if (fbo){
                 fbo -> cleanUp();
+                delete fbo;
+                fbo = nullptr;
+            }
         }
 };
 

@@ -26,13 +26,13 @@ class Quaternion : public Vector4f{
         Quaternion conjugate(void);
         void rotate(const Vector3f & vec){
             Quaternion result = *this;
-            if(!eq(vec.x, 0))
+            if(NEQ(vec.x, 0))
                 result = result * Quaternion(Vector3f(1, 0, 0), vec.x);
 
-            if(!eq(vec.y, 0))
+            if(NEQ(vec.y, 0))
                 result = result * Quaternion(Vector3f(0, 1, 0), vec.y);
 
-            if(!eq(vec.z, 0))
+            if(NEQ(vec.z, 0))
                 result = result * Quaternion(Vector3f(0, 0, 1), vec.z);
 
             x = result.x;

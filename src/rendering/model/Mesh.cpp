@@ -5,22 +5,22 @@
 #include "Mesh.h"
 
 Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLuint> indices){
-    this -> vertices = vertices;
-    this -> uvs = uvs;
-    this -> indices = indices;
+    this -> vertices    = vertices;
+    this -> indices     = indices;
+    this -> uvs         = uvs;
 }
 Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLuint> indices){
-    this -> vertices = vertices;
-    this -> uvs = uvs;
-    this -> normals = normals;
-    this -> indices = indices;
+    this -> vertices    = vertices;
+    this -> normals     = normals;
+    this -> indices     = indices;
+    this -> uvs         = uvs;
 }
 Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLfloat> tangents, std::vector<GLuint> indices){
-    this -> vertices = vertices;
-    this -> uvs = uvs;
-    this -> normals = normals;
-    this -> indices = indices;
-    this -> tangents = tangents;
+    this -> vertices    = vertices;
+    this -> normals     = normals;
+    this -> indices     = indices;
+    this -> tangents    = tangents;
+    this -> uvs         = uvs;
 }
 
 std::vector<GLfloat> Mesh::getVertices(void){

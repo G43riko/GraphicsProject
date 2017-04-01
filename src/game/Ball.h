@@ -41,7 +41,7 @@ public:
 
     static bool collision(Vector3f posA, Vector3f posB, float size){
         float dist = (posA - posB).getLength();
-        return (dist <= size * 16) && (!eq(dist, 0));
+        return (dist <= size * 16) && (NEQ(dist, 0));
 
     }
     static void checkBorder(Transform * a, Vector3f * velocity, float size, Vector2f pos, Vector2f scale){

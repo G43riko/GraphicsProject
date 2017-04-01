@@ -223,19 +223,19 @@ Matrix4f Matrix4f::initRotation(float x, float y, float z){
     y = static_cast<float>(TO_RADIANS(y));
     z = static_cast<float>(TO_RADIANS(z));
 
-    rz.m00 = cosF(z); rz.m01 = -sinF(z);rz.m02 = 0;      rz.m03 = 0;
-    rz.m10 = sinF(z); rz.m11 = cosF(z); rz.m12 = 0;      rz.m13 = 0;
+    rz.m00 = COSF(z); rz.m01 = -SINF(z);rz.m02 = 0;      rz.m03 = 0;
+    rz.m10 = SINF(z); rz.m11 = COSF(z); rz.m12 = 0;      rz.m13 = 0;
     rz.m20 = 0;      rz.m21 = 0;      rz.m22 = 1;      rz.m23 = 0;
     rz.m30 = 0;      rz.m31 = 0;      rz.m32 = 0;      rz.m33 = 1;
 
     rx.m00 = 1;      rx.m01 = 0;      rx.m02 = 0;      rx.m03 = 0;
-    rx.m10 = 0;      rx.m11 = cosF(x); rx.m12 = -sinF(x);rx.m13 = 0;
-    rx.m20 = 0;      rx.m21 = sinF(x); rx.m22 = cosF(x); rx.m23 = 0;
+    rx.m10 = 0;      rx.m11 = COSF(x); rx.m12 = -SINF(x);rx.m13 = 0;
+    rx.m20 = 0;      rx.m21 = SINF(x); rx.m22 = COSF(x); rx.m23 = 0;
     rx.m30 = 0;      rx.m31 = 0;      rx.m32 = 0;      rx.m33 = 1;
 
-    ry.m00 = cosF(y); ry.m01 = 0;      ry.m02 = -sinF(y);ry.m03 = 0;
+    ry.m00 = COSF(y); ry.m01 = 0;      ry.m02 = -SINF(y);ry.m03 = 0;
     ry.m10 = 0;      ry.m11 = 1;      ry.m12 = 0;      ry.m13 = 0;
-    ry.m20 = sinF(y); ry.m21 = 0;      ry.m22 = cosF(y); ry.m23 = 0;
+    ry.m20 = SINF(y); ry.m21 = 0;      ry.m22 = COSF(y); ry.m23 = 0;
     ry.m30 = 0;      ry.m31 = 0;      ry.m32 = 0;      ry.m33 = 1;
 
     Matrix4f m;
