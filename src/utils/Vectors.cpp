@@ -61,6 +61,13 @@ Vector3f Vector3f::cross(Vector3f * v){
         return *this;
 }
 
+float Vector3f::dot(Vector3f * other){
+    return x * other -> x + y * other -> y + z * other -> z;
+}
+float Vector3f::dot(Vector3f other){
+    return x * other.x + y * other.y + z * other.z;
+}
+
 Vector3f Vector3f::getCross(Vector3f * v){
     float x_ = y * v -> z - z * v -> y;
     float y_ = z * v -> x - x * v -> z;

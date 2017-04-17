@@ -34,6 +34,12 @@ if(el == nullptr){              \
 #define COSI(a) (int)cos(num)
 #define COSF(a) (float)cos(a)
 
+#define ABS(x) (x < 0 ? -x : x)
+
+//macro ako náhrada pre new
+//použitie: GNEW(Vector3f, 2, 3, 4)
+#define GNEW(X, ...) (new (malloc(sizeof(X))) X(__VA_ARGS__))
+
 //Equal
 #define EQ(a, b) !(a < b || a > b)
 
@@ -91,6 +97,20 @@ class IdGenerator{
         static int counter;
     public:
         static int getId(void);
+};
+
+/**
+ * Objekt bude počítať vytvorené inštancie
+ */
+class CountedObj {
+public:
+    CountedObj() {++total_;}
+    CountedObj(const CountedObj& obj) {if(this != &obj) ++total_;}
+    ~CountedObj() {--total_;}
+
+    static size_t OustandingObjects() {return total_;}
+private:
+    static size_t total_;
 };
 
 #endif //GRAPHICSPROJECT_UTILS_H

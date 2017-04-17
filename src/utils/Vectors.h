@@ -69,6 +69,8 @@ class Vector3f{
         Vector3f cross(Vector3f *);
         Vector3f getCross(Vector3f *);
         Vector3f getCross(Vector3f);
+        float dot(Vector3f * other);
+        float dot(Vector3f other);
 
         Vector3f& operator *= (const float& val){ this -> x *= val, this -> y *= val, this -> z *= val;return *this; }
         Vector3f operator *= (const Vector3f& v){ this -> x *= v.x, this -> y *= v.y, this -> z *= v.z;return *this; }

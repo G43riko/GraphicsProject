@@ -9,7 +9,6 @@ int main(int argc, char *argv[]){
 
 
     engine.start();
-
 //    engine.setUpApp(new MainApplication());
 //    engine.appStart();
 

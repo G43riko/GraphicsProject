@@ -13,7 +13,7 @@ void VoxelMaster::renderBlock(Block *block) {
     }
 }
 
-void VoxelMaster::render(PointerCamera camera) {
+void VoxelMaster::render(PointerCamera camera) {//TODO memory leak
     if(world -> blocks.empty()){
         return;
     }

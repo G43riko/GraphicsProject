@@ -143,7 +143,7 @@ set(GL_MAIN_SRC
         src/components/terrain/TerrainManager.h
         src/components/water/WaterRenderer.cpp
         src/components/water/WaterRenderer.h
-        src/GameEngine.h src/components/ResourcesManager.cpp src/components/ResourcesManager.h src/components/voxel/World.cpp src/components/voxel/World.h src/components/voxel/Chunk.cpp src/components/voxel/Chunk.h src/components/voxel/Block.cpp src/components/voxel/Block.h src/components/voxel/VoxelMaster.cpp src/components/voxel/VoxelMaster.h src/rendering/shader/VoxelShader.cpp)
+        src/GameEngine.h src/components/ResourcesManager.cpp src/components/ResourcesManager.h src/components/voxel/World.cpp src/components/voxel/World.h src/components/voxel/Chunk.cpp src/components/voxel/Chunk.h src/components/voxel/Block.cpp src/components/voxel/Block.h src/components/voxel/VoxelMaster.cpp src/components/voxel/VoxelMaster.h src/rendering/shader/VoxelShader.cpp src/utils/Intersections.h)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 

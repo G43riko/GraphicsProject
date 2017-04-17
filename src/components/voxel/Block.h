@@ -78,6 +78,9 @@ public:
         zNeighborMinus && zNeighborMinus->isVisible() ? turnOffOption(Z_MINUS) : turnOnOption(Z_MINUS);
     }
     void setNeighbor(Block * block){
+        if(block == nullptr){
+            return;
+        }
         if(block -> x + 1 == x){
             xNeighborPlus = block;
             block -> xNeighborMinus = this;

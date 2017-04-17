@@ -20,6 +20,9 @@ void Chunk::setUpNeigbors(void){
     for(int i=0 ; i<MAX_BLOCKS_X ; i++){
         for(int j=0 ; j<MAX_BLOCKS_Y ; j++){
             for(int k=0 ; k<MAX_BLOCKS_Z ; k++){
+                if(map[i][j][k] == nullptr){
+                    continue;
+                }
                 if(i > 0){
                     map[i][j][k] -> setNeighbor(map[i - 1][j][k]);
                 }
@@ -37,7 +40,9 @@ void Chunk::setUpVisibility(void){
     for(int i=0 ; i<MAX_BLOCKS_X ; i++){
         for(int j=0 ; j<MAX_BLOCKS_Y ; j++){
             for(int k=0 ; k<MAX_BLOCKS_Z ; k++){
-                map[i][j][k] -> setUpVisibility();
+                if(map[i][j][k]){
+                    map[i][j][k] -> setUpVisibility();
+                }
             }
         }
     }
@@ -46,9 +51,7 @@ void Chunk::cleanUp(void){
     for(int i=0 ; i< MAX_BLOCKS_X ; i++){
         for(int j=0 ; j<MAX_BLOCKS_Y ; j++){
             for(int k=0 ; k<MAX_BLOCKS_Z ; k++){
-                map[i][j][k] -> cleanUp();
-                delete map[i][j][k];
-                map[i][j][k] = nullptr;
+                CHECK_AND_CLEAR(map[i][j][k]);
             }
             delete[] map[i][j];
         }
@@ -70,12 +73,17 @@ void Chunk::generateAllBlocks(void){
         for(int j=0 ; j<MAX_BLOCKS_Y ; j++){
             map[i][j] = new Block * [MAX_BLOCKS_Z];
             for(int k=0 ; k<MAX_BLOCKS_Z ; k++){
-                generateBlock(i, j, k);
+                    generateBlock(i, j, k);
             }
         }
     }
 }
 
 void Chunk::generateBlock(int x, int y, int z){
-    map[x][y][z] = new Block(x, y, z, this, getRandomType());
+    if(random(0, 5) > 1){
+        map[x][y][z] = new Block(x, y, z, this, getRandomType());
+    }
+    else{
+        map[x][y][z] = nullptr;
+    }
 }

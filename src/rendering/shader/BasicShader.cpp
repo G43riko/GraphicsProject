@@ -114,7 +114,9 @@ void BasicShader::updateUniform4m(const std::string name, const glm::mat4 matrix
     glUniformMatrix4fv(uniforms[name], 1, false, glm::value_ptr(matrix));
 }
 void BasicShader::updateUniform4m(const std::string name, const Matrix4f matrix){
-    glUniformMatrix4fv(uniforms[name], 1, false, matrix.getArray());
+    float * f = matrix.getArray();
+    glUniformMatrix4fv(uniforms[name], 1, false, f);
+    delete[] f;
 }
 
 void BasicShader::updateUniform3f(const std::string name, const Vector3f & value){

@@ -168,7 +168,9 @@ void Renderer::renderScene(BasicScene * scene){
     if(master.usePostFx()){
         multiFbo.bindFrameBuffer();
     }
-    master.getPostFx() -> startRender();
+    if(master.getPostFx()->getUsingPostFx()) {
+        master.getPostFx()->startRender();
+    }
 
     if(master.useSkybox()){
         master.getSkyBox() -> renderSky(scene -> getSky(), actualCamera);
