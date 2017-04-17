@@ -12,6 +12,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <src/utils/Matrix4f.h>
 #include <src/utils/FileLoader.h>
+#include <src/utils/Const.h>
 #include <src/components/lights/SpotLight.h>
 #include <src/components/lights/DirectionalLight.h>
 

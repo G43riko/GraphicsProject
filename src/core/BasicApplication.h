@@ -5,86 +5,61 @@
 #ifndef GRAPHICSPROJECT_BASICAPPLICATION_H
 #define GRAPHICSPROJECT_BASICAPPLICATION_H
 
-#include "BasicRenderer.h"
-#include "BasicScene.h"
+#include <src/core/BasicRenderer.h>
+#include <src/GUI/BasicGtkGui.h>
 #include <src/components/movement/BasicView.h>
 
 class BasicApplication{
 private:
-    bool l_running = false;
-    Loader * l_loader = nullptr;
+    bool l_running              = false;
+    BasicRenderer * l_renderer  = nullptr;
+    BasicScene * l_scene        = nullptr;
+    BasicView * l_view          = nullptr;
+    Loader * l_loader           = nullptr;
 
-    BasicRenderer * l_renderer = nullptr;
-    BasicScene * l_scene = nullptr;
-    BasicView * l_view = nullptr;
 protected:
-    void setRenderer(BasicRenderer * l_renderer){
-        if(this -> l_renderer == nullptr){
-            this -> l_renderer = l_renderer;
-        }
+    inline void setRenderer(BasicRenderer * i_renderer){
+        SET_IF_IS_NULL(l_renderer, i_renderer);
     };
-    void setView(BasicView * l_view){
-        if(this -> l_view == nullptr){
-            this -> l_view = l_view;
-        }
+    inline void setView(BasicView * i_view){
+        SET_IF_IS_NULL(l_view, i_view);
     };
-    void setScene(BasicScene * l_scene){
-        if(this -> l_scene == nullptr){
-            this -> l_scene = l_scene;
-        }
+    inline void setScene(BasicScene * i_scene){
+        SET_IF_IS_NULL(l_scene, i_scene);
     };
-    void stop(void){
+    inline void stop(void){
         l_running = false;
     };
 
-    BasicView& getView(void){
-        return *l_view;
-    };
-    BasicRenderer *getRenderer(void){
-        return l_renderer;
-    };
-    BasicScene *getScene(void){
-        return l_scene;
-    };
-    Loader getLoader(void){
-        return *l_loader;
-    };
-    void localCleanUp(void){
-        if(this -> l_renderer){
-            DEBUG("maže sa renderer v basic application\n");
-            l_renderer -> cleanUp();
-            delete l_renderer;
-        }
-        if(this -> l_view){
-            l_view -> cleanUp();
-            delete l_view;
-        }
-        if(this -> l_scene){
-            l_scene -> cleanUp();
-            delete l_scene;
-        }
-    };
+    inline BasicView& getView(void){ return *l_view; };
+    inline BasicRenderer *getRenderer(void){ return l_renderer; };
+    inline BasicScene *getScene(void){ return l_scene; };
+    inline Loader getLoader(void){ return *l_loader; };
 public:
-    virtual ~BasicApplication(){};
-    void setLoader(Loader * loader){
-        this -> l_loader = loader;
-//        if(this -> loader == nullptr){
-//            this -> loader = loader;
-//        }
+    inline void localCleanUp(void){
+        CHECK_AND_CLEAR(l_renderer);
+        CHECK_AND_CLEAR(l_view);
+        CHECK_AND_CLEAR(l_scene);
     };
-    bool isRunning(void){
+
+    virtual ~BasicApplication(void){};
+    inline void setLoader(Loader * i_loader){
+        this -> l_loader = i_loader;
+    };
+    inline bool isRunning(void){
         return l_running;
     };
-    void start(void){
+    inline void start(void){
         PRINT("startujem");
+
         l_running = true;
     };
     virtual void loadContent(void){};
-    virtual void init(void) = 0;
-    virtual void update(float delta) = 0;
+    virtual void init(BasicGtkGui * i_gui) = 0;
+    virtual void update(float i_delta) = 0;
     virtual void render(void) = 0;
     virtual void cleanUp(void){};
-    virtual void onSecondElapse(int fps){};
+    virtual void onSecondElapse(int i_fps){};
 };
 
 #endif //GRAPHICSPROJECT_BASICAPPLICATION_H

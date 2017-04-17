@@ -5,9 +5,6 @@
 #ifndef GRAPHICSPROJECT_BASICVIEW_H
 #define GRAPHICSPROJECT_BASICVIEW_H
 
-#include <src/rendering/Camera.h>
-#include <src/game/GameObject.h>
-
 class BasicView{
 protected:
     PointerCamera camera = nullptr;

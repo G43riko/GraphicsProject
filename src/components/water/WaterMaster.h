@@ -12,24 +12,31 @@
 #include <src/rendering/material/TextureManager.h>
 #include "WaterFrameBuffer.h"
 
+#define DEFAULT_WATER_SIZE 50
+#define DEFAULT_WATER_HEIGHT 1.5f
+
 class WaterMaster {
 private:
-    float tiling = 6.0;
-    float waveStrength = 0.02f;
-    float shineDumper = 20.0f;
-    float reflectivity = 0.6f;
-    float refractiveRation = 1.0f;
-    float waterSpeed = 0.001f;
-    float moveFactor = 0;
+    float tiling            = 6.0;
+    float waveStrength      = 0.02f;
+    float shineDumper       = 20.0f;
+    float reflectivity      = 0.6f;
+    float refractiveRation  = 1.0f;
+    float waterSpeed        = 0.001f;
+    float moveFactor        = 0;
     PointerRawModel quad;
-    WaterFrameBuffer fbo = WaterFrameBuffer();
-    WaterTile water = WaterTile(0, 0, 1.5f);
+    WaterFrameBuffer fbo    = WaterFrameBuffer();
+    WaterTile water         = WaterTile(0, 0, DEFAULT_WATER_HEIGHT, DEFAULT_WATER_SIZE);
+    std::vector<WaterTile *> waters;
     PointerTexture2D dudvMap = TextureManager::createTexture2D("res/textures/waterDUDV.png");
     PointerTexture2D normalMap = TextureManager::createTexture2D("res/textures/matchingNormalMap.png");
 
     BasicShader * shader = new WaterShader();
     float distance;
 public:
+    void addWater(float centerX, float centerZ, float height = DEFAULT_WATER_HEIGHT, float size = DEFAULT_WATER_SIZE){
+        waters.push_back(new WaterTile(centerX, centerZ, height, size));
+    }
     void render(PointerCamera camera, std::vector<PointerPointLight> lights);
     WaterMaster(PointerCamera camera, Loader loader){
         std::vector<float> vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
@@ -44,6 +51,10 @@ public:
     void cleanUp(void){
         shader -> cleanUp();
         delete shader;
+        for(auto water : waters){
+            delete water;
+        }
+        waters.clear();
     };
 
     void starRenderReflection(PointerCamera camera){
@@ -61,52 +72,22 @@ public:
         fbo.unbindCurrentFrameBuffer();
     };
     /******************GETTERS******************/
-    BasicShader * getShader(void){
-        return shader;
-    };
-    float getTilig(void){
-        return tiling;
-    };
-    float getWaveStrenght(void){
-        return waveStrength;
-    };
-    float getShineDumper(void){
-        return tiling;
-    };
-    float getReflectivity(void){
-        return reflectivity;
-    };
-    float getWaterSpeed(void){
-        return waterSpeed;
-    };
-    float getRefractiveRation(void){
-        return refractiveRation;
-    };
-    float getWaterHeight(void){
-        return water.getHeight();
-    };
+    BasicShader * getShader(void){ return shader; };
+    float getTilig(void){ return tiling; };
+    float getWaveStrenght(void){ return waveStrength; };
+    float getShineDumper(void){ return tiling; };
+    float getReflectivity(void){ return reflectivity; };
+    float getWaterSpeed(void){ return waterSpeed; };
+    float getRefractiveRation(void){ return refractiveRation; };
+    float getWaterHeight(void){ return water.getHeight(); };
     /******************SETTER******************/
-    void setWaterHeight(float height){
-        water.setHeight(height);
-    }
-    void setTiling(float tiling){
-        this -> tiling = tiling;
-    };
-    void setWaveStrength(float waveStrength){
-        this -> waveStrength = waveStrength;
-    };
-    void setShineDumper(float shineDumper){
-        this -> shineDumper = shineDumper;
-    };
-    void setReflectivity(float reflectivity){
-        this -> reflectivity = reflectivity;
-    };
-    void setWaterSpeed(float waterSpeed){
-        this -> waterSpeed = waterSpeed;
-    };
-    void setRefractiveRation(float refractiveRation){
-        this -> refractiveRation = refractiveRation;
-    };
+    void setWaterHeight(float height){water.setHeight(height);}
+    void setTiling(float tiling){this -> tiling = tiling; };
+    void setWaveStrength(float waveStrength){ this -> waveStrength = waveStrength; };
+    void setShineDumper(float shineDumper){ this -> shineDumper = shineDumper;};
+    void setReflectivity(float reflectivity){ this -> reflectivity = reflectivity; };
+    void setWaterSpeed(float waterSpeed){ this -> waterSpeed = waterSpeed; };
+    void setRefractiveRation(float refractiveRation){ this -> refractiveRation = refractiveRation; };
 };
 
 

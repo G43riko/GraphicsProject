@@ -34,6 +34,7 @@ class Material {
 
         bool hasEnvironmentalMap(void);
 };
+
 typedef std::shared_ptr<Material> PointerMaterial;
 PointerMaterial createMaterial(PointerTexture2D diffuse);
 PointerMaterial createMaterial(PointerTexture2D diffuse, PointerTexture2D normal);

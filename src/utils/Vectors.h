@@ -21,12 +21,7 @@ class Vector2f{
     public:
         float x, y;
         void show(bool = true);
-        Vector2f(std::string data){
-            std::string currentLine = strtok((char *)data.c_str(), " ");
-            x = static_cast<float>(atof(currentLine.c_str()));
-            currentLine = strtok(NULL, " ");
-            y = static_cast<float>(atof(currentLine.c_str()));
-        }
+        Vector2f(std::string data);
 
         Vector2f(float, float);
         Vector2f(void) : Vector2f(0.0f, 0.0f){};

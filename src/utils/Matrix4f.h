@@ -9,8 +9,6 @@
 #include <iomanip>
 #include <glm/mat4x4.hpp>
 
-#define TO_DEGREES(X) X * 180 / M_PI
-#define TO_RADIANS(X) X * M_PI / 180
 
 class Matrix4f {
 public:

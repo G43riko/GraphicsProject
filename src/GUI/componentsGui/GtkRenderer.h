@@ -22,19 +22,19 @@ public:
     static inline void rendererChange(GtkWidget *widget, gpointer data){
         GtkRenderer * renderer = (GtkRenderer *)data;
 
-        renderer->renderer->setWater(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(renderer->renderWater)) == gtk_true());
-        renderer->renderer->setSky(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(renderer->renderSky)) == gtk_true());
+        renderer->renderer->getMaster() -> setWater(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(renderer->renderWater)) == gtk_true());
+        renderer->renderer->getMaster() -> setSky(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(renderer->renderSky)) == gtk_true());
     };
     GtkRenderer(Renderer * renderer) : renderer(renderer){
         panel = GtkHandler::createBox(GTK_ORIENTATION_HORIZONTAL, 20);
 
         renderWater = gtk_check_button_new_with_label("Renderovať vodu");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(renderWater), renderer->isUseSky());
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(renderWater), renderer->getMaster() -> useSky());
         g_signal_connect(renderWater, "toggled", G_CALLBACK(GtkRenderer::rendererChange), this);
         gtk_container_add (GTK_CONTAINER (panel), renderWater);
 
         renderSky = gtk_check_button_new_with_label("Renderovať oblohu");
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(renderSky), renderer->isUseSky());
+        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(renderSky), renderer->getMaster() -> useSky());
         g_signal_connect(renderSky, "toggled", G_CALLBACK(GtkRenderer::rendererChange), this);
         gtk_container_add (GTK_CONTAINER (panel), renderSky);
     };

@@ -39,11 +39,13 @@ void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
 
     RenderUtil::prepareModel(quad, 1);
 
-    Matrix4f modelMatrix = Maths::createTransformationMatrix(water.getX(), water.getHeight(), water.getZ(),
-                                                             0, 0, 0,
-                                                             water.getSize(), water.getSize(), water.getSize());
-    shader -> updateUniform4m("modelMatrix", modelMatrix);
-    glDrawArrays(GL_TRIANGLES, 0, quad -> getVertexCount());
+    for(auto water : waters){
+        Matrix4f modelMatrix = Maths::createTransformationMatrix(water -> getX(), water -> getHeight(), water -> getZ(),
+                                                                 0, 0, 0,
+                                                                 water -> getSize(), water -> getSize(), water -> getSize());
+        shader -> updateUniform4m("modelMatrix", modelMatrix);
+        glDrawArrays(GL_TRIANGLES, 0, quad -> getVertexCount());
+    }
 
     glDisable(GL_BLEND);
     RenderUtil::finishRender(1);

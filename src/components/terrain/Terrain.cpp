@@ -22,6 +22,8 @@ float Terrain::getTerrainHeight(int x, int z){
 PointerRawModel Terrain::generateTerrain(Loader loader, int textMulti){
     std::vector<float> verticesVector, normals, textures;
     std::vector<GLuint> indices;
+
+    //vygeneruje výškovú mapu pre terén a vypočíta súradnice pre textúru
     for(unsigned int i=0 ; i<vertices ; i++){
         for(unsigned int j=0 ; j<vertices ; j++){
             map[j][i] = generator.generateHeight(j, i);
@@ -34,6 +36,11 @@ PointerRawModel Terrain::generateTerrain(Loader loader, int textMulti){
             textures.push_back((float)i / (vertices - 1) * textMulti);
         }
     }
+    PRINT(map[0][0] << ", " << map[10][0] << ", " << map[0][10] << ", " << map[10][10]);
+    PRINT(map[0][0] << ", " << map[20][0] << ", " << map[0][20] << ", " << map[20][20]);
+    PRINT(map[0][0] << ", " << map[30][0] << ", " << map[0][30] << ", " << map[30][30]);
+
+    //vypočíta normály
     for(unsigned int gz=0 ; gz<vertices ; gz++){
         for(unsigned int gx=0 ; gx<vertices ; gx++){
             Vector3f normal = calculateNormal(gx, gz);
@@ -45,6 +52,7 @@ PointerRawModel Terrain::generateTerrain(Loader loader, int textMulti){
                 GLuint topRight = topLeft + 1;
                 GLuint bottomLeft = (gz + 1) * vertices + gx;
                 GLuint bottomRight = bottomLeft + 1;
+
                 indices.push_back(topLeft);
                 indices.push_back(bottomLeft);
                 indices.push_back(topRight);
@@ -54,5 +62,7 @@ PointerRawModel Terrain::generateTerrain(Loader loader, int textMulti){
             }
         }
     }
+
+    //vráti nový rawPointer
     return loader.loadToVao(verticesVector, textures, normals, indices);
 }

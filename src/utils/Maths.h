@@ -12,14 +12,6 @@
 #include "Transform.h"
 #include <glm/gtx/transform.hpp>
 
-
-#define MATH_PI 3.1415926535897932384626433832795
-#define ToRadians(x) (float)((x) * MATH_PI / 180.0f)
-#define ToDegrees(x) (float)((x) * 180.0f / MATH_PI)
-#ifndef CLAMP
-#define CLAMP(a, b, c) (a < b ? b : a > c ? c : a);
-#endif
-
 template<typename T>
 inline T linearInterpolation(const T &a, const T &b, const float &val){
     return a * val + (1 - val) * b;

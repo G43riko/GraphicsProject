@@ -98,7 +98,12 @@ Vector2f::Vector2f(float x, float y){
     this -> x = x;
     this -> y = y;
 }
-
+Vector2f::Vector2f(std::string data){
+    std::string currentLine = strtok((char *)data.c_str(), " ");
+    x = static_cast<float>(atof(currentLine.c_str()));
+    currentLine = strtok(NULL, " ");
+    y = static_cast<float>(atof(currentLine.c_str()));
+}
 
 void Vector2f::show(bool endLine){
     std::cout << "[" << x << "x" << y << "]";

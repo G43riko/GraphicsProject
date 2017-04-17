@@ -18,12 +18,13 @@ bool WindowManager::isCloseRequest(void){
     return glfwWindowShouldClose(WindowManager::window);
 }
 void WindowManager::update(void){
-    glfwSwapBuffers(WindowManager::window);
+    glfwSwapBuffers(window);
     glfwPollEvents();
 }
 
 void WindowManager::close(void) {
     glfwTerminate();
+    glfwDestroyWindow(window);
 }
 
 

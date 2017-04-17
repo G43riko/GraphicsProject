@@ -21,15 +21,15 @@ class Camera {
         Transform transform     = Transform();
         bool VERTICAL           = true;
         MousePicker * picker    = nullptr;
-        Vector3f forward;
+//        Vector3f forward;
     public:
         Vector3f getForward(void);
-        void updateForward(){
-            forward.x = (float)(sin((-yaw + 180)) * cos(-pitch));
-            forward.y = (float)sin((-pitch + 180));
-            forward.z = (float)(cos((-yaw)) * cos(-pitch));
-            forward.normalize();
-        }
+//        void updateForward(){
+//            forward.x = (float)(sin((-yaw + 180)) * cos(-pitch));
+//            forward.y = (float)sin((-pitch + 180));
+//            forward.z = (float)(cos((-yaw)) * cos(-pitch));
+//            forward.normalize();
+//        }
         float FOV           = DEFAULT_CAMERA_FOV;
         float FAR_PLANE     = DEFAULT_CAMERA_FAR_PLANE;
         float NEAR_PLANE    = DEFAULT_CAMERA_NEAR_PLANE;

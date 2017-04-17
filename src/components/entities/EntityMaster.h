@@ -7,25 +7,40 @@
 
 #include "../../rendering/RenderUtil.h"
 #include "EntityManager.h"
+#include <src/rendering/Camera.h>
+#include <src/components/Master.h>
 #include <src/rendering/shader/EntityShader.cpp>
-
+#include <src/rendering/shader/WireframeShader.cpp>
+class Master;
 class EntityMaster {
 private:
     BasicShader * shader = new EntityShader();
+    BasicShader * wireFrameShader = new WireframeShader();
 public:
-    void renderEntities(EntitiesList entities, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Matrix4f toShadowSpace, GLuint shadowMap);
-    void renderEntities(std::vector<PointerEntity> entities, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Matrix4f toShadowSpace, GLuint shadowMap);
-    void renderEntity(PointerEntity entity, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane);
-    EntityMaster(PointerCamera camera){
-        RenderUtil::updateProjectionMatrix(shader, camera);
-    };
-    void cleanUp(void){
-        shader -> cleanUp();
-        delete shader;
-    };
-    BasicShader * getShader(void){
-        return shader;
-    };
+    void renderEntities(EntitiesList entities,
+                        std::vector<PointerPointLight> lights,
+                        PointerCamera camera,
+                        int options,
+                        Vector4f clipPlane,
+                        Master& master);
+
+    void renderEntities(std::vector<PointerEntity> entities,
+                        std::vector<PointerPointLight> lights,
+                        PointerCamera camera,
+                        int options,
+                        Vector4f clipPlane,
+                        Master& master);
+
+    void renderEntity(PointerEntity entity,
+                      std::vector<PointerPointLight> lights,
+                      PointerCamera camera,
+                      int options,
+                      Vector4f clipPlane);
+
+    void renderWireFrame(EntitiesList entities, PointerCamera camera);
+    EntityMaster(PointerCamera camera);
+    void cleanUp(void);
+    BasicShader * getShader(void);
 };
 
 

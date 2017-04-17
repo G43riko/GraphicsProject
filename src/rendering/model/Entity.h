@@ -18,6 +18,9 @@ class Entity {
         PointerMaterialedModel model    = nullptr;
         Transform transform             = Transform();
     public:
+        bool isWireframe(void){
+            return false;
+        }
         bool immortal = false;
         Entity(PointerMaterialedModel, const Vector3f &, const Vector3f &, const Vector3f &);
         int getId(void);

@@ -9,15 +9,15 @@
 
 class HeightGenerator {
     private:
-        static constexpr int OCTAVES = 3;
-        static constexpr float ROUGHNESS = 0.3f;
+        static constexpr int OCTAVES        = 3;
+        static constexpr float ROUGHNESS    = 0.3f;
         float amplitude;
         int seed;
         int xOffset = 0;
         int zOffset = 0;
 
 
-    float interpolate(float a, float b, float blend){
+        float interpolate(float a, float b, float blend){
             double theta = blend * M_PI;
             float f = (1.0f - COSF(theta)) * 0.5f;
             return a * (1.0f - f) + b * f;
@@ -51,12 +51,6 @@ class HeightGenerator {
         HeightGenerator(float amplitude, int seed) : amplitude(amplitude), seed(seed){}
 
         float generateHeight(int x, int z){
-            /*
-            float total =  getInterpolateNoise(x / 4.0f, y / 4.0f) * amplitude;
-            total += getInterpolateNoise(x / 2.0f, y / 2.0f) * amplitude / 3.0f;
-            total += getInterpolateNoise(x, y) * amplitude / 9.0f;
-            return total;
-             */
             float total = 0;
             float d = (float) pow(2, OCTAVES-1);
             for(unsigned int i=0;i<OCTAVES;i++){

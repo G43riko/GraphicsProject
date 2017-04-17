@@ -7,164 +7,185 @@
 
 #include <memory>
 #include <vector>
-
-#include <src/rendering/WindowManager.h>
-#include <src/utils/Input.h>
-#include <src/rendering/Renderer.h>
-#include <src/rendering/model/Mesh.h>
-#include <src/utils/Loader.h>
-#include <src/components/postProccessing/Screen.h>
-
-#include <src/components/postProccessing/Fbo.h>
-#include <src/components/postProccessing/PostProccessing.h>
-#include <src/components/water/WaterFrameBuffer.h>
-#include <src/components/terrain/Terrain.h>
-#include <src/components/movement/FpsView.h>
-#include <src/components/movement/TopView.h>
-#include <src/game/Ball.h>
-#include <src/rendering/material/Material.h>
 #include <time.h>
-#include <src/game/Environment.h>
-#include <src/game/Arrow.h>
-#include <src/components/shadows/ShadowMaster.h>
-#include <src/components/terrain/HeightGenerator.h>
-#include <src/components/entities/EntityManager.h>
-#include <src/components/particles/ParticleManager.h>
-#include <src/core/MainApplication.h>
-#include <src/GUI/BasicGtkGui.h>
-#include <src/utils/Vectors.h>
-#include <src/rendering/material/Texture2D.h>
 
-#include <src/GUI/BasicGtkGui.h>
-#include "BasicApplication.h"
-#include "MainApplication.h"
+#include <src/core/BasicApplication.h>
 
 class BasicEngine {
     private:
-        long fpsCounter         = 0;
-        BasicApplication * app  = nullptr;
-        Loader * loader         = new Loader();
-        BasicGtkGui gui         = BasicGtkGui(this);
-        bool running            = false;
-        int width;
-        int height;
+        long l_fpsCounter         = 0;
+        BasicApplication * l_app  = nullptr;
+        Loader * l_loader         = new Loader();
+        BasicGtkGui l_gui         = BasicGtkGui(this);
+        bool l_running            = false;
+        bool l_showGui            = true;
+        int l_width;
+        int l_height;
 
+        /**
+         * Funckia vyčistí celý engine
+         */
         void cleanUp(void){
             showStatus();
 
-            loader -> cleanUp();
-            delete loader;
+            l_loader -> cleanUp();
+            delete l_loader;
         };
 
+        /**
+         * Funckia inicializuje všetko potrebné pre beh enginu
+         */
         void init(void){
             DEBUG("BasicEngine::init - start: " << glfwGetTime());
-            gui.init();
-//            WindowManager::init(width, height, "GEngine", false);
-//            Input::init(WindowManager::window, WindowManager::width, WindowManager::height);
-//
-//            app -> setLoader(&loader);
-//            app -> init();
-//            app -> loadContent();
-//
-//            app -> start();
-//
-//            gui.setWater(new GtkWater(((MainApplication * )app)->getMainRenderer()->getWaterMaster()));
-//            gui.setPostFx(new GtkPostFx(((MainApplication * )app) ->getMainRenderer()->getPostFxMaster()));
-//            gui.setRenderer(new GtkRenderer(((MainApplication * )app) ->getMainRenderer()));
+
+            if(l_showGui){
+                l_gui.init();
+            }
+            else{
+                appStart();
+            }
+
             DEBUG("BasicEngine::init - end: " << glfwGetTime());
         };
 
+        /**
+         * Funkcia vypíše priebežný stav enginu
+         */
         void showStatus(void){
-            DEBUG("frames: " << fpsCounter << ", elapsedTime: " << glfwGetTime());
+            DEBUG("frames: " << l_fpsCounter << ", elapsedTime: " << glfwGetTime());
         }
 
-        void update(float delta){
-            fpsCounter++;
+        /**
+         * Funckia vykoná update enginu
+         *
+         * @param i_delta - časový koeficient podla aktuálneho FPS
+         */
+        void update(float i_delta){
+            l_fpsCounter++;
 
-            if(running){
-                app -> update(delta);
-                app -> render();
+            if(l_running){
+                l_app -> update(i_delta);
+                l_app -> render();
             }
-            if(Input::getKeyDown(GLFW_KEY_M)){
-                gui.showWater();
-            }
-            if(Input::getKeyDown(GLFW_KEY_N)){
-                gui.showPostFx();
-            }
-            if(Input::getKeyDown(GLFW_KEY_B)){
-                gui.showRenderer();
-            }
-//            if(Input::getKeyDown(GLFW_KEY_V)){
-//                gui.showScene();
-//            }
+            if(l_showGui){
+                if(Input::getKeyDown(GLFW_KEY_M)){
+                    l_gui.showWater();
+                }
+                if(Input::getKeyDown(GLFW_KEY_N)){
+                    l_gui.showPostFx();
+                }
+                if(Input::getKeyDown(GLFW_KEY_B)){
+                    l_gui.showRenderer();
+                }
+    //            if(Input::getKeyDown(GLFW_KEY_V)){
+    //                gui.showScene();
+    //            }
 
-            gui.update();
+                l_gui.update();
+            }
             Input::update();
             WindowManager::update();
         };
     public:
-        void appStart(void){
-            std::cout << "x: " << gui.getResX() << ", y: " << gui.getResY() << "\n";
-            WindowManager::init(gui.getResX(), gui.getResY(), "GEngine", gui.getFullscreen());
-            Input::init(WindowManager::window, WindowManager::width, WindowManager::height);
-
-            gui.appIsRunning(true);
-
-            app -> setLoader(loader);
-            app -> init();
-            app -> loadContent();
-
-            app -> start();
-
-            gui.setWater(new GtkWater(((MainApplication * )app)->getMainRenderer()->getWaterMaster()));
-            gui.setPostFx(new GtkPostFx(((MainApplication * )app) ->getMainRenderer()->getPostFxMaster()));
-            gui.setRenderer(new GtkRenderer(((MainApplication * )app) ->getMainRenderer()));
-
-            running = true;
+        BasicEngine(BasicApplication * i_app, int i_width, int i_height) : l_app(i_app), l_width(i_width), l_height(i_height){
+            DEBUG("BasicEngine::BasicEngine" << glfwGetTime());
+            l_showGui = l_app == nullptr;
         };
 
-        void appStop(void){
-            gui.appIsRunning(false);
-            running = false;
+        /**
+         * Funkcia spusti aktuálne nastavenú aplikáciu v engine
+         */
+        void appStart(void){
+            //inicializujem okno
+            if(l_showGui){
+                WindowManager::init(l_gui.getResX(), l_gui.getResY(), DEFAULT_TITLE, l_gui.getFullscreen());
+            }
+            else{
+                WindowManager::init(0, 0 , DEFAULT_TITLE, true);
+            }
+            //inicializujem input
+            Input::init(WindowManager::width, WindowManager::height);
 
-            app -> cleanUp();
-            delete app;
-            app = nullptr;
+            //pridám aplikacii loader
+            l_app -> setLoader(l_loader);
+
+            if(l_showGui){
+                //v gui zmením tlačítka
+                l_gui.appIsRunning(true);
+
+                //inicializujeme aplikáciu
+                l_app -> init(&l_gui);
+            }
+            else{
+                l_app -> init(nullptr);
+            }
+
+            //načítame potrebný obsah
+            l_app -> loadContent();
+
+            //spustime aplikáciu
+            l_app -> start();
+
+            //nastavím engine aby updatoval aj aplikáciu
+            l_running = true;
+        };
+
+        /**
+         * Funkcia zastaví aktuálne bežiacu aplikáciu
+         */
+        void appStop(void){
+            if(l_showGui){
+                //v gui zmením tlačítka
+                l_gui.appIsRunning(false);
+            }
+            //nastavím engine aby neupdatoval aplikáciu
+            l_running = false;
+
+            //upraceme aplikáciu
+            l_app -> localCleanUp();
+            l_app -> cleanUp();
+            delete l_app;
+            l_app = nullptr;
+
+            //zavrieme okno
             WindowManager::close();
         };
 
-        void setUpApp(BasicApplication * app){
+        /**
+         * Funckia nastaví aplikáciu do enginu
+         *
+         * @param i_app - aplikácia ktorá sa bude spúštať
+         */
+        void setUpApp(BasicApplication * i_app){
             //zmažeme staru aplikáciu ak existovala
-            if(this -> app){
-                this -> app -> cleanUp();
-                delete this -> app;
+            if(this -> l_app){
+                ERROR("nemožeš zapnuť aplikáciu keď už jedna je spustená!!! ...najprv ju musíš vypnuť");
+                return;
             }
 
             //vytvorime novu
-            this -> app = app;
+            this -> l_app = i_app;
         };
 
-        BasicEngine(BasicApplication * app, int width, int height) : app(app), width(width), height(height){
-            DEBUG("BasicEngine::BasicEngine" << glfwGetTime());
-        };
-
+        /**
+         * Funkcia sa zavolá len raz a spustí celý engine
+         */
         void start(void){
             DEBUG("BasicEngine::start - start: " << glfwGetTime());
-            float delta = 1;
-            int fps = 0;
+            double currentTime  = glfwGetTime();
+            float delta         = 1;
+            int fps             = 0;
 
-
-            double currentTime = glfwGetTime();
             init();
-            while(!gui.getExitRequest()){
-                if(app && running){
+            while((l_showGui && !l_gui.getExitRequest()) || (!l_showGui && l_running)){
+                if(l_running){
                     fps++;
                     if(glfwGetTime() - currentTime > 1.0){
-                        app -> onSecondElapse(fps);
+                        l_app -> onSecondElapse(fps);
                         fps = 0;
                         currentTime = glfwGetTime();
                     }
-                    if(WindowManager::isCloseRequest() || !app->isRunning()){
+                    if(WindowManager::isCloseRequest() || !l_app -> isRunning()){
                         appStop();
                     }
                 }
@@ -173,8 +194,20 @@ class BasicEngine {
             cleanUp();
             DEBUG("BasicEngine::start - end : " << glfwGetTime());
         };
-    inline int getResX(void){return width;}
-    inline int getResY(void){return height;}
+
+        /**
+         * Funkcia vráti šírku okna aktuálnej aplikácie
+         *
+         * @return - šírka okna aktuálnej aplikácie v pixeloch
+         */
+        inline int getResX(void){return l_width;}
+
+        /**
+         * Funkcia vráti výšku okna aktuálnej aplikácie
+         *
+         * @return - výška okna aktuálnej aplikácie v pixeloch
+         */
+        inline int getResY(void){return l_height;}
 };
 
 

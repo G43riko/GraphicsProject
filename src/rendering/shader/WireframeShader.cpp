@@ -17,5 +17,6 @@ public:
     void setAllUniforms(void){
         setUniform("viewMatrix");
         setUniform("projectionMatrix");
+        setUniform("transformationMatrix");
     }
 };

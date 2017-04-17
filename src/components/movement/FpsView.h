@@ -118,12 +118,19 @@ public:
         if(Input::isKeyDown(GLFW_KEY_E)){
             yaw += rotSpeed;
         }
+        if(Input::isKeyDown(GLFW_KEY_U)){
+            pitch -= rotSpeed;
+        }
+        if(Input::isKeyDown(GLFW_KEY_J)){
+            pitch += rotSpeed;
+        }
+
 
         camera -> yaw = yaw;
         camera -> pitch = pitch;
         camera -> position = position;
 
-        camera -> updateForward();
+//        camera -> updateForward();
     }
 };
 

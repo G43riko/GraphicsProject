@@ -38,93 +38,93 @@ private:
 public:
     WaterMaster * getWaterMaster(void){}
 /**************************************************GETTERS**************************************************/
-bool isUseShadows(){
-    return useShadow;
-}
+    bool isUseShadows(){
+        return useShadow;
+    }
 
-void setShadows(bool useShadows) {
-    this -> useShadow = useShadows;
-}
+    void setShadows(bool useShadows) {
+        this -> useShadow = useShadows;
+    }
 
-bool useParticles(){
-    return useParticle;
-}
+    bool useParticles(){
+        return useParticle;
+    }
 
-void setParticles(bool useParticles) {
-    this -> useParticle = useParticles;
-}
+    void setParticles(bool useParticles) {
+        this -> useParticle = useParticles;
+    }
 
-bool useSkyboxes(){
-    return useSkybox;
-}
+    bool useSkyboxes(){
+        return useSkybox;
+    }
 
-void setSkybox(bool useSkybox) {
-    this -> useSkybox = useSkybox;
-}
+    void setSkybox(bool useSkybox) {
+        this -> useSkybox = useSkybox;
+    }
 
-bool useWaters(){
-    return useWater;
-}
+    bool useWaters(){
+        return useWater;
+    }
 
-void setWaters(bool useWater) {
-    this -> useWater = useWater;
-}
+    void setWaters(bool useWater) {
+        this -> useWater = useWater;
+    }
 
-bool usePostFxs(){
-    return usePostFx;
-}
+    bool usePostFxs(){
+        return usePostFx;
+    }
 
-void setPostFx(bool usePostFx) {
-    this -> usePostFx = usePostFx;
-}
+    void setPostFx(bool usePostFx) {
+        this -> usePostFx = usePostFx;
+    }
 
-bool useGuis() const {
-    return useGui;
-}
+    bool useGuis() const {
+        return useGui;
+    }
 
-void setGuis(bool useGui) {
-    this -> useGui = useGui;
-}
+    void setGuis(bool useGui) {
+        this -> useGui = useGui;
+    }
 
-bool useTextures() const {
-    return useTexture;
-}
+    bool useTextures() const {
+        return useTexture;
+    }
 
-void setUseTextures(bool useTexture) {
-    this -> useTexture = useTexture;
-}
+    void setUseTextures(bool useTexture) {
+        this -> useTexture = useTexture;
+    }
 
-bool useNormals(){
-    return useNormal;
-}
+    bool useNormals(){
+        return useNormal;
+    }
 
-void setUseNormals(bool useNormal) {
-    this -> useNormal = useNormal;
-}
+    void setUseNormals(bool useNormal) {
+        this -> useNormal = useNormal;
+    }
 
-bool useLights(){
-    return useLight;
-}
+    bool useLights(){
+        return useLight;
+    }
 
-void setUseLights(bool useLight) {
-    this -> useLight = useLight;
-}
+    void setUseLights(bool useLight) {
+        this -> useLight = useLight;
+    }
 
-bool useSpeculars(){
-    return useSpecular;
-}
+    bool useSpeculars(){
+        return useSpecular;
+    }
 
-void setUseSpeculars(bool useSpecular) {
-    this -> useSpecular = useSpecular;
-}
+    void setUseSpeculars(bool useSpecular) {
+        this -> useSpecular = useSpecular;
+    }
 
-bool useEnviromentals(){
-    return useEnviromental;
-}
+    bool useEnviromentals(){
+        return useEnviromental;
+    }
 
-void setUseEnviromentals(bool useEnviromental) {
-    this -> useEnviromental = useEnviromental;
-}
+    void setUseEnviromentals(bool useEnviromental) {
+        this -> useEnviromental = useEnviromental;
+    }
 };
 
 #endif //GRAPHICSPROJECT_RENDERERINTERFACE_H

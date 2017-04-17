@@ -7,36 +7,28 @@
 
 
 class WaterTile {
-    private:
-        float height;
-        float x, z;
-    public:
-        float size = 50;
-        WaterTile(float centerX, float centerZ, float height){
-            this -> x = centerX;
-            this -> z = centerZ;
-            this -> height = height;
-        }
+private:
+    float size;
+    float height;
+    float x, z;
+public:
+    WaterTile(float centerX, float centerZ, float height, float size){
+        this -> x = centerX;
+        this -> z = centerZ;
+        this -> size = size;
+        this -> height = height;
+    }
 
-        float getSize(){
-            return size;
-        }
+    //GETTERS
 
-        void setHeight(float height){
-            this -> height = height;
-        }
+    float getSize(){ return size; }
+    float getHeight() { return height; }
+    float getX() { return x; }
+    float getZ() { return z; }
 
-        float getHeight() {
-            return height;
-        }
+    //SETTERS
 
-        float getX() {
-            return x;
-        }
-
-        float getZ() {
-            return z;
-        }
+    void setHeight(float height){ this -> height = height; }
 };
 
 

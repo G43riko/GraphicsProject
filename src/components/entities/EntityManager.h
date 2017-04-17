@@ -6,7 +6,6 @@
 #define GRAPHICSPROJECT_ENTITYMANAGER_H
 
 
-#include <src/rendering/model/MaterialedModel.h>
 #include <src/rendering/model/Entity.h>
 #include <map>
 #include <vector>

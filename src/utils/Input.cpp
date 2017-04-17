@@ -4,7 +4,6 @@
 
 #include "Input.h"
 
-GLFWwindow * Input::window = nullptr;
 Vector2f Input::windowCenter;
 Vector2f Input::mouseScrollOffset;
 Vector2f Input::mousePos;
@@ -19,16 +18,15 @@ bool Input::keys[NUM_KEY_CODES] = {false};
 bool Input::lastButtons[NUM_MOUSE_BUTTONS] = {false};
 bool Input::buttons[NUM_MOUSE_BUTTONS] = {false};
 
-void Input::init(GLFWwindow* window, int width, int height){
-    Input::window = window;
-    glfwSetKeyCallback(window, Input::onKeyDown);
-    glfwSetCursorPosCallback(window, Input::onMouseMove);
-    glfwSetScrollCallback(window, Input::onMouseScroll);
+void Input::init(int width, int height){
+    glfwSetKeyCallback(WindowManager::window, Input::onKeyDown);
+    glfwSetCursorPosCallback(WindowManager::window, Input::onMouseMove);
+    glfwSetScrollCallback(WindowManager::window, Input::onMouseScroll);
     Input::windowCenter = Vector2f(width >> 1, height >> 1);
 }
 
 void Input::setMousePos(Vector2f  pos){
-    glfwSetCursorPos(Input::window, pos.x, pos.y);
+    glfwSetCursorPos(WindowManager::window, pos.x, pos.y);
 }
 void Input::onMouseScroll(GLFWwindow * window, double posX, double posY){
     mouseScrollOffset.x += (float)posX;
@@ -70,7 +68,7 @@ void Input::setMousePos(Vector2f);
 //KEYS
 
 bool Input::isKeyDown(int keyCode){
-    return glfwGetKey(Input::window, keyCode) == GLFW_PRESS;
+    return glfwGetKey(WindowManager::window, keyCode) == GLFW_PRESS;
     //return keys[keyCode];
 }
 
@@ -87,7 +85,7 @@ bool Input::getKeyUp(int keyCode){
 //MOUSE
 
 bool Input::isButtonDown(int buttonCode){
-    return glfwGetMouseButton(Input::window, buttonCode) == GLFW_PRESS;
+    return glfwGetMouseButton(WindowManager::window, buttonCode) == GLFW_PRESS;
     //return buttons[buttonCode];
 }
 bool Input::getMouseDown(int mouseButton){

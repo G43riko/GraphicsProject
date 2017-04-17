@@ -184,6 +184,7 @@ public:
         gtk_container_add(GTK_CONTAINER(mainPanel), introGui.getPanel());
 
         showIntro();
+
         return 0;
     };
 

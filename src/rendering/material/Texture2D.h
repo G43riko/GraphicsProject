@@ -16,35 +16,14 @@ class TextureData{
         GLuint id;
         GLenum type;
     public:
-        TextureData(GLuint id, GLenum type){
-            this -> id      = id;
-            this -> type    = type;
-        }
-        void setFilter(GLint filter){//GL_LINEAR, GL_NEAREST
-            glTexParameteri(type, GL_TEXTURE_MAG_FILTER, filter);
-            glTexParameteri(type, GL_TEXTURE_MIN_FILTER, filter);
-        }
-        void setWrap(GLint wrap){
-            glTexParameteri(type, GL_TEXTURE_WRAP_S, wrap);
-            glTexParameteri(type, GL_TEXTURE_WRAP_T, wrap);
-        }
-        void setMipmapping(){
-            glGenerateMipmap(GL_TEXTURE_2D);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -2.4f);
-        }
+        TextureData(GLuint id, GLenum type);
+        void setFilter(GLint filter);//GL_LINEAR, GL_NEAREST
+        void setWrap(GLint wrap);
+        void setMipmapping(void);
 
-        void bind(){
-            glBindTexture(type, id);
-        }
-
-        void bind(GLuint num){
-            glActiveTexture(num);
-            bind();
-        }
-        void cleanUp(void){
-            glDeleteTextures(1, &id);
-        }
+        void bind(void);
+        void bind(GLuint num);
+        void cleanUp(void);
 };
 
 class Texture2D {
@@ -59,18 +38,10 @@ class Texture2D {
         GLuint getTextureID(void);
         void bind(void);
         void bind(GLuint);
-        std::string getTitle(void){
-            return title;
-        };
-        int getWidth(void){
-            return width;
-        };
-        int getHeight(void){
-            return height;
-        };
-        void cleanUp(void){
-            glDeleteTextures(1, &textureID);
-        }
+        std::string getTitle(void);
+        int getWidth(void);
+        int getHeight(void);
+        void cleanUp(void);
 };
 typedef std::shared_ptr<Texture2D> PointerTexture2D;
 //PointerTexture2D initTexture2D(std::string, std::vector<unsigned char>, int, int);

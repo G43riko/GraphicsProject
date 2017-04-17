@@ -6,17 +6,11 @@
 #define GRAPHICSPROJECT_SCENE_H
 
 
-#include <src/rendering/model/Entity.h>
-#include "src/components/lights/PointLight.h"
-#include "GameObject.h"
-#include <map>
-#include <algorithm>
-#include <src/components/particles/Particle.h>
-#include <src/components/entities/EntityManager.h>
-#include <src/rendering/Renderer.h>
-#include <src/components/particles/ParticleManager.h>
+#include <src/core/BasicScene.h>
 
-class Scene {
+class BasicScene;
+
+class Scene : public BasicScene{
     private:
         PointerRawModel sphereModel = nullptr;
         PointerCubeTexture sky = nullptr;
@@ -31,13 +25,13 @@ class Scene {
             particles.loadTexture(texture, rows, columns);
         }
 
-        void setSky(PointerCubeTexture sky){
+        void setSky(PointerCubeTexture sky) override{
             this -> sky = sky;
         }
-        void addLight(PointerPointLight light){
+        void addLight(PointerPointLight light) override{
             lights.push_back(light);
         }
-        void addEntity(PointerEntity entity){
+        void addEntity(PointerEntity entity) override{
             entities.addEntity(entity);
         }
         void createParticleSystem(PointerTexture2D texture, float pps, float speed, float gravityComplient, float lifeLength){
@@ -55,13 +49,13 @@ class Scene {
 //            }
         }
          */
-        void addObject(PointerGameObject object){
+        void addObject(PointerGameObject object) override{
             objects.push_back(object);
             //entities.push_back(object->getObject());
             entities.addEntity(object->getObject());
         }
 
-        void update(float delta){
+        void update(float delta) override{
             particles.update(delta);
             /*
             if(particles.size()){
@@ -85,22 +79,22 @@ class Scene {
             entities.update(delta);
         };
 
-        void cleanUp(){
+        void cleanUp(void) override{
             sky -> cleanUp();
         };
 
-        std::vector<PointerPointLight> getLights(){
+        std::vector<PointerPointLight> getLights(void) override{
             return lights;
         };
 
-        EntitiesList getEntities(){
+        EntitiesList getEntities(void) override{
             return entities.getEntities();
         };
 
-        std::vector<PointerGameObject> getObjects(){
+        std::vector<PointerGameObject> getObjects(void) override{
             return objects;
         };
-        ParticlesList getParticles(void){
+        ParticlesList getParticles(void) override{
             return particles.getParticles();
         }
         /*
@@ -109,7 +103,7 @@ class Scene {
         };
         */
 
-        PointerCubeTexture getSky(void){
+        PointerCubeTexture getSky(void) override{
             return sky;
         };
 

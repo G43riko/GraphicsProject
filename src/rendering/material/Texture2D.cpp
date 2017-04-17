@@ -34,3 +34,50 @@ void Texture2D::bind(GLuint num){
     glActiveTexture(num);
     bind();
 }
+
+std::string Texture2D::getTitle(void){
+    return title;
+}
+int Texture2D::getWidth(void){
+    return width;
+}
+int Texture2D::getHeight(void){
+    return height;
+}
+void Texture2D::cleanUp(void){
+    glDeleteTextures(1, &textureID);
+}
+
+/*
+ * TextureData
+ */
+
+TextureData::TextureData(GLuint id, GLenum type){
+this -> id      = id;
+this -> type    = type;
+}
+void TextureData::setFilter(GLint filter){//GL_LINEAR, GL_NEAREST
+    glTexParameteri(type, GL_TEXTURE_MAG_FILTER, filter);
+    glTexParameteri(type, GL_TEXTURE_MIN_FILTER, filter);
+}
+void TextureData::setWrap(GLint wrap){
+    glTexParameteri(type, GL_TEXTURE_WRAP_S, wrap);
+    glTexParameteri(type, GL_TEXTURE_WRAP_T, wrap);
+}
+void TextureData::setMipmapping(void){
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -2.4f);
+}
+
+void TextureData::bind(void){
+    glBindTexture(type, id);
+}
+
+void TextureData::bind(GLuint num){
+    glActiveTexture(num);
+    bind();
+}
+void TextureData::cleanUp(void){
+    glDeleteTextures(1, &id);
+}

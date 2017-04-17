@@ -13,9 +13,9 @@
 
 
 class TextureManager{
-    static std::map<std::string, PointerTexture2D> loadedTextures2D;
-    static std::map<std::string, PointerCubeTexture> loadedCubeTextures;
-    static std::map<std::string, PointerParticleTexture> loadedParticleTextures;
+    static std::map<std::string, PointerTexture2D>          loadedTextures2D;
+    static std::map<std::string, PointerCubeTexture>        loadedCubeTextures;
+    static std::map<std::string, PointerParticleTexture>    loadedParticleTextures;
 public:
     static inline PointerTexture2D createTexture2D(std::string fileName){
         if(loadedTextures2D.find(fileName) == loadedTextures2D.end()){
