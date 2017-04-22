@@ -6,11 +6,11 @@
 #define GRAPHICSPROJECT_SCREEN_H
 
 
-#include <../rendering/material/Texture2D.h>
-#include <../utils/Vectors.h>
-#include <../utils/Loader.h>
+#include <src/rendering/material/Texture2D.h>
+#include <src/utils/Vectors.h>
+#include <src/utils/Loader.h>
 #include "ToFrameBufferRendering.h"
-#include <../rendering/shader/BasicShader.h>
+#include <src/rendering/shader/BasicShader.h>
 #include "../../rendering/Renderer.h"
 #include "Fbo.h"
 

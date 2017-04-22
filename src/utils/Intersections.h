@@ -51,4 +51,151 @@ bool intersectRayWithSquare(Vector3f R1, Vector3f R2, Vector3f S1, Vector3f S2, 
     // 4.
     return (u >= 0.0f && u <= dS21.dot(&dS21) && v >= 0.0f && v <= dS31.dot(&dS31));
 }
+/////////////
+float mod(float value, float modulus) {
+    return fmodf((fmodf(value, modulus) + modulus), modulus);
+}
+float intbound(float s, float ds) {
+    // Find the smallest positive t such that s+t*ds is an integer.
+    if (ds < 0) {
+        return intbound(-s, -ds);
+    } else {
+        s = mod(s, 1);
+        // problem is now s+t*ds = 1
+        return (1 - s) / ds;
+    }
+}
+
+float signum(float x) {
+    return x > 0 ? 1 : x < 0 ? -1 : 0;
+}
+
+/**
+ * AK vráti true tak sa prestane prehladávať dalej
+ *
+ * @param x
+ * @param y
+ * @param z
+ * @param face
+ * @return
+ */
+bool callback(int x, int y, int z, Vector3f face){
+    PRINT("kolizia: [" << x << ", " << y << ", " << z << "]\nface: ");
+    face.show();
+
+    return false;
+}
+
+void raycast(Vector3f origin, Vector3f direction, float radius = 100) {
+    // From "A Fast Voxel Traversal Algorithm for Ray Tracing"
+    // by John Amanatides and Andrew Woo, 1987
+    // <http://www.cse.yorku.ca/~amana/research/grid.pdf>
+    // <http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.42.3443>
+    // Extensions to the described algorithm:
+    //   • Imposed a distance limit.
+    //   • The face passed through to reach the current cube is provided to
+    //     the callback.
+
+    // The foundation of this algorithm is a parameterized representation of
+    // the provided ray,
+    //                    origin + t * direction,
+    // except that t is not actually stored; rather, at any given point in the
+    // traversal, we keep track of the *greater* t values which we would have
+    // if we took a step sufficient to cross a cube boundary along that axis
+    // (i.e. change the integer part of the coordinate) in the variables
+    // tMaxX, tMaxY, and tMaxZ.
+
+    // Cube containing origin point.
+    int x = (int)floor(origin.x);
+    int y = (int)floor(origin.y);
+    int z = (int)floor(origin.z);
+    // Break out direction vector.
+    float dx = direction.x;
+    float dy = direction.y;
+    float dz = direction.z;
+    // Direction to increment x,y,z when stepping.
+    float stepX = signum(dx);
+    float stepY = signum(dy);
+    float stepZ = signum(dz);
+    // See description above. The initial values depend on the fractional
+    // part of the origin.
+    float tMaxX = intbound(origin.x, dx);
+    float tMaxY = intbound(origin.y, dy);
+    float tMaxZ = intbound(origin.z, dz);
+    // The change in t when taking a step (always positive).
+    float tDeltaX = stepX / dx;
+    float tDeltaY = stepY / dy;
+    float tDeltaZ = stepZ / dz;
+    // Buffer for reporting faces to the callback.
+    Vector3f face;
+
+    // Avoids an infinite loop.
+    if (EZ(dx) && EZ(dy) && EZ(dz)){
+        return;
+        //throw new RangeError("Raycast in zero direction!");
+    }
+
+    // Rescale from units of 1 cube-edge to units of 'direction' so we can
+    // compare with 't'.
+    radius /= (float)sqrt(dx * dx + dy * dy + dz * dz);
+
+    int wx = 1000;
+    int wy = 1000;
+    int wz = 1000;
+
+    while (/* ray has not gone past bounds of world */
+            (stepX > 0 ? x < wx : x >= 0) &&
+            (stepY > 0 ? y < wy : y >= 0) &&
+            (stepZ > 0 ? z < wz : z >= 0)) {
+
+        // Invoke the callback, unless we are not *yet* within the bounds of the
+        // world.
+        if (!(x < 0 || y < 0 || z < 0 || x >= wx || y >= wy || z >= wz))
+            if (callback(x, y, z, face))
+                break;
+
+        // tMaxX stores the t-value at which we cross a cube boundary along the
+        // X axis, and similarly for Y and Z. Therefore, choosing the least tMax
+        // chooses the closest cube boundary. Only the first case of the four
+        // has been commented in detail.
+        if (tMaxX < tMaxY) {
+            if (tMaxX < tMaxZ) {
+                if (tMaxX > radius) break;
+                // Update which cube we are now in.
+                x += (int)stepX;
+                // Adjust tMaxX to the next X-oriented boundary crossing.
+                tMaxX += tDeltaX;
+                // Record the normal vector of the cube face we entered.
+                face.x = -stepX;
+                face.y = 0;
+                face.z = 0;
+            } else {
+                if (tMaxZ > radius) break;
+                z += (int)stepZ;
+                tMaxZ += tDeltaZ;
+                face.x = 0;
+                face.y = 0;
+                face.z = -stepZ;
+            }
+        } else {
+            if (tMaxY < tMaxZ) {
+                if (tMaxY > radius) break;
+                y += (int)stepY;
+                tMaxY += tDeltaY;
+                face.x = 0;
+                face.y = -stepY;
+                face.z = 0;
+            } else {
+                // Identical to the second case, repeated for simplicity in
+                // the conditionals.
+                if (tMaxZ > radius) break;
+                z += (int)stepZ;
+                tMaxZ += tDeltaZ;
+                face.x = 0;
+                face.y = 0;
+                face.z = -stepZ;
+            }
+        }
+    }
+}
 #endif //GAMEENGINE_INTERSECTIONS_H

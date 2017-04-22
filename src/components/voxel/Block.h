@@ -28,8 +28,14 @@ public:
     const static unsigned char Z_PLUS   = 0x10; // hex for 0001 0000
     const static unsigned char Z_MINUS  = 0x20; // hex for 0010 0000
     Block(int x, int y, int z, Chunk * parent, BlockType type);
-    void cleanUp(void){
 
+    void cleanUp(void){
+        if(xNeighborPlus){ xNeighborPlus -> xNeighborMinus = nullptr; }
+        if(xNeighborMinus){ xNeighborMinus -> xNeighborPlus = nullptr; }
+        if(yNeighborPlus){ yNeighborPlus -> yNeighborMinus = nullptr; }
+        if(yNeighborMinus){ yNeighborMinus -> yNeighborPlus = nullptr; }
+        if(zNeighborPlus){ zNeighborPlus -> zNeighborMinus = nullptr; }
+        if(zNeighborMinus){ zNeighborMinus -> zNeighborPlus = nullptr; }
     }
 
     Vector3f getAbsolutePosition(void);
@@ -49,7 +55,7 @@ public:
         glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
 
 
-        shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation(M_PI_2, 0, 0) * Matrix4f::initTranslation(position.x, position.y, position.z));
+        shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation((float)M_PI_2, 0, 0) * Matrix4f::initTranslation(position.x, position.y, position.z));
         glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     }
 
@@ -63,7 +69,7 @@ public:
             case BlockType::green: return Vector4f(0, 1, 0, 1);
             case BlockType::blue: return Vector4f(0, 0, 1, 1);
             case BlockType::black: return Vector4f(0, 0, 0, 1);
-            case BlockType::white: return Vector4f(1, 1, 1, 1);
+            default: return Vector4f(1, 1, 1, 1);
         }
     }
 
@@ -76,6 +82,13 @@ public:
 
         zNeighborPlus && zNeighborPlus->isVisible() ? turnOffOption(Z_PLUS) : turnOnOption(Z_PLUS);
         zNeighborMinus && zNeighborMinus->isVisible() ? turnOffOption(Z_MINUS) : turnOnOption(Z_MINUS);
+
+//        turnOnOption(X_PLUS);
+//        turnOnOption(X_MINUS);
+//        turnOnOption(Y_PLUS);
+//        turnOnOption(Y_MINUS);
+//        turnOnOption(Z_PLUS);
+//        turnOnOption(Z_MINUS);
     }
     void setNeighbor(Block * block){
         if(block == nullptr){

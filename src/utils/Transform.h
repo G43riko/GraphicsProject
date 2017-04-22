@@ -31,6 +31,13 @@ public:
     void move(float, float, float);
     //void rotate(float, float, float);
 
+
+    void rotate(const Quaternion& rot){
+        rotation = Quaternion(rot.mul(rotation).normalize());
+    }
+    void rotate(const Vector3f& axis, float angle){
+        rotate(Quaternion(axis, angle));
+    }
     Matrix4f getTransformation(bool = true, bool = true, bool = true);
     void setPosition(Vector3f);
     Vector3f * getPosition(void);
@@ -38,9 +45,9 @@ public:
     float getPosY(void);
     float getPosZ(void);
     Quaternion * getRotation(void);
-    float getRotX(void);
-    float getRotY(void);
-    float getRotZ(void);
+//    float getRotX(void);
+//    float getRotY(void);
+//    float getRotZ(void);
     Vector3f * getScale(void);
     float getScaleX(void);
     float getScaleY(void);

@@ -59,12 +59,19 @@ void Chunk::cleanUp(void){
     }
     delete[] map;
 }
+void Chunk::removeBlock(int x, int y, int z){
+    Block * b = getBlock(x, y, z);
+    b -> cleanUp();
+    delete b;
+    setBlock(nullptr, x, y, z);
+}
+
 bool Chunk::isTransparent(int x, int y, int z){
     //ak blok neexistuje tak je priehladný
     if(x < 0 || y < 0 || z < 0 || x >= MAX_BLOCKS_X || y >= MAX_BLOCKS_Y || z >= MAX_BLOCKS_Z){
         return true;
     }
-    return map[x][y][z] == nullptr ;//|| !map[x][y][z] -> isVisible();
+    return getBlock(x, y, z) == nullptr ;//|| !map[x][y][z] -> isVisible();
 }
 void Chunk::generateAllBlocks(void){
     map = new Block *** [MAX_BLOCKS_X];
@@ -81,9 +88,9 @@ void Chunk::generateAllBlocks(void){
 
 void Chunk::generateBlock(int x, int y, int z){
     if(random(0, 5) > 1){
-        map[x][y][z] = new Block(x, y, z, this, getRandomType());
+        setBlock(new Block(x, y, z, this, getRandomType()), x, y, z);
     }
     else{
-        map[x][y][z] = nullptr;
+        setBlock(nullptr, x, y, z);
     }
 }

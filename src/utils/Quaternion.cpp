@@ -92,6 +92,7 @@ Quaternion Quaternion::operator * (const Quaternion& r){
     return Quaternion(_x, _y, _z, _w);
 }
 
+
 Quaternion Quaternion::operator *= (const Quaternion& r){
     *this = *this * r;
     return *this;

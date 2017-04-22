@@ -21,6 +21,7 @@ class Scene : public BasicScene{
         std::vector<PointerGameObject> objects;
     public:
         Scene(Loader, PointerCubeTexture = nullptr);
+
         void loadParticleTexture(PointerTexture2D texture, int rows, int columns){
             particles.loadTexture(texture, rows, columns);
         }

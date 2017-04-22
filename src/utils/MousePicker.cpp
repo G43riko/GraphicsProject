@@ -8,8 +8,8 @@ Vector3f MousePicker::calculateMouseRay(){
     Vector2f mousePos = Input::getMousePosition();
     float mouseX = mousePos.x;
     float mouseY = mousePos.y;
-    mouseX = WindowManager::width / 2;
-    mouseY = WindowManager::height / 2;
+    mouseX = (float)(WindowManager::width / 2);
+    mouseY = (float)(WindowManager::height / 2);
     Vector2f normalizedCoords = getNormalizedDeviceCoords(mouseX, mouseY);
     Vector4f clipCoords = Vector4f(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
     Vector4f eyeCoords = toEyeCoords(clipCoords);
@@ -38,9 +38,9 @@ Vector2f MousePicker::getNormalizedDeviceCoords(float mouseX, float mouseY){
 }
 
 void MousePicker::update(){
-    PRINT("pitch: " << camera -> pitch << " yaw: " << camera -> yaw);
-    viewMatrix = Maths::createViewMatrix(-camera -> pitch,      -camera -> yaw,        camera -> roll,
-                                         camera -> position.x, camera -> position.y, camera -> position.z);
+    viewMatrix = glm::rotate(-camera -> pitch, glm::vec3(1, 0, 0));
+    viewMatrix *= glm::rotate(-camera -> yaw, glm::vec3(0, 1, 0));
+    viewMatrix *= glm::translate(glm::vec3(-camera -> getPosition().x, -camera -> getPosition().y, -camera -> getPosition().z));
     currentRay = calculateMouseRay();
 }
 MousePicker::MousePicker(Camera * camera) {

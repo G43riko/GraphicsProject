@@ -34,7 +34,9 @@ if(el == nullptr){              \
 #define COSI(a) (int)cos(num)
 #define COSF(a) (float)cos(a)
 
-#define ABS(x) (x < 0 ? -x : x)
+#ifndef ABS
+    #define ABS(x) (x < 0 ? -x : x)
+#endif
 
 //macro ako náhrada pre new
 //použitie: GNEW(Vector3f, 2, 3, 4)
@@ -50,10 +52,10 @@ if(el == nullptr){              \
 #define NEQ(a, b) !EQ(a, b)
 
 //Equal Zero
-#define NZ(a) EQ(a, 0)
+#define EZ(a) EQ(a, 0)
 
 //Not Equal Zero
-#define NEZ(a) !NZ(a)
+#define NEZ(a) !EZ(a)
 
 /*******************************************MATH******************************************************/
 #define MATH_PI 3.1415926535897932384626433832795

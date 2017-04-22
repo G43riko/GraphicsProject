@@ -34,8 +34,7 @@ glm::mat4 Maths::createViewMatrix(const float &pitch, const float &yaw, const fl
     if(NEQ(roll, 0)){
         resultMatrix *= glm::rotate(roll, glm::vec3(0, 0, 1));
     }
-    resultMatrix *= glm::translate(glm::vec3(-x, -y, -z));
-    return resultMatrix;
+    return resultMatrix * glm::translate(glm::vec3(-x, -y, -z));
 }
 
 

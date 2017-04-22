@@ -26,19 +26,28 @@ class Quaternion : public Vector4f{
         Quaternion conjugate(void);
         void rotate(const Vector3f & vec){
             Quaternion result = *this;
-            if(NEQ(vec.x, 0))
+            if(NEQ(vec.x, 0)){
                 result = result * Quaternion(Vector3f(1, 0, 0), vec.x);
-
-            if(NEQ(vec.y, 0))
+            }
+            if(NEQ(vec.y, 0)){
                 result = result * Quaternion(Vector3f(0, 1, 0), vec.y);
-
-            if(NEQ(vec.z, 0))
+            }
+            if(NEQ(vec.z, 0)){
                 result = result * Quaternion(Vector3f(0, 0, 1), vec.z);
+            }
 
             x = result.x;
             y = result.y;
             z = result.z;
             w = result.w;
+        }
+        Quaternion mul(const Quaternion& r) const {
+            const float _w = (w * r.w) - (x * r.x) - (y * r.y) - (z * r.z);
+            const float _x = (x * r.w) + (w * r.x) + (y * r.z) - (z * r.y);
+            const float _y = (y * r.w) + (w * r.y) + (z * r.x) - (x * r.z);
+            const float _z = (z * r.w) + (w * r.z) + (x * r.y) - (y * r.x);
+
+            return Quaternion(_x, _y, _z, _w);
         }
         Quaternion operator * (const Quaternion&);
         Quaternion operator *= (const Quaternion&);

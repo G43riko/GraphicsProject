@@ -31,10 +31,10 @@ class Loader {
         GLuint createVAO(void);
         void bindIndicesBuffer(std::vector<GLuint>);
         void bindIndicesBufferArray(GLuint *);
-        void storeDataInAttributeList(int, int, std::vector<GLfloat>);
-        void storeDataInAttributeArray(int, int, GLfloat *);
+        void storeDataInAttributeList(GLuint ,int, std::vector<GLfloat>);
+        void storeDataInAttributeArray(GLuint ,int, GLfloat *);
         void unbindVAO(void);
-
+        /*
         template <typename T> void showBufferData(int size, GLuint id, GLuint type = GL_ARRAY_BUFFER){
             T * target = new T[size * sizeof(T)];
             glBindBuffer(type, id);
@@ -44,6 +44,7 @@ class Loader {
                 std::cout << target[i] << " ";
             std::cout << std::endl;
         }
+         */
 };
 
 #endif //GRAPHICSPROJECT_LOADER_H

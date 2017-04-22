@@ -22,7 +22,7 @@ void ShadowMaster::renderShadows(EntitiesList entities, PointerPointLight sun, P
     box.update();
     prepare(sun -> getPosition() * -1, box);
     if(Input::getKeyDown(GLFW_KEY_L)){
-        camera ->position.show();
+        camera ->getPosition().show();
     }
 
     //shader -> updateUniform4m("mvpMatrix", projectionViewMatrix);

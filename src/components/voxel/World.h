@@ -6,14 +6,19 @@
 #define GAMEENGINE_WORLD_H
 
 
+#define MAX_CHUNKS_X 1
+#define MAX_CHUNKS_Y 1
+#define MAX_CHUNKS_Z 1
+
 #include <src/utils/Vectors.h>
 #include <src/core/BasicScene.h>
 #include <src/rendering/material/TextureManager.h>
 #include "Chunk.h"
 
-#define MAX_CHUNKS_X 10
-#define MAX_CHUNKS_Y 10
-#define MAX_CHUNKS_Z 10
+#define WOLD_MAX_X (MAX_CHUNKS_X * MAX_BLOCKS_X)
+#define WOLD_MAX_Y (MAX_CHUNKS_Y * MAX_BLOCKS_Y)
+#define WOLD_MAX_Z (MAX_CHUNKS_Z * MAX_BLOCKS_Z)
+
 
 class Chunk;
 class Block;
@@ -25,7 +30,7 @@ public:
     void init(void);
     void cleanUp(void);
     inline BasicScene * getScene(void){return scene;}
-
+    Block * getBlockOn(int x, int y, int z);
     PointerMaterialedModel getModel(int number){
         switch(number){
             case 1: return model1;
@@ -43,6 +48,9 @@ private:
     PointerRawModel model;
     BasicScene * scene = nullptr;
     Chunk * getChunk(int x, int y, int z){
+        if(x < 0 || y < 0 || z < 0 || x >= MAX_CHUNKS_X || y >= MAX_CHUNKS_Y || z >= MAX_CHUNKS_Z){
+            return nullptr;
+        }
         return map[x][y][z];
     }
 

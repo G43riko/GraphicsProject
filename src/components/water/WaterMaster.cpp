@@ -32,7 +32,7 @@ void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
 
     shader -> updateUniformf("refractiveRation", refractiveRation);
     //waveStrength
-    shader -> updateUniform3f("cameraPosition", camera -> position);
+    shader -> updateUniform3f("cameraPosition", camera -> getPosition());
     shader -> updateUniformf("moveFactor", moveFactor);
     moveFactor = (float)fmod(moveFactor, 1);
     shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());

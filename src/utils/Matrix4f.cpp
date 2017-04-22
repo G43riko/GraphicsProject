@@ -70,25 +70,20 @@ Matrix4f Matrix4f::mul(const Matrix4f & left, Matrix4f right, Matrix4f * dest) {
     res.m32 = m32;
     res.m33 = m33;
 
-    if (dest)
+    if (dest){
         *dest = res;
+    }
     return res;
 }
 Vector4f Matrix4f::transform(Matrix4f left, Vector4f right, Vector4f * dest) {
-    Vector4f res = Vector4f();
+    Vector4f res = Vector4f(left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w,
+                            left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w,
+                            left.m02 * right.x + left.m12 * right.y + left.m22 * right.z + left.m32 * right.w,
+                            left.m03 * right.x + left.m13 * right.y + left.m23 * right.z + left.m33 * right.w);
 
-    float x = left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w;
-    float y = left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w;
-    float z = left.m02 * right.x + left.m12 * right.y + left.m22 * right.z + left.m32 * right.w;
-    float w = left.m03 * right.x + left.m13 * right.y + left.m23 * right.z + left.m33 * right.w;
-
-    res.x = x;
-    res.y = y;
-    res.z = z;
-    res.w = w;
-
-    if(dest)
+    if(dest){
         *dest = res;
+    }
     return res;
 }
 Matrix4f Matrix4f::translate(Vector3f vec, Matrix4f src, Matrix4f * dest) {
@@ -100,8 +95,9 @@ Matrix4f Matrix4f::translate(Vector3f vec, Matrix4f src, Matrix4f * dest) {
     res.m33 += src.m03 * vec.x + src.m13 * vec.y + src.m23 * vec.z;
 
 
-    if (dest)
+    if (dest){
         *dest = res;
+    }
     return res;
 }
 /*
@@ -126,24 +122,24 @@ Matrix4f Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * d
     float c = (float) cos(angle);
     float s = (float) sin(angle);
     float oneminusc = 1.0f - c;
-    float xy = axis.x*axis.y;
-    float yz = axis.y*axis.z;
-    float xz = axis.x*axis.z;
-    float xs = axis.x*s;
-    float ys = axis.y*s;
-    float zs = axis.z*s;
+    float xy = axis.x * axis.y;
+    float yz = axis.y * axis.z;
+    float xz = axis.x * axis.z;
+    float xs = axis.x * s;
+    float ys = axis.y * s;
+    float zs = axis.z * s;
 
-    float f00 = axis.x*axis.x*oneminusc+c;
-    float f01 = xy*oneminusc+zs;
-    float f02 = xz*oneminusc-ys;
+    float f00 = axis.x * axis.x * oneminusc + c;
+    float f01 = xy * oneminusc + zs;
+    float f02 = xz * oneminusc - ys;
     // n[3] not used
-    float f10 = xy*oneminusc-zs;
-    float f11 = axis.y*axis.y*oneminusc+c;
-    float f12 = yz*oneminusc+xs;
+    float f10 = xy * oneminusc - zs;
+    float f11 = axis.y * axis.y * oneminusc + c;
+    float f12 = yz * oneminusc + xs;
     // n[7] not used
-    float f20 = xz*oneminusc+ys;
-    float f21 = yz*oneminusc-xs;
-    float f22 = axis.z*axis.z*oneminusc+c;
+    float f20 = xz * oneminusc + ys;
+    float f21 = yz * oneminusc - xs;
+    float f22 = axis.z * axis.z * oneminusc + c;
 
     float t00 = src.m00 * f00 + src.m10 * f01 + src.m20 * f02;
     float t01 = src.m01 * f00 + src.m11 * f01 + src.m21 * f02;
@@ -166,8 +162,9 @@ Matrix4f Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * d
     res.m12 = t12;
     res.m13 = t13;
 
-    if (dest)
+    if (dest){
         *dest = res;
+    }
     return res;
 }
 
@@ -187,8 +184,9 @@ Matrix4f Matrix4f::scale(Vector3f vec, Matrix4f src, Matrix4f * dest) {
     res.m22 = src.m22 * vec.z;
     res.m23 = src.m23 * vec.z;
 
-    if (dest)
+    if (dest){
         *dest = res;
+    }
     return res;
 }
 
@@ -219,9 +217,9 @@ Matrix4f Matrix4f::initRotation(float x, float y, float z){
     Matrix4f ry = Matrix4f();
     Matrix4f rz = Matrix4f();
 
-    x = static_cast<float>(TO_RADIANS(x));
-    y = static_cast<float>(TO_RADIANS(y));
-    z = static_cast<float>(TO_RADIANS(z));
+    x = TO_RADIANS(x);
+    y = TO_RADIANS(y);
+    z = TO_RADIANS(z);
 
     rz.m00 = COSF(z); rz.m01 = -SINF(z);rz.m02 = 0;      rz.m03 = 0;
     rz.m10 = SINF(z); rz.m11 = COSF(z); rz.m12 = 0;      rz.m13 = 0;
@@ -238,9 +236,7 @@ Matrix4f Matrix4f::initRotation(float x, float y, float z){
     ry.m20 = SINF(y); ry.m21 = 0;      ry.m22 = COSF(y); ry.m23 = 0;
     ry.m30 = 0;      ry.m31 = 0;      ry.m32 = 0;      ry.m33 = 1;
 
-    Matrix4f m;
-    Matrix4f result = mul(ry, rx, &m);
-    return mul(rz, result, &result);
+    return mul(rz, mul(ry, rx));
 }
 
 Matrix4f Matrix4f::initPerspective(float fov, float aspectRatio, float zNear, float zFar){
@@ -252,9 +248,9 @@ Matrix4f Matrix4f::initPerspective(float fov, float aspectRatio, float zNear, fl
     result.m20 = 0;  result.m21 = 0;  result.m22 = 0;  result.m23 = 0;
     result.m30 = 0;  result.m31 = 0;  result.m32 = 0;  result.m33 = 0;
 
-    result.m00 = 1.0f/(tanHalfFOV * aspectRatio);
+    result.m00 = 1.0f / (tanHalfFOV * aspectRatio);
     result.m11 = 1.0f / tanHalfFOV;
-    result.m22 = -(zNear+zFar) / zRange;
+    result.m22 = -(zNear + zFar) / zRange;
     result.m32 = 1;
     result.m23 = 2 * zFar * zNear / zRange;
 

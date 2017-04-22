@@ -14,11 +14,13 @@
 class BasicScene{
 public:
     virtual ~BasicScene(){};
+
+    //OTHERS
     virtual void cleanUp(void) = 0;
     virtual void update(float delta) = 0;
-    virtual void setSky(PointerCubeTexture sky) = 0;
-    virtual void addLight(PointerPointLight light) = 0;
 
+    //ADDERS
+    virtual void addLight(PointerPointLight light) = 0;
     virtual void addEntity(PointerEntity entity) = 0;
     virtual void addObject(PointerGameObject object) = 0;
 
@@ -30,6 +32,9 @@ public:
     virtual std::vector<PointerGameObject> getObjects() = 0;
     virtual ParticlesList getParticles(void) = 0;
     virtual PointerCubeTexture getSky(void) = 0;
+
+    //SETTERS
+    virtual void setSky(PointerCubeTexture sky) = 0;
 };
 
 #endif //GRAPHICSPROJECT_BASICSCENE_H

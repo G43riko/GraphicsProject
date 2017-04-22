@@ -67,7 +67,6 @@ public:
         TerrainManager terrainManager = TerrainManager(getLoader(), 100, (Scene *)getScene());
         terrainManager.generateTerrain(diffuse, 128, 5, 40, 0, 0);
 //        getRenderer()->getMaster()->getVoxel()->setWorld(new World(getScene(), rawModel));
-        getRenderer()->getMaster()->getVoxel()->setWorld(new World(getScene(), plane));
 
 //        for(int i=0 ; i<3000 ; i++){
 //            float x = (float)random(0, 100);

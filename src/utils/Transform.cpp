@@ -19,17 +19,22 @@ void Transform::move(float x, float y, float z){
     position.z += z;
 }
 
-Matrix4f Transform::getTransformation(bool pos, bool rot, bool sca){
+Matrix4f Transform::getTransformation(bool pos, bool rot, bool sca) {
     Matrix4f result;
     Matrix4f::setIdentity(result);
-    if(parent)
-        result = parent -> getTransformation(parentAttributes.x > 0, parentAttributes.y > 0, parentAttributes.z > 0) * result;
-    if(pos)
+    if (parent) {
+        result = parent -> getTransformation(parentAttributes.x > 0, parentAttributes.y > 0, parentAttributes.z > 0) *
+                 result;
+    }
+    if (pos){
         result = Matrix4f::initTranslation(position.x, position.y, position.z) * result;
-    if(rot)
+    }
+    if (rot){
         result = rotation.toRotationMatrix() * result;
-    if(sca)
+    }
+    if(sca){
         result = Matrix4f::initScale(scale.x, scale.y, scale.z) * result;
+    }
     return result;
 }
 void Transform::setPosition(Vector3f vec){

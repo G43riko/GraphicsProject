@@ -131,7 +131,7 @@ void Renderer::renderSceneDeferred(BasicScene * scene){
     shader -> bind();
 
     shader -> updateUniform4m(VIEW_MATRIX, actualCamera -> getViewMatrix());
-    shader -> updateUniform3f("cameraPosition", actualCamera -> position);
+    shader -> updateUniform3f("cameraPosition", actualCamera -> getPosition());
     glEnable(GL_TEXTURE);
     EntitiesList entities = scene -> getEntities();
 

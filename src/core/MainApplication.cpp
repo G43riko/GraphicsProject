@@ -62,7 +62,7 @@ void MainApplication::update(float delta) {
     }
 
     if(Input::getMouseDown(0)){
-        PointerGameObject entity = PointerGameObject(new GameObject(createEntity(ball, getRenderer() -> getActualCamera() -> position, Vector3f(), Vector3f(1))));
+        PointerGameObject entity = PointerGameObject(new GameObject(createEntity(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(1))));
         entity->setVelocity(getRenderer() -> getActualCamera() -> getForward());
         getScene()->addObject(entity);
     }

@@ -14,7 +14,7 @@ Camera::Camera(void){
     picker = new MousePicker(this);
 }
 Vector3f Camera::getForward(void){
-    return picker -> getCurrentRay();
+    return transform.getRotation()->getBack();
 }
 glm::mat4 Camera::getProjectionMatrix(void){
     return projectionMatrix;
@@ -22,14 +22,8 @@ glm::mat4 Camera::getProjectionMatrix(void){
 void Camera::cleanUp(void){
     delete picker;
 }
-float toRadians(float val){
-    return static_cast<float>(val * (M_PI / 180));
-}
-
-bool isNotZero(float val){
-    return val > 0 || val < 0;
-}
-
 glm::mat4 Camera::getViewMatrix(void){
-    return Maths::createViewMatrix(pitch, yaw, roll, position.x, position.y, position.z);
+//    return Maths::createViewMatrix(pitch, yaw, roll, position.x, position.y, position.z);
+    Vector3f pos = transform.getPosition();
+    return Matrix4f::toGlmMatrix(transform .getRotation() -> toRotationMatrix()) * glm::translate(glm::vec3(-pos.x, -pos.y, -pos.z));
 }

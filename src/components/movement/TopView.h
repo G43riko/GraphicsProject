@@ -20,8 +20,9 @@ private:
 public:
     TopView(PointerCamera camera, float height, GameObject * player = nullptr) : BasicView(camera, player, "topView"){
         this -> height = height;
-        realPosition = camera -> position;
-        camera -> position.y = height;
+        realPosition = camera -> getPosition();
+//        camera -> position.y = height;
+        camera -> getTransform()->getPosition()-> y = height;
         camera -> pitch = (float)M_PI_2;
         player->getObject()->immortal = true;
     }
@@ -78,7 +79,8 @@ public:
         position.y = playerPos -> y + tmpHeight * SINF(camera -> pitch);
         position.z = playerPos -> z + tmpHeight * COSF(-camera -> yaw) * COSF(camera -> pitch);
         position.x = playerPos -> x + tmpHeight * SINF(-camera -> yaw) * COSF(camera -> pitch);
-        camera -> position = position;
+//        camera -> setPosition(position);
+        camera ->getTransform()->setPosition(position);
     }
 };
 

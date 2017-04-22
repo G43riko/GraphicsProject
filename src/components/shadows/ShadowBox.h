@@ -55,8 +55,8 @@ public:
         Vector3f forwardVector = Matrix4f::transform(rotation, FORWARD);
         Vector3f toFar = forwardVector * SHADOW_DISTANCE;
         Vector3f toNear = forwardVector * cam -> NEAR_PLANE;
-        Vector3f centerNear = toNear + cam -> position;
-        Vector3f centerFar = toFar + cam -> position;
+        Vector3f centerNear = toNear + cam -> getPosition();
+        Vector3f centerFar = toFar + cam -> getPosition();
         Vector4f* points = calculateFrustumVertices(rotation, forwardVector, centerNear,
                                                      centerFar);
 

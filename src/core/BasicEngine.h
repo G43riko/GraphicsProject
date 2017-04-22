@@ -28,8 +28,7 @@ class BasicEngine {
         void cleanUp(void){
             showStatus();
 
-            l_loader -> cleanUp();
-            delete l_loader;
+            CHECK_AND_CLEAR(l_loader);
         };
 
         /**

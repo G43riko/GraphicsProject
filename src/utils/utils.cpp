@@ -23,7 +23,7 @@ std::vector<Vector3f> getKerner(void){
         float scale = (float)i / 64;
         scale =  LERP(0.1f, 1.0f, scale * scale);
         Vector3f sample = Vector3f(randomFloats(generator) * 2 - 1, randomFloats(generator) * 2 - 1, randomFloats(generator)).normalize();
-        sample *=randomFloats(generator) * scale;
+        sample *= randomFloats(generator) * scale;
         ssaoKernel.push_back(sample);
     }
     return ssaoKernel;

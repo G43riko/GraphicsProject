@@ -64,6 +64,26 @@ public:
         res[3][3] = mat.m33;;
         return res;
     }
+    static Matrix4f InitRotationEuler(float x, float y, float z) {
+        Matrix4f rx, ry, rz;
+
+        rx.m00 = 1;   rx.m10 = 0  ;  rx.m20 = 0   ; rx.m30 = 0;
+        rx.m01 = 0;   rx.m11 = COSF(x);  rx.m21 = -SINF(x); rx.m31 = 0;
+        rx.m02 = 0;   rx.m12 = SINF(x);  rx.m22 = COSF(x) ; rx.m32 = 0;
+        rx.m03 = 0;   rx.m13 = 0  ;  rx.m23 = 0   ; rx.m33 = 1;
+
+        ry.m00 = COSF(y); ry.m10 = 0;    ry.m20 = -SINF(y); ry.m30 = 0;
+        ry.m01 = 0  ; ry.m11 = 1;    ry.m21 = 0   ; ry.m31 = 0;
+        ry.m02 = SINF(y); ry.m12 = 0;    ry.m22 = COSF(y) ; ry.m32 = 0;
+        ry.m03 = 0  ; ry.m13 = 0;    ry.m23 = 0   ; ry.m33 = 1;
+
+        rz.m00 = COSF(z); rz.m10 = -SINF(z); rz.m20 = 0;    rz.m30 = 0;
+        rz.m01 = SINF(z); rz.m11 = COSF(z) ; rz.m21 = 0;    rz.m31 = 0;
+        rz.m02 = 0  ; rz.m12 = 0   ; rz.m22 = 1;    rz.m32 = 0;
+        rz.m03 = 0  ; rz.m13 = 0   ; rz.m23 = 0;    rz.m33 = 1;
+
+        return rz * ry * rx;
+    }
 
     static Matrix4f setIdentity(Matrix4f&);
 

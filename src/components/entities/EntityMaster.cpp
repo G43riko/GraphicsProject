@@ -11,7 +11,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
     }
     shader -> bind();
     shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform3f("cameraPosition", camera -> position);
+    shader -> updateUniform3f("cameraPosition", camera -> getPosition());
     //shader -> updateUniform2f("levels", 4);
     if(master.getShadow() != nullptr){
         shader -> updateUniform4m("toShadowSpace", master.getShadow() -> getToShadowMapSpaceMatrix());
@@ -55,7 +55,7 @@ void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vect
         shader->updateUniform4m("toShadowSpace", master.getShadow() -> getToShadowMapSpaceMatrix());
     }
     shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
-    shader -> updateUniform3f("cameraPosition", camera -> position);
+    shader -> updateUniform3f("cameraPosition", camera -> getPosition());
     //shader -> updateUniform2f("levels", 4);
     shader -> updateUniform4f("plane", clipPlane);
     for(unsigned int i=0 ; i<lights.size() ; i++){
@@ -79,7 +79,7 @@ void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLi
     shader -> bind();
 
     shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
-    shader -> updateUniform3f("cameraPosition", camera -> position);
+    shader -> updateUniform3f("cameraPosition", camera -> getPosition());
     //shader -> updateUniform2f("levels", 4);
 
     for(unsigned int i=0 ; i<lights.size() ; i++){
@@ -124,13 +124,16 @@ void EntityMaster::renderWireFrame(EntitiesList entities, PointerCamera camera){
     RenderUtil::finishRender(1);
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }
+
 EntityMaster::EntityMaster(PointerCamera camera){
     RenderUtil::updateProjectionMatrix(shader, camera);
-};
+}
+
 void EntityMaster::cleanUp(void){
     shader -> cleanUp();
     delete shader;
-};
+}
+
 BasicShader * EntityMaster::getShader(void){
     return shader;
-};
+}

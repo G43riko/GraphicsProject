@@ -5,6 +5,8 @@
 #include "World.h"
 
 World::World(BasicScene * scene, PointerRawModel model){
+//    int sum = (WOLD_MAX_X * WOLD_MAX_Y * WOLD_MAX_Z);
+//    PRINT("size: " << sum);
     this -> scene = scene;
     this -> model = model;
 //    model1 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(255, 0, 0))));
@@ -28,6 +30,17 @@ void World::init(void){
         }
     }
 }
+Block * World::getBlockOn(int x, int y, int z){
+    if(x < 0 || y < 0 || z < 0 || x >= WOLD_MAX_X || y >= WOLD_MAX_Y || z >= WOLD_MAX_Z){
+        return nullptr;
+    }
+    int chunkX = x / MAX_BLOCKS_X;
+    int chunkY = y / MAX_BLOCKS_Y;
+    int chunkZ = z / MAX_BLOCKS_Z;
+
+    return getChunk(chunkX, chunkY, chunkZ) -> getBlock(x % MAX_BLOCKS_X, y % MAX_BLOCKS_Y, z % MAX_BLOCKS_Z);
+}
+
 void World::cleanUp(void){
     for(int i=0 ; i< MAX_CHUNKS_X ; i++){
         for(int j=0 ; j<MAX_CHUNKS_Y ; j++){

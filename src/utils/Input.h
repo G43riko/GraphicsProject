@@ -11,6 +11,9 @@
 #include <GLFW/glfw3.h>
 #include "../rendering/WindowManager.h"
 
+#define NUM_KEY_CODES 256
+#define NUM_MOUSE_BUTTONS 5
+
 typedef struct{
     double x;
     double y;
@@ -18,8 +21,8 @@ typedef struct{
 
 class Input {
     private:
-        static const int NUM_KEY_CODES = 256;
-        static const int NUM_MOUSE_BUTTONS = 5;
+//        static const int NUM_KEY_CODES = 256;
+//        static const int NUM_MOUSE_BUTTONS = 5;
         static bool lastKeys[];
         static bool keys[];
         static bool lastButtons[];

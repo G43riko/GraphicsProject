@@ -51,6 +51,24 @@ if (USE_STRICT_COMPILE_WARNINGS)
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${STRICT_COMPILE_FLAGS}")
 endif ()
 
+MACRO(CREATE_LIBRARY NAME)
+    ADD_LIBRARY(${NAME} SHARED ${ARGN})
+    SET_TARGET_PROPERTIES(${NAME} PROPERTIES
+            CLEAN_DIRECT_OUTPUT 1
+            )
+
+    ADD_LIBRARY(${NAME}_static STATIC ${ARGN})
+    SET_TARGET_PROPERTIES(${NAME}_static PROPERTIES
+            OUTPUT_NAME ${NAME}
+            CLEAN_DIRECT_OUTPUT 1
+            )
+
+    INSTALL(TARGETS ${NAME} ${NAME}_static
+            ARCHIVE DESTINATION lib
+            LIBRARY DESTINATION lib
+            )
+ENDMACRO(CREATE_LIBRARY)
+
 
 # Find required packages
 find_package(GLFW3 REQUIRED)
@@ -140,10 +158,14 @@ set(GL_MAIN_SRC
         src/utils/Vectors.cpp
         src/rendering/material/Texture2D.cpp
         src/components/terrain/TerrainManager.cpp
-        src/components/terrain/TerrainManager.h
         src/components/water/WaterRenderer.cpp
-        src/components/water/WaterRenderer.h
-        src/GameEngine.h src/components/ResourcesManager.cpp src/components/ResourcesManager.h src/components/voxel/World.cpp src/components/voxel/World.h src/components/voxel/Chunk.cpp src/components/voxel/Chunk.h src/components/voxel/Block.cpp src/components/voxel/Block.h src/components/voxel/VoxelMaster.cpp src/components/voxel/VoxelMaster.h src/rendering/shader/VoxelShader.cpp src/utils/Intersections.h)
+        src/GameEngine.h src/components/ResourcesManager.cpp
+        src/components/voxel/World.cpp
+        src/components/voxel/Chunk.cpp
+        src/components/voxel/Block.cpp
+        src/components/voxel/VoxelMaster.cpp
+        src/rendering/shader/VoxelShader.cpp
+        src/components/voxel/VoxelApplication.cpp )
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 
@@ -152,24 +174,21 @@ add_executable(MainEngine ${GL_MAIN_SRC})
 #add_executable(MainEngine ${HDRS} ${SRCS})
 
 
-
 add_library(MyLibrary STATIC ${MY_LIBRARIES_SRC})
-
 target_link_libraries(MainEngine MyLibrary)
-
 
 # Make sure GLM uses radians and static GLEW library
 target_compile_definitions(MainEngine PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC )
 
 target_include_directories(MainEngine PUBLIC
-        src/lib
-        res
+#        src/lib
+#        res
         ${GLFW_INCLUDE_DIRS}
         ${GLEW_INCLUDE_DIRS}
         ${GLM_INCLUDE_DIRS}
         ${OPENGL_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}
-        ${CMAKE_CURRENT_BINARY_DIR}
+#        ${CMAKE_CURRENT_BINARY_DIR}
         ${GTK3_INCLUDE_DIRS})
 target_link_libraries(MainEngine ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GTK3_LIBRARIES})
 install(TARGETS MainEngine DESTINATION .)

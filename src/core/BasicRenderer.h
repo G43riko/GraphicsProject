@@ -21,11 +21,13 @@ protected:
     PointerPointLight sun = nullptr;
     PointerCamera actualCamera = nullptr;
 public:
+    virtual ~BasicRenderer(){};
     virtual void init3D(void) = 0;
     virtual void prepareRenderer(GLfloat red  = 0, GLfloat green  = 0, GLfloat blue  = 0, GLfloat alpha = 1) = 0;
     virtual void update(float delta) = 0;
     virtual void input(void) = 0;
     virtual void cleanUp(void) = 0;
+
     //RENDERERS
     virtual void renderSceneDeferred(BasicScene * scene) = 0;
     virtual void renderScene(BasicScene * scene) = 0;
