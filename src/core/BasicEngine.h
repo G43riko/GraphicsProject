@@ -13,22 +13,20 @@
 
 class BasicEngine {
     private:
-        long l_fpsCounter         = 0;
-        BasicApplication * l_app  = nullptr;
-        Loader * l_loader         = new Loader();
-        BasicGtkGui l_gui         = BasicGtkGui(this);
-        bool l_running            = false;
-        bool l_showGui            = true;
-        int l_width;
-        int l_height;
+        long l_fpsCounter           = 0;
+        BasicApplication * l_app    = nullptr;
+        Loader l_loader             = Loader();
+        BasicGtkGui l_gui           = BasicGtkGui(this);
+        bool l_running              = false;
+        bool l_showGui              = true;
+        const int l_width;
+        const int l_height;
 
         /**
          * Funckia vyčistí celý engine
          */
         void cleanUp(void){
             showStatus();
-
-            CHECK_AND_CLEAR(l_loader);
         };
 
         /**
@@ -106,7 +104,7 @@ class BasicEngine {
             Input::init(WindowManager::width, WindowManager::height);
 
             //pridám aplikacii loader
-            l_app -> setLoader(l_loader);
+            l_app -> setLoader(&l_loader);
 
             if(l_showGui){
                 //v gui zmením tlačítka

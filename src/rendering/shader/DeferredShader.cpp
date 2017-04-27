@@ -1,9 +1,8 @@
 //
 // Created by gabriel on 14.1.2017.
 //
-#include "BasicShader.h"
-#include <iostream>
 
+#include "BasicShader.h"
 
 class DeferredShader : public BasicShader{
 public:

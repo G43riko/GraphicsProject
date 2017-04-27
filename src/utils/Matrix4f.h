@@ -15,7 +15,8 @@ public:
     static int counter;
     static int minus;
     bool created = false;
-    float m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33;
+    float m01 = 0, m02 = 0, m03 = 0, m10 = 0, m12 = 0, m13 = 0, m20 = 0, m21 = 0, m23 = 0, m30 = 0, m31 = 0, m32 = 0;
+    float m00 = 1, m11 = 1, m22 = 1, m33 = 1;
     ~Matrix4f(){
         //Matrix4f::counter--;
         Matrix4f::minus++;
@@ -93,8 +94,8 @@ public:
     /*
     static Matrix4f translate(Vector2f, Matrix4f, Matrix4f * = nullptr);
     */
-    static Matrix4f rotate(float, Vector3f, Matrix4f, Matrix4f * = nullptr);
-    static Matrix4f scale(Vector3f, Matrix4f, Matrix4f *);
+    static Matrix4f rotate(float, const Vector3f, const Matrix4f, Matrix4f * = nullptr);
+    static Matrix4f scale(Vector3f, const Matrix4f, Matrix4f *);
     static Matrix4f initScale(float, float, float);
     static Matrix4f initTranslation(float, float, float);
     static Matrix4f initRotation(float, float, float);

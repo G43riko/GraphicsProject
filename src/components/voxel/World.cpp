@@ -4,11 +4,12 @@
 
 #include "World.h"
 
-World::World(BasicScene * scene, PointerRawModel model){
+World::World(BasicScene * scene, PointerRawModel planeModel, PointerRawModel boxModel){
 //    int sum = (WOLD_MAX_X * WOLD_MAX_Y * WOLD_MAX_Z);
 //    PRINT("size: " << sum);
     this -> scene = scene;
-    this -> model = model;
+    this -> model = planeModel;
+    this -> boxModel = boxModel;
 //    model1 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(255, 0, 0))));
 //    model2 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(0, 255, 0))));
 //    model3 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(0, 0, 255))));
@@ -17,6 +18,7 @@ World::World(BasicScene * scene, PointerRawModel model){
 //    model6 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(255, 0, 255))));
     init();
     generateChunk(0, 0, 0);
+    setUpNeighbors();
 }
 void World::init(void){
     map = new Chunk *** [MAX_CHUNKS_X];
@@ -26,6 +28,22 @@ void World::init(void){
             map[i][j] = new Chunk * [MAX_CHUNKS_Z];
             for(int k=0 ; k<MAX_CHUNKS_Z ; k++){
                 map[i][j][k] = nullptr;
+            }
+        }
+    }
+}
+
+void World::show(void){
+    for(int i=0 ; i< MAX_CHUNKS_X ; i++){
+        for(int j=0 ; j<MAX_CHUNKS_Y ; j++){
+            for(int k=0 ; k<MAX_CHUNKS_Z ; k++){
+                if(IS_NOT_NULL(map[i][j][k])){
+                    printf("%d_%d_%d = ",  i, j ,k);
+                    map[i][j][k] -> show();
+                }
+                else{
+                    printf("%d_%d_%d = null\n", i, j ,k);
+                }
             }
         }
     }
@@ -40,7 +58,17 @@ Block * World::getBlockOn(int x, int y, int z){
 
     return getChunk(chunkX, chunkY, chunkZ) -> getBlock(x % MAX_BLOCKS_X, y % MAX_BLOCKS_Y, z % MAX_BLOCKS_Z);
 }
-
+void World::setUpNeighbors(void){
+    for(int i=0 ; i< MAX_CHUNKS_X ; i++){
+        for(int j=0 ; j<MAX_CHUNKS_Y ; j++){
+            for(int k=0 ; k<MAX_CHUNKS_Z ; k++){
+                if(IS_NOT_NULL(map[i][j][k])){
+                    map[i][j][k]->setUpNeigbors();
+                }
+            }
+        }
+    }
+}
 void World::cleanUp(void){
     for(int i=0 ; i< MAX_CHUNKS_X ; i++){
         for(int j=0 ; j<MAX_CHUNKS_Y ; j++){

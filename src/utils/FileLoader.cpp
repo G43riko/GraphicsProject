@@ -93,6 +93,7 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
     std::vector<GLuint> indices = std::vector<GLuint>();
 
     std::vector<std::string> currentLine;
+
     while (std::getline(ifs, line)) {
         if (line.find("v ") == 0) {
             currentLine.clear();
@@ -135,32 +136,43 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
         Vector3f vertex2 = Vector3f(atof(ver2[0].c_str()), atof(ver2[1].c_str()), atof(ver2[2].c_str()));;
         Vector3f vertex3 = Vector3f(atof(ver3[0].c_str()), atof(ver3[1].c_str()), atof(ver3[2].c_str()));;
 
-        if(fileName == "res/models/axe.obj" && false) {
-            vertex1.show();
-            vertex2.show();
-            vertex3.show();
-        }
-
         PointerVertex v0 = processVertex(vertex1, vertices, indices);
         PointerVertex v1 = processVertex(vertex2, vertices, indices);
         PointerVertex v2 = processVertex(vertex3, vertices, indices);
         calculateTangents(*v0, *v1, *v2, textures);
         std::getline(ifs, line);
+
     }
     removeUnusedVertices(vertices);
 
+//    if(fileName == "res/models/plane.obj"){
+//        printf("vertices size po: %ld\n", vertices.size());
+//        for(unsigned int i=0 ; i<vertices.size() ; i++)
+//            vertices.at(i) -> show();
+////        PRINT("textures: ");
+////        for(auto i : textures){
+////            i.show();
+////        }
+//    }
+//
+
     std::vector<GLfloat> verticesFinal;
     std::vector<GLfloat> uvsFinal;
-    std::vector<GLuint> indicesFinal;
+//    std::vector<GLuint> indicesFinal;
     std::vector<GLfloat> normalsFinal;
     std::vector<GLfloat> tangentsFinal;
 
-    if(fileName == "res/models/axe.obj" && false){
-        for(unsigned int i=0 ; i<vertices.size() ; i++)
-            DEBUG("x: " << vertices.at(i) -> position.x);
-    }
     convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal, tangentsFinal);
 //            printf("x: %f\n", verticesFinal[i]);
+
+//    if(fileName == "res/models/plane.obj"){
+//        printf("vertices size nakoniec: %ld\n", vertices.size());
+//        for(unsigned int i=0 ; i<vertices.size() ; i++)
+//            vertices.at(i) -> show();
+//        for(auto i : uvsFinal){
+//            printf("uvsFinal: %f\n" , i);
+//        }
+//    }
     return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices));
     //float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray, normalsArray, tangentsArray);
     // ModelData data = new ModelData(verticesArray, texturesArray,
@@ -182,7 +194,7 @@ void ContentLoader::split(const std::string text, char divider, std::vector<std:
 }
 
 PointerVertex ContentLoader::processVertex(Vector3f vertex, std::vector<PointerVertex>& vertices, std::vector<GLuint>& indices) {
-    int index = (int)vertex.x - 1;
+    GLuint index = (GLuint)vertex.x - 1;
     PointerVertex currentVertex = vertices[index];
     int textureIndex = (int)vertex.y - 1;
     int normalIndex = (int)vertex.z - 1;

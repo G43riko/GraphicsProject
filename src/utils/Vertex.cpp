@@ -10,6 +10,7 @@ Vertex::Vertex(long unsigned int index,Vector3f position){
     this -> length = position.getLength();
 }
 void Vertex::show(void){
+    printf("texture: %d, normal: %d\n", textureIndex, normalIndex);
     position.show();
 }
 void Vertex::addTangent(Vector3f tangent){

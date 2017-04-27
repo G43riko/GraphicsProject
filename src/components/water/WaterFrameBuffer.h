@@ -9,13 +9,13 @@
 #include <GLFW/glfw3.h>
 #include <src/rendering/WindowManager.h>
 
+#define REFLECTION_WIDTH 320 * 8
+#define REFLECTION_HEIGHT 180 * 8
+#define REFRACTION_WIDTH 1280
+#define REFRACTION_HEIGHT 720
+
 class WaterFrameBuffer {
     private:
-        const static int REFLECTION_WIDTH = 320 * 8;
-        const static int REFLECTION_HEIGHT = 180 * 8;
-        const static int REFRACTION_WIDTH = 1280;
-        const static int REFRACTION_HEIGHT = 720;
-
         GLuint reflectionFrameBuffer;
         GLuint reflectionTexture;
         GLuint reflectionDepthBuffer;
@@ -81,7 +81,7 @@ class WaterFrameBuffer {
             unbindCurrentFrameBuffer();
         }
 
-        void bindFrameBuffer(int frameBuffer, int width, int height){
+        void bindFrameBuffer(GLuint frameBuffer, int width, int height){
             glBindTexture(GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
             glViewport(0, 0, width, height);

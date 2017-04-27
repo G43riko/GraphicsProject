@@ -13,57 +13,106 @@ void VoxelMaster::renderBlock(Block *block) {
     }
 }
 
-void VoxelMaster::render(PointerCamera camera) {//TODO memory leak
-    if(world -> blocks.empty()){
+void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> lights) {
+    if(world == nullptr || world -> blocks.empty()){
         return;
     }
+
     shader -> bind();
     shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
-//    glActiveTexture(GL_TEXTURE3);
-    PointerRawModel model = world -> getModel();
-    RenderUtil::prepareModel(model, 1);
+    shader -> updateUniform3f(CAMERA_POSITION, camera -> getTransform() -> getPosition());
+//    shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
 
-    Vector3f position;
+//    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    PointerRawModel model = world -> getModel();
+//    model = world->getBoxModel();
+    RenderUtil::prepareModel(model, 3);
+
+    Vector3f position, scale;
     Matrix4f translation;
 
+    Matrix4f xPlusRotation = Matrix4f::initRotation(0, 0, 90);
+    Matrix4f xMinusRotation = Matrix4f::initRotation(0, 0, -90);
+    Matrix4f yPlusRotation = Matrix4f::initRotation(180, 0, 0);
+    Matrix4f zPlusRotation  = Matrix4f::initRotation(-90, 0, 0);
+    Matrix4f zMinusRotation = Matrix4f::initRotation(90, 0, 0);
 
-//    glDisable(GL_CULL_FACE);
-//
-//    glEnable(GL_BLEND);
-//    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    Vector3f cameraPosition = camera -> getPosition();
 
+    for(unsigned int i=0 ; i<lights.size() ; i++){
+        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
+    }
+    int threeFacesBoxes = 0;
+    std::vector<Block *> blocks;
     for(Block * block : world -> blocks){
         if(!block -> isVisible() || block -> getRenderOptions() == 0){
             continue;
         }
-        position = block -> getAbsolutePosition();
+
+
+        position = block -> getAbsolutePos();
+        scale = block -> getScale();
+        Matrix4f scaleMat = Matrix4f::initScale(scale.x, scale.y, scale.z);
         translation = Matrix4f::initTranslation(position.x, position.y, position.z);
+//        translation = *block -> getTranslation();
         shader -> updateUniform4f("color", block -> getColor());
-        Vector3f po = camera -> getPosition();
-        if(block -> getRenderOptions() & Block::Y_MINUS && position.y < po.y){
-            shader -> updateUniform4m(TRANSFORMATION_MATRIX, translation);
-            glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+
+//
+//        shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * translation);
+//        glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+//        continue;
+
+        int counter = 0;
+//        if(block -> getRenderOptions() & Block::X_PLUS && position.x > cameraPosition.x) {counter++;}
+//        if(block -> getRenderOptions() & Block::X_MINUS && position.x < cameraPosition.x) {counter++;}
+//        if(block -> getRenderOptions() & Block::Y_PLUS && position.y > cameraPosition.y){counter++;}
+//        if(block -> getRenderOptions() & Block::Y_MINUS && position.y < cameraPosition.y){counter++;}
+//        if(block -> getRenderOptions() & Block::Z_PLUS && position.z > cameraPosition.z) {counter++;}
+//        if(block -> getRenderOptions() & Block::Z_MINUS && position.z < cameraPosition.z) {counter++;}
+        if(true || counter < 3){
+            if(block -> getRenderOptions() & Block::X_PLUS && position.x > cameraPosition.x) {
+                shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * xPlusRotation * translation);
+                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+            }
+            if(block -> getRenderOptions() & Block::X_MINUS && position.x < cameraPosition.x) {
+                shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * xMinusRotation * translation);
+                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+            }
+            if(block -> getRenderOptions() & Block::Y_PLUS && position.y > cameraPosition.y){
+                shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * yPlusRotation * translation);
+                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+            }
+            if(block -> getRenderOptions() & Block::Y_MINUS && position.y < cameraPosition.y){
+                shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * translation);
+                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+            }
+            if(block -> getRenderOptions() & Block::Z_PLUS && position.z > cameraPosition.z) {
+                shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * zPlusRotation * translation);
+                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+            }
+            if(block -> getRenderOptions() & Block::Z_MINUS && position.z < cameraPosition.z) {
+                shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * zMinusRotation * translation);
+                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+            }
         }
-        if(block -> getRenderOptions() & Block::Y_PLUS && position.y > po.y){
-            shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation(180, 0, 0) * translation);
-            glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-        }
-        if(block -> getRenderOptions() & Block::X_PLUS && position.x > po.x) {
-            shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation(0, 0, 90) * translation);
-            glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-        }
-        if(block -> getRenderOptions() & Block::X_MINUS && position.x < po.x) {
-            shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation(0, 0, -90) * translation);
-            glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-        }
-        if(block -> getRenderOptions() & Block::Z_MINUS && position.z < po.z) {
-            shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation(90, 0, 0) * translation);
-            glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-        }
-        if(block -> getRenderOptions() & Block::Z_PLUS && position.z > po.z) {
-            shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation(-90, 0, 0) * translation);
-            glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+        else{
+                blocks.push_back(block);
+        };
+    }
+    if(!blocks.empty()){
+        model = world ->getBoxModel();
+        RenderUtil::prepareModel(model, 3);
+        for(Block * block : blocks) {
+            position = block -> getAbsolutePos();
+            scale = block -> getScale();
+            Matrix4f scaleMat = Matrix4f::initScale(scale.x, scale.y, scale.z);
+            translation = Matrix4f::initTranslation(position.x, position.y, position.z);
+
+            shader -> updateUniform4f("color", block -> getColor());
+
+            shader->updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * translation);
+            glDrawElements(GL_TRIANGLES, model->getVertexCount(), GL_UNSIGNED_INT, 0);
         }
     }
 
@@ -72,4 +121,5 @@ void VoxelMaster::render(PointerCamera camera) {//TODO memory leak
 //
 //    glDisable(GL_BLEND);
     RenderUtil::finishRender(3);
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 }

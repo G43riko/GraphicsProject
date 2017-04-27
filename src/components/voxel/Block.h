@@ -10,6 +10,8 @@
 #define BLOCK_SIZE_Y 1
 #define BLOCK_SIZE_Z 1
 
+#define VISIBLE_ALL 63
+
 #include <src/utils/Vectors.h>
 #include <src/rendering/shader/BasicShader.h>
 #include <src/rendering/model/RawModel.h>
@@ -29,6 +31,7 @@ public:
     const static unsigned char Z_MINUS  = 0x20; // hex for 0010 0000
     Block(int x, int y, int z, Chunk * parent, BlockType type);
 
+    void show(void);
     void cleanUp(void){
         if(xNeighborPlus){ xNeighborPlus -> xNeighborMinus = nullptr; }
         if(xNeighborMinus){ xNeighborMinus -> xNeighborPlus = nullptr; }
@@ -38,25 +41,10 @@ public:
         if(zNeighborMinus){ zNeighborMinus -> zNeighborPlus = nullptr; }
     }
 
-    Vector3f getAbsolutePosition(void);
+//    Vector3f getAbsolutePosition(void);
 
     Vector4f getColor(void){
         return color;
-    }
-
-    void render(PointerRawModel model, PointerBasicShader shader){
-        if(!isVisible()){
-            return;
-        }
-        Vector3f position = getAbsolutePosition();
-        shader -> updateUniform4f("color", getColor());
-
-        shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation(0, 0, 0) * Matrix4f::initTranslation(position.x, position.y, position.z));
-        glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-
-
-        shader -> updateUniform4m(TRANSFORMATION_MATRIX, Matrix4f::initRotation((float)M_PI_2, 0, 0) * Matrix4f::initTranslation(position.x, position.y, position.z));
-        glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     }
 
     bool isVisible(void);
@@ -90,24 +78,13 @@ public:
 //        turnOnOption(Z_PLUS);
 //        turnOnOption(Z_MINUS);
     }
-    void setNeighbor(Block * block){
-        if(block == nullptr){
-            return;
-        }
-        if(block -> x + 1 == x){
-            xNeighborPlus = block;
-            block -> xNeighborMinus = this;
-        }
-        else if(block -> y + 1 == y){
-            yNeighborPlus = block;
-            block -> yNeighborMinus = this;
-        }
-        else if(block -> z + 1 == z){
-            zNeighborPlus = block;
-            block -> zNeighborMinus = this;
-        }
-    }
+    void setNeighbor(Block * block);
     inline int getRenderOptions(void){return options;}
+    inline Matrix4f * getTranslation(void){return &translation;}
+    inline Vector3f getScale(void){return scale;}
+    inline Vector3f getAbsolutePos(void){return Vector3f(((x * BLOCK_SIZE_X) << 1) - ((scale.getXi() - 1) * BLOCK_SIZE_X),
+                                                         ((y * BLOCK_SIZE_Y) << 1) - ((scale.getYi() - 1) * BLOCK_SIZE_Y),
+                                                         ((z * BLOCK_SIZE_Z) << 1) - ((scale.getZi() - 1) * BLOCK_SIZE_Z)); }
 private:
     inline void turnOnOption(unsigned char val){
         options |= val;
@@ -118,17 +95,19 @@ private:
     inline void toggleOption(unsigned char val){
         options ^= val;
     }
+    Vector3f scale          = Vector3f(1, 1, 1);
+    Matrix4f translation;
     Block * xNeighborPlus   = nullptr;
     Block * xNeighborMinus  = nullptr;
     Block * yNeighborPlus   = nullptr;
     Block * yNeighborMinus  = nullptr;
     Block * zNeighborPlus   = nullptr;
     Block * zNeighborMinus  = nullptr;
-    int options = 0;
-    Vector4f color;
-    BlockType type;
+    int options = VISIBLE_ALL;
     Chunk * parent;
-    int x, y, z;
+    const Vector4f color;
+    const BlockType type;
+    const int x, y, z;
 };
 
 

@@ -42,6 +42,7 @@
 
 
 #define VIEW_MATRIX "viewMatrix"
+#define CAMERA_POSITION "cameraPosition"
 #define PROJECTION_MATRIX "projectionMatrix"
 #define TRANSFORMATION_MATRIX "transformationMatrix"
 

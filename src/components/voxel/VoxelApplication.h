@@ -15,15 +15,20 @@ class VoxelApplication : public BasicApplication{
     void loadContent() override {
         DEBUG("načítavam content");
         auto skyTexture = TextureManager::createCubeTexture("sky");
+        PRINT("PLANEEEEE<<<<<<<<<<<<<<<<<<<<\n\n");
         auto plane = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/plane.obj"));
         auto sphere = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj"));
+        auto box = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/box.obj"));
         auto diffuse = TextureManager::createTexture2D("res/textures/texture.png");
         auto normal = TextureManager::createTexture2D("res/textures/textureNormal.png");
+        auto cursor = TextureManager::createTexture2D("res/textures/aim_cursor.png");
+        float size = 50;
+        getRenderer() -> addTexture(GuiTexture(cursor->getTextureID(), Vector2f(), Vector2f(size / WindowManager::width, size / WindowManager::height)));
         auto material = createMaterial(diffuse, normal);
         ball = createMaterialedModel(sphere, material);
         getScene()->setSky(skyTexture);
 
-        getRenderer()->getMaster()->getVoxel()->setWorld(new World(getScene(), plane));
+        getRenderer()->getMaster()->getVoxel()->setWorld(new World(getScene(), plane, box));
     }
     void init(BasicGtkGui * gui) override{
 
@@ -48,7 +53,6 @@ class VoxelApplication : public BasicApplication{
         getRenderer() -> init3D();
         getRenderer() -> input();
         getRenderer() -> update(delta);
-
         getScene() -> update(delta);
         getView().update(delta);
 

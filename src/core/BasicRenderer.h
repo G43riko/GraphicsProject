@@ -27,7 +27,7 @@ public:
     virtual void update(float delta) = 0;
     virtual void input(void) = 0;
     virtual void cleanUp(void) = 0;
-
+    virtual void addTexture(GuiTexture texture) = 0;
     //RENDERERS
     virtual void renderSceneDeferred(BasicScene * scene) = 0;
     virtual void renderScene(BasicScene * scene) = 0;

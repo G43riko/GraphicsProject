@@ -60,12 +60,12 @@ PointerRawModel Loader::loadToVao(PointerMesh mesh){
     storeDataInAttributeList(0, 3, mesh -> getVertices());
     storeDataInAttributeList(1, 2, mesh -> getUvs());
     storeDataInAttributeList(2, 3, mesh -> getNormals());
-    //storeDataInAttributeList(3, 3, mesh -> getTangents());
+    storeDataInAttributeList(3, 3, mesh -> getTangents());
     unbindVAO();
     return createRawModel(vaoID, (GLuint)mesh -> getIndices().size());
 }
 
-void Loader::cleanUp(void){
+void Loader::cleanUp(void)const{
     for(GLuint vao : vaos){
         glDeleteVertexArrays(1, &vao);
     }
@@ -112,13 +112,13 @@ void Loader::storeDataInAttributeArray(GLuint attributeNumber, int size, GLfloat
 void Loader::storeDataInAttributeList(GLuint attributeNumber, int size, std::vector<GLfloat> buffer){
     GLuint vboID;
     glGenBuffers(1, &vboID);
-    vbos.push_front(vboID);
     glBindBuffer(GL_ARRAY_BUFFER, vboID);
     glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(GLfloat), buffer.data(), GL_STATIC_DRAW);
     glVertexAttribPointer(attributeNumber, size, GL_FLOAT, GL_FALSE, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    vbos.push_front(vboID);
 }
 
-void Loader::unbindVAO(){
+void Loader::unbindVAO(void) const{
     glBindVertexArray(0);
 }

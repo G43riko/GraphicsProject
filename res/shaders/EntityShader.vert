@@ -29,9 +29,9 @@ void main() {
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
 
     surfaceNormal = (transformationMatrix * vec4(Normal, 0.0)).xyz;
-    for(int i=0 ; i<8 ; i++)
+    for(int i=0 ; i<8 ; i++){
         toLightVector[i] = lightPosition[i] - worldPosition.xyz;
-
+    }
     vec3 unitNormal = normalize(surfaceNormal);
     vec3 viewVector = normalize(worldPosition.xyz - cameraPosition);
     reflectedVector = reflect(viewVector, unitNormal);

@@ -7,7 +7,6 @@
 int Matrix4f::counter = 0;
 int Matrix4f::minus = 0;
 Matrix4f::Matrix4f(){
-    setIdentity(*this);
     Matrix4f::counter++;
     created = true;
 //    std::cout << "tvorim: " << Matrix4f::counter << "\n";
@@ -116,7 +115,7 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
 }
 
  */
-Matrix4f Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * dest) {
+Matrix4f Matrix4f::rotate(float angle, Vector3f axis, const Matrix4f src, Matrix4f * dest) {
     Matrix4f res = Matrix4f();
 
     float c = (float) cos(angle);
@@ -168,7 +167,7 @@ Matrix4f Matrix4f::rotate(float angle, Vector3f axis, Matrix4f src, Matrix4f * d
     return res;
 }
 
-Matrix4f Matrix4f::scale(Vector3f vec, Matrix4f src, Matrix4f * dest) {
+Matrix4f Matrix4f::scale(const Vector3f vec, const Matrix4f src, Matrix4f * dest) {
     Matrix4f res = Matrix4f();
 
     res.m00 = src.m00 * vec.x;

@@ -16,6 +16,8 @@
 #include <src/components/lights/SpotLight.h>
 #include <src/components/lights/DirectionalLight.h>
 
+#define MAX_LIGHTS 8
+
 class BasicShader{
     private:
         std::map<std::string, int> uniforms;
@@ -26,12 +28,11 @@ class BasicShader{
         std::string vertexFileName;
         std::string fragmentFileName;
         int getUniformLocation(const std::string uniformName);
-        GLuint addShader(int, std::string);
+        GLuint addShader(GLenum, std::string);
     public:
         BasicShader(const std::string, const std::string);
         BasicShader(const std::string shader) : BasicShader(shader, shader){};
         virtual ~BasicShader(void);
-        static int MAX_LIGHTS;
         virtual void connectTextures(void);
         void bind(void);
         void cleanUp();

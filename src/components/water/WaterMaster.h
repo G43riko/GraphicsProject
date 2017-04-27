@@ -14,6 +14,7 @@
 
 #define DEFAULT_WATER_SIZE 50
 #define DEFAULT_WATER_HEIGHT 1.5f
+#define WATER_VERTICES {-1, -1, -1,  1,  1, -1,  1, -1, -1, 1, 1, 1 }
 
 class WaterMaster {
 private:
@@ -39,8 +40,7 @@ public:
     }
     void render(PointerCamera camera, std::vector<PointerPointLight> lights);
     WaterMaster(PointerCamera camera, Loader loader){
-        std::vector<float> vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
-        quad = loader.loadToVao(vertices, 2);
+        quad = loader.loadToVao(WATER_VERTICES, 2);
         RenderUtil::updateProjectionMatrix(shader, camera);
     };
 
@@ -61,10 +61,12 @@ public:
         fbo.bindReflectionFrameBuffer();
         distance = 2 * (camera -> getPosition().y - water.getHeight());
         camera -> getTransform() ->move(0, -distance, 0);
-        camera -> pitch *= -1;
+        camera -> getTransform()->getRotation()->x = -camera -> getTransform()->getRotation() -> x;
+        camera -> getTransform()->getRotation()->z = -camera -> getTransform()->getRotation() -> z;
     };
     void starRenderRefraction(PointerCamera camera){
-        camera -> pitch *= -1;
+        camera -> getTransform()->getRotation()->x = -camera -> getTransform()->getRotation()->x;
+        camera -> getTransform()->getRotation()->z = -camera -> getTransform()->getRotation()->z;
         camera -> getTransform() ->move(0, distance, 0);
 //        camera -> position.y += distance;
         fbo.bindRefractionFrameBuffer();

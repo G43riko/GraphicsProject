@@ -74,7 +74,7 @@ class Renderer : public BasicRenderer{
         WaterFrameBuffer wf;
 
         std::map<std::string, PointerBasicShader> shaders;
-        PointLight * light = new PointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        const PointLight * light = new PointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1));
         std::vector<GuiTexture> textures;
         //PRIVATE METHODS
 };

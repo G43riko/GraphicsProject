@@ -31,9 +31,6 @@ void Master::updateProjectionMatrix(PointerCamera camera) {
     if (skyBoxMaster) {
         RenderUtil::updateProjectionMatrix(skyBoxMaster -> getShader(), camera);
     };
-    if (voxelMaster) {
-        RenderUtil::updateProjectionMatrix(voxelMaster -> getShader(), camera);
-    };
     if (entityMaster) {
         RenderUtil::updateProjectionMatrix(entityMaster -> getShader(), camera);
     };
@@ -79,7 +76,7 @@ void Master::init(Loader loader, int width, int height, PointerCamera camera, Po
     if (options.useWaters) {
         waterMaster = new WaterMaster(camera, loader);
     };
-    voxelMaster = new VoxelMaster();
+    voxelMaster = new VoxelMaster(camera);
     postFxMaster = new PostFxMaster(loader, false, width, height);
     postFxMaster->addFbo("fbo1", width, height, Fbo::DEPTH_TEXTURE);
 }

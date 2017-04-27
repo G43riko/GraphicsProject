@@ -24,7 +24,7 @@ class Loader {
         PointerRawModel loadToVao(PointerMesh);
         PointerRawModel loadToVao(std::vector<GLfloat> positions, int dimensions);
 
-        void cleanUp(void);
+        void cleanUp(void)const;
     private:
         std::list<GLuint> vaos;
         std::list<GLuint> vbos;
@@ -33,7 +33,7 @@ class Loader {
         void bindIndicesBufferArray(GLuint *);
         void storeDataInAttributeList(GLuint ,int, std::vector<GLfloat>);
         void storeDataInAttributeArray(GLuint ,int, GLfloat *);
-        void unbindVAO(void);
+        void unbindVAO(void)const;
         /*
         template <typename T> void showBufferData(int size, GLuint id, GLuint type = GL_ARRAY_BUFFER){
             T * target = new T[size * sizeof(T)];

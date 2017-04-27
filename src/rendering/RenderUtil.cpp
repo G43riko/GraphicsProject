@@ -7,8 +7,9 @@
 
 void RenderUtil::prepareModel(PointerRawModel model, GLuint numberOfAttributes){
     glBindVertexArray(model -> getVaoID());
-    for(GLuint i=0 ; i<=numberOfAttributes ; i++)
+    for(GLuint i=0 ; i<=numberOfAttributes ; i++){
         glEnableVertexAttribArray(i);
+    }
 }
 
 void RenderUtil::prepareMaterial(PointerMaterial material, PointerBasicShader shader, int options){

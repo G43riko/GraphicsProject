@@ -8,11 +8,12 @@
 #include "Vectors.h"
 #include <vector>
 
+#define NO_INDEX -1
+
 class Vertex;
 typedef std::shared_ptr<Vertex> PointerVertex;
 class Vertex {
     private:
-        int NO_INDEX = -1;
         int textureIndex = NO_INDEX;
         int normalIndex = NO_INDEX;
         PointerVertex duplicateVertex = nullptr;

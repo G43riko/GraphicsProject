@@ -54,7 +54,7 @@ void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vect
         glBindTexture(GL_TEXTURE_2D, master.getShadow() -> getShadowMap());
         shader->updateUniform4m("toShadowSpace", master.getShadow() -> getToShadowMapSpaceMatrix());
     }
-    shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
+    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
     shader -> updateUniform3f("cameraPosition", camera -> getPosition());
     //shader -> updateUniform2f("levels", 4);
     shader -> updateUniform4f("plane", clipPlane);
@@ -78,7 +78,7 @@ void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vect
 void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane){
     shader -> bind();
 
-    shader -> updateUniform4m("viewMatrix", camera -> getViewMatrix());
+    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
     shader -> updateUniform3f("cameraPosition", camera -> getPosition());
     //shader -> updateUniform2f("levels", 4);
 
@@ -89,7 +89,7 @@ void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLi
     PointerRawModel model = entity -> getModel() -> getModel();
     glEnable(GL_TEXTURE);
 
-    shader -> updateUniform4m("transformationMatrix", entity -> getTransform() -> getTransformation());
+    shader -> updateUniform4m(TRANSFORMATION_MATRIX, entity -> getTransform() -> getTransformation());
 
     RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
     RenderUtil::prepareModel(model, 3);

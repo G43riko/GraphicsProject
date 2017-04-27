@@ -63,6 +63,7 @@ public:
         getScene() -> addEntity(createEntity(model, Vector3f(-5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
 
         getScene() -> addEntity(createEntity(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+        getScene() -> addEntity(createEntity(floor, Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 1, 10)));
 
         TerrainManager terrainManager = TerrainManager(getLoader(), 100, (Scene *)getScene());
         terrainManager.generateTerrain(diffuse, 128, 5, 40, 0, 0);
@@ -78,7 +79,7 @@ public:
         PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(20, 0) << ", " << terrainManager.getHeight(0, 20) << ", " << terrainManager.getHeight(20, 20));
         PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(30, 0) << ", " << terrainManager.getHeight(0, 30) << ", " << terrainManager.getHeight(30, 30));
 
-        //renderer->getWaterMaster()->addWater(-50, -50, 1.5f);
+        getRenderer()->getMaster()->getWater()->addWater(-50, -50, 1.5f);
         /*
         terrainManager.generateTerrain(diffuse, 128, 5, 40,  0,  0);
         terrainManager.generateTerrain(diffuse, 128, 5, 40, -1,  0);

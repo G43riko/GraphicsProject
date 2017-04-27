@@ -8,6 +8,8 @@
 #include <src/rendering/shader/VoxelShader.cpp>
 #include <src/rendering/Camera.h>
 #include "World.h"
+#include "../../rendering/RenderUtil.h"
+
 class World;
 
 class VoxelMaster {
@@ -18,10 +20,13 @@ private:
     void renderBlock(Block *block);
 
 public:
+    VoxelMaster(PointerCamera camera){
+        RenderUtil::updateProjectionMatrix(shader, camera);
+    }
     void setWorld(World * world){
         this -> world = world;
     }
-    void render(PointerCamera camera);
+    void render(PointerCamera camera, std::vector<PointerPointLight> lights);
 
     void cleanUp(void) {
         shader->cleanUp();

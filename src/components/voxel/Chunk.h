@@ -11,6 +11,10 @@
 //17.4.2016 16*16*16 = 47FPS
 //17.4.2016 16*16*16 = 50FPS
 //17.4.2016 64*16*64 = 10FPS
+//23.4.2016 16*16*16 = 55FPS
+//23.4.2016 64*16*64 = 11FPS
+//23.4.2016 128*16*128 = 15FPS - všetky kocky
+
 #define MAX_BLOCKS_X 16
 #define MAX_BLOCKS_Y 16
 #define MAX_BLOCKS_Z 16
@@ -27,18 +31,17 @@ class World;
 
 class Chunk {
 public:
-    Chunk(int x, int y, int z, World * parent){
-        this -> parent = parent;
-        this -> x = x;
-        this -> y = y;
-        this -> z = z;
+    Chunk(int x, int y, int z, World * parent) : parent(parent), x(x), y(y), z(z){
         generateAllBlocks();
-        setUpNeigbors();
-        setUpVisibility();
     };
 
+//    void setUpNeighbors(void){
+//        setUpNeigbors();
+//        setUpVisibility();
+//    }
+    void removeBlock(Vector3f position){return removeBlock(position.x, position.y, position.z); };
     void removeBlock(int x, int y, int z);
-
+    void show(void);
     void setBlock(Block * block, int x, int y, int z){
         if(x < 0 || y < 0 || z < 0 || x >= MAX_BLOCKS_X || y >= MAX_BLOCKS_Y || z >= MAX_BLOCKS_Z){
             return;
@@ -62,7 +65,7 @@ public:
     inline World * getWorld(void){return parent;}
 private:
     World * parent;
-    int x, y, z;
+    const int x, y, z;
     Block **** map;
     void generateAllBlocks(void);
     void generateBlock(int x, int y, int z);

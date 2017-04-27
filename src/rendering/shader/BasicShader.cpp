@@ -6,7 +6,6 @@
 
 #include "BasicShader.h"
 
-int BasicShader::MAX_LIGHTS = 8;
 
 BasicShader::BasicShader(const std::string vertex, const std::string fragment){
     this -> vertexFileName = vertex;
@@ -41,7 +40,7 @@ void BasicShader::compileShader(){
     this -> setAllUniforms();
 }
 
-GLuint BasicShader::addShader(int type, std::string fileName){
+GLuint BasicShader::addShader(GLenum type, std::string fileName){
     unsigned int info_length = 1024;
     GLint result = GL_FALSE;
     std::string fragment_shader_log(info_length, ' ');

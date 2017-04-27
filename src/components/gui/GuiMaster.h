@@ -11,6 +11,8 @@
 #include "../../rendering/RenderUtil.h"
 #include <src/rendering/shader/GuiShader.cpp>
 
+#define GUI_VERTICES {-1,  1, -1, -1,  1,  1,  1, -1}
+
 class GuiMaster {
 private:
     BasicShader  * shader = new GuiShader();
@@ -18,8 +20,7 @@ private:
 public:
     void renderGui(std::vector<GuiTexture> textures);
     GuiMaster(PointerCamera camera, Loader loader){
-        std::vector<float> vertices = {-1, 1, -1, -1, 1, 1, 1, -1};
-        model = loader.loadToVao(vertices, 2);
+        model = loader.loadToVao(GUI_VERTICES, 2);
     };
     void cleanUp(void){
         shader -> cleanUp();

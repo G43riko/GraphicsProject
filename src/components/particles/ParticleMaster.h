@@ -8,7 +8,7 @@
 #include <src/rendering/RenderUtil.h>
 #include "Particle.h"
 #include "ParticleManager.h"
-
+#define PARTICLE_VERTICES {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f}
 class ParticleMaster {
 private:
     PointerRawModel model;
@@ -17,8 +17,7 @@ public:
     void renderParticles(ParticlesList particles, PointerCamera camera);
     void renderParticles(std::vector<Particle> particles, PointerCamera camera);
     ParticleMaster(PointerBasicShader shader, Loader loader) : shader(shader){
-        std::vector<float> vertices = {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f};
-        model = loader.loadToVao(vertices, 2);
+        model = loader.loadToVao(PARTICLE_VERTICES, 2);
     };
     void cleanUp(void){};
 };

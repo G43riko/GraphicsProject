@@ -182,7 +182,7 @@ void Renderer::renderScene(BasicScene * scene){
 
     //entityMaster -> renderWireFrame(scene.getEntities(), actualCamera);
     master.getEntity() -> renderEntities(scene -> getEntities(), scene -> getLights(), actualCamera, options, Vector4f(0, 1, 0, -master.getWater() -> getWaterHeight()), master);
-    master.getVoxel() -> render(actualCamera);
+    master.getVoxel() -> render(actualCamera, scene -> getLights());
 
     if(master.useWaters()){
         master.getWater() -> starRenderReflection(actualCamera);

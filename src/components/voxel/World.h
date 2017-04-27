@@ -6,9 +6,9 @@
 #define GAMEENGINE_WORLD_H
 
 
-#define MAX_CHUNKS_X 1
-#define MAX_CHUNKS_Y 1
-#define MAX_CHUNKS_Z 1
+#define MAX_CHUNKS_X 3
+#define MAX_CHUNKS_Y 3
+#define MAX_CHUNKS_Z 3
 
 #include <src/utils/Vectors.h>
 #include <src/core/BasicScene.h>
@@ -25,11 +25,12 @@ class Block;
 class World {
 public:
     std::vector<Block*> blocks;
-    World(BasicScene * scene, PointerRawModel model);
+    World(BasicScene * scene, PointerRawModel planeModel, PointerRawModel boxModel);
     Chunk **** map = nullptr;
     void init(void);
     void cleanUp(void);
     inline BasicScene * getScene(void){return scene;}
+    void show(void);
     Block * getBlockOn(int x, int y, int z);
     PointerMaterialedModel getModel(int number){
         switch(number){
@@ -43,16 +44,21 @@ public:
         }
     }
     inline PointerRawModel getModel(void){return model; }
-private:
-    PointerMaterialedModel model1, model2, model3, model4, model5, model6;
-    PointerRawModel model;
-    BasicScene * scene = nullptr;
+    inline PointerRawModel getBoxModel(void){return boxModel; }
     Chunk * getChunk(int x, int y, int z){
         if(x < 0 || y < 0 || z < 0 || x >= MAX_CHUNKS_X || y >= MAX_CHUNKS_Y || z >= MAX_CHUNKS_Z){
             return nullptr;
         }
         return map[x][y][z];
     }
+private:
+
+    void setUpNeighbors(void);
+    PointerMaterialedModel model1, model2, model3, model4, model5, model6;
+    PointerRawModel model;
+    PointerRawModel boxModel;
+    BasicScene * scene = nullptr;
+
 
 
     void generateChunks(Vector3f from, Vector3f to){
