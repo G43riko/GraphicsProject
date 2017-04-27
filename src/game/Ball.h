@@ -9,17 +9,31 @@
 #include <src/rendering/model/Entity.h>
 #include "GameObject.h"
 
+#define GRAVITY_EFFECT 0.8f
+#define DEFRACTION_EFFECT 0.95f
+#define BALL_SIZE 1
+
+
 class Ball : public GameObject{
-    static float GRAVITY_EFFECT;
-    static float DEFRACTION_EFFECT;
-
-public:
-    constexpr static float size = 1;
+private:
+    float size = BALL_SIZE;
     static std::vector<Ball*> balls;
-    Ball(PointerEntity object);
-    void update(float);
+public:
+    inline Ball(PointerEntity object) : GameObject(object){
+        balls.push_back(this);
+    }
+    inline void update(float delta){
+        if(!getObject() -> isAlive()){
+            return;
+        }
+        object -> getTransform() -> move(velocity * delta);
+        object -> getTransform() -> getRotation() -> rotate(Vector3f(-velocity.z * 0.4f, 0.0f, velocity.x * 0.4f) * delta);
+        checkCollision(this);
+        //float DEFRACTION_EFFECT = 0.95f;
+        velocity *= DEFRACTION_EFFECT * delta;
+    }
 
-    static bool checkCollision(Ball * el) {
+    inline static bool checkCollision(Ball * el) {
         checkBorder(el->object->getTransform(), &el->velocity, el->size, Vector2f(-50, -50), Vector2f(100, 100));
 
         Vector3f * thisPos = el -> object ->getTransform() -> getPosition();
@@ -39,12 +53,12 @@ public:
         return false;
     }
 
-    static bool collision(Vector3f posA, Vector3f posB, float size){
-        float dist = (posA - posB).getLength();
+    inline static bool collision(Vector3f posA, Vector3f posB, float size){
+        float dist = (posA - posB).length();
         return (dist <= size * 16) && (NEQ(dist, 0));
 
     }
-    static void checkBorder(Transform * a, Vector3f * velocity, float size, Vector2f pos, Vector2f scale){
+    inline static void checkBorder(Transform * a, Vector3f * velocity, float size, Vector2f pos, Vector2f scale){
         Vector2f max = pos + scale;
         if (a -> getPosition() -> x + size > max.x) {
             a -> getPosition() -> x = max.x - size;

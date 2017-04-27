@@ -14,10 +14,10 @@
 
 Renderer::Renderer(Loader loader, int width, int height) :
 //        screen(Screen(width, height, loader)),
-        multiFbo(Fbo(width, height, Fbo::DEPTH_RENDER_BUFFER,4)),
-        fbo(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
-        fbo2(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
-        fbo3(Fbo(width, height, Fbo::DEPTH_TEXTURE)),
+        multiFbo(Fbo(width, height, FBO_DEPTH_RENDER_BUFFER,4)),
+        fbo(Fbo(width, height, FBO_DEPTH_TEXTURE)),
+        fbo2(Fbo(width, height, FBO_DEPTH_TEXTURE)),
+        fbo3(Fbo(width, height, FBO_DEPTH_TEXTURE)),
         pp(PostProccessing(loader)),
         wf(WaterFrameBuffer()){
     DEBUG("------------------------------------------");

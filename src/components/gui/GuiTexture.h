@@ -11,27 +11,17 @@
 
 class GuiTexture {
 private:
-    GLuint texture;
+    const GLuint id;
     Vector2f position;
     Vector2f scale;
 public:
-    GuiTexture(GLuint texture, const Vector2f & position, const Vector2f & scale){
-        this -> texture = texture;
-        this -> position = position;
-        this -> scale = scale;
-    }
-    GLuint getTexture(){
-        return texture;
-    }
-    void setTexture(GLuint id){
-        texture = id;
-    }
-    Vector2f getPosition(){
-        return position;
-    }
-    Vector2f getScale(){
-        return scale;
-    }
+    inline GuiTexture(GLuint id, const Vector2f & position, const Vector2f & scale) : id(id), position(position), scale(scale){}
+
+    inline Vector2f getPosition(void) const{return position; }
+    inline GLuint getTexture(void) const{return id; }
+    inline Vector2f getScale(void) const{return scale; }
+
+//    inline void setTexture(GLuint i_id){ id = i_id; }
 };
 
 

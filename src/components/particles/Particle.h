@@ -36,37 +36,38 @@ class Particle {
             setTextreOffset(textureOffset2, index2);
         }
 
-    void setTextreOffset(Vector2f& offset, int index){
+    inline void setTextreOffset(Vector2f& offset, int index){
         int column = index % texture -> rows;
         int row = index / texture -> rows;
         offset.x = (float) (column / texture -> rows);
         offset.y = (float) (row / texture -> rows);
     }
 public:
-    Particle(PointerParticleTexture texture, const Vector3f &, const Vector3f &, float, float, float, float);
-
-    bool update(float);
-    Vector3f getPosition(void);
-    float getRotation(void);
-    float getScale(void);
-
-    Vector2f getTextureOffset1(void){
-        return textureOffset1;
-    }
-    Vector2f getTextureOffset2(void){
-        return textureOffset2;
-    }
-    Vector2f getTextureInfo(void){
-        return Vector2f((float)getTexture() ->rows, getBlend());
+    inline Particle(PointerParticleTexture texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale)
+            :texture(texture){
+        this -> position = position;
+        this -> velocity = velocity;
+        this -> gravityEffect = gravityEffect;
+        this -> lifeLength = lifeLength;
+        this -> rotation = rotation;
+        this -> scale = scale;
     }
 
-    float getBlend(void){
-        return blend;
+    inline bool update(float delta){
+        velocity.y += gravityEffect * delta * GRAVITY;
+        position += velocity * delta;
+        elapsedTime += delta;
+        updateTextureCoordInfo();
+        return elapsedTime < lifeLength;
     }
-
-    PointerParticleTexture getTexture(void){
-        return texture;
-    };
+    Vector3f getPosition(void) const{return position; }
+    inline float getRotation(void) const{return rotation; }
+    inline float getScale(void) const{ return scale; }
+    inline Vector2f getTextureOffset1(void) const{return textureOffset1;}
+    inline Vector2f getTextureOffset2(void) const{return textureOffset2;}
+    inline Vector2f getTextureInfo(void){return Vector2f((float)getTexture() ->rows, getBlend());}
+    inline float getBlend(void) const{return blend;}
+    inline PointerParticleTexture getTexture(void) const{return texture; };
 };
 
 

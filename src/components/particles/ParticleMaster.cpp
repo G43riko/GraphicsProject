@@ -35,7 +35,8 @@ void ParticleMaster::renderParticles(ParticlesList particles, PointerCamera came
                 mat.m22 = viewMatrix[2][2];
 
                 mat = Matrix4f::initRotation(0, 0, itPart ->getRotation()) * mat;
-                Matrix4f::scale(Vector3f(itPart ->getScale()), mat, &mat);
+                float scale = itPart ->getScale();
+                Matrix4f::scale(Vector3f(scale, scale, scale), mat, &mat);
                 mat = mat * Matrix4f(viewMatrix);
                 shader -> updateUniform4m("modelViewMatrix", mat);
 
@@ -78,7 +79,8 @@ void ParticleMaster::renderParticles(std::vector<Particle> particles, PointerCam
         mat.m22 = viewMatrix[2][2];
 
         mat = Matrix4f::initRotation(0, 0, p.getRotation()) * mat;
-        Matrix4f::scale(Vector3f(p.getScale()), mat, &mat);
+        float scale = p.getScale();
+        Matrix4f::scale(Vector3f(scale, scale, scale), mat, &mat);
         mat = mat * Matrix4f(viewMatrix);
         shader -> updateUniform4m("modelViewMatrix", mat);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, model -> getVertexCount());

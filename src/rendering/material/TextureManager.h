@@ -13,6 +13,7 @@
 
 
 class TextureManager{
+private:
     static std::map<std::string, PointerTexture2D>          loadedTextures2D;
     static std::map<std::string, PointerCubeTexture>        loadedCubeTextures;
     static std::map<std::string, PointerParticleTexture>    loadedParticleTextures;

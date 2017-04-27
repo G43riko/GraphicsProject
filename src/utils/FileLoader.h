@@ -7,7 +7,6 @@
 
 #include <string>
 #include "Const.h"
-#include "Logger.cpp"
 #include <fstream>
 #include "../rendering/model/Mesh.h"
 #include "../rendering/material/Texture2D.h"

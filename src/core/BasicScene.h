@@ -12,29 +12,50 @@
 
 
 class BasicScene{
+protected:
+    PointerCubeTexture sky = nullptr;
+    EntityManager entities;
+    ParticleManager particles;
+    std::vector<PointerPointLight> lights;
+    std::vector<PointerGameObject> objects;
 public:
+    inline BasicScene(PointerCubeTexture sky = nullptr) : sky(sky){}
     virtual ~BasicScene(){};
 
     //OTHERS
     virtual void cleanUp(void) = 0;
     virtual void update(float delta) = 0;
+    inline void loadParticleTexture(PointerTexture2D texture, int rows, int columns){
+        particles.loadTexture(texture, rows, columns);
+    }
 
     //ADDERS
-    virtual void addLight(PointerPointLight light) = 0;
-    virtual void addEntity(PointerEntity entity) = 0;
     virtual void addObject(PointerGameObject object) = 0;
 
+
+    inline void addLight(PointerPointLight light){ lights.push_back(light); }
+    inline void addEntity(PointerEntity entity){ entities.addEntity(entity); }
+
+    //CREATORS
+    inline void createParticleSystem(PointerTexture2D texture, float pps, float speed, float gravityComplient, float lifeLength){
+        particles.createSystem(texture, pps, speed, gravityComplient, lifeLength);
+
+    }
+    inline void createParticle(PointerTexture2D texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale){
+        particles.createParticle(texture, position, velocity, gravityEffect, lifeLength, rotation, scale);
+    }
+
     //GETTERS
-    virtual std::vector<PointerPointLight> getLights() = 0;
-
-    virtual EntitiesList getEntities() = 0;
-
-    virtual std::vector<PointerGameObject> getObjects() = 0;
-    virtual ParticlesList getParticles(void) = 0;
-    virtual PointerCubeTexture getSky(void) = 0;
+    inline std::vector<PointerPointLight> & getLights(void){ return lights; };
+    inline std::vector<PointerGameObject> & getObjects(void){ return objects; };
+    inline ParticlesList getParticles(void) const{ return particles.getParticles(); }
+    inline EntitiesList  getEntities(void){ return entities.getEntities(); };
+    inline PointerCubeTexture getSky(void) const{ return sky; };
 
     //SETTERS
-    virtual void setSky(PointerCubeTexture sky) = 0;
+    void setSky(PointerCubeTexture sky){
+        this -> sky = sky;
+    }
 };
 
 #endif //GRAPHICSPROJECT_BASICSCENE_H

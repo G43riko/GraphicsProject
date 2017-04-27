@@ -14,37 +14,135 @@
 #include <iostream>
 
 class Loader {
-    public:
-        PointerRawModel loadToVao(std::vector<GLfloat>);
-        PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLuint>);
-        PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
-        PointerRawModel loadToVao(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
-        PointerRawModel loadToVaoA(GLfloat *,GLfloat *, GLfloat *, GLuint *);
+public:
+    inline PointerRawModel loadToVao(std::vector<GLfloat> positions){
+        GLuint vaoID = createVAO();
+        storeDataInAttributeList(0, 3, positions);
+        unbindVAO();
+        return createRawModel(vaoID, (GLuint)positions.size() / 3);
+    }
 
-        PointerRawModel loadToVao(PointerMesh);
-        PointerRawModel loadToVao(std::vector<GLfloat> positions, int dimensions);
+    inline PointerRawModel loadToVao(std::vector<GLfloat> positions, std::vector<GLuint> indices){
+        GLuint vaoID = createVAO();
+        bindIndicesBuffer(indices);
+        storeDataInAttributeList(0, 3, positions);
+        unbindVAO();
+        return createRawModel(vaoID, (int)indices.size());
+    }
 
-        void cleanUp(void)const;
-    private:
-        std::list<GLuint> vaos;
-        std::list<GLuint> vbos;
-        GLuint createVAO(void);
-        void bindIndicesBuffer(std::vector<GLuint>);
-        void bindIndicesBufferArray(GLuint *);
-        void storeDataInAttributeList(GLuint ,int, std::vector<GLfloat>);
-        void storeDataInAttributeArray(GLuint ,int, GLfloat *);
-        void unbindVAO(void)const;
-        /*
-        template <typename T> void showBufferData(int size, GLuint id, GLuint type = GL_ARRAY_BUFFER){
-            T * target = new T[size * sizeof(T)];
-            glBindBuffer(type, id);
-            glGetBufferSubData(type, 0, size * sizeof(T), target);
-            std::cout << "načítalo sa " << size << " veci: "<< std::endl;
-            for(int i=0 ; i<size ; i++)
-                std::cout << target[i] << " ";
-            std::cout << std::endl;
+    inline PointerRawModel loadToVao(std::vector<GLfloat> positions, std::vector<GLfloat> texts, std::vector<GLfloat> normals, std::vector<GLuint> indices){
+        GLuint vaoID = createVAO();
+        bindIndicesBuffer(indices);
+        storeDataInAttributeList(0, 3, positions);
+        storeDataInAttributeList(1, 2, texts);
+        storeDataInAttributeList(2, 3, normals);
+        unbindVAO();
+        return createRawModel(vaoID, (GLuint)indices.size());
+    }
+    inline PointerRawModel loadToVaoA(GLfloat * vertices,GLfloat * textures, GLfloat * normals, GLuint * indices){
+        GLuint vaoID = createVAO();
+        bindIndicesBufferArray(indices);
+        storeDataInAttributeArray(0, 3, vertices);
+        storeDataInAttributeArray(1, 2, textures);
+        storeDataInAttributeArray(2, 3, normals);
+        unbindVAO();
+        return createRawModel(vaoID, sizeof(indices) / sizeof(GLuint));
+    }
+
+    inline PointerRawModel loadToVao(std::vector<GLfloat> positions, std::vector<GLfloat> texts, std::vector<GLuint> indices){
+        GLuint vaoID = createVAO();
+        bindIndicesBuffer(indices);
+        storeDataInAttributeList(0, 3, positions);
+        storeDataInAttributeList(1, 2, texts);
+        unbindVAO();
+        return createRawModel(vaoID, (int)indices.size());
+    }
+
+    inline PointerRawModel loadToVao(std::vector<GLfloat> positions, int dimensions) {
+        GLuint vaoID = createVAO();
+        storeDataInAttributeList(0, dimensions, positions);
+        unbindVAO();
+        return createRawModel(vaoID, (GLuint)(positions.size() / dimensions));
+    }
+
+    inline PointerRawModel loadToVao(PointerMesh mesh){
+        GLuint vaoID = createVAO();
+        bindIndicesBuffer(mesh -> getIndices());
+        storeDataInAttributeList(0, 3, mesh -> getVertices());
+        storeDataInAttributeList(1, 2, mesh -> getUvs());
+        storeDataInAttributeList(2, 3, mesh -> getNormals());
+        storeDataInAttributeList(3, 3, mesh -> getTangents());
+        unbindVAO();
+        return createRawModel(vaoID, (GLuint)mesh -> getIndices().size());
+    }
+
+    inline void cleanUp(void)const{
+        for(GLuint vao : vaos){
+            glDeleteVertexArrays(1, &vao);
         }
-         */
+        for(GLuint vbo : vbos){
+            glDeleteBuffers(1, &vbo);
+        }
+    }
+private:
+    std::list<GLuint> vaos;
+    std::list<GLuint> vbos;
+    inline GLuint createVAO(void){
+        GLuint vaoID;
+        glGenVertexArrays(1, &vaoID);
+        glBindVertexArray(vaoID);
+        vaos.push_front(vaoID);
+        return vaoID;
+    }
+
+    inline void bindIndicesBuffer(std::vector<GLuint> buffer){
+        GLuint vboID;
+        glGenBuffers(1, &vboID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer.size() * sizeof(GLuint), buffer.data(), GL_STATIC_DRAW);
+        vbos.push_front(vboID);
+    }
+    inline void bindIndicesBufferArray(GLuint * buffer){
+        GLuint vboID;
+        glGenBuffers(1, &vboID);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(buffer), buffer, GL_STATIC_DRAW);
+        vbos.push_front(vboID);
+    }
+
+
+
+    inline void storeDataInAttributeArray(GLuint attributeNumber, int size, GLfloat * buffer){
+        GLuint vboID;
+        glGenBuffers(1, &vboID);
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(buffer), buffer, GL_STATIC_DRAW);
+        glVertexAttribPointer(attributeNumber, size, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        vbos.push_front(vboID);
+    }
+
+    inline void storeDataInAttributeList(GLuint attributeNumber, int size, std::vector<GLfloat> buffer){
+        GLuint vboID;
+        glGenBuffers(1, &vboID);
+        glBindBuffer(GL_ARRAY_BUFFER, vboID);
+        glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(GLfloat), buffer.data(), GL_STATIC_DRAW);
+        glVertexAttribPointer(attributeNumber, size, GL_FLOAT, GL_FALSE, 0, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        vbos.push_front(vboID);
+    }
+    inline void unbindVAO(void) const{ glBindVertexArray(0);}
+    /*
+    template <typename T> void showBufferData(int size, GLuint id, GLuint type = GL_ARRAY_BUFFER){
+        T * target = new T[size * sizeof(T)];
+        glBindBuffer(type, id);
+        glGetBufferSubData(type, 0, size * sizeof(T), target);
+        std::cout << "načítalo sa " << size << " veci: "<< std::endl;
+        for(int i=0 ; i<size ; i++)
+            std::cout << target[i] << " ";
+        std::cout << std::endl;
+    }
+     */
 };
 
 #endif //GRAPHICSPROJECT_LOADER_H

@@ -6,6 +6,7 @@
 
 #include <src/rendering/Camera.h>
 #include "FileLoader.h"
+
 /*
  * TEXT FILES
  */
@@ -21,7 +22,7 @@ void ContentLoader::loadTextFile(std::string fileName, std::string *content){
         ifs.close();
         return;
     }
-    Logger::error(ERROR_MISSING_FILE + fileName);
+    ERROR(ERROR_MISSING_FILE + fileName);
 }
 
 /*
@@ -49,21 +50,21 @@ CubeImageData ContentLoader::loadTextureColor(Vector3f color){
 
 
     result.data.clear();
-    result.data.push_back(color.getXuc());
-    result.data.push_back(color.getYuc());
-    result.data.push_back(color.getZuc());
+    result.data.push_back((unsigned char)color.getX());
+    result.data.push_back((unsigned char)color.getY());
+    result.data.push_back((unsigned char)color.getZ());
     result.data.push_back(255);
-    result.data.push_back(color.getXuc());
-    result.data.push_back(color.getYuc());
-    result.data.push_back(color.getZuc());
+    result.data.push_back((unsigned char)color.getX());
+    result.data.push_back((unsigned char)color.getY());
+    result.data.push_back((unsigned char)color.getZ());
     result.data.push_back(255);
-    result.data.push_back(color.getXuc());
-    result.data.push_back(color.getYuc());
-    result.data.push_back(color.getZuc());
+    result.data.push_back((unsigned char)color.getX());
+    result.data.push_back((unsigned char)color.getY());
+    result.data.push_back((unsigned char)color.getZ());
     result.data.push_back(255);
-    result.data.push_back(color.getXuc());
-    result.data.push_back(color.getYuc());
-    result.data.push_back(color.getZuc());
+    result.data.push_back((unsigned char)color.getX());
+    result.data.push_back((unsigned char)color.getY());
+    result.data.push_back((unsigned char)color.getZ());
     result.data.push_back(255);
 
     return result;

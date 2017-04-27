@@ -20,7 +20,7 @@ private:
     ParticleManager *parent;
     PointerParticleTexture texture;
 public:
-    ParticleSystemSimple(PointerParticleTexture texture, ParticleManager *parent, float pps, float speed, float gravityComplient, float lifeLength) : texture(texture) {
+    inline ParticleSystemSimple(PointerParticleTexture texture, ParticleManager *parent, float pps, float speed, float gravityComplient, float lifeLength) : texture(texture) {
         this->parent = parent;
         this->pps = pps;
         this->speed = speed;
@@ -28,7 +28,7 @@ public:
         this->lifeLength = lifeLength;
     }
 
-    void update(float delta, Vector3f systemCenter) {
+    inline void update(float delta, Vector3f systemCenter) {
         float particlesToCreate = pps * delta;
         int count = (int) floor(particlesToCreate);
         float partialParticle = (float) fmod(particlesToCreate, 1);

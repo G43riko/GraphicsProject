@@ -7,20 +7,31 @@
 
 #include <src/rendering/material/CubeTexture.h>
 #include <src/rendering/RenderUtil.h>
-#include <src/rendering/shader/SkyBoxShader.cpp>
+#include <src/rendering/shader/SkyBoxShader.h>
+
+#define SIZE 500
 
 class SkyBoxMaster {
 private:
-    constexpr static float SIZE = 500;
     BasicShader * shader = new SkyBoxShader();
     PointerRawModel model;
 public:
-    void renderSky(PointerCubeTexture sky, PointerCamera camera);
-    void cleanUp(void){
+    inline void renderSky(PointerCubeTexture sky, PointerCamera camera){
+        if(sky == nullptr){
+            return;
+        }
+        shader -> bind();
+        shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
+        RenderUtil::prepareModel(model, 1);
+        sky -> bind();
+        glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());
+        RenderUtil::finishRender(1);
+    }
+    inline void cleanUp(void){
         shader -> cleanUp();
         delete shader;
     };
-    SkyBoxMaster(PointerCamera camera, Loader loader){
+    inline SkyBoxMaster(PointerCamera camera, Loader loader){
         RenderUtil::updateProjectionMatrix(shader, camera);
         std::vector<float> vertices = {
             -SIZE,  SIZE, -SIZE,
@@ -67,7 +78,7 @@ public:
         };
         model = loader.loadToVao(vertices, 3);
     };
-    BasicShader * getShader(void){
+    inline BasicShader * getShader(void) const{
         return shader;
     };
 };

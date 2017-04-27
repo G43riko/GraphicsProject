@@ -53,10 +53,10 @@ private:
 public:
     PostFxMaster(Loader loader, bool usingPostFx, int width, int height, int samples = 1) {
         if(samples == 1){
-            mainFbo = new Fbo(width, height, Fbo::DEPTH_TEXTURE);
+            mainFbo = new Fbo(width, height, FBO_DEPTH_TEXTURE);
         }
         else{
-            mainFbo = new Fbo(width, height, Fbo::DEPTH_RENDER_BUFFER, samples);
+            mainFbo = new Fbo(width, height, FBO_DEPTH_RENDER_BUFFER, samples);
         }
         quad = loader.loadToVao(POSITIONS, 2);
         setUsingPostFx(usingPostFx);
@@ -89,7 +89,7 @@ public:
         delete mainFbo;
     };
 
-    void addFbo(std::string name, int width, int height, int depthBufferType = Fbo::DEPTH_TEXTURE){
+    void addFbo(std::string name, int width, int height, int depthBufferType = FBO_DEPTH_TEXTURE){
         fbos[name] = new Fbo(width, height, depthBufferType);
     };
 

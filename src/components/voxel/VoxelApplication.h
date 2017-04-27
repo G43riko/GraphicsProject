@@ -6,7 +6,6 @@
 #define GAMEENGINE_VOXELAPPLICATION_H
 
 
-#include <src/utils/Performance.h>
 #include <src/core/BasicApplication.h>
 #include <src/components/movement/FpsView.h>
 
@@ -23,7 +22,7 @@ class VoxelApplication : public BasicApplication{
         auto normal = TextureManager::createTexture2D("res/textures/textureNormal.png");
         auto cursor = TextureManager::createTexture2D("res/textures/aim_cursor.png");
         float size = 50;
-        getRenderer() -> addTexture(GuiTexture(cursor->getTextureID(), Vector2f(), Vector2f(size / WindowManager::width, size / WindowManager::height)));
+        getRenderer() -> addTexture(GuiTexture(cursor->getTextureID(), Vector2f(), Vector2f(size / (float)WindowManager::width, size / (float)WindowManager::height)));
         auto material = createMaterial(diffuse, normal);
         ball = createMaterialedModel(sphere, material);
         getScene()->setSky(skyTexture);
@@ -62,7 +61,7 @@ class VoxelApplication : public BasicApplication{
         }
 
         if(Input::getMouseDown(0)){
-            PointerGameObject entity = PointerGameObject(new GameObject(createEntity(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(1))));
+            PointerGameObject entity = PointerGameObject(new GameObject(createEntity(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(1, 1, 1))));
             entity->setVelocity(getRenderer() -> getActualCamera() -> getForward());
             getScene()->addObject(entity);
         }

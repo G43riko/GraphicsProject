@@ -9,12 +9,12 @@
 #include <src/utils/Matrix4f.h>
 #include <src/rendering/Camera.h>
 
+#define OFFSET 10.0f
+#define SHADOW_DISTANCE 100.0f
+#define UP {0.0f, 0.1f, 0.0f, 0.0f}
+#define FORWARD {0.0f, 0.0f, -1.0f, 0.0f}
 class ShadowBox {
 private:
-    static constexpr float OFFSET = 10.0f;
-    static const float SHADOW_DISTANCE;
-    static const Vector4f UP;
-    static const Vector4f FORWARD;
 
     float minX, maxX;
     float minY, maxY;
@@ -24,7 +24,7 @@ private:
     float farHeight, farWidth, nearHeight, nearWidth;
 
     Vector4f * calculateFrustumVertices(Matrix4f rotation, Vector3f forwardVector, Vector3f centerNear, Vector3f centerFar) {
-        Vector3f upVector = Vector3f(Matrix4f::transform(rotation, UP, nullptr));
+        Vector3f upVector = Vector3f(Matrix4f::transform(rotation, UP, nullptr).getXYZ());
         Vector3f rightVector = forwardVector.getCross(upVector);
         Vector3f downVector = Vector3f(-upVector.x, -upVector.y, -upVector.z);
         Vector3f leftVector = Vector3f(-rightVector.x, -rightVector.y, -rightVector.z);
@@ -52,7 +52,7 @@ public:
 
     void update(void){
         Matrix4f rotation = calculateCameraRotationMatrix();
-        Vector3f forwardVector = Matrix4f::transform(rotation, FORWARD);
+        Vector3f forwardVector = Matrix4f::transform(rotation, FORWARD).getXYZ();
         Vector3f toFar = forwardVector * SHADOW_DISTANCE;
         Vector3f toNear = forwardVector * cam -> NEAR_PLANE;
         Vector3f centerNear = toNear + cam -> getPosition();
@@ -102,7 +102,7 @@ public:
 //        Vector4f cen = Vector4f(x, y, z, 1);
 //        Matrix4f invertedLight = Matrix4f();
 //        Matrix4f.invert(lightViewMatrix, invertedLight);
-        return Vector3f(Matrix4f::transform(invertedLight, Vector4f(x, y, z, 1)));
+        return Vector3f(Matrix4f::transform(invertedLight, Vector4f(x, y, z, 1)).getXYZ());
     }
 
     Vector4f calculateLightSpaceFrustumCorner(Vector3f startPoint, Vector3f direction, float width) {

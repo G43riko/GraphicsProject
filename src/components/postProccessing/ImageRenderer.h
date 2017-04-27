@@ -12,7 +12,7 @@ class ImageRenderer {
         Fbo * fbo = nullptr;
     public:
         ImageRenderer(int width, int height) {
-            this -> fbo = new Fbo(width, height, Fbo::NONE);
+            this -> fbo = new Fbo(width, height, FBO_DEPTH_NONE);
         }
         ImageRenderer(){
 

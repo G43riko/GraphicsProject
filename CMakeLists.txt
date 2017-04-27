@@ -93,79 +93,25 @@ set(GL_MAIN_SRC
         src/main.cpp
         src/utils/Input.cpp
         src/rendering/Renderer.cpp
-        src/utils/Loader.cpp
-        src/components/postProccessing/Screen.cpp
-        src/components/entities/EntityManager.cpp
         src/components/entities/EntityMaster.cpp
-        src/components/FreeMove.cpp
-        src/components/gui/GuiMaster.cpp
-        src/components/lights/DirectionalLight.cpp
-        src/components/lights/PointLight.cpp
-        src/components/lights/SpotLight.cpp
         src/components/Master.cpp
-        src/components/movement/FpsView.cpp
-        src/components/movement/TopView.cpp
-        src/components/Object.cpp
-        src/components/particles/Particle.cpp
         src/components/particles/ParticleManager.cpp
         src/components/particles/ParticleMaster.cpp
-        src/components/particles/ParticleSystemComplex.cpp
         src/components/particles/ParticleSystemSimple.cpp
-        src/components/particles/ParticleTexture.cpp
-        src/components/postProccessing/Fbo.cpp
-        src/components/postProccessing/Filter.cpp
-        src/components/postProccessing/ImageRenderer.cpp
-        src/components/postProccessing/PostFxMaster.cpp
-        src/components/postProccessing/ToFrameBufferRendering.cpp
-        src/components/shadows/ShadowBox.cpp
-        src/components/shadows/ShadowFrameBuffer.cpp
         src/components/shadows/ShadowMaster.cpp
-        src/components/sky/SkyBoxMaster.cpp
-        src/components/terrain/HeightGenerator.cpp
-        src/components/terrain/Terrain.cpp
-        src/components/water/WaterFrameBuffer.cpp
         src/components/water/WaterMaster.cpp
-        src/core/GameComponent.cpp
-        src/core/GameObject.cpp
-        src/core/MainApplication.cpp
-        src/core/MainRenderer.cpp
-        #src/game/Animation.cpp
-        #src/game/Arrow.cpp
-        src/game/Ball.cpp
-        src/game/Environment.cpp
-        src/game/Scene.cpp
-        src/GUI/BasicGtkGui.cpp
         src/GUI/GtkIntroGui.cpp
-        src/rendering/Camera.cpp
-        src/rendering/material/CubeTexture.cpp
-        src/rendering/material/Material.cpp
         src/rendering/material/TextureManager.cpp
-        src/rendering/model/Entity.cpp
-        src/rendering/model/MaterialedModel.cpp
         src/rendering/model/Mesh.cpp
-        src/rendering/model/RawModel.cpp
-        src/rendering/RenderUtil.cpp
         src/rendering/shader/BasicShader.cpp
         src/utils/FileLoader.cpp
-        src/utils/Maths.cpp
-        src/utils/Matrix4f.cpp
         src/utils/MousePicker.cpp
-        src/utils/Quaternion.cpp
-        src/utils/Transform.cpp
-        src/utils/utils.cpp
-        src/utils/Vertex.cpp
         src/rendering/WindowManager.cpp
         src/utils/Vectors.cpp
-        src/rendering/material/Texture2D.cpp
-        src/components/terrain/TerrainManager.cpp
-        src/components/water/WaterRenderer.cpp
-        src/GameEngine.h src/components/ResourcesManager.cpp
         src/components/voxel/World.cpp
         src/components/voxel/Chunk.cpp
         src/components/voxel/Block.cpp
-        src/components/voxel/VoxelMaster.cpp
-        src/rendering/shader/VoxelShader.cpp
-        src/components/voxel/VoxelApplication.cpp )
+        src/components/voxel/VoxelMaster.cpp)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 

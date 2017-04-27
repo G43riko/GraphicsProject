@@ -8,8 +8,9 @@
 /************************
  * Vector3f
  ***********************/
-
+/*
 int Vector3f::count = 0;
+
 Vector3f::Vector3f(float x, float y, float z) {
     this -> x = x;
     this -> y = y;
@@ -91,16 +92,17 @@ Vector3f Vector3f::getNormal(void){
 
 Vector3f::Vector3f(const Vector4f vec) : Vector3f(vec.x, vec.y, vec.z){}
 
+ */
+
 Vector3f Vector3f::rotate(Quaternion rotation){
     Quaternion w = rotation * (*this) * rotation.conjugate();
 
     return Vector3f(w.x, w.y, w.z);
 }
-
 /************************
  * Vector2f
  ***********************/
-
+/*
 Vector2f::Vector2f(float x, float y){
     this -> x = x;
     this -> y = y;
@@ -117,6 +119,7 @@ void Vector2f::show(bool endLine){
     if(endLine)
         std::cout << std::endl;
 }
+ */
 /************************
  * Vector4f
  ***********************/

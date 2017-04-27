@@ -18,27 +18,30 @@ class Material {
         PointerTexture2D alpha              = nullptr;
         PointerTexture2D bump               = nullptr;
     public:
-        void setEnvironmentalMap(PointerCubeTexture texture);
-        PointerCubeTexture getEnvironmentalMap(void);
         float shineDumber = DEFAULT_MATERIAL_SHINE_DUMPER;
         float reflectivity = DEFAULT_MATERIAL_REFLECTIVITY;
 
-        Material(PointerTexture2D diffuse);
-        Material(PointerTexture2D diffuse, PointerTexture2D normal);
+        inline Material(PointerTexture2D diffuse) : diffuse(diffuse){};
+        inline Material(PointerTexture2D diffuse, PointerTexture2D normal) : diffuse(diffuse), normal(normal){};
 
-        PointerTexture2D getDiffuse(void);
-        PointerTexture2D getSpecular(void);
-        PointerTexture2D getNormal(void);
-        PointerTexture2D getAlpha(void);
-        PointerTexture2D getBump(void);
+        inline PointerTexture2D getDiffuse(void) const{return diffuse;};
+        inline PointerTexture2D getSpecular(void) const{return specular;};
+        inline PointerTexture2D getNormal(void) const{return normal;};
+        inline PointerTexture2D getAlpha(void) const{return alpha;};
+        inline PointerTexture2D getBump(void) const{return bump;};
 
-        bool hasEnvironmentalMap(void);
+        inline void setEnvironmentalMap(PointerCubeTexture texture){environmentalMap = texture; };
+        inline PointerCubeTexture getEnvironmentalMap(void) const{return environmentalMap; };
+        inline bool hasEnvironmentalMap(void) const{return environmentalMap == nullptr; };
 };
 
 typedef std::shared_ptr<Material> PointerMaterial;
-PointerMaterial createMaterial(PointerTexture2D diffuse);
-PointerMaterial createMaterial(PointerTexture2D diffuse, PointerTexture2D normal);
 
-
+inline PointerMaterial createMaterial(PointerTexture2D texture){
+    return PointerMaterial(new Material(texture));
+}
+inline PointerMaterial createMaterial(PointerTexture2D texture, PointerTexture2D normal){
+    return PointerMaterial(new Material(texture, normal));
+}
 
 #endif //GRAPHICSPROJECT_MATERIAL_H

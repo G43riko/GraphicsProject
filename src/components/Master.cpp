@@ -78,5 +78,5 @@ void Master::init(Loader loader, int width, int height, PointerCamera camera, Po
     };
     voxelMaster = new VoxelMaster(camera);
     postFxMaster = new PostFxMaster(loader, false, width, height);
-    postFxMaster->addFbo("fbo1", width, height, Fbo::DEPTH_TEXTURE);
+    postFxMaster->addFbo("fbo1", width, height, FBO_DEPTH_TEXTURE);
 }

@@ -32,10 +32,10 @@ bool intersectRayWithSquare(Vector3f R1, Vector3f R2, Vector3f S1, Vector3f S2, 
     // 1.
     Vector3f dS21 = S2 - S1;
     Vector3f dS31 = S3 - S1;
-    Vector3f n = dS21.getCross(&dS31);
+    Vector3f n = dS21.getCross(dS31);
     // 2.
     Vector3f dR = R1 - R2;
-    float ndotdR = n.dot(&dR);
+    float ndotdR = n.dot(dR);
 
     if (ABS(ndotdR) < 1e-6f) { // Choose your tolerance
         return false;
@@ -45,11 +45,11 @@ bool intersectRayWithSquare(Vector3f R1, Vector3f R2, Vector3f S1, Vector3f S2, 
 
     // 3.
     Vector3f dMS1 = M - S1;
-    float u = dMS1.dot(&dS21);
-    float v = dMS1.dot(&dS31);
+    float u = dMS1.dot(dS21);
+    float v = dMS1.dot(dS31);
 
     // 4.
-    return (u >= 0.0f && u <= dS21.dot(&dS21) && v >= 0.0f && v <= dS31.dot(&dS31));
+    return (u >= 0.0f && u <= dS21.dot(dS21) && v >= 0.0f && v <= dS31.dot(dS31));
 }
 /////////////
 float mod(float value, float modulus) {

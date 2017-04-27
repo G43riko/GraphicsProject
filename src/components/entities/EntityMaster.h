@@ -9,8 +9,8 @@
 #include "EntityManager.h"
 #include <src/rendering/Camera.h>
 #include <src/components/Master.h>
-#include <src/rendering/shader/EntityShader.cpp>
-#include <src/rendering/shader/WireframeShader.cpp>
+#include <src/rendering/shader/EntityShader.h>
+#include <src/rendering/shader/WireframeShader.h>
 class Master;
 class EntityMaster {
 private:

@@ -20,7 +20,7 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
 
     shader -> bind();
     shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform3f(CAMERA_POSITION, camera -> getTransform() -> getPosition());
+    shader -> updateUniform3f(CAMERA_POSITION, *camera -> getTransform() -> getPosition());
 //    shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
 
 //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -43,7 +43,7 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
     for(unsigned int i=0 ; i<lights.size() ; i++){
         RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
-    int threeFacesBoxes = 0;
+    //int threeFacesBoxes = 0;
     std::vector<Block *> blocks;
     for(Block * block : world -> blocks){
         if(!block -> isVisible() || block -> getRenderOptions() == 0){

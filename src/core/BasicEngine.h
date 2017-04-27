@@ -25,14 +25,14 @@ class BasicEngine {
         /**
          * Funckia vyčistí celý engine
          */
-        void cleanUp(void){
+        inline void cleanUp(void){
             showStatus();
         };
 
         /**
          * Funckia inicializuje všetko potrebné pre beh enginu
          */
-        void init(void){
+        inline void init(void){
             DEBUG("BasicEngine::init - start: " << glfwGetTime());
 
             if(l_showGui){
@@ -48,7 +48,7 @@ class BasicEngine {
         /**
          * Funkcia vypíše priebežný stav enginu
          */
-        void showStatus(void){
+        inline void showStatus(void) const {
             DEBUG("frames: " << l_fpsCounter << ", elapsedTime: " << glfwGetTime());
         }
 
@@ -57,7 +57,7 @@ class BasicEngine {
          *
          * @param i_delta - časový koeficient podla aktuálneho FPS
          */
-        void update(float i_delta){
+        inline void update(float i_delta){
             l_fpsCounter++;
 
             if(l_running){
@@ -84,7 +84,7 @@ class BasicEngine {
             WindowManager::update();
         };
     public:
-        BasicEngine(BasicApplication * i_app, int i_width, int i_height) : l_app(i_app), l_width(i_width), l_height(i_height){
+    inline BasicEngine(BasicApplication * i_app, int i_width, int i_height) : l_app(i_app), l_width(i_width), l_height(i_height){
             DEBUG("BasicEngine::BasicEngine" << glfwGetTime());
             l_showGui = l_app == nullptr;
         };
@@ -92,7 +92,7 @@ class BasicEngine {
         /**
          * Funkcia spusti aktuálne nastavenú aplikáciu v engine
          */
-        void appStart(void){
+        inline void appStart(void){
             //inicializujem okno
             if(l_showGui){
                 WindowManager::init(l_gui.getResX(), l_gui.getResY(), DEFAULT_TITLE, l_gui.getFullscreen());
@@ -130,7 +130,7 @@ class BasicEngine {
         /**
          * Funkcia zastaví aktuálne bežiacu aplikáciu
          */
-        void appStop(void){
+        inline void appStop(void){
             if(l_showGui){
                 //v gui zmením tlačítka
                 l_gui.appIsRunning(false);
@@ -153,7 +153,7 @@ class BasicEngine {
          *
          * @param i_app - aplikácia ktorá sa bude spúštať
          */
-        void setUpApp(BasicApplication * i_app){
+        inline void setUpApp(BasicApplication * i_app){
             //zmažeme staru aplikáciu ak existovala
             if(this -> l_app){
                 ERROR("nemožeš zapnuť aplikáciu keď už jedna je spustená!!! ...najprv ju musíš vypnuť");
@@ -167,7 +167,7 @@ class BasicEngine {
         /**
          * Funkcia sa zavolá len raz a spustí celý engine
          */
-        void start(void){
+        inline void start(void){
             DEBUG("BasicEngine::start - start: " << glfwGetTime());
             double currentTime  = glfwGetTime();
             float delta         = 1;
@@ -197,14 +197,14 @@ class BasicEngine {
          *
          * @return - šírka okna aktuálnej aplikácie v pixeloch
          */
-        inline int getResX(void){return l_width;}
+        inline int getResX(void) const{return l_width;}
 
         /**
          * Funkcia vráti výšku okna aktuálnej aplikácie
          *
          * @return - výška okna aktuálnej aplikácie v pixeloch
          */
-        inline int getResY(void){return l_height;}
+        inline int getResY(void) const{return l_height;}
 };
 
 

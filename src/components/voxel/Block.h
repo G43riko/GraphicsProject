@@ -11,6 +11,7 @@
 #define BLOCK_SIZE_Z 1
 
 #define VISIBLE_ALL 63
+#define VISIBLE_NONE 0
 
 #include <src/utils/Vectors.h>
 #include <src/rendering/shader/BasicShader.h>
@@ -32,7 +33,7 @@ public:
     Block(int x, int y, int z, Chunk * parent, BlockType type);
 
     void show(void);
-    void cleanUp(void){
+    inline void cleanUp(void) const{
         if(xNeighborPlus){ xNeighborPlus -> xNeighborMinus = nullptr; }
         if(xNeighborMinus){ xNeighborMinus -> xNeighborPlus = nullptr; }
         if(yNeighborPlus){ yNeighborPlus -> yNeighborMinus = nullptr; }
@@ -61,7 +62,7 @@ public:
         }
     }
 
-    void setUpVisibility(void){
+    inline void setUpVisibility(void){
         xNeighborPlus && xNeighborPlus->isVisible() ? turnOffOption(X_PLUS) : turnOnOption(X_PLUS);
         xNeighborMinus && xNeighborMinus->isVisible() ? turnOffOption(X_MINUS) : turnOnOption(X_MINUS);
 
@@ -70,13 +71,6 @@ public:
 
         zNeighborPlus && zNeighborPlus->isVisible() ? turnOffOption(Z_PLUS) : turnOnOption(Z_PLUS);
         zNeighborMinus && zNeighborMinus->isVisible() ? turnOffOption(Z_MINUS) : turnOnOption(Z_MINUS);
-
-//        turnOnOption(X_PLUS);
-//        turnOnOption(X_MINUS);
-//        turnOnOption(Y_PLUS);
-//        turnOnOption(Y_MINUS);
-//        turnOnOption(Z_PLUS);
-//        turnOnOption(Z_MINUS);
     }
     void setNeighbor(Block * block);
     inline int getRenderOptions(void){return options;}
@@ -104,10 +98,10 @@ private:
     Block * zNeighborPlus   = nullptr;
     Block * zNeighborMinus  = nullptr;
     int options = VISIBLE_ALL;
-    Chunk * parent;
-    const Vector4f color;
     const BlockType type;
     const int x, y, z;
+    Chunk * parent;
+    const Vector4f color;
 };
 
 

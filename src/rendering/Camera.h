@@ -18,55 +18,70 @@
 
 class MousePicker;
 class Camera {
-    private:
+private:
     glm::mat4 projectionMatrix;
-        Transform transform     = Transform();
-        bool VERTICAL           = true;
-        MousePicker * picker    = nullptr;
-        Vector3f forward        = Vector3f(1, 0, 0);
+    Transform transform     = Transform();
+    bool VERTICAL           = true;
+    //MousePicker * picker    = nullptr;
+    Vector3f forward        = Vector3f(1, 0, 0);
 //    Vector3f position   = Vector3f(DEFAULT_CAMERA_POSITION);//TODO deprecated
-    public:
-        Vector3f getForward(void);
+public:
 //        void updateForward(){
 //            forward.x = (float)(sin((-yaw + 180)) * cos(-pitch));
 //            forward.y = (float)sin((-pitch + 180));
 //            forward.z = (float)(cos((-yaw)) * cos(-pitch));
 //            forward.normalize();
 //        }
-        Vector3f getPosition(void)&{
-            return * transform.getPosition();
-        }
 //        void setPosition(Vector3f pos){
 //            position = pos;
 //        }
-        float FOV           = DEFAULT_CAMERA_FOV;
-        float FAR_PLANE     = DEFAULT_CAMERA_FAR_PLANE;
-        float NEAR_PLANE    = DEFAULT_CAMERA_NEAR_PLANE;
-        float pitch         = 0;
-        float roll          = 0;
-        float yaw           = 0;
+    float FOV           = DEFAULT_CAMERA_FOV;
+    float FAR_PLANE     = DEFAULT_CAMERA_FAR_PLANE;
+    float NEAR_PLANE    = DEFAULT_CAMERA_NEAR_PLANE;
+    float pitch         = 0;
+    float roll          = 0;
+    float yaw           = 0;
 
-        Transform * getTransform(void){
-            return &transform;
+    Transform * getTransform(void){
+        return &transform;
+    }
+    inline Camera(void){
+        projectionMatrix = glm::perspectiveFov<float>(FOV,
+                                                      static_cast<float>(WindowManager::width),
+                                                      static_cast<float>(WindowManager::height),
+                                                      NEAR_PLANE,
+                                                      FAR_PLANE);
+        //picker = new MousePicker(this);
+    }
+    inline void cleanUp(void){
+        //delete picker;
+    }
+    inline void show(void) const{
+        printf("pitch: %f, yaw: %f, roll: %f\n", pitch, yaw, roll);
+    }
+
+    //GETTERS
+
+    inline glm::mat4 getViewMatrix(void){
+        Vector3f pos = *transform.getPosition();
+        return Matrix4f::toGlmMatrix(transform .getRotation() -> toRotationMatrix()) * glm::translate(glm::vec3(-pos.x, -pos.y, -pos.z));
+    }
+    inline Vector3f getForward(void){return transform.getRotation()->getBack(); }
+    inline glm::mat4 getProjectionMatrix(void) const{return projectionMatrix; }
+    inline Vector3f getForwardVector(void){
+        forward = transform.getRotation()->getForward();
+        if(VERTICAL){
+            return (forward * -1).getNormal();
         }
-        Camera(void);
-        glm::mat4 getProjectionMatrix(void);
-        glm::mat4 getViewMatrix(void);
-        void cleanUp(void);
-        void show(){
-            printf("pitch: %f, yaw: %f, roll: %f\n", pitch, yaw, roll);
-        }
-        Vector3f getForwardVector(){
-            forward = transform.getRotation()->getForward();
-            if(VERTICAL){
-                return (forward * -1).getNormal();
-            }
-            return (Vector3f(0, 1, 0).cross(&forward).getCross(Vector3f(0, 1, 0)) * -1).normalize();
-        }
-        Vector3f getRightVector(){
-            forward = transform.getRotation()->getForward();
-            return Vector3f(0, 1, 0).cross(&forward).normalize();
-        }
+        return (Vector3f(0, 1, 0).cross(forward).getCross(Vector3f(0, 1, 0)) * -1).normalize();
+    }
+    inline Vector3f getPosition(void){
+        return * transform.getPosition();
+    }
+    inline Vector3f getRightVector(){
+        forward = transform.getRotation()->getForward();
+        return Vector3f(0, 1, 0).cross(forward).normalize();
+    }
 };
 
 typedef std::shared_ptr<Camera> PointerCamera;

@@ -29,11 +29,13 @@ class Mesh {
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLuint>);
         Mesh(std::vector<GLfloat>, std::vector<GLfloat>, std::vector<GLfloat>,std::vector<GLfloat>, std::vector<GLuint>);
 
-        std::vector<GLfloat> getVertices(void);
-        std::vector<GLfloat> getTangents(void);
-        std::vector<GLfloat> getNormals(void);
-        std::vector<GLfloat> getUvs(void);
-        std::vector<GLuint> getIndices(void);
+
+    inline std::vector<GLfloat> getVertices(void){ return vertices; }
+    inline std::vector<GLfloat> getTangents(void){ return tangents; }
+    inline std::vector<GLfloat> getNormals(void){ return normals; }
+    inline std::vector<GLuint> getIndices(void){ return indices; }
+    inline std::vector<GLfloat> getUvs(void){ return uvs; }
+
 };
 
 #endif //GRAPHICSPROJECT_MESH_H

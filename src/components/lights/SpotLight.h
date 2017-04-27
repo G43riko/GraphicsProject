@@ -14,26 +14,21 @@ private:
     float cutOff;
     float outerCutOff;
 public:
-    SpotLight(Vector3f pos, Vector3f col, Vector3f att, Vector3f dir, float cutOff, float outerCutOff) :
+    inline SpotLight(Vector3f pos, Vector3f col, Vector3f att, Vector3f dir, float cutOff, float outerCutOff) :
             PointLight(pos, col, att),
             direction(dir),
             cutOff(cutOff),
             outerCutOff(outerCutOff){
     };
-    float getCutOff(void){
-        return cutOff;
-    };
-    float getOuterCutOff(void){
-        return outerCutOff;
-    };
-    Vector3f getDirection(void){
-        return direction;
-    };
+    inline float getCutOff(void) const{return cutOff; };
+    inline float getOuterCutOff(void) const{return outerCutOff; };
+    inline Vector3f getDirection(void) const{return direction; };
 };
 
 typedef std::shared_ptr<SpotLight> PointerSpotLight;
 
-PointerSpotLight createSpotLight(Vector3f pos, Vector3f col, Vector3f att, Vector3f dir, float cutOff, float outerCutOff);
-
+inline PointerSpotLight createSpotLight(Vector3f pos, Vector3f col, Vector3f att, Vector3f dir, float cutOff, float outerCutOff){
+    return PointerSpotLight(new SpotLight(pos, col, att, dir, cutOff, outerCutOff));
+}
 
 #endif //GRAPHICSPROJECT_SPOTLIGHT_H

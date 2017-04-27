@@ -17,12 +17,12 @@ class HeightGenerator {
         int zOffset = 0;
 
 
-        float interpolate(float a, float b, float blend){
+        inline float interpolate(const float a, const float b, const float blend) const{
             double theta = blend * M_PI;
             float f = (1.0f - COSF(theta)) * 0.5f;
             return a * (1.0f - f) + b * f;
         }
-        float getInterpolateNoise(float x, float y){
+        inline float getInterpolateNoise(const float x, const float y) const{
             unsigned  int intX = (unsigned int)x;
             unsigned int intY = (unsigned int)y;
             float fractX = x - (float)intX;
@@ -36,21 +36,21 @@ class HeightGenerator {
             float i2 = interpolate(v3, v4, fractX);
             return interpolate(i1, i2, fractY);
         }
-        float getNoise(unsigned int x, unsigned int y){
+        inline float getNoise(const unsigned int x, const unsigned int y) const{
             srand(x * 151 + y * 425 + seed);
             return (float)((double)rand() / RAND_MAX) * 2 - 1;
         }
-        float getSmoothNoise(unsigned int x, unsigned int y){
+        inline float getSmoothNoise(const unsigned int x, const unsigned int y) const{
             float corners = (getNoise(x - 1, y - 1) + getNoise(x - 1, y + 1) + getNoise(x + 1, y - 1) + getNoise(x + 1 , y + 1)) / 16.0f;
             float sides = (getNoise(x - 1, y) + getNoise(x, y + 1) + getNoise(x, y - 1) + getNoise(x + 1 , y)) / 8.0f;
             float center = getNoise(x, y) / 4.0f;
             return corners + sides + center;
         }
     public:
-        HeightGenerator(float amplitude) : HeightGenerator(amplitude, 100000){}
-        HeightGenerator(float amplitude, int seed) : amplitude(amplitude), seed(seed){}
+        inline HeightGenerator(const float amplitude) : HeightGenerator(amplitude, 100000){}
+        inline HeightGenerator(const float amplitude, int seed) : amplitude(amplitude), seed(seed){}
 
-        float generateHeight(int x, int z){
+        inline float generateHeight(const int x, const int z) const{
             float total = 0;
             float d = (float) pow(2, OCTAVES-1);
             for(unsigned int i=0;i<OCTAVES;i++){

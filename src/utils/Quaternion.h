@@ -8,50 +8,126 @@
 #include "Matrix4f.h"
 
 class Quaternion : public Vector4f{
-    public:
-        Quaternion(float = 0.0f, float = 0.0f, float = 0.0f, float = 1.0f);
-        Quaternion(Vector4f);
-        Quaternion(Vector3f, float);
-        Quaternion(Matrix4f);
+public:
+    inline Quaternion(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f) : Vector4f(x, y, z, w){}
 
-        Matrix4f toRotationMatrix(void);
+    inline Quaternion(Vector4f v) : Vector4f(v.x, v.y, v.z, v.w) {}
 
-        Vector3f getForward(void);
-        Vector3f getBack(void);
-        Vector3f getUp(void);
-        Vector3f getDown(void);
-        Vector3f getRight(void);
-        Vector3f getLeft(void);
+    inline Quaternion(Vector3f axis, float angle) {
+        float sinHalfAngle = sinf(angle / 2);
+        float cosHalfAngle = cosf(angle / 2);
 
-        Quaternion conjugate(void);
-        void rotate(const Vector3f & vec){
-            Quaternion result = *this;
-            if(NEQ(vec.x, 0)){
-                result = result * Quaternion(Vector3f(1, 0, 0), vec.x);
-            }
-            if(NEQ(vec.y, 0)){
-                result = result * Quaternion(Vector3f(0, 1, 0), vec.y);
-            }
-            if(NEQ(vec.z, 0)){
-                result = result * Quaternion(Vector3f(0, 0, 1), vec.z);
-            }
+        x = axis.x * sinHalfAngle;
+        y = axis.y * sinHalfAngle;
+        z = axis.z * sinHalfAngle;
+        w = cosHalfAngle;
+    }
 
-            x = result.x;
-            y = result.y;
-            z = result.z;
-            w = result.w;
+    inline Quaternion(Matrix4f m) {
+        float trace = m.m00 + m.m11 + m.m22;
+
+        if(trace > 0) {
+            float s = 0.5f / sqrtf(trace + 1.0f);
+            w = 0.25f / s;
+            x = (m.m12 - m.m21) * s;
+            y = (m.m20 - m.m02) * s;
+            z = (m.m01 - m.m10) * s;
         }
-        Quaternion mul(const Quaternion& r) const {
-            const float _w = (w * r.w) - (x * r.x) - (y * r.y) - (z * r.z);
-            const float _x = (x * r.w) + (w * r.x) + (y * r.z) - (z * r.y);
-            const float _y = (y * r.w) + (w * r.y) + (z * r.x) - (x * r.z);
-            const float _z = (z * r.w) + (w * r.z) + (x * r.y) - (y * r.x);
-
-            return Quaternion(_x, _y, _z, _w);
+        else if(m.m00 > m.m11 && m.m00 > m.m22){
+            float s = 2.0f * sqrtf(1.0f + m.m00 - m.m11 - m.m22);
+            w = (m.m12 - m.m21) / s;
+            x = 0.25f * s;
+            y = (m.m10 + m.m01) / s;
+            z = (m.m20 + m.m02) / s;
         }
-        Quaternion operator * (const Quaternion&);
-        Quaternion operator *= (const Quaternion&);
-        Quaternion operator * (const Vector3f&);
+        else if(m.m11 > m.m22){
+            float s = 2.0f * sqrtf(1.0f + m.m11 - m.m00 - m.m22);
+            w = (m.m20 - m.m02) / s;
+            x = (m.m10 + m.m01) / s;
+            y = 0.25f * s;
+            z = (m.m21 + m.m12) / s;
+        }
+        else {
+            float s = 2.0f * sqrtf(1.0f + m.m22 - m.m11 - m.m00);
+            w = (m.m01 - m.m10) / s;
+            x = (m.m20 + m.m02) / s;
+            y = (m.m12 + m.m21) / s;
+            z = 0.25f * s;
+        }
+
+        float len = length();
+        w = w / len;
+        x = x / len;
+        y = y / len;
+        z = z / len;
+    }
+
+
+    inline Quaternion operator * (const Quaternion& r) const{
+        const float _w = (w * r.w) - (x * r.x) - (y * r.y) - (z * r.z);
+        const float _x = (x * r.w) + (w * r.x) + (y * r.z) - (z * r.y);
+        const float _y = (y * r.w) + (w * r.y) + (z * r.x) - (x * r.z);
+        const float _z = (z * r.w) + (w * r.z) + (x * r.y) - (y * r.x);
+
+        return Quaternion(_x, _y, _z, _w);
+    }
+
+
+    inline Quaternion operator *= (const Quaternion& r){
+        *this = *this * r;
+        return *this;
+    }
+
+    inline Quaternion operator * (const Vector3f& v) const{
+        const float _w = - (x * v.x) - (y * v.y) - (z * v.z);
+        const float _x =   (w * v.x) + (y * v.z) - (z * v.y);
+        const float _y =   (w * v.y) + (z * v.x) - (x * v.z);
+        const float _z =   (w * v.z) + (x * v.y) - (y * v.x);
+
+        return Quaternion(_x, _y, _z, _w);
+    }
+
+    Matrix4f toRotationMatrix(void) const{
+        Vector3f forward = Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
+        Vector3f up      = Vector3f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
+        Vector3f right   = Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
+        return Matrix4f().InitRotationFromVectors(forward, up, right);
+    }
+
+    inline Vector3f getForward(void) const{return Vector3f(0, 0, 1).rotate(*this);}
+    inline Vector3f getBack(void) const{return Vector3f(0, 0, -1).rotate(*this);}
+    inline Vector3f getUp(void) const{return Vector3f(0, 1, 0).rotate(*this);}
+    inline Vector3f getDown(void) const{return Vector3f(0, -1, 0).rotate(*this);}
+    inline Vector3f getRight(void) const{return Vector3f(1, 0, 0).rotate(*this);}
+    inline Vector3f getLeft(void) const{return Vector3f(-1, 0, 0).rotate(*this);}
+
+    inline Quaternion conjugate(void) const{ return Quaternion(-x, -y, -z, w); }
+
+    inline void rotate(const Vector3f & vec){
+        Quaternion result = *this;
+        if(NEQ(vec.x, 0)){
+            result = result * Quaternion(Vector3f(1, 0, 0), vec.x);
+        }
+        if(NEQ(vec.y, 0)){
+            result = result * Quaternion(Vector3f(0, 1, 0), vec.y);
+        }
+        if(NEQ(vec.z, 0)){
+            result = result * Quaternion(Vector3f(0, 0, 1), vec.z);
+        }
+
+        x = result.x;
+        y = result.y;
+        z = result.z;
+        w = result.w;
+    }
+    inline Quaternion mul(const Quaternion& r)  const{
+        const float _w = (w * r.w) - (x * r.x) - (y * r.y) - (z * r.z);
+        const float _x = (x * r.w) + (w * r.x) + (y * r.z) - (z * r.y);
+        const float _y = (y * r.w) + (w * r.y) + (z * r.x) - (x * r.z);
+        const float _z = (z * r.w) + (w * r.z) + (x * r.y) - (y * r.x);
+
+        return Quaternion(_x, _y, _z, _w);
+    }
 
     static Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
         Quaternion qm = Quaternion();

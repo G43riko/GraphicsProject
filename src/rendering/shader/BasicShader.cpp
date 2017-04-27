@@ -62,7 +62,7 @@ GLuint BasicShader::addShader(GLenum type, std::string fileName){
     glGetShaderiv(shader, GL_COMPILE_STATUS, &result);
     if(result == GL_FALSE){
         glGetShaderInfoLog(shader, info_length, NULL, &fragment_shader_log[0]);
-        Logger::error(ERROR_COMPILE_SHADER(fileName, fragment_shader_log));
+        ERROR(ERROR_COMPILE_SHADER(fileName, fragment_shader_log));
         return 0;
     }
 

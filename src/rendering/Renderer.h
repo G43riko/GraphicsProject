@@ -13,9 +13,9 @@
 #include <glm/gtx/string_cast.hpp>
 #include <src/game/Scene.h>
 #include <src/core/BasicRenderer.h>
-#include "shader/ParticleShader.cpp"
-#include "shader/DeferredShader.cpp"
-#include "shader/ShadowShader.cpp"
+#include "src/rendering/shader/ParticleShader.h"
+#include "src/rendering/shader/DeferredShader.h"
+#include "src/rendering/shader/ShadowShader.h"
 #include "RenderUtil.h"
 #include "../components/postProccessing/Screen.h"
 

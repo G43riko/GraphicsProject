@@ -30,12 +30,11 @@ public:
 private:
 };
 
-
+#define POINTS {-1, 1, -1, -1, 1, 1, 1, -1}
 
 class Screen {
 private:
-    static PointerRawModel MODEL;
-    static std::vector<float> POINTS;
+    PointerRawModel MODEL = nullptr;
     PointerTexture2D texture;
 
     Vector2f position;
@@ -57,7 +56,19 @@ private:
     float contrast = 0;//(0-1)(0=N)
     int levels = 0;
 public:
-    Screen(int, int, Loader);
+    Screen(int width, int height, Loader loader) {
+        MODEL = loader.loadToVao(POINTS, 2);
+        frameRenderer = ToFrameBufferRendering(width, height);
+        texture = frameRenderer.getTexture();
+        position = Vector2f();
+        scale = Vector2f(1, 1);
+
+//    setGreyscale(true);
+        //setInvert(true);
+        //setContrast(1);
+        //setLevels(0);
+
+    }
 
     //OTHERS
 

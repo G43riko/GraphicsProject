@@ -39,7 +39,7 @@ public:
 //        setUpNeigbors();
 //        setUpVisibility();
 //    }
-    void removeBlock(Vector3f position){return removeBlock(position.x, position.y, position.z); };
+    void removeBlock(Vector3f position){return removeBlock(position.getXi(), position.getYi(), position.getZi()); };
     void removeBlock(int x, int y, int z);
     void show(void);
     void setBlock(Block * block, int x, int y, int z){
@@ -48,7 +48,7 @@ public:
         }
         map[x][y][z] = block;
     }
-    Block * getBlock(int x, int y, int z){
+    inline Block * getBlock(int x, int y, int z){
         if(x < 0 || y < 0 || z < 0 || x >= MAX_BLOCKS_X || y >= MAX_BLOCKS_Y || z >= MAX_BLOCKS_Z){
             return nullptr;
         }
@@ -62,7 +62,7 @@ public:
     inline Vector3f getAbsoulePosition(void){ return getSize() * getOffsetPosition(); }
     inline static Vector3f getSize(void){ return Vector3f(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z); }
     void cleanUp(void);
-    inline World * getWorld(void){return parent;}
+    inline World * getWorld(void) const{return parent;}
 private:
     World * parent;
     const int x, y, z;

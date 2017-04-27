@@ -24,18 +24,34 @@ private:
     ParticlesList particles;
 
 //    void addParticle(Particle particle, PointerParticleTexture texture);
-    void initParticles(PointerParticleTexture texture);
-public:
-    ParticlesList getParticles(void){
-        return particles;
+    inline void initParticles(PointerParticleTexture texture){
+        particles[texture] = std::vector<Particle>();
     }
-    int size(void);
-    void addParticle(Particle particle);
-    void update(float delta);
-    bool hasTexture(std::string name);
-    void loadTexture(PointerTexture2D texture, int rows, int columns);
-    void createParticle(PointerTexture2D texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale);
+
+
+public:
+    inline ParticlesList getParticles(void) const{return particles; }
+    inline int size(void) const{return count; }
+
     void createSystem(PointerTexture2D texture, float pps, float speed, float gravityComplient, float lifeLength);
+    inline void addParticle(Particle particle){
+        if(particles.find(particle.getTexture()) == particles.end()){
+            initParticles(particle.getTexture());
+        }
+        count++;
+        particles[particle.getTexture()].push_back(particle);
+    }
+    void update(float delta);
+    inline bool hasTexture(std::string name) const{return textures.find(name) != textures.end(); }
+    inline void loadTexture(PointerTexture2D texture, int rows, int columns){;
+        if(!hasTexture(texture -> getTitle())){
+            textures[texture -> getTitle()] = PointerParticleTexture(new ParticleTexture(texture, rows, columns));
+        }
+    }
+    inline void createParticle(PointerTexture2D texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale){
+        PointerParticleTexture pointerTexture = textures[texture -> getTitle()];
+        addParticle(Particle(pointerTexture, position, velocity, gravityEffect, lifeLength, rotation, scale));
+    }
 };
 
 #endif //GRAPHICSPROJECT_PARTICLEMANAGER_H

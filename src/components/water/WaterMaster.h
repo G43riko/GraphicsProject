@@ -8,7 +8,7 @@
 
 #include <src/rendering/RenderUtil.h>
 #include "WaterTile.h"
-#include <src/rendering/shader/WaterShader.cpp>
+#include <src/rendering/shader/WaterShader.h>
 #include <src/rendering/material/TextureManager.h>
 #include "WaterFrameBuffer.h"
 

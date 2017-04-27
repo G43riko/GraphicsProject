@@ -24,12 +24,12 @@ class WaterFrameBuffer {
         GLuint refractionTexture;
         GLuint refractionDepthTexture;
     public:
-        WaterFrameBuffer() {//call when loading the game
+        inline WaterFrameBuffer(void) {//call when loading the game
             initialiseReflectionFrameBuffer();
             initialiseRefractionFrameBuffer();
         }
 
-        void cleanUp() {//call when closing the game
+        inline void cleanUp(void) const{//call when closing the game
             glDeleteFramebuffers(1, &reflectionFrameBuffer);
             glDeleteTextures(1, &reflectionTexture);
             glDeleteRenderbuffers(1, &reflectionDepthBuffer);
@@ -38,56 +38,56 @@ class WaterFrameBuffer {
             glDeleteTextures(1, &refractionDepthTexture);
         }
 
-        void bindReflectionFrameBuffer() {//call before rendering to this FBO
+        inline void bindReflectionFrameBuffer(void) const{//call before rendering to this FBO
             bindFrameBuffer(reflectionFrameBuffer, REFLECTION_WIDTH, REFLECTION_HEIGHT);
             glViewport(0, 0, REFLECTION_WIDTH, REFLECTION_HEIGHT);
             glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
-        void bindRefractionFrameBuffer() {//call before rendering to this FBO
+        inline void bindRefractionFrameBuffer(void) const{//call before rendering to this FBO
             bindFrameBuffer(refractionFrameBuffer, REFRACTION_WIDTH, REFRACTION_HEIGHT);
             glViewport(0, 0, REFRACTION_WIDTH, REFRACTION_HEIGHT);
             glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
-        void unbindCurrentFrameBuffer() {//call to switch to default frame buffer
+        inline void unbindCurrentFrameBuffer(void) const{//call to switch to default frame buffer
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glViewport(0, 0, WindowManager::width, WindowManager::height);
         }
 
-        GLuint getReflectionTexture() {//get the resulting texture
+        inline GLuint getReflectionTexture(void) const{//get the resulting texture
             return reflectionTexture;
         }
 
-        GLuint getRefractionTexture() {//get the resulting texture
+        inline GLuint getRefractionTexture(void) const{//get the resulting texture
             return refractionTexture;
         }
 
-        GLuint getRefractionDepthTexture(){//get the resulting depth texture
+        inline GLuint getRefractionDepthTexture(void) const{//get the resulting depth texture
             return refractionDepthTexture;
         }
 
-        void initialiseReflectionFrameBuffer() {
+        inline void initialiseReflectionFrameBuffer(void) {
             createFrameBuffer(&reflectionFrameBuffer);
             createTextureAttachment(&reflectionTexture, REFLECTION_WIDTH,REFLECTION_HEIGHT);
             createDepthBufferAttachment(&reflectionDepthBuffer, REFLECTION_WIDTH,REFLECTION_HEIGHT);
             unbindCurrentFrameBuffer();
         }
 
-        void initialiseRefractionFrameBuffer() {
+        inline void initialiseRefractionFrameBuffer(void){
             createFrameBuffer(&refractionFrameBuffer);
             createTextureAttachment(&refractionTexture, REFRACTION_WIDTH,REFRACTION_HEIGHT);
             createDepthTextureAttachment(&refractionDepthTexture, REFRACTION_WIDTH,REFRACTION_HEIGHT);
             unbindCurrentFrameBuffer();
         }
 
-        void bindFrameBuffer(GLuint frameBuffer, int width, int height){
+        inline void bindFrameBuffer(GLuint frameBuffer, const int width, const int height) const{
             glBindTexture(GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
             glViewport(0, 0, width, height);
         }
     private:
-        void createFrameBuffer(GLuint * frameBuffer) {
+        inline void createFrameBuffer(GLuint * frameBuffer) const{
             glGenFramebuffers(1, frameBuffer);
             //generate name for frame buffer
             glBindFramebuffer(GL_FRAMEBUFFER, *frameBuffer);
@@ -96,7 +96,7 @@ class WaterFrameBuffer {
             //indicate that we will always render to color attachment 0
         }
 
-        void createTextureAttachment(GLuint * texture, int width, int height) {
+        inline void createTextureAttachment(GLuint * texture, const int width, const int height) const{
             glGenTextures(1, texture);
             glBindTexture(GL_TEXTURE_2D, *texture);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
@@ -105,7 +105,7 @@ class WaterFrameBuffer {
             glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, *texture, 0);
         }
 
-        void createDepthTextureAttachment(GLuint * texture, int width, int height){
+        inline void createDepthTextureAttachment(GLuint * texture, const int width, int const height) const{
             glGenTextures(1, texture);
             glBindTexture(GL_TEXTURE_2D, *texture);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
@@ -114,7 +114,7 @@ class WaterFrameBuffer {
             glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, *texture, 0);
         }
 
-        void createDepthBufferAttachment(GLuint * depthBuffer, int width, int height) {
+        inline void createDepthBufferAttachment(GLuint * depthBuffer, const int width, const int height) const{
             glGenRenderbuffers(1, depthBuffer);
             glBindRenderbuffer(GL_RENDERBUFFER, *depthBuffer);
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);

@@ -9,10 +9,10 @@
 #include <src/rendering/model/RawModel.h>
 #include <src/utils/Loader.h>
 #include "Filter.h"
-#include "src/rendering/shader/ContrastShader.cpp"
-#include "src/rendering/shader/HorizontalBlurShader.cpp"
-#include "src/rendering/shader/VerticalBlurShader.cpp"
-#include "src/rendering/shader/CombineShader.cpp"
+#include "src/rendering/shader/ContrastShader.h"
+#include "src/rendering/shader/HorizontalBlurShader.h"
+#include "src/rendering/shader/VerticalBlurShader.h"
+#include "src/rendering/shader/CombineShader.h"
 
 class PostProccessing {
     public:

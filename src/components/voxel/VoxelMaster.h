@@ -5,7 +5,7 @@
 #ifndef GAMEENGINE_VOXELRENDERER_H
 #define GAMEENGINE_VOXELRENDERER_H
 
-#include <src/rendering/shader/VoxelShader.cpp>
+#include <src/rendering/shader/VoxelShader.h>
 #include <src/rendering/Camera.h>
 #include "World.h"
 #include "../../rendering/RenderUtil.h"

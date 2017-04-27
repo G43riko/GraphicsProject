@@ -15,20 +15,21 @@ class CubeTexture;
 
 class CubeTexture {
     private:
-        GLuint textureID;
-        std::string title;
+        const GLuint textureID;
+        const std::string title;
     public:
-        CubeTexture(std::string title, GLuint textureID);
-        GLuint getId(void);
-        void cleanUp(void);
-        void bind(void);
-        void bind(GLuint num);
+        inline CubeTexture(std::string title, GLuint textureID) : textureID(textureID), title(title){};
+        inline GLuint getId(void)const {return textureID;};
+        inline void cleanUp(void) const {glDeleteTextures(1, &textureID);};
+        inline void bind(void)const {glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);};
+        inline void bind(GLuint num) const{glActiveTexture(num); bind();};
 };
 
 
 typedef std::shared_ptr<CubeTexture> PointerCubeTexture;
-PointerCubeTexture createCubeTexture(std::string title, GLuint textureID);
-
+inline PointerCubeTexture createCubeTexture(std::string title, GLuint textureID){
+    return PointerCubeTexture(new CubeTexture(title, textureID));
+}
 
 
 #endif //GRAPHICSPROJECT_CUBETEXTURE_H
