@@ -54,9 +54,9 @@ private:
                                                         std::vector<GLuint>& indices,
                                                         std::vector<PointerVertex>& vertices);
 
-    static float convertDataToArrays(std::vector<PointerVertex> vertices,
-                                     std::vector<Vector2f> textures,
-                                     std::vector<Vector3f> normals,
+    static void convertDataToArrays(const std::vector<PointerVertex> vertices,
+                                    const std::vector<Vector2f> textures,
+                                    const std::vector<Vector3f> normals,
                                      std::vector<GLfloat>& verticesArray,
                                      std::vector<GLfloat>& texturesArray,
                                      std::vector<GLfloat>& normalsArray,

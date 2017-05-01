@@ -20,14 +20,40 @@ public:
     const static unsigned char FLAG_ENVIRONMENTAL   = 0x20; // hex for 0010 0000
     const static unsigned char FLAG_WATER           = 0x40; // hex for 0100 0000
     const static unsigned char FLAG_SHADOW          = 0x80; // hex for 1000 0000
-    inline static void prepareModel(PointerRawModel model, GLuint numberOfAttributes){
+
+    inline static void prepareModel(const PointerRawModel model, const GLuint numberOfAttributes){
         glBindVertexArray(model -> getVaoID());
         for(GLuint i=0 ; i<=numberOfAttributes ; i++){
             glEnableVertexAttribArray(i);
         }
     }
 
-    inline static void prepareMaterial(PointerMaterial material, PointerBasicShader shader, int options){
+    inline static void prepareMaterial(const PointerMaterial material, const PointerBasicShader shader, const int options){
+        if(shader){
+            if(options & FLAG_SPECULAR){
+                shader -> updateUniformf("shineDumper", material -> shineDumber);
+                shader -> updateUniformf("reflectivity", material -> reflectivity);
+            }
+            shader -> connectTextures();
+
+            material -> getDiffuse() -> bind(GL_TEXTURE0);
+
+            if(options & FLAG_ENVIRONMENTAL){
+                if(material -> hasEnvironmentalMap()){
+                    material -> getEnvironmentalMap() -> bind(GL_TEXTURE1);
+                }
+            }
+
+            if(options & FLAG_NORMAL_MAP){
+                PointerTexture2D normal = material -> getNormal();
+                if(normal){
+                    normal -> bind(GL_TEXTURE1);
+                }
+            }
+        }
+    }
+
+    inline static void prepareMaterial(const PointerMaterial material, BasicShader * shader, const int options){
         if(shader){
             if(options & FLAG_SPECULAR){
                 shader -> updateUniformf("shineDumper", material -> shineDumber);
@@ -50,37 +76,18 @@ public:
         }
     }
 
-    inline static void prepareMaterial(PointerMaterial material, BasicShader * shader, int options){
-        if(shader){
-            if(options & FLAG_SPECULAR){
-                shader -> updateUniformf("shineDumper", material -> shineDumber);
-                shader -> updateUniformf("reflectivity", material -> reflectivity);
-            }
-            shader -> connectTextures();
-
-            material -> getDiffuse() -> bind(GL_TEXTURE0);
-
-            if(options & FLAG_ENVIRONMENTAL){
-                if(material -> hasEnvironmentalMap())
-                    material -> getEnvironmentalMap() -> bind(GL_TEXTURE1);
-            }
-
-            if(options & FLAG_NORMAL_MAP){
-                PointerTexture2D normal = material -> getNormal();
-                if(normal)
-                    normal -> bind(GL_TEXTURE1);
-            }
-        }
-    }
-
-    inline static void finishRender(GLuint numberOfAttributes){
+    inline static void finishRender(const GLuint numberOfAttributes){
         for(GLuint i=0 ; i<=numberOfAttributes ; i++)
             glDisableVertexAttribArray(i);
 
         glBindVertexArray(0);
     }
 
-    inline static void updateLightUniforms(PointerPointLight light, PointerBasicShader shader, PointerCamera camera, int index, bool eyeSpace = true){
+    inline static void updateLightUniforms(const PointerPointLight light,
+                                           const PointerBasicShader shader,
+                                           const PointerCamera camera,
+                                           const int index,
+                                           bool const eyeSpace = true){
         Vector3f position = eyeSpace ? getEyeSpacePosition(light, camera -> getViewMatrix()) : light->getPosition();
         std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
         shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);
@@ -88,7 +95,11 @@ public:
         shader -> updateUniform3f("attenuation[" + std::to_string(index) + "]", light -> getAttenuation());
     }
 
-    inline static void updateLightUniforms(PointerPointLight light, BasicShader * shader, PointerCamera camera, int index, bool eyeSpace = true){
+    inline static void updateLightUniforms(const PointerPointLight light,
+                                           BasicShader * shader,
+                                           const PointerCamera camera,
+                                           const int index,
+                                           const bool eyeSpace = true){
         Vector3f position = eyeSpace ? getEyeSpacePosition(light, camera -> getViewMatrix()) : light->getPosition();
         std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
         shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);
@@ -96,17 +107,14 @@ public:
         shader -> updateUniform3f("attenuation[" + std::to_string(index) + "]", light -> getAttenuation());
     }
 
-    inline static Vector3f getEyeSpacePosition(PointerPointLight light, glm::mat4 view){
+    inline static Vector3f getEyeSpacePosition(const PointerPointLight light, const glm::mat4 view){
         Vector3f position = light -> getPosition();
-
-        float x = view[0][0] * position.x + view[1][0] * position.y + view[2][0] * position.z + view[3][0];
-        float y = view[0][1] * position.x + view[1][1] * position.y + view[2][1] * position.z + view[3][1];
-        float z = view[0][2] * position.x + view[1][2] * position.y + view[2][2] * position.z + view[3][2];
-
-        return Vector3f(x, y, z);
+        return Vector3f(view[0][0] * position.x + view[1][0] * position.y + view[2][0] * position.z + view[3][0],
+                        view[0][1] * position.x + view[1][1] * position.y + view[2][1] * position.z + view[3][1],
+                        view[0][2] * position.x + view[1][2] * position.y + view[2][2] * position.z + view[3][2]);
     }
 
-    inline static void updateProjectionMatrix(BasicShader *shader, PointerCamera camera) {
+    inline static void updateProjectionMatrix(BasicShader *shader, const PointerCamera camera) {
         shader -> bind();
         shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
     }

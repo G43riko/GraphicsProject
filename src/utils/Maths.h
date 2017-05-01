@@ -19,8 +19,8 @@ public:
     static inline glm::mat4 createTransformationMatrix(const float &posX, const float &posY, const float &posZ,
                                                        const float &rotX, const float &rotY, const float &rotZ,
                                                        const float &scaleX, const float &scaleY, const float &scaleZ){
-        glm::vec3 translate = glm::vec3(posX, posY, posZ);
-        glm::mat4 translateMatrix = glm::translate(translate);
+        const glm::vec3 translate = glm::vec3(posX, posY, posZ);
+        const glm::mat4 translateMatrix = glm::translate(translate);
 
         glm::mat4 rotationMatrix = glm::mat4(1.0f);
         rotationMatrix *= glm::rotate(rotX, glm::vec3(1, 0, 0));

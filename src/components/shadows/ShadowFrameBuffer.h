@@ -21,16 +21,16 @@ public:
         glDeleteTextures(1, &shadowMap);
     }
 
-    void bindFrameBuffer() {
+    void bindFrameBuffer(void) {
         bindFrameBuffer(fbo, WIDTH, HEIGHT);
     }
 
-    void unbindFrameBuffer() {
+    void unbindFrameBuffer(void) {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, WindowManager::width, WindowManager::height);
     }
 
-    int getShadowMap() {
+    inline GLuint getShadowMap(void) const{
         return shadowMap;
     }
 private:

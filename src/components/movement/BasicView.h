@@ -9,9 +9,9 @@ class BasicView{
 protected:
     PointerCamera camera = nullptr;
     GameObject * player = nullptr;
+    const std::string name;
 public:
     virtual ~BasicView(){};
-    const std::string name;
     BasicView(PointerCamera camera, GameObject * player, std::string name) : name(name){
         this -> camera = camera;
         this -> player = player;

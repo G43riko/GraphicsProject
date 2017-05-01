@@ -4,7 +4,10 @@
 
 #ifndef GAMEENGINE_INTERSECTIONS_H
 #define GAMEENGINE_INTERSECTIONS_H
+
 #include <src/utils/Vectors.h>
+
+#define SIGNUM(x) (x > 0 ? 1 : x < 0 ? -1 : 0)
 /**
  * 1. The normal to the plane is: n = (S2 - S1) x (S3 - S1)
  *  A point M belongs to this plane iff it satisfies this equation: n . ( M - S1 ) = 0
@@ -28,7 +31,7 @@
  * @param S3
  * @return
  */
-bool intersectRayWithSquare(Vector3f R1, Vector3f R2, Vector3f S1, Vector3f S2, Vector3f S3) {
+bool intersectRayWithSquare(const Vector3f R1, const Vector3f R2, const Vector3f S1, const Vector3f S2, const Vector3f S3) {
     // 1.
     Vector3f dS21 = S2 - S1;
     Vector3f dS31 = S3 - S1;
@@ -52,22 +55,17 @@ bool intersectRayWithSquare(Vector3f R1, Vector3f R2, Vector3f S1, Vector3f S2, 
     return (u >= 0.0f && u <= dS21.dot(dS21) && v >= 0.0f && v <= dS31.dot(dS31));
 }
 /////////////
-float mod(float value, float modulus) {
+float mod(const float value, const float modulus) {
     return fmodf((fmodf(value, modulus) + modulus), modulus);
 }
-float intbound(float s, float ds) {
+float intbound(const float s, const float ds) {
     // Find the smallest positive t such that s+t*ds is an integer.
     if (ds < 0) {
         return intbound(-s, -ds);
     } else {
-        s = mod(s, 1);
         // problem is now s+t*ds = 1
-        return (1 - s) / ds;
+        return (1 - mod(s, 1)) / ds;
     }
-}
-
-float signum(float x) {
-    return x > 0 ? 1 : x < 0 ? -1 : 0;
 }
 
 /**
@@ -79,14 +77,14 @@ float signum(float x) {
  * @param face
  * @return
  */
-bool callback(int x, int y, int z, Vector3f face){
+bool callback(const int x, const int y, const int z, const Vector3f face){
     PRINT("kolizia: [" << x << ", " << y << ", " << z << "]\nface: ");
     face.show();
 
     return false;
 }
 
-void raycast(Vector3f origin, Vector3f direction, float radius = 100) {
+void raycast(const Vector3f origin, const Vector3f direction, float radius = 100) {
     // From "A Fast Voxel Traversal Algorithm for Ray Tracing"
     // by John Amanatides and Andrew Woo, 1987
     // <http://www.cse.yorku.ca/~amana/research/grid.pdf>
@@ -114,9 +112,9 @@ void raycast(Vector3f origin, Vector3f direction, float radius = 100) {
     float dy = direction.y;
     float dz = direction.z;
     // Direction to increment x,y,z when stepping.
-    float stepX = signum(dx);
-    float stepY = signum(dy);
-    float stepZ = signum(dz);
+    float stepX = SIGNUM(dx);
+    float stepY = SIGNUM(dy);
+    float stepZ = SIGNUM(dz);
     // See description above. The initial values depend on the fractional
     // part of the origin.
     float tMaxX = intbound(origin.x, dx);

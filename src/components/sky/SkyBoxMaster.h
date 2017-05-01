@@ -10,18 +10,25 @@
 #include <src/rendering/shader/SkyBoxShader.h>
 
 #define SIZE 500
+#define  SKYBOX_VERTICES {-SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE,\
+                          -SIZE, -SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE,\
+                           SIZE, -SIZE, -SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE, -SIZE,\
+                          -SIZE, -SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,\
+                          -SIZE,  SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE,\
+                          -SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE}
 
 class SkyBoxMaster {
 private:
     BasicShader * shader = new SkyBoxShader();
     PointerRawModel model;
 public:
-    inline void renderSky(PointerCubeTexture sky, PointerCamera camera){
-        if(sky == nullptr){
+    inline void renderSky(const PointerCubeTexture sky, const PointerCamera camera){
+        if(IS_NULL(sky)){
             return;
         }
         shader -> bind();
         shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
+
         RenderUtil::prepareModel(model, 1);
         sky -> bind();
         glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());
@@ -31,56 +38,11 @@ public:
         shader -> cleanUp();
         delete shader;
     };
-    inline SkyBoxMaster(PointerCamera camera, Loader loader){
+    inline SkyBoxMaster(const PointerCamera camera, Loader loader){
         RenderUtil::updateProjectionMatrix(shader, camera);
-        std::vector<float> vertices = {
-            -SIZE,  SIZE, -SIZE,
-            -SIZE, -SIZE, -SIZE,
-             SIZE, -SIZE, -SIZE,
-             SIZE, -SIZE, -SIZE,
-             SIZE,  SIZE, -SIZE,
-            -SIZE,  SIZE, -SIZE,
-
-            -SIZE, -SIZE,  SIZE,
-            -SIZE, -SIZE, -SIZE,
-            -SIZE,  SIZE, -SIZE,
-            -SIZE,  SIZE, -SIZE,
-            -SIZE,  SIZE,  SIZE,
-            -SIZE, -SIZE,  SIZE,
-
-             SIZE, -SIZE, -SIZE,
-             SIZE, -SIZE,  SIZE,
-             SIZE,  SIZE,  SIZE,
-             SIZE,  SIZE,  SIZE,
-             SIZE,  SIZE, -SIZE,
-             SIZE, -SIZE, -SIZE,
-
-            -SIZE, -SIZE,  SIZE,
-            -SIZE,  SIZE,  SIZE,
-             SIZE,  SIZE,  SIZE,
-             SIZE,  SIZE,  SIZE,
-             SIZE, -SIZE,  SIZE,
-            -SIZE, -SIZE,  SIZE,
-
-            -SIZE,  SIZE, -SIZE,
-             SIZE,  SIZE, -SIZE,
-             SIZE,  SIZE,  SIZE,
-             SIZE,  SIZE,  SIZE,
-            -SIZE,  SIZE,  SIZE,
-            -SIZE,  SIZE, -SIZE,
-
-            -SIZE, -SIZE, -SIZE,
-            -SIZE, -SIZE,  SIZE,
-             SIZE, -SIZE, -SIZE,
-             SIZE, -SIZE, -SIZE,
-            -SIZE, -SIZE,  SIZE,
-             SIZE, -SIZE,  SIZE
-        };
-        model = loader.loadToVao(vertices, 3);
+        model = loader.loadToVao(SKYBOX_VERTICES, 3);
     };
-    inline BasicShader * getShader(void) const{
-        return shader;
-    };
+    inline BasicShader * getShader(void) const{ return shader; };
 };
 
 

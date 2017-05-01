@@ -30,6 +30,18 @@ public:
         count++;
         entities[entity->getModel()].push_back(entity);
     }
+
+    void removeEntity(PointerEntity entity){
+        if (entities.find(entity->getModel()) == entities.end()) {
+            return;
+        }
+        for(auto iter = entities[entity -> getModel()].begin(); iter != entities[entity -> getModel()].end(); ++iter){
+            if( *iter == entity ){
+                entities[entity -> getModel()].erase(iter);
+                break;
+            }
+        }
+    }
     EntitiesList getEntities(void){
         return entities;
     }

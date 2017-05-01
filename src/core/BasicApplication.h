@@ -18,6 +18,7 @@ private:
     Loader * l_loader           = nullptr;
 
 protected:
+
     inline void setRenderer(BasicRenderer * i_renderer){
         SET_IF_IS_NULL(l_renderer, i_renderer);
     };
@@ -31,10 +32,10 @@ protected:
         l_running = false;
     };
 
-    inline BasicView& getView(void){ return *l_view; };
-    inline BasicRenderer *getRenderer(void){ return l_renderer; };
-    inline BasicScene *getScene(void){ return l_scene; };
-    inline Loader getLoader(void){ return *l_loader; };
+    inline BasicView& getView(void) const{return *l_view; };
+    inline BasicRenderer *getRenderer(void)const{return l_renderer; };
+    inline BasicScene *getScene(void)const{ return l_scene; };
+    inline Loader getLoader(void)const{ return *l_loader; };
 public:
     inline void localCleanUp(void){
         CHECK_AND_CLEAR(l_renderer);
@@ -43,23 +44,31 @@ public:
     };
 
     virtual ~BasicApplication(void){};
-    inline void setLoader(Loader * i_loader){
-        this -> l_loader = i_loader;
-    };
-    inline bool isRunning(void){
-        return l_running;
-    };
+    inline void setLoader(Loader * i_loader){ this -> l_loader = i_loader; };
+    inline bool isRunning(void) const{return l_running; };
     inline void start(void){
         PRINT("startujem");
+
 
         l_running = true;
     };
     virtual void loadContent(void){};
+
+    /**
+     * Funkcia inicializuje engine
+     *
+     * musia sa volať tieto funkcie:
+     * 1. setRenderer
+     * 2. setScene
+     * 3. setView
+     *
+     * @param gui
+     */
     virtual void init(BasicGtkGui * i_gui) = 0;
-    virtual void update(float i_delta) = 0;
-    virtual void render(void) = 0;
+    virtual void update(float i_delta){};
+    virtual void render(void){};
     virtual void cleanUp(void){};
-    virtual void onSecondElapse(int i_fps){};
+    virtual void onSecondElapse(const int i_fps){};
 };
 
 #endif //GRAPHICSPROJECT_BASICAPPLICATION_H

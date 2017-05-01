@@ -17,6 +17,7 @@ public:
     };
     void setAllUniforms(void){
         setUniform("color");
+        setUniform("colorMatrix");
         setUniform("viewMatrix");
         setUniform("cameraPosition");
         setUniform("projectionMatrix");

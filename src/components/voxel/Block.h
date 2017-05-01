@@ -32,21 +32,26 @@ public:
     const static unsigned char Z_MINUS  = 0x20; // hex for 0010 0000
     Block(int x, int y, int z, Chunk * parent, BlockType type);
 
-    void show(void);
+    inline void show(void) const{
+        printf("block[%d, %d, %d]\n", x, y, z);
+        printf("top: %s\n", IS_NULL(yNeighborPlus) ? "N" : "Y");
+        printf("rig: %s\n", IS_NULL(xNeighborPlus) ? "N" : "Y");
+        printf("for: %s\n", IS_NULL(zNeighborPlus) ? "N" : "Y");
+        printf("bot: %s\n", IS_NULL(yNeighborMinus) ? "N" : "Y");
+        printf("lef: %s\n", IS_NULL(xNeighborMinus) ? "N" : "Y");
+        printf("bac: %s\n", IS_NULL(zNeighborMinus) ? "N" : "Y");
+    }
     inline void cleanUp(void) const{
-        if(xNeighborPlus){ xNeighborPlus -> xNeighborMinus = nullptr; }
-        if(xNeighborMinus){ xNeighborMinus -> xNeighborPlus = nullptr; }
-        if(yNeighborPlus){ yNeighborPlus -> yNeighborMinus = nullptr; }
-        if(yNeighborMinus){ yNeighborMinus -> yNeighborPlus = nullptr; }
-        if(zNeighborPlus){ zNeighborPlus -> zNeighborMinus = nullptr; }
-        if(zNeighborMinus){ zNeighborMinus -> zNeighborPlus = nullptr; }
+        if(xNeighborPlus){ xNeighborPlus -> xNeighborMinus = nullptr; xNeighborPlus -> setUpVisibility();}
+        if(xNeighborMinus){ xNeighborMinus -> xNeighborPlus = nullptr; xNeighborMinus -> setUpVisibility();}
+        if(yNeighborPlus){ yNeighborPlus -> yNeighborMinus = nullptr; yNeighborPlus -> setUpVisibility();}
+        if(yNeighborMinus){ yNeighborMinus -> yNeighborPlus = nullptr; yNeighborMinus -> setUpVisibility();}
+        if(zNeighborPlus){ zNeighborPlus -> zNeighborMinus = nullptr; zNeighborPlus -> setUpVisibility();}
+        if(zNeighborMinus){ zNeighborMinus -> zNeighborPlus = nullptr; zNeighborMinus -> setUpVisibility();}
     }
 
 //    Vector3f getAbsolutePosition(void);
 
-    Vector4f getColor(void){
-        return color;
-    }
 
     bool isVisible(void);
     inline static Vector4f getColorByType(BlockType type){
@@ -73,12 +78,15 @@ public:
         zNeighborMinus && zNeighborMinus->isVisible() ? turnOffOption(Z_MINUS) : turnOnOption(Z_MINUS);
     }
     void setNeighbor(Block * block);
+    inline Vector4f getColor(void) const{ return color; }
+    inline Chunk * getParent(void) const{ return parent; }
     inline int getRenderOptions(void){return options;}
     inline Matrix4f * getTranslation(void){return &translation;}
-    inline Vector3f getScale(void){return scale;}
-    inline Vector3f getAbsolutePos(void){return Vector3f(((x * BLOCK_SIZE_X) << 1) - ((scale.getXi() - 1) * BLOCK_SIZE_X),
-                                                         ((y * BLOCK_SIZE_Y) << 1) - ((scale.getYi() - 1) * BLOCK_SIZE_Y),
-                                                         ((z * BLOCK_SIZE_Z) << 1) - ((scale.getZi() - 1) * BLOCK_SIZE_Z)); }
+    inline Vector3f getScale(void) const{return scale;}
+    inline Vector3f getPosition(void) const{ return Vector3f(x, y, z); }
+    inline Vector3f getAbsolutePos(void)const{return Vector3f(((x * BLOCK_SIZE_X) << 1) - ((scale.getXi() - 1) * BLOCK_SIZE_X),
+                                                              ((y * BLOCK_SIZE_Y) << 1) - ((scale.getYi() - 1) * BLOCK_SIZE_Y),
+                                                              ((z * BLOCK_SIZE_Z) << 1) - ((scale.getZi() - 1) * BLOCK_SIZE_Z)); }
 private:
     inline void turnOnOption(unsigned char val){
         options |= val;
@@ -89,6 +97,7 @@ private:
     inline void toggleOption(unsigned char val){
         options ^= val;
     }
+
     Vector3f scale          = Vector3f(1, 1, 1);
     Matrix4f translation;
     Block * xNeighborPlus   = nullptr;

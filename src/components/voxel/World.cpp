@@ -52,11 +52,14 @@ Block * World::getBlockOn(int x, int y, int z){
     if(x < 0 || y < 0 || z < 0 || x >= WOLD_MAX_X || y >= WOLD_MAX_Y || z >= WOLD_MAX_Z){
         return nullptr;
     }
+    x /= 2;
+    y /= 2;
+    z /= 2;
     int chunkX = x / MAX_BLOCKS_X;
     int chunkY = y / MAX_BLOCKS_Y;
     int chunkZ = z / MAX_BLOCKS_Z;
 
-    return getChunk(chunkX, chunkY, chunkZ) -> getBlock(x % MAX_BLOCKS_X, y % MAX_BLOCKS_Y, z % MAX_BLOCKS_Z);
+    return getChunk(chunkX, chunkY, chunkZ) -> getBlock(x % CHUNK_SIZE_X, y % CHUNK_SIZE_Y, z % CHUNK_SIZE_Z);
 }
 void World::setUpNeighbors(void){
     for(int i=0 ; i< MAX_CHUNKS_X ; i++){

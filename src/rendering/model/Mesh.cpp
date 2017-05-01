@@ -4,46 +4,7 @@
 
 #include "Mesh.h"
 
-Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLuint> indices){
-    this -> vertices    = vertices;
-    this -> indices     = indices;
-    this -> uvs         = uvs;
-}
-Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLuint> indices){
-    this -> vertices    = vertices;
-    this -> normals     = normals;
-    this -> indices     = indices;
-    this -> uvs         = uvs;
-}
-Mesh::Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLfloat> tangents, std::vector<GLuint> indices){
-    this -> vertices    = vertices;
-    this -> normals     = normals;
-    this -> indices     = indices;
-    this -> tangents    = tangents;
-    this -> uvs         = uvs;
-}
-void Mesh::show(void){
-    std::cout << "vertices: " << std::endl;
-    for(auto i : vertices)
-        std::cout << i << " ";
-    std::cout << std::endl;
-    std::cout << "uvs: " << std::endl;
-    for(auto i : uvs)
-        std::cout << i << " ";
-    std::cout << std::endl;
-    std::cout << "normals: " << std::endl;
-    for(auto i : normals)
-        std::cout << i << " ";
-    std::cout << std::endl;
-    std::cout << "tangents: " << std::endl;
-    for(auto i : tangents)
-        std::cout << i << " ";
-    std::cout << std::endl;
-    std::cout << "indices: " << std::endl;
-    for(auto i : indices)
-        std::cout << i << " ";
-    std::cout << std::endl;
-}
+
 
 PointerMesh Mesh::plane = PointerMesh(new Mesh({-1.0f, 1.0f, 0.0f, -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f, 1.0f, 0.0f},
                                                { 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f},{ 0, 1, 3, 3, 1, 2}));

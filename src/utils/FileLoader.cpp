@@ -6,7 +6,7 @@
 
 #include <src/rendering/Camera.h>
 #include "FileLoader.h"
-
+#define CUBE_TEXTURE_FACES {"Right", "Left", "Top", "Bottom", "Back", "Front"}
 /*
  * TEXT FILES
  */
@@ -33,10 +33,10 @@ void ContentLoader::loadTextFile(std::string fileName, std::string *content){
 
 CubeImageData * ContentLoader::loadCubeTexture(std::string title){
     CubeImageData * datas = new CubeImageData[6];
-    std::vector<std::string> TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
+    std::vector<std::string> TITLES = CUBE_TEXTURE_FACES;
     for(int i=0 ; i<6 ; i++){
-        DEBUG("načitava sa: " << std::string("res/textures/skies/" + title + TITLES[i] + ".png").c_str());
-        lodepng::decode(datas[i].data, datas[i].width, datas[i].height, "res/textures/skies/" + title + TITLES[i] + ".png");
+        DEBUG("načitava sa: " << std::string(TEXTURES_FOLDER + "skies/" + title + TITLES[i] + ".png").c_str());
+        lodepng::decode(datas[i].data, datas[i].width, datas[i].height, "res/textures/skies/" + title + TITLES[i] + TEXTURES_EXTENSION);
     }
     datas[0].title = title;
     return datas;
@@ -195,18 +195,19 @@ void ContentLoader::split(const std::string text, char divider, std::vector<std:
 }
 
 PointerVertex ContentLoader::processVertex(Vector3f vertex, std::vector<PointerVertex>& vertices, std::vector<GLuint>& indices) {
-    GLuint index = (GLuint)vertex.x - 1;
+    GLuint index = (GLuint)vertex.getXi() - 1;
     PointerVertex currentVertex = vertices[index];
-    int textureIndex = (int)vertex.y - 1;
-    int normalIndex = (int)vertex.z - 1;
+    int textureIndex = vertex.getXi() - 1;
+    int normalIndex = vertex.getZi() - 1;
+
     if (!currentVertex -> isSet()) {
         currentVertex -> setTextureIndex(textureIndex);
         currentVertex -> setNormalIndex(normalIndex);
         indices.push_back(index);
         return currentVertex;
-    } else {
-        return dealWithAlreadyProcessedVertex(currentVertex, textureIndex, normalIndex, indices, vertices);
     }
+
+    return dealWithAlreadyProcessedVertex(currentVertex, textureIndex, normalIndex, indices, vertices);
 }
 
 PointerVertex ContentLoader::dealWithAlreadyProcessedVertex(PointerVertex previousVertex, int newTextureIndex, int newNormalIndex, std::vector<GLuint>& indices, std::vector<PointerVertex>& vertices) {
@@ -215,18 +216,17 @@ PointerVertex ContentLoader::dealWithAlreadyProcessedVertex(PointerVertex previo
         return previousVertex;
     } else {
         PointerVertex anotherVertex = previousVertex -> getDuplicateVertex();
-        if (anotherVertex != NULL) {
+        if (IS_NOT_NULL(anotherVertex)) {
             return dealWithAlreadyProcessedVertex(anotherVertex, newTextureIndex, newNormalIndex, indices, vertices);
-        } else {
-            PointerVertex duplicateVertex = PointerVertex(new Vertex(vertices.size(), previousVertex -> getPosition()));
-            duplicateVertex -> setTextureIndex(newTextureIndex);
-            duplicateVertex -> setNormalIndex(newNormalIndex);
-            previousVertex -> setDuplicateVertex(duplicateVertex);
-            vertices.push_back(duplicateVertex);
-            indices.push_back(static_cast<GLuint>(duplicateVertex -> getIndex()));
-            return duplicateVertex;
         }
 
+        PointerVertex duplicateVertex = PointerVertex(new Vertex(vertices.size(), previousVertex -> getPosition()));
+        duplicateVertex -> setTextureIndex(newTextureIndex);
+        duplicateVertex -> setNormalIndex(newNormalIndex);
+        previousVertex -> setDuplicateVertex(duplicateVertex);
+        vertices.push_back(duplicateVertex);
+        indices.push_back(static_cast<GLuint>(duplicateVertex -> getIndex()));
+        return duplicateVertex;
     }
 }
 
@@ -243,14 +243,14 @@ void ContentLoader::removeUnusedVertices(std::vector<PointerVertex>& vertices) {
 void ContentLoader::calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, std::vector<Vector2f> textures) {
     Vector3f deltaPos1 = v1.getPosition() - v0.getPosition();
     Vector3f deltaPos2 = v2.getPosition() - v0.getPosition();
-    Vector2f uv0 = textures[v0.getTextureIndex()];
-    Vector2f uv1 = textures[v1.getTextureIndex()];
-    Vector2f uv2 = textures[v2.getTextureIndex()];
+    const Vector2f uv0 = textures[v0.getTextureIndex()];
+    const Vector2f uv1 = textures[v1.getTextureIndex()];
+    const Vector2f uv2 = textures[v2.getTextureIndex()];
 
-    Vector2f deltaUv1 = uv1 - uv0;
-    Vector2f deltaUv2 = uv2 - uv0;
+    const Vector2f deltaUv1 = uv1 - uv0;
+    const Vector2f deltaUv2 = uv2 - uv0;
 
-    float r = 1.0f / (deltaUv1.x * deltaUv2.y - deltaUv1.y * deltaUv2.x);
+    const float r = 1.0f / (deltaUv1.x * deltaUv2.y - deltaUv1.y * deltaUv2.x);
     deltaPos1 *= deltaUv2.y;
     deltaPos2 *= deltaUv1.y;
 
@@ -260,14 +260,13 @@ void ContentLoader::calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, std
     v2.addTangent(tangent);
 }
 
-float ContentLoader::convertDataToArrays(std::vector<PointerVertex> vertices,
-                          std::vector<Vector2f> textures,
-                          std::vector<Vector3f> normals,
-                          std::vector<GLfloat>& verticesArray,
-                          std::vector<GLfloat>& texturesArray,
-                          std::vector<GLfloat>& normalsArray,
-                          std::vector<GLfloat>& tangentsArray) {
-    float furthestPoint = 0;
+void ContentLoader::convertDataToArrays(const std::vector<PointerVertex> vertices,
+                                        const std::vector<Vector2f> textures,
+                                        const std::vector<Vector3f> normals,
+                                        std::vector<GLfloat>& verticesArray,
+                                        std::vector<GLfloat>& texturesArray,
+                                        std::vector<GLfloat>& normalsArray,
+                                        std::vector<GLfloat>& tangentsArray) {
     for (unsigned int i = 0; i < vertices.size(); i++) {
         PointerVertex currentVertex = vertices[i];
         Vector3f position = currentVertex -> getPosition();
@@ -287,7 +286,6 @@ float ContentLoader::convertDataToArrays(std::vector<PointerVertex> vertices,
         tangentsArray.push_back(tangent.y);
         tangentsArray.push_back(tangent.z);
     }
-    return furthestPoint;
 }
 
 #endif

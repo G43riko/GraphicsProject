@@ -11,11 +11,10 @@
 #include <src/rendering/RenderUtil.h>
 #include "ShadowBox.h"
 #include "ShadowFrameBuffer.h"
-
+#define SHADOW_MAP_SIZE 2048
 class ShadowMaster {
 private:
     PointerBasicShader shader;
-    static constexpr int SHADOW_MAP_SIZE = 2048;
 //    Fbo fbo = Fbo(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
     ShadowFrameBuffer fbo = ShadowFrameBuffer(SHADOW_MAP_SIZE, SHADOW_MAP_SIZE);
     ShadowBox box;

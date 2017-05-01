@@ -43,6 +43,7 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
     for(unsigned int i=0 ; i<lights.size() ; i++){
         RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
+
     //int threeFacesBoxes = 0;
     std::vector<Block *> blocks;
     for(Block * block : world -> blocks){

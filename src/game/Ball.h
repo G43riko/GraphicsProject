@@ -13,7 +13,6 @@
 #define DEFRACTION_EFFECT 0.95f
 #define BALL_SIZE 1
 
-
 class Ball : public GameObject{
 private:
     float size = BALL_SIZE;

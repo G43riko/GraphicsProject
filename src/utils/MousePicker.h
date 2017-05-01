@@ -9,6 +9,7 @@
 #include "Vectors.h"
 #include "Matrix4f.h"
 #include "../rendering/Camera.h"
+#include "../utils/Input.h"
 class Camera;
 
 class MousePicker {
@@ -44,7 +45,7 @@ private:
 
 public:
 	inline Vector3f calculateMouseRay(void){
-		Vector2f mousePos = Input::getMousePosition();
+		Vector2f mousePos;// = Input::getMousePosition();
 		float mouseX = mousePos.x;
 		float mouseY = mousePos.y;
 		mouseX = (float)(WindowManager::width / 2);

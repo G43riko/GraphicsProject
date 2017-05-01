@@ -14,37 +14,39 @@
 
 class TextureManager{
 private:
-    static std::map<std::string, PointerTexture2D>          loadedTextures2D;
-    static std::map<std::string, PointerCubeTexture>        loadedCubeTextures;
-    static std::map<std::string, PointerParticleTexture>    loadedParticleTextures;
+    std::map<std::string, PointerTexture2D>          loadedTextures2D;
+    std::map<std::string, PointerCubeTexture>        loadedCubeTextures;
+    std::map<std::string, PointerParticleTexture>    loadedParticleTextures;
 public:
-    static inline PointerTexture2D createTexture2D(std::string fileName){
+    static TextureManager instance;
+
+    inline PointerTexture2D createTexture2D(const std::string fileName){
         if(loadedTextures2D.find(fileName) == loadedTextures2D.end()){
             loadedTextures2D[fileName] = initTexture2D(ContentLoader::loadTexturePNG(fileName));
         }
         return loadedTextures2D[fileName];
     };
-    static inline PointerTexture2D createTexture2D(Vector3f color){
+    inline PointerTexture2D createTexture2D(const Vector3f color){
         std::string fileName = color.toString();
         if(loadedTextures2D.find(fileName) == loadedTextures2D.end()){
             loadedTextures2D[fileName] = initTexture2D(ContentLoader::loadTextureColor(color));
         }
         return loadedTextures2D[fileName];
     };
-    static inline PointerCubeTexture createCubeTexture(std::string fileName){
+    inline PointerCubeTexture createCubeTexture(const std::string fileName){
         if(loadedCubeTextures.find(fileName) == loadedCubeTextures.end()){
             loadedCubeTextures[fileName] = initCubeTexture(ContentLoader::loadCubeTexture(fileName));
         }
         return loadedCubeTextures[fileName];
     };
-    static inline PointerParticleTexture createParticleTexture(std::string fileName, int rows, int columns){
+    inline PointerParticleTexture createParticleTexture(const std::string fileName, const int rows, const int columns){
         if(loadedParticleTextures.find(fileName) == loadedParticleTextures.end()){
             loadedParticleTextures[fileName] = PointerParticleTexture(new ParticleTexture(createTexture2D(fileName), rows, columns));
         }
         return loadedParticleTextures[fileName];
     };
 
-    static inline void cleanUp(void){
+    inline void cleanUp(void){
         for (auto it = loadedTextures2D.begin(); it != loadedTextures2D.end(); ++it){
             it -> second -> cleanUp();
         }
@@ -58,7 +60,7 @@ public:
         loadedParticleTextures.clear();
     };
 private:
-    static inline PointerTexture2D initTexture2D(CubeImageData data){
+    inline PointerTexture2D initTexture2D(const CubeImageData data){
         GLuint texture_id;
         glGenTextures(1, &texture_id);
         glBindTexture(GL_TEXTURE_2D, texture_id);
@@ -82,7 +84,7 @@ private:
         return PointerTexture2D(new Texture2D(data.title, texture_id, data.width, data.height));
     };
 
-    static inline PointerCubeTexture initCubeTexture(CubeImageData * datas){
+    inline PointerCubeTexture initCubeTexture(CubeImageData * datas){
         std::vector<std::string> TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
         GLuint texture_id;
         glGenTextures(1, &texture_id);

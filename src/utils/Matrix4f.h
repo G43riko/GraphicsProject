@@ -8,7 +8,28 @@
 #include "Vectors.h"
 #include <iomanip>
 #include <glm/mat4x4.hpp>
+#include <xmmintrin.h>
 
+inline void M4x4_SSE(const float *A, const float *B, float *C) {
+    __m128 row1 = _mm_load_ps(&B[0]);
+    __m128 row2 = _mm_load_ps(&B[4]);
+    __m128 row3 = _mm_load_ps(&B[8]);
+    __m128 row4 = _mm_load_ps(&B[12]);
+    for(int i=0; i<4; i++) {
+        __m128 brod1 = _mm_set1_ps(A[4 * i + 0]);
+        __m128 brod2 = _mm_set1_ps(A[4 * i + 1]);
+        __m128 brod3 = _mm_set1_ps(A[4 * i + 2]);
+        __m128 brod4 = _mm_set1_ps(A[4 * i + 3]);
+        __m128 row = _mm_add_ps(
+                _mm_add_ps(
+                        _mm_mul_ps(brod1, row1),
+                        _mm_mul_ps(brod2, row2)),
+                _mm_add_ps(
+                        _mm_mul_ps(brod3, row3),
+                        _mm_mul_ps(brod4, row4)));
+        _mm_store_ps(&C[4*i], row);
+    }
+}
 
 class Matrix4f {
 public:
@@ -17,6 +38,24 @@ public:
     ~Matrix4f(){
         //Matrix4f::counter--;
         //std::cout << "nicim: " << Matrix4f::minus <<  (created ? " som " : " niesom ") << "\n";
+    }
+    Matrix4f(const float * mat){
+        m00 = mat[0];
+        m10 = mat[1];
+        m20 = mat[2];
+        m30 = mat[3];
+        m01 = mat[4];
+        m11 = mat[5];
+        m21 = mat[6];
+        m31 = mat[7];
+        m02 = mat[8];
+        m12 = mat[9];
+        m22 = mat[10];
+        m32 = mat[11];
+        m03 = mat[12];
+        m13 = mat[13];
+        m23 = mat[14];
+        m33 = mat[15];
     }
     Matrix4f(const glm::mat4 mat){
         m00 = mat[0][0];
@@ -58,7 +97,7 @@ public:
         res[3][3] = mat.m33;;
         return res;
     }
-    static inline Matrix4f InitRotationEuler(float x, float y, float z) {
+    static inline Matrix4f InitRotationEuler(const float x, const float y, const float z) {
         Matrix4f rx, ry, rz;
 
         rx.m00 = 1;   rx.m10 = 0  ;  rx.m20 = 0   ; rx.m30 = 0;
@@ -84,68 +123,57 @@ public:
     }
 
     static inline Matrix4f setIdentity(Matrix4f& m) {
-        m.m00 = 1.0f;
-        m.m01 = 0.0f;
-        m.m02 = 0.0f;
-        m.m03 = 0.0f;
-        m.m10 = 0.0f;
-        m.m11 = 1.0f;
-        m.m12 = 0.0f;
-        m.m13 = 0.0f;
-        m.m20 = 0.0f;
-        m.m21 = 0.0f;
-        m.m22 = 1.0f;
-        m.m23 = 0.0f;
-        m.m30 = 0.0f;
-        m.m31 = 0.0f;
-        m.m32 = 0.0f;
-        m.m33 = 1.0f;
+        m.m01 = m.m02 = m.m03 = m.m10 = m.m12 = m.m13 = m.m20 = m.m21 = m.m23 = m.m30 = m.m31 = m.m32 = 0.0f;
+        m.m00 = m.m11 = m.m22 = m.m33 = 1.0f;
         return m;
     }
 
-    static inline Matrix4f mul(const Matrix4f & left, Matrix4f right, Matrix4f * dest = nullptr) {
+    static inline Matrix4f mul(const Matrix4f & left, const Matrix4f right, Matrix4f * dest = nullptr) {
+        /*
+        float * a = new float[16]{left.m00, left.m10, left.m20, left.m30,
+                                  left.m01, left.m11, left.m21, left.m31,
+                                  left.m02, left.m12, left.m22, left.m32,
+                                  left.m03, left.m13, left.m23, left.m33};
+
+        float * b = new float[16]{right.m00, right.m10, right.m20, right.m30,
+                                  right.m01, right.m11, right.m21, right.m31,
+                                  right.m02, right.m12, right.m22, right.m32,
+                                  right.m03, right.m13, right.m23, right.m33};
+        */
+        float * a = left.getArray();
+        float * b = right.getArray();
+        float * c = new float[16];
+        M4x4_SSE(a, b, c);
+        Matrix4f res = Matrix4f(c);
+        delete[] a;
+        delete[] b;
+        delete[] c;
+        /*
         Matrix4f res = Matrix4f();
 
-        float m00 = left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02 + left.m30 * right.m03;
-        float m01 = left.m01 * right.m00 + left.m11 * right.m01 + left.m21 * right.m02 + left.m31 * right.m03;
-        float m02 = left.m02 * right.m00 + left.m12 * right.m01 + left.m22 * right.m02 + left.m32 * right.m03;
-        float m03 = left.m03 * right.m00 + left.m13 * right.m01 + left.m23 * right.m02 + left.m33 * right.m03;
-        float m10 = left.m00 * right.m10 + left.m10 * right.m11 + left.m20 * right.m12 + left.m30 * right.m13;
-        float m11 = left.m01 * right.m10 + left.m11 * right.m11 + left.m21 * right.m12 + left.m31 * right.m13;
-        float m12 = left.m02 * right.m10 + left.m12 * right.m11 + left.m22 * right.m12 + left.m32 * right.m13;
-        float m13 = left.m03 * right.m10 + left.m13 * right.m11 + left.m23 * right.m12 + left.m33 * right.m13;
-        float m20 = left.m00 * right.m20 + left.m10 * right.m21 + left.m20 * right.m22 + left.m30 * right.m23;
-        float m21 = left.m01 * right.m20 + left.m11 * right.m21 + left.m21 * right.m22 + left.m31 * right.m23;
-        float m22 = left.m02 * right.m20 + left.m12 * right.m21 + left.m22 * right.m22 + left.m32 * right.m23;
-        float m23 = left.m03 * right.m20 + left.m13 * right.m21 + left.m23 * right.m22 + left.m33 * right.m23;
-        float m30 = left.m00 * right.m30 + left.m10 * right.m31 + left.m20 * right.m32 + left.m30 * right.m33;
-        float m31 = left.m01 * right.m30 + left.m11 * right.m31 + left.m21 * right.m32 + left.m31 * right.m33;
-        float m32 = left.m02 * right.m30 + left.m12 * right.m31 + left.m22 * right.m32 + left.m32 * right.m33;
-        float m33 = left.m03 * right.m30 + left.m13 * right.m31 + left.m23 * right.m32 + left.m33 * right.m33;
-
-        res.m00 = m00;
-        res.m01 = m01;
-        res.m02 = m02;
-        res.m03 = m03;
-        res.m10 = m10;
-        res.m11 = m11;
-        res.m12 = m12;
-        res.m13 = m13;
-        res.m20 = m20;
-        res.m21 = m21;
-        res.m22 = m22;
-        res.m23 = m23;
-        res.m30 = m30;
-        res.m31 = m31;
-        res.m32 = m32;
-        res.m33 = m33;
-
+        res.m00 = left.m00 * right.m00 + left.m10 * right.m01 + left.m20 * right.m02 + left.m30 * right.m03;
+        res.m01 = left.m01 * right.m00 + left.m11 * right.m01 + left.m21 * right.m02 + left.m31 * right.m03;
+        res.m02 = left.m02 * right.m00 + left.m12 * right.m01 + left.m22 * right.m02 + left.m32 * right.m03;
+        res.m03 = left.m03 * right.m00 + left.m13 * right.m01 + left.m23 * right.m02 + left.m33 * right.m03;
+        res.m10 = left.m00 * right.m10 + left.m10 * right.m11 + left.m20 * right.m12 + left.m30 * right.m13;
+        res.m11 = left.m01 * right.m10 + left.m11 * right.m11 + left.m21 * right.m12 + left.m31 * right.m13;
+        res.m12 = left.m02 * right.m10 + left.m12 * right.m11 + left.m22 * right.m12 + left.m32 * right.m13;
+        res.m13 = left.m03 * right.m10 + left.m13 * right.m11 + left.m23 * right.m12 + left.m33 * right.m13;
+        res.m20 = left.m00 * right.m20 + left.m10 * right.m21 + left.m20 * right.m22 + left.m30 * right.m23;
+        res.m21 = left.m01 * right.m20 + left.m11 * right.m21 + left.m21 * right.m22 + left.m31 * right.m23;
+        res.m22 = left.m02 * right.m20 + left.m12 * right.m21 + left.m22 * right.m22 + left.m32 * right.m23;
+        res.m23 = left.m03 * right.m20 + left.m13 * right.m21 + left.m23 * right.m22 + left.m33 * right.m23;
+        res.m30 = left.m00 * right.m30 + left.m10 * right.m31 + left.m20 * right.m32 + left.m30 * right.m33;
+        res.m31 = left.m01 * right.m30 + left.m11 * right.m31 + left.m21 * right.m32 + left.m31 * right.m33;
+        res.m32 = left.m02 * right.m30 + left.m12 * right.m31 + left.m22 * right.m32 + left.m32 * right.m33;
+        res.m33 = left.m03 * right.m30 + left.m13 * right.m31 + left.m23 * right.m32 + left.m33 * right.m33;
+        */
         if (dest){
             *dest = res;
         }
         return res;
     }
-    static inline Vector4f transform(Matrix4f left, Vector4f right, Vector4f * dest = nullptr) {
+    static inline Vector4f transform(const Matrix4f left, const Vector4f right, Vector4f * dest = nullptr) {
         Vector4f res = Vector4f(left.m00 * right.x + left.m10 * right.y + left.m20 * right.z + left.m30 * right.w,
                                 left.m01 * right.x + left.m11 * right.y + left.m21 * right.z + left.m31 * right.w,
                                 left.m02 * right.x + left.m12 * right.y + left.m22 * right.z + left.m32 * right.w,
@@ -156,7 +184,7 @@ public:
         }
         return res;
     }
-    static inline Matrix4f translate(Vector3f vec, Matrix4f src, Matrix4f * dest = nullptr) {
+    static inline Matrix4f translate(const Vector3f vec, const Matrix4f src, Matrix4f * dest = nullptr) {
         Matrix4f res = Matrix4f();
 
         res.m30 += src.m00 * vec.x + src.m10 * vec.y + src.m20 * vec.z;
@@ -186,7 +214,7 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
 }
 
  */
-    static inline Matrix4f rotate(float angle, Vector3f axis, const Matrix4f src, Matrix4f * dest = nullptr) {
+    static inline Matrix4f rotate(const float angle, const Vector3f axis, const Matrix4f src, Matrix4f * dest = nullptr) {
         Matrix4f res = Matrix4f();
 
         float c = (float) cos(angle);
@@ -260,24 +288,22 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
         return res;
     }
 
-    static inline Matrix4f initScale(float x, float y, float z){
+    static inline Matrix4f initScale(const float x, const float y, const float z){
         Matrix4f result = Matrix4f();
 
-        result.m00 = x;    result.m01 = 0;    result.m02 = 0;    result.m03 = 0;
-        result.m10 = 0;    result.m11 = y;    result.m12 = 0;    result.m13 = 0;
-        result.m20 = 0;    result.m21 = 0;    result.m22 = z;    result.m23 = 0;
-        result.m30 = 0;    result.m31 = 0;    result.m32 = 0;    result.m33 = 1;
+        result.m00 = x;
+        result.m11 = y;
+        result.m22 = z;
 
         return result;
     }
 
-    static inline Matrix4f initTranslation(float x, float y, float z){
+    static inline Matrix4f initTranslation(const float x, const float y, const float z){
         Matrix4f result = Matrix4f();
 
-        result.m00 = 1;    result.m01 = 0;    result.m02 = 0;    result.m03 = x;
-        result.m10 = 0;    result.m11 = 1;    result.m12 = 0;    result.m13 = y;
-        result.m20 = 0;    result.m21 = 0;    result.m22 = 1;    result.m23 = z;
-        result.m30 = 0;    result.m31 = 0;    result.m32 = 0;    result.m33 = 1;
+        result.m03 = x;
+        result.m13 = y;
+        result.m23 = z;
 
         return result;
     }
@@ -291,32 +317,30 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
         y = TO_RADIANS(y);
         z = TO_RADIANS(z);
 
-        rz.m00 = COSF(z); rz.m01 = -SINF(z);rz.m02 = 0;      rz.m03 = 0;
-        rz.m10 = SINF(z); rz.m11 = COSF(z); rz.m12 = 0;      rz.m13 = 0;
-        rz.m20 = 0;      rz.m21 = 0;      rz.m22 = 1;      rz.m23 = 0;
-        rz.m30 = 0;      rz.m31 = 0;      rz.m32 = 0;      rz.m33 = 1;
+        rx.m11 = rx.m22 = COSF(x);
+        rx.m21 = SINF(x);
+        rx.m12 = -rx.m21;
 
-        rx.m00 = 1;      rx.m01 = 0;      rx.m02 = 0;      rx.m03 = 0;
-        rx.m10 = 0;      rx.m11 = COSF(x); rx.m12 = -SINF(x);rx.m13 = 0;
-        rx.m20 = 0;      rx.m21 = SINF(x); rx.m22 = COSF(x); rx.m23 = 0;
-        rx.m30 = 0;      rx.m31 = 0;      rx.m32 = 0;      rx.m33 = 1;
+        ry.m00 = ry.m22 = COSF(y);
+        ry.m20 = SINF(y);
+        ry.m02 = -ry.m20;
 
-        ry.m00 = COSF(y); ry.m01 = 0;      ry.m02 = -SINF(y);ry.m03 = 0;
-        ry.m10 = 0;      ry.m11 = 1;      ry.m12 = 0;      ry.m13 = 0;
-        ry.m20 = SINF(y); ry.m21 = 0;      ry.m22 = COSF(y); ry.m23 = 0;
-        ry.m30 = 0;      ry.m31 = 0;      ry.m32 = 0;      ry.m33 = 1;
+        rz.m00 = rz.m11 = COSF(z);
+        rz.m10 = SINF(z);
+        rz.m01 = -rz.m10;
 
         return mul(rz, mul(ry, rx));
     }
 
-    static inline Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar){
+    static inline Matrix4f initPerspective(const float fov, const float aspectRatio, const float zNear, const float zFar){
         float tanHalfFOV = static_cast<float>(tan(fov / 2));
         float zRange = zNear - zFar;
         Matrix4f result = Matrix4f();
-        result.m00 = 0;  result.m01 = 0;  result.m02 = 0;  result.m03 = 0;
-        result.m10 = 0;  result.m11 = 0;  result.m12 = 0;  result.m13 = 0;
-        result.m20 = 0;  result.m21 = 0;  result.m22 = 0;  result.m23 = 0;
-        result.m30 = 0;  result.m31 = 0;  result.m32 = 0;  result.m33 = 0;
+//        result.m00 = 0;  result.m01 = 0;  result.m02 = 0;  result.m03 = 0;
+//        result.m10 = 0;  result.m11 = 0;  result.m12 = 0;  result.m13 = 0;
+//        result.m20 = 0;  result.m21 = 0;  result.m22 = 0;  result.m23 = 0;
+//        result.m30 = 0;  result.m31 = 0;  result.m32 = 0;  result.m33 = 0;
+        result.m00 = result.m11 = result.m22 = result.m33 = 0;
 
         result.m00 = 1.0f / (tanHalfFOV * aspectRatio);
         result.m11 = 1.0f / tanHalfFOV;
@@ -327,7 +351,7 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
         return result;
     }
 
-    static inline Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far){
+    static inline Matrix4f initOrthographic(const float left, const float right, const float bottom, const float top, const float near, const float far){
         float width = right - left;
         float height = top - bottom;
         float depth = far - near;
@@ -341,7 +365,7 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
         return result;
     }
 
-    inline Matrix4f InitRotationFromVectors(Vector3f &n, Vector3f &v, Vector3f &u){
+    inline Matrix4f InitRotationFromVectors(const Vector3f &n, const Vector3f &v, const Vector3f &u){
         m00 = u.x;  m10 = u.y;  m20 = u.z;  m30 = 0;
         m01 = v.x;  m11 = v.y;  m21 = v.z;  m31 = 0;
         m02 = n.x;  m12 = n.y;  m22 = n.z;  m32 = 0;
@@ -350,13 +374,13 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
         return *this;
     }
 
-    Matrix4f operator * (const Matrix4f& matrix){
+    Matrix4f operator * (const Matrix4f& matrix) const{
         return mul(*this, matrix);
     }
     Matrix4f operator *= (const Matrix4f& matrix){
         return mul(*this, matrix, this);
     }
-    void show(bool formate = true){
+    void show(const bool formate = true) const{
         std::cout << std::fixed << std::setprecision(6);
         std::cout << "mat4x4((" << m00 << ", " << m10 << ", " << m20 << ", " << m30 << ")";
         if(formate)
@@ -377,12 +401,10 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
         std::cout << "(" << m03 << ", " << m13 << ", " << m23 << ", " << m33 << ")";
         std::cout << std::endl;
     }
-
-    float * getArray() const{
-        //float *f = new float[16]{m00, m01, m02, m03,m10, m11, m12, m13,m20, m21, m22, m23,m30, m31, m32, m33};
+    float * getArray(void) const{
+        //float *f =
         //TODO toto dealokovať
-        float *f = new float[16]{m00, m10, m20, m30,m01, m11, m21, m31,m02, m12, m22, m32,m03, m13, m23, m33};
-        return f;
+        return new float[16]{m00, m10, m20, m30,m01, m11, m21, m31,m02, m12, m22, m32,m03, m13, m23, m33};
     }
 };
 

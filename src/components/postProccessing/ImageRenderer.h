@@ -8,37 +8,38 @@
 #include "Fbo.h"
 
 class ImageRenderer {
-    private:
-        Fbo * fbo = nullptr;
-    public:
-        ImageRenderer(int width, int height) {
-            this -> fbo = new Fbo(width, height, FBO_DEPTH_NONE);
-        }
-        ImageRenderer(){
+private:
+    Fbo * fbo = nullptr;
+public:
+    inline ImageRenderer(int width, int height) {
+        this -> fbo = new Fbo(width, height, FBO_DEPTH_NONE);
+    }
+    inline ImageRenderer(void){
 
+    }
+    inline void renderQuad(void) const{
+        if (fbo){
+            fbo -> bindFrameBuffer();
         }
-        void renderQuad() {
-            if (fbo)
-                fbo -> bindFrameBuffer();
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-            glClear(GL_COLOR_BUFFER_BIT);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-            if (fbo)
-                fbo -> unbindFrameBuffer();
+        if (fbo){
+            fbo -> unbindFrameBuffer();
         }
+    }
 
-        int getOutputTexture() {
-            return fbo -> getColourTexture();
-        }
+    inline int getOutputTexture(void) const{
+        return fbo -> getColourTexture();
+    }
 
-        void cleanUp() {
-            if (fbo){
-                fbo -> cleanUp();
-                delete fbo;
-                fbo = nullptr;
-            }
+    inline void cleanUp(void) {
+        if (fbo){
+            fbo -> cleanUp();
+            delete fbo;
+            fbo = nullptr;
         }
+    }
 };
 
 

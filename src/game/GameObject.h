@@ -18,14 +18,14 @@ public:
     virtual void update(float delta){
         object -> move(velocity.x, velocity.y, velocity.z);
     }
-    void setVelocity(const Vector3f & value){
+    inline void setVelocity(const Vector3f & value){
         velocity = value;
     }
 
-    PointerEntity getObject(void){
+    inline PointerEntity getObject(void) const{
         return object;
     }
-    Vector3f * getVelocity(void){
+    inline Vector3f * getVelocity(void){
         return &velocity;
     }
 };

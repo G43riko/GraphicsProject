@@ -29,10 +29,10 @@ public:
     Chunk **** map = nullptr;
     void init(void);
     void cleanUp(void);
-    inline BasicScene * getScene(void){return scene;}
+
     void show(void);
     Block * getBlockOn(int x, int y, int z);
-    PointerMaterialedModel getModel(int number){
+    inline PointerMaterialedModel getModel(int number){
         switch(number){
             case 1: return model1;
             case 2: return model2;
@@ -43,26 +43,24 @@ public:
             default: return model6;
         }
     }
-    inline PointerRawModel getModel(void){return model; }
-    inline PointerRawModel getBoxModel(void){return boxModel; }
-    Chunk * getChunk(int x, int y, int z){
+    inline PointerRawModel getModel(void)const {return model; }
+    inline PointerRawModel getBoxModel(void)const {return boxModel; }
+    inline BasicScene * getScene(void) const{return scene;}
+    Chunk * getChunk(int x, int y, int z)const {
         if(x < 0 || y < 0 || z < 0 || x >= MAX_CHUNKS_X || y >= MAX_CHUNKS_Y || z >= MAX_CHUNKS_Z){
             return nullptr;
         }
         return map[x][y][z];
     }
 private:
-
     void setUpNeighbors(void);
     PointerMaterialedModel model1, model2, model3, model4, model5, model6;
     PointerRawModel model;
     PointerRawModel boxModel;
     BasicScene * scene = nullptr;
 
-
-
-    void generateChunks(Vector3f from, Vector3f to){
-
+    inline void generateChunks(Vector3f from, Vector3f to){
+        //TODO
     }
     void generateChunk(int x, int y, int z);
 };

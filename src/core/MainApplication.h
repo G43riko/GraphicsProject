@@ -27,16 +27,16 @@ public:
     }
     inline void loadContent() override {
         DEBUG("načítavam content");
-        auto skyTexture = TextureManager::createCubeTexture("sky");
+        auto skyTexture = TextureManager::instance.createCubeTexture("sky");
         getScene()->setSky(skyTexture);
 
-        particleTexture = TextureManager::createTexture2D("res/textures/particle_1.png");
-        auto diffuse = TextureManager::createTexture2D("res/textures/texture.png");
-        auto normal = TextureManager::createTexture2D("res/textures/textureNormal.png");
+        particleTexture = TextureManager::instance.createTexture2D("res/textures/particle_1.png");
+        auto diffuse = TextureManager::instance.createTexture2D("res/textures/texture.png");
+        auto normal = TextureManager::instance.createTexture2D("res/textures/textureNormal.png");
         auto rawModel = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/box.obj"));
         auto plane = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/plane.obj"));
         auto sphere = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj"));
-        auto green = TextureManager::createTexture2D("res/textures/green.png");
+        auto green = TextureManager::instance.createTexture2D("res/textures/green.png");
         auto tea = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/tea.obj"));
 
         auto teaMaterial = createMaterial(green);
@@ -78,7 +78,7 @@ public:
         PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(10, 0) << ", " << terrainManager.getHeight(0, 10) << ", " << terrainManager.getHeight(10, 10));
         PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(20, 0) << ", " << terrainManager.getHeight(0, 20) << ", " << terrainManager.getHeight(20, 20));
         PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(30, 0) << ", " << terrainManager.getHeight(0, 30) << ", " << terrainManager.getHeight(30, 30));
-
+        //((Scene*)getScene()) -> createParticleSystem();
         getRenderer()->getMaster()->getWater()->addWater(-50, -50, 1.5f);
         /*
         terrainManager.generateTerrain(diffuse, 128, 5, 40,  0,  0);
@@ -151,7 +151,7 @@ public:
         }
     }
 
-    inline void onSecondElapse(int fps) override{
+    inline void onSecondElapse(const int fps) override{
 //        printf("FPS: %d\n", fps);
         PRINT("FPS: " << fps);
     };
@@ -163,7 +163,7 @@ public:
     inline void cleanUp(void) override {
         DEBUG("maže sa renderer v main application");
         getLoader().cleanUp();
-        TextureManager::cleanUp();
+        TextureManager::instance.cleanUp();
     };
 };
 

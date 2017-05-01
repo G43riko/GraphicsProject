@@ -10,6 +10,10 @@
 #include <GLFW/glfw3.h>
 #include <src/utils/utils.h>
 
+#define CONTENT_ATTRIBUTES_MINOR_VERSION 3
+#define CONTENT_ATTRIBUTES_MAJOR_VERSION 3
+#define SAMPLES 4
+
 class WindowManager {
 public:
     static GLFWwindow * window;
@@ -30,7 +34,7 @@ public:
     }
 
     static inline bool isCloseRequest(void){
-        return glfwWindowShouldClose(WindowManager::window);
+        return glfwWindowShouldClose(WindowManager::window) == GL_TRUE;
     }
     static inline int init(int width, int height, std::string title, bool fullscreen){
         //inicializuje openGL
@@ -39,9 +43,9 @@ public:
             return EXIT_FAILURE;
         }
         //nastaví openGL
-        glfwWindowHint(GLFW_SAMPLES, WindowManager::samples);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, WindowManager::contentAttributesMinorVersion);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, WindowManager::contentAttributesMajorVersion);
+        glfwWindowHint(GLFW_SAMPLES, SAMPLES);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, CONTENT_ATTRIBUTES_MINOR_VERSION);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, CONTENT_ATTRIBUTES_MAJOR_VERSION);
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
@@ -84,10 +88,6 @@ public:
         return EXIT_SUCCESS;
     }
 private:
-    static const int contentAttributesMinorVersion = 3;
-    static const int contentAttributesMajorVersion = 3;
-    static const int samples = 4;
-
     WindowManager(void){};
 };
 

@@ -19,6 +19,12 @@
 #include "RenderUtil.h"
 #include "../components/postProccessing/Screen.h"
 
+#define SHADOW_SHADER "shadowShader"
+#define OBJECT_SHADER "objectShader"
+#define POSTFX_SHADER "postFxShader"
+#define PARTICLE_SHADER "particleShader"
+#define DEFERRED_SHADER "deferredShader"
+
 class Screen;
 class Scene;
 

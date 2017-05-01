@@ -29,8 +29,8 @@ private:
     WaterFrameBuffer fbo    = WaterFrameBuffer();
     WaterTile water         = WaterTile(0, 0, DEFAULT_WATER_HEIGHT, DEFAULT_WATER_SIZE);
     std::vector<WaterTile *> waters;
-    PointerTexture2D dudvMap = TextureManager::createTexture2D("res/textures/waterDUDV.png");
-    PointerTexture2D normalMap = TextureManager::createTexture2D("res/textures/matchingNormalMap.png");
+    PointerTexture2D dudvMap = TextureManager::instance.createTexture2D("res/textures/waterDUDV.png");
+    PointerTexture2D normalMap = TextureManager::instance.createTexture2D("res/textures/matchingNormalMap.png");
 
     BasicShader * shader = new WaterShader();
     float distance;

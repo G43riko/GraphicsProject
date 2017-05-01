@@ -7,7 +7,6 @@
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "../utils/Input.h"
 #include "../rendering/WindowManager.h"
 #include <sys/time.h>
 #include "../utils/Vectors.h"
@@ -21,9 +20,9 @@ class Camera {
 private:
     glm::mat4 projectionMatrix;
     Transform transform     = Transform();
-    bool VERTICAL           = true;
+    const bool VERTICAL           = true;
     //MousePicker * picker    = nullptr;
-    Vector3f forward        = Vector3f(1, 0, 0);
+//    Vector3f forward        = Vector3f(1, 0, 0);
 //    Vector3f position   = Vector3f(DEFAULT_CAMERA_POSITION);//TODO deprecated
 public:
 //        void updateForward(){
@@ -35,9 +34,9 @@ public:
 //        void setPosition(Vector3f pos){
 //            position = pos;
 //        }
-    float FOV           = DEFAULT_CAMERA_FOV;
-    float FAR_PLANE     = DEFAULT_CAMERA_FAR_PLANE;
-    float NEAR_PLANE    = DEFAULT_CAMERA_NEAR_PLANE;
+    const float FOV           = DEFAULT_CAMERA_FOV;
+    const float FAR_PLANE     = DEFAULT_CAMERA_FAR_PLANE;
+    const float NEAR_PLANE    = DEFAULT_CAMERA_NEAR_PLANE;
     float pitch         = 0;
     float roll          = 0;
     float yaw           = 0;
@@ -56,9 +55,9 @@ public:
     inline void cleanUp(void){
         //delete picker;
     }
-    inline void show(void) const{
-        printf("pitch: %f, yaw: %f, roll: %f\n", pitch, yaw, roll);
-    }
+//    inline void show(void) const{
+//        printf("pitch: %f, yaw: %f, roll: %f\n", pitch, yaw, roll);
+//    }
 
     //GETTERS
 
@@ -69,7 +68,7 @@ public:
     inline Vector3f getForward(void){return transform.getRotation()->getBack(); }
     inline glm::mat4 getProjectionMatrix(void) const{return projectionMatrix; }
     inline Vector3f getForwardVector(void){
-        forward = transform.getRotation()->getForward();
+        const Vector3f forward = transform.getRotation()->getForward();
         if(VERTICAL){
             return (forward * -1).getNormal();
         }
@@ -78,8 +77,8 @@ public:
     inline Vector3f getPosition(void){
         return * transform.getPosition();
     }
-    inline Vector3f getRightVector(){
-        forward = transform.getRotation()->getForward();
+    inline Vector3f getRightVector(void){
+        const Vector3f forward = transform.getRotation()->getForward();
         return Vector3f(0, 1, 0).cross(forward).normalize();
     }
 };

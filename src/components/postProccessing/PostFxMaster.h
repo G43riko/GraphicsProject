@@ -10,7 +10,7 @@
 #include "Fbo.h"
 #include "PostProccessing.h"
 
-
+#define POSITIONS { -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f}
 
 class PostFxMaster {
 private:
@@ -27,31 +27,29 @@ private:
     bool usingPostFx;
     std::map<std::string, Fbo *> fbos;
     std::map<FILTER, Filter *> filters;
-
-    std::vector<float> POSITIONS{ -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f};
     PointerRawModel quad;
 //    std::vector<Fbo> fbos;
 //    PostProccessing postProcessing;
 
-    void init(void){
+    inline void init(void){
         filters[FILTER::CONTRAST] = nullptr;
         filters[FILTER::VERTICAL_BLUR] = nullptr;
         filters[FILTER::HORIZONTAL_BLUR] = nullptr;
         filters[FILTER::COMBINED_FILTER] = nullptr;
     };
-    void start(){
+    inline void start(void) const{
         glBindVertexArray(quad -> getVaoID());
         glEnableVertexAttribArray(0);
         glDisable(GL_DEPTH_TEST);
     };
 
-    void end(){
+    inline void end(void) const{
         glEnable(GL_DEPTH_TEST);
         glDisableVertexAttribArray(0);
         glBindVertexArray(0);
     };
 public:
-    PostFxMaster(Loader loader, bool usingPostFx, int width, int height, int samples = 1) {
+    inline PostFxMaster(Loader loader, bool usingPostFx, int width, int height, int samples = 1) {
         if(samples == 1){
             mainFbo = new Fbo(width, height, FBO_DEPTH_TEXTURE);
         }
@@ -63,7 +61,7 @@ public:
         setContrastChanger();
     };
 
-    void doPostProcessing(std::string fboName){
+    inline void doPostProcessing(std::string fboName){
         start();
 //            hBlur -> render(colorTexture);
 //            vBlur -> render(hBlur->getOutputTexture());
@@ -75,7 +73,7 @@ public:
         end();
     }
 
-    void cleanUp(void){
+    inline void cleanUp(void){
         for (auto it = fbos.begin(); it != fbos.end(); ++it){
             it -> second -> cleanUp();
             delete it -> second;
@@ -89,48 +87,48 @@ public:
         delete mainFbo;
     };
 
-    void addFbo(std::string name, int width, int height, int depthBufferType = FBO_DEPTH_TEXTURE){
+    inline void addFbo(std::string name, int width, int height, int depthBufferType = FBO_DEPTH_TEXTURE){
         fbos[name] = new Fbo(width, height, depthBufferType);
     };
 
-    void resolveToFbo(GLenum framebuffer, std::string fboName){
+    inline void resolveToFbo(GLenum framebuffer, std::string fboName){
         mainFbo->resolveToFbo(framebuffer, *fbos[fboName]);
     };
 
-    void startRender(void){
+    inline void startRender(void) const{
         if(usingPostFx){
             mainFbo -> bindFrameBuffer();
         }
     };
-    void stopRender(void){
+    inline void stopRender(void) const{
         mainFbo -> unbindFrameBuffer();
     };
     /**************GETTERS***********************/
-    bool getUsingPostFx(void){
+    inline bool getUsingPostFx(void) const{
         return usingPostFx;
     };
-    float getContrastValue(void){
+    inline float getContrastValue(void) const{
         return contrast;
     };
     /**************SETTERS***********************/
-    void setUsingPostFx(bool usingPostFx){
+    inline void setUsingPostFx(bool usingPostFx){
         this -> usingPostFx = usingPostFx;
     };
-    void setContrastValue(float contrast){
+    inline void setContrastValue(float contrast){
         this -> contrast = contrast;
     };
     /**************FILTERS***********************/
 
-    void setContrastChanger(void){
+    inline void setContrastChanger(void){
         filters[FILTER::CONTRAST] = new Filter(PointerBasicShader(new ContrastShader()));
     };
-    void setHorizontalBlur(int width, int height, int targetWidth){
+    inline void setHorizontalBlur(int width, int height, int targetWidth){
         filters[FILTER::HORIZONTAL_BLUR] = new Filter(PointerBasicShader(new HorizontalBlurShader()), width, height);
     };
-    void setVerticalBlur(int width, int height, int targetHeight){
+    inline void setVerticalBlur(int width, int height, int targetHeight){
         filters[FILTER::VERTICAL_BLUR] = new Filter(PointerBasicShader(new VerticalBlurShader()), width, height);
     };
-    void setCombinedFilter(void){
+    inline void setCombinedFilter(void){
         filters[FILTER::COMBINED_FILTER] = new Filter(PointerBasicShader(new CombineShader()));
     };
 };

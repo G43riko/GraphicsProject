@@ -17,6 +17,7 @@
 
 #define TEXTURES_FOLDER "res/textures/"
 #define MODELS_FOLDER "res/models/"
+#define SHADERS_FOLDER "res/shaders/"
 #define MODELS_EXTENSION ".obj"
 #define TEXTURES_EXTENSION ".png"
 

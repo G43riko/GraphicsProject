@@ -24,8 +24,8 @@ class Material {
         inline Material(PointerTexture2D diffuse) : diffuse(diffuse){};
         inline Material(PointerTexture2D diffuse, PointerTexture2D normal) : diffuse(diffuse), normal(normal){};
 
-        inline PointerTexture2D getDiffuse(void) const{return diffuse;};
         inline PointerTexture2D getSpecular(void) const{return specular;};
+        inline PointerTexture2D getDiffuse(void) const{return diffuse;};
         inline PointerTexture2D getNormal(void) const{return normal;};
         inline PointerTexture2D getAlpha(void) const{return alpha;};
         inline PointerTexture2D getBump(void) const{return bump;};

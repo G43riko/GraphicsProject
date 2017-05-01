@@ -15,9 +15,9 @@
 //23.4.2016 64*16*64 = 11FPS
 //23.4.2016 128*16*128 = 15FPS - všetky kocky
 
-#define MAX_BLOCKS_X 16
-#define MAX_BLOCKS_Y 16
-#define MAX_BLOCKS_Z 16
+#define MAX_BLOCKS_X 64
+#define MAX_BLOCKS_Y 4
+#define MAX_BLOCKS_Z 64
 
 #include "Block.h"
 #include "World.h"
@@ -48,7 +48,7 @@ public:
         }
         map[x][y][z] = block;
     }
-    inline Block * getBlock(int x, int y, int z){
+    inline Block * getBlock(int x, int y, int z) const{
         if(x < 0 || y < 0 || z < 0 || x >= MAX_BLOCKS_X || y >= MAX_BLOCKS_Y || z >= MAX_BLOCKS_Z){
             return nullptr;
         }
@@ -56,13 +56,30 @@ public:
     }
     void setUpVisibility(void);
     void setUpNeigbors(void);
-    static BlockType getRandomType(void);
-    bool isTransparent(int x, int y, int z);
-    inline Vector3f getOffsetPosition(void){return Vector3f(x, y, z); }
-    inline Vector3f getAbsoulePosition(void){ return getSize() * getOffsetPosition(); }
-    inline static Vector3f getSize(void){ return Vector3f(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z); }
-    void cleanUp(void);
+    inline static BlockType getRandomType(void){
+        switch((int)random(1, 9)){
+            case 1: return BlockType::red;
+            case 2: return BlockType::aqua;
+            case 3: return BlockType::blue;
+            case 4: return BlockType::magenta;
+            case 5: return BlockType::yellow;
+            case 6: return BlockType::green;
+            case 8: return BlockType::black;
+            default: return BlockType::white;
+        }
+    }
+    inline bool isTransparent(int x, int y, int z) const{
+        //ak blok neexistuje tak je priehladný
+        if(x < 0 || y < 0 || z < 0 || x >= MAX_BLOCKS_X || y >= MAX_BLOCKS_Y || z >= MAX_BLOCKS_Z){
+            return true;
+        }
+        return getBlock(x, y, z) == nullptr ;//|| !map[x][y][z] -> isVisible();
+    }
+    inline Vector3f getOffsetPosition(void) const{return Vector3f(x, y, z); }
+    inline Vector3f getAbsoulePosition(void) const{return getSize() * getOffsetPosition(); }
+    inline static Vector3f getSize(void){return Vector3f(CHUNK_SIZE_X, CHUNK_SIZE_Y, CHUNK_SIZE_Z); }
     inline World * getWorld(void) const{return parent;}
+    void cleanUp(void);
 private:
     World * parent;
     const int x, y, z;

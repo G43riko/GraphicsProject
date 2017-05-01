@@ -8,7 +8,7 @@
 #include <src/rendering/material/TextureManager.h>
 
 class ResourcesManager {
-
+    
     //TEXTURES
     static inline PointerTexture2D createTexture2D(std::string fileName){
         return TextureManager::createTexture2D(fileName);

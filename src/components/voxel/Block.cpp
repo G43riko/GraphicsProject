@@ -15,15 +15,7 @@ Block::Block(int x, int y, int z, Chunk * parent, const BlockType type)
     parent -> getWorld() -> blocks.push_back(this);
     PRINT("data: " << options);
 }
-void Block::show(void){
-    printf("block[%d, %d, %d]\n", x, y, z);
-    printf("top: %s\n", IS_NULL(yNeighborPlus) ? "N" : "Y");
-    printf("rig: %s\n", IS_NULL(xNeighborPlus) ? "N" : "Y");
-    printf("for: %s\n", IS_NULL(zNeighborPlus) ? "N" : "Y");
-    printf("bot: %s\n", IS_NULL(yNeighborMinus) ? "N" : "Y");
-    printf("lef: %s\n", IS_NULL(xNeighborMinus) ? "N" : "Y");
-    printf("bac: %s\n", IS_NULL(zNeighborMinus) ? "N" : "Y");
-}
+
 bool Block::isVisible(void){
 //    if(!parent -> isTransparent(x + 1, y, z) &&
 //       !parent -> isTransparent(x - 1, y, z) &&

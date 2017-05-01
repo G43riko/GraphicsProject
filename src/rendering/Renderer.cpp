@@ -6,11 +6,6 @@
 #include "../components/postProccessing/PostFxMaster.h"
 
 
-#define SHADOW_SHADER "shadowShader"
-#define OBJECT_SHADER "objectShader"
-#define POSTFX_SHADER "postFxShader"
-#define PARTICLE_SHADER "particleShader"
-#define DEFERRED_SHADER "deferredShader"
 
 Renderer::Renderer(Loader loader, int width, int height) :
 //        screen(Screen(width, height, loader)),

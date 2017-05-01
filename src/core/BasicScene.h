@@ -31,6 +31,7 @@ public:
 
     //ADDERS
     virtual void addObject(PointerGameObject object) = 0;
+    virtual void removeObject(PointerGameObject object) = 0;
 
 
     inline void addLight(PointerPointLight light){ lights.push_back(light); }

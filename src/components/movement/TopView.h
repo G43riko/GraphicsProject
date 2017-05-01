@@ -14,8 +14,8 @@
 class TopView : public BasicView{
 private:
     Vector3f realPosition;
-    float speed = 1;
-    float velocityPower = 0.05f;
+    const float speed = 1;
+    const float velocityPower = 0.05f;
     float height;
 public:
     TopView(PointerCamera camera, float height, GameObject * player = nullptr) : BasicView(camera, player, "topView"){

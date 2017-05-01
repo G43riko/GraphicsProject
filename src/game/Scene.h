@@ -20,7 +20,15 @@ class Scene : public BasicScene{
             objects.push_back(object);
             entities.addEntity(object->getObject());
         }
-
+        void removeObject(PointerGameObject object){
+            for(auto iter = objects.begin(); iter != objects.end(); ++iter){
+                if( *iter == object ){
+                    objects.erase(iter);
+                    break;
+                }
+            }
+            entities.removeEntity(object ->getObject());
+        };
         void update(float delta) override{
             particles.update(delta);
 

@@ -103,7 +103,6 @@ set(GL_MAIN_SRC
         src/GUI/GtkIntroGui.cpp
         src/rendering/material/TextureManager.cpp
         src/rendering/model/Mesh.cpp
-        src/rendering/shader/BasicShader.cpp
         src/utils/FileLoader.cpp
         src/utils/MousePicker.cpp
         src/rendering/WindowManager.cpp

@@ -17,6 +17,7 @@ private:
     const GLenum type;
 public:
     inline TextureData(GLuint id, GLenum type) : id(id), type(type){};
+
     inline void setFilter(GLint filter) const{//GL_LINEAR, GL_NEAREST
         glTexParameteri(type, GL_TEXTURE_MAG_FILTER, filter);
         glTexParameteri(type, GL_TEXTURE_MIN_FILTER, filter);

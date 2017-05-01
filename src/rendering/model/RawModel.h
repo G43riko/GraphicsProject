@@ -13,7 +13,7 @@ private:
     const GLuint vaoID;
     const GLuint vertexCount;
 public:
-    RawModel(GLuint vaoID, GLuint vertexCount) : vaoID(vaoID), vertexCount(vertexCount){};
+    inline RawModel(GLuint vaoID, GLuint vertexCount) : vaoID(vaoID), vertexCount(vertexCount){};
     inline GLuint getVaoID(void) const{return this -> vaoID; }
     inline GLuint getVertexCount(void) const{return vertexCount; }
 };
