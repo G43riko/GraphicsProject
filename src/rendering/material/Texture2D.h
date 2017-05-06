@@ -6,6 +6,7 @@
 #define GRAPHICSPROJECT_TEXTURE2D_H
 
 #include <src/utils/Const.h>
+#include <src/utils/GTypes.h>
 #include <GL/glew.h>
 #include <iostream>
 #include <memory>
@@ -62,7 +63,6 @@ class Texture2D {
         inline int getHeight(void) const{return height; };
         inline void cleanUp(void)const {glDeleteTextures(1, &id);}
 };
-typedef std::shared_ptr<Texture2D> PointerTexture2D;
 //PointerTexture2D initTexture2D(std::string, std::vector<unsigned char>, int, int);
 inline PointerTexture2D createTexture2D(std::string title, GLuint id, int width, int height){
     return PointerTexture2D(new Texture2D(title, id, width, height));

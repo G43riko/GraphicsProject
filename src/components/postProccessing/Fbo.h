@@ -8,9 +8,6 @@
 #include <src/rendering/material/Texture2D.h>
 #include "src/rendering/WindowManager.h"
 
-#define FBO_DEPTH_NONE 0
-#define FBO_DEPTH_TEXTURE 1
-#define FBO_DEPTH_RENDER_BUFFER 2
 
 class Fbo {
 private :

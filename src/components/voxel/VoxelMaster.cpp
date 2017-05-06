@@ -4,6 +4,7 @@
 
 #include <src/rendering/RenderUtil.h>
 #include "VoxelMaster.h"
+
 void VoxelMaster::renderBlock(Block *block) {
     if (block == nullptr) {
         return;

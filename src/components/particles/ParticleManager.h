@@ -14,7 +14,6 @@
 #include "ParticleSystemSimple.h"
 
 class ParticleSystemSimple;
-typedef std::map<PointerParticleTexture, std::vector<Particle>> ParticlesList;
 
 class ParticleManager {
 private:

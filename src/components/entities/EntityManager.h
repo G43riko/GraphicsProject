@@ -7,10 +7,7 @@
 
 
 #include <src/rendering/model/Entity.h>
-#include <map>
-#include <vector>
 
-typedef std::map<PointerMaterialedModel, std::vector<PointerEntity>> EntitiesList;
 
 class EntityManager {
 private:

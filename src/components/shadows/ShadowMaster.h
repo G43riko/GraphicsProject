@@ -11,7 +11,6 @@
 #include <src/rendering/RenderUtil.h>
 #include "ShadowBox.h"
 #include "ShadowFrameBuffer.h"
-#define SHADOW_MAP_SIZE 2048
 class ShadowMaster {
 private:
     PointerBasicShader shader;

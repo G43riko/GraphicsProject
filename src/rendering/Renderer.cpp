@@ -222,7 +222,7 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
     PointerBasicShader shader = shaders[OBJECT_SHADER];
     GLuint items = 3;
     if(!shader){
-        std::cerr << "Nenašiel sa shader" << std::endl;
+        std::cerr << getMessage(CANT_FIND_SHADER) << std::endl;
         return;
     }
 

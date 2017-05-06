@@ -25,7 +25,6 @@ public:
     inline Vector3f getDirection(void) const{return direction; };
 };
 
-typedef std::shared_ptr<SpotLight> PointerSpotLight;
 
 inline PointerSpotLight createSpotLight(Vector3f pos, Vector3f col, Vector3f att, Vector3f dir, float cutOff, float outerCutOff){
     return PointerSpotLight(new SpotLight(pos, col, att, dir, cutOff, outerCutOff));

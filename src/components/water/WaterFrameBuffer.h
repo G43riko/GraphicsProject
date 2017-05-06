@@ -9,10 +9,6 @@
 #include <GLFW/glfw3.h>
 #include <src/rendering/WindowManager.h>
 
-#define REFLECTION_WIDTH 320 * 8
-#define REFLECTION_HEIGHT 180 * 8
-#define REFRACTION_WIDTH 1280
-#define REFRACTION_HEIGHT 720
 
 class WaterFrameBuffer {
     private:
@@ -39,14 +35,14 @@ class WaterFrameBuffer {
         }
 
         inline void bindReflectionFrameBuffer(void) const{//call before rendering to this FBO
-            bindFrameBuffer(reflectionFrameBuffer, REFLECTION_WIDTH, REFLECTION_HEIGHT);
-            glViewport(0, 0, REFLECTION_WIDTH, REFLECTION_HEIGHT);
+            bindFrameBuffer(reflectionFrameBuffer, WATER_REFLECTION_WIDTH, WATER_REFLECTION_HEIGHT);
+            glViewport(0, 0, WATER_REFLECTION_WIDTH, WATER_REFLECTION_HEIGHT);
             glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
         inline void bindRefractionFrameBuffer(void) const{//call before rendering to this FBO
-            bindFrameBuffer(refractionFrameBuffer, REFRACTION_WIDTH, REFRACTION_HEIGHT);
-            glViewport(0, 0, REFRACTION_WIDTH, REFRACTION_HEIGHT);
+            bindFrameBuffer(refractionFrameBuffer, WATER_REFRACTION_WIDTH, WATER_REFRACTION_HEIGHT);
+            glViewport(0, 0, WATER_REFRACTION_WIDTH, WATER_REFRACTION_HEIGHT);
             glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
 
@@ -69,15 +65,15 @@ class WaterFrameBuffer {
 
         inline void initialiseReflectionFrameBuffer(void) {
             createFrameBuffer(&reflectionFrameBuffer);
-            createTextureAttachment(&reflectionTexture, REFLECTION_WIDTH,REFLECTION_HEIGHT);
-            createDepthBufferAttachment(&reflectionDepthBuffer, REFLECTION_WIDTH,REFLECTION_HEIGHT);
+            createTextureAttachment(&reflectionTexture, WATER_REFLECTION_WIDTH, WATER_REFLECTION_HEIGHT);
+            createDepthBufferAttachment(&reflectionDepthBuffer, WATER_REFLECTION_WIDTH, WATER_REFLECTION_HEIGHT);
             unbindCurrentFrameBuffer();
         }
 
         inline void initialiseRefractionFrameBuffer(void){
             createFrameBuffer(&refractionFrameBuffer);
-            createTextureAttachment(&refractionTexture, REFRACTION_WIDTH,REFRACTION_HEIGHT);
-            createDepthTextureAttachment(&refractionDepthTexture, REFRACTION_WIDTH,REFRACTION_HEIGHT);
+            createTextureAttachment(&refractionTexture, WATER_REFRACTION_WIDTH, WATER_REFRACTION_HEIGHT);
+            createDepthTextureAttachment(&refractionDepthTexture, WATER_REFRACTION_WIDTH, WATER_REFRACTION_HEIGHT);
             unbindCurrentFrameBuffer();
         }
 

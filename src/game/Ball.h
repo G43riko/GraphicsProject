@@ -9,9 +9,6 @@
 #include <src/rendering/model/Entity.h>
 #include "GameObject.h"
 
-#define GRAVITY_EFFECT 0.8f
-#define DEFRACTION_EFFECT 0.95f
-#define BALL_SIZE 1
 
 class Ball : public GameObject{
 private:

@@ -10,7 +10,6 @@
 #include "Fbo.h"
 #include "PostProccessing.h"
 
-#define POSITIONS { -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f}
 
 class PostFxMaster {
 private:
@@ -56,7 +55,7 @@ public:
         else{
             mainFbo = new Fbo(width, height, FBO_DEPTH_RENDER_BUFFER, samples);
         }
-        quad = loader.loadToVao(POSITIONS, 2);
+        quad = loader.loadToVao(POST_FX_POSITIONS, 2);
         setUsingPostFx(usingPostFx);
         setContrastChanger();
     };

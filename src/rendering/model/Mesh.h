@@ -9,34 +9,34 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+#include <src/utils/Vectors.h>
+#include <src/utils/GTypes.h>
 
-class Mesh;
-
-typedef std::shared_ptr<Mesh> PointerMesh;
 
 class Mesh {
 private:
-    std::vector<GLfloat> vertices;
-    std::vector<GLfloat> tangents;
-    std::vector<GLfloat> normals;
-    std::vector<GLuint> indices;
-    std::vector<GLfloat> uvs;
+    VectorF vertices;
+    VectorF tangents;
+    VectorF normals;
+    VectorUI indices;
+    VectorF uvs;
 public:
-    static PointerMesh plane;
-    static PointerMesh cube;
-
-    inline Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLuint> indices){
+    inline Mesh(VectorF vertices, VectorUI indices){
+        this -> vertices    = vertices;
+        this -> indices     = indices;
+    }
+    inline Mesh(VectorF vertices, VectorF uvs, VectorUI indices){
         this -> vertices    = vertices;
         this -> indices     = indices;
         this -> uvs         = uvs;
     }
-    inline Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLuint> indices){
+    inline Mesh(VectorF vertices, VectorF uvs, VectorF normals, VectorUI indices){
         this -> vertices    = vertices;
         this -> normals     = normals;
         this -> indices     = indices;
         this -> uvs         = uvs;
     }
-    inline Mesh(std::vector<GLfloat> vertices, std::vector<GLfloat> uvs, std::vector<GLfloat> normals, std::vector<GLfloat> tangents, std::vector<GLuint> indices){
+    inline Mesh(VectorF vertices, VectorF uvs, VectorF normals, VectorF tangents, VectorUI indices){
         this -> vertices    = vertices;
         this -> normals     = normals;
         this -> indices     = indices;
@@ -68,11 +68,11 @@ public:
     }
 
 
-    inline std::vector<GLfloat> getVertices(void) const{return vertices; }
-    inline std::vector<GLfloat> getTangents(void) const{return tangents; }
-    inline std::vector<GLfloat> getNormals(void) const{return normals; }
-    inline std::vector<GLuint> getIndices(void) const{return indices; }
-    inline std::vector<GLfloat> getUvs(void) const{return uvs; }
+    inline VectorF getVertices(void) const{return vertices; }
+    inline VectorF getTangents(void) const{return tangents; }
+    inline VectorF getNormals(void) const{return normals; }
+    inline VectorUI getIndices(void) const{return indices; }
+    inline VectorF getUvs(void) const{return uvs; }
 
 };
 

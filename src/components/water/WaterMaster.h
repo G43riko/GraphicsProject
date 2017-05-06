@@ -12,9 +12,6 @@
 #include <src/rendering/material/TextureManager.h>
 #include "WaterFrameBuffer.h"
 
-#define DEFAULT_WATER_SIZE 50
-#define DEFAULT_WATER_HEIGHT 1.5f
-#define WATER_VERTICES {-1, -1, -1,  1,  1, -1,  1, -1, -1, 1, 1, 1 }
 
 class WaterMaster {
 private:

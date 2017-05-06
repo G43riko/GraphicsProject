@@ -2,16 +2,15 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/GObjects.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Mesh.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/Mesh.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleSystemSimple.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleManager.cpp" isTestSource="false" />
@@ -21,8 +20,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/shadows/ShadowMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/shadows/ShadowMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/WoldConst.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Chunk.cpp" isTestSource="false" />
@@ -42,20 +41,23 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkIntroGui.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkIntroGui.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/OBJLoader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/grandom.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/Array3D.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/GTypes.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/Array3D.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/Messages.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cmake/FindGLFW3.cmake" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cmake/FindGLM.cmake" isTestSource="false" />

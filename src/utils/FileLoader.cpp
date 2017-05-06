@@ -92,7 +92,7 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
     std::vector<PointerVertex> vertices = std::vector<PointerVertex>();
     std::vector<Vector2f> textures = std::vector<Vector2f>();
     std::vector<Vector3f> normals = std::vector<Vector3f>();
-    std::vector<GLuint> indices = std::vector<GLuint>();
+    VectorUI indices = VectorUI();
 
     std::vector<std::string> currentLine;
 
@@ -158,11 +158,11 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
 //    }
 //
 
-    std::vector<GLfloat> verticesFinal;
-    std::vector<GLfloat> uvsFinal;
-//    std::vector<GLuint> indicesFinal;
-    std::vector<GLfloat> normalsFinal;
-    std::vector<GLfloat> tangentsFinal;
+    VectorF verticesFinal;
+    VectorF uvsFinal;
+//    VectorUI indicesFinal;
+    VectorF normalsFinal;
+    VectorF tangentsFinal;
 
     convertDataToArrays(vertices, textures, normals, verticesFinal, uvsFinal, normalsFinal, tangentsFinal);
 //            printf("x: %f\n", verticesFinal[i]);
@@ -195,7 +195,7 @@ void ContentLoader::split(const std::string text, char divider, std::vector<std:
     }
 }
 
-PointerVertex ContentLoader::processVertex(Vector3f vertex, std::vector<PointerVertex>& vertices, std::vector<GLuint>& indices) {
+PointerVertex ContentLoader::processVertex(Vector3f vertex, std::vector<PointerVertex>& vertices, VectorUI& indices) {
     GLuint index = (GLuint)vertex.x - 1;
     PointerVertex currentVertex = vertices[index];
     int textureIndex = (int)vertex.y - 1;
@@ -210,7 +210,7 @@ PointerVertex ContentLoader::processVertex(Vector3f vertex, std::vector<PointerV
     }
 }
 
-PointerVertex ContentLoader::dealWithAlreadyProcessedVertex(PointerVertex previousVertex, int newTextureIndex, int newNormalIndex, std::vector<GLuint>& indices, std::vector<PointerVertex>& vertices) {
+PointerVertex ContentLoader::dealWithAlreadyProcessedVertex(PointerVertex previousVertex, int newTextureIndex, int newNormalIndex, VectorUI& indices, std::vector<PointerVertex>& vertices) {
     if (previousVertex -> hasSameTextureAndNormal(newTextureIndex, newNormalIndex)) {
         indices.push_back(static_cast<GLuint>(previousVertex -> getIndex()));
         return previousVertex;
@@ -264,10 +264,10 @@ void ContentLoader::calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, std
 float ContentLoader::convertDataToArrays(std::vector<PointerVertex> vertices,
                           std::vector<Vector2f> textures,
                           std::vector<Vector3f> normals,
-                          std::vector<GLfloat>& verticesArray,
-                          std::vector<GLfloat>& texturesArray,
-                          std::vector<GLfloat>& normalsArray,
-                          std::vector<GLfloat>& tangentsArray) {
+                          VectorF& verticesArray,
+                          VectorF& texturesArray,
+                          VectorF& normalsArray,
+                          VectorF& tangentsArray) {
     float furthestPoint = 0;
     for (unsigned int i = 0; i < vertices.size(); i++) {
         PointerVertex currentVertex = vertices[i];

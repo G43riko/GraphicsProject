@@ -8,7 +8,6 @@
 #include <src/rendering/RenderUtil.h>
 #include "Particle.h"
 #include "ParticleManager.h"
-#define PARTICLE_VERTICES {-0.5f, 0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, -0.5f}
 class ParticleMaster {
 private:
     PointerRawModel model;

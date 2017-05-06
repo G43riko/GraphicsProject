@@ -5,14 +5,16 @@
 #ifndef GRAPHICSPROJECT_MAINAPPLICATION_H
 #define GRAPHICSPROJECT_MAINAPPLICATION_H
 
-
 #include <src/components/terrain/Terrain.h>
 #include <src/components/movement/FpsView.h>
 #include "BasicApplication.h"
 
+#include <src/rendering/model/GObjects.h>
 #include <src/rendering/material/TextureManager.h>
 #include <src/components/terrain/TerrainManager.h>
 #include <src/components/voxel/World.h>
+#include <src/utils/OBJLoader.h>
+#include <map>
 
 class MainApplication : public BasicApplication{
 private:
@@ -22,32 +24,47 @@ private:
     PointerMaterialedModel ball         = nullptr;
     PointerTexture2D particleTexture    = nullptr;
 public:
-    inline Renderer * getMainRenderer(void){
-        return (Renderer *)getRenderer();
-    }
     inline void loadContent() override {
         DEBUG("načítavam content");
         auto skyTexture = TextureManager::instance.createCubeTexture("sky");
         getScene()->setSky(skyTexture);
 
+        OBJLoader objLoader = OBJLoader({"box", "plane", "sphere", "tea"});
+        objLoader.startLoadAsynch();
+        //////////////////////////////////////////////////////////Začiatok načítavanie OBJ súborov
+
         particleTexture = TextureManager::instance.createTexture2D("res/textures/particle_1.png");
         auto diffuse = TextureManager::instance.createTexture2D("res/textures/texture.png");
         auto normal = TextureManager::instance.createTexture2D("res/textures/textureNormal.png");
-        auto rawModel = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/box.obj"));
-        auto plane = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/plane.obj"));
-        auto sphere = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/sphere.obj"));
         auto green = TextureManager::instance.createTexture2D("res/textures/green.png");
-        auto tea = getLoader().loadToVao(ContentLoader::loadOBJ("res/models/tea.obj"));
+
+
+        getScene() -> setTerrainManager(new TerrainManager(getLoader(), 100, getScene()));
+        getScene() -> getTerrainManager() -> generateTerrain(diffuse, 128, 5, 40, 1, 0);
 
         auto teaMaterial = createMaterial(green);
-        auto teaModel = createMaterialedModel(tea, teaMaterial);
         auto material = createMaterial(diffuse, normal);
 
+
+        auto line = getLoader().loadToVao(GObjects::createLine({Vector3f(), {0, 5, 0}, {0, 5, 5,}, {5, 5, 5}}), GL_LINE_STRIP);
+
+        //////////////////////////////////////////////////////////Koniec načítavanie OBJ súborov
+        objLoader.waitLoadAsynch();
+
+        auto rawModel = objLoader.getRawModel(getLoader(), "box");
+        auto tea = objLoader.getRawModel(getLoader(), "tea");
+        auto plane = objLoader.getRawModel(getLoader(), "plane");
+        auto sphere = objLoader.getRawModel(getLoader(), "sphere");
+        objLoader.cleanUp();
+
         ball = createMaterialedModel(sphere, material);
+        auto teaModel = createMaterialedModel(tea, teaMaterial);
         auto model = createMaterialedModel(rawModel, material);
         auto floor = createMaterialedModel(plane, createMaterial(diffuse, normal));
         auto barrelModel = createMaterialedModel("barrel", getLoader());
 
+
+        getScene() -> addEntity(createEntity(createMaterialedModel(line, teaMaterial), Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 2, 1)));
 
         teaEntity = createEntity(teaModel, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
         teaMaterial -> setEnvironmentalMap(skyTexture);
@@ -65,41 +82,18 @@ public:
         getScene() -> addEntity(createEntity(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
         getScene() -> addEntity(createEntity(floor, Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 1, 10)));
 
-//        TerrainManager terrainManager = TerrainManager(getLoader(), 100, (Scene *)getScene());
-//        terrainManager.generateTerrain(diffuse, 128, 5, 40, 0, 0);
-        getScene() -> setTerrainManager(new TerrainManager(getLoader(), 100, getScene()));
-        getScene() -> getTerrainManager() ->generateTerrain(diffuse, 128, 5, 40, 0, 0);
-//        getRenderer()->getMaster()->getVoxel()->setWorld(new World(getScene(), rawModel));
-
-//        for(int i=0 ; i<3000 ; i++){
-//            float x = (float)random(0, 100);
-//            float y = (float)random(0, 100);
-//            PRINT("x: " << x << ", z: " << y);
-//            getScene() -> addEntity(createEntity(model, Vector3f(x, terrainManager.getHeight(x, y) , y), Vector3f(0, 0, 0), Vector3f(0.05, 0.05, 0.05)));
-//        }
-//        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(10, 0) << ", " << terrainManager.getHeight(0, 10) << ", " << terrainManager.getHeight(10, 10));
-//        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(20, 0) << ", " << terrainManager.getHeight(0, 20) << ", " << terrainManager.getHeight(20, 20));
-//        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(30, 0) << ", " << terrainManager.getHeight(0, 30) << ", " << terrainManager.getHeight(30, 30));
-        //((Scene*)getScene()) -> createParticleSystem();
-        getRenderer()->getMaster()->getWater()->addWater(-50, -50, 1.5f);
-        /*
-        terrainManager.generateTerrain(diffuse, 128, 5, 40,  0,  0);
-        terrainManager.generateTerrain(diffuse, 128, 5, 40, -1,  0);
-        terrainManager.generateTerrain(diffuse, 128, 5, 40,  0, -1);
-        */
     }
 
     inline void init(BasicGtkGui * gui) {
-
         DEBUG("MainApplication::init - start: " << glfwGetTime());
 //        gui.init();
 
         //renderer = new Renderer(getLoader(), WindowManager::width, WindowManager::height);
         setRenderer(new Renderer(getLoader(), WindowManager::width, WindowManager::height));
         if(gui){
-            gui -> setWater(new GtkWater(getMainRenderer() -> getMaster() -> getWater()));
-            gui -> setPostFx(new GtkPostFx(getMainRenderer() -> getMaster() -> getPostFx()));
-            gui -> setRenderer(new GtkRenderer(getMainRenderer()));
+            gui -> setWater(new GtkWater(getRenderer() -> getMaster() -> getWater()));
+            gui -> setPostFx(new GtkPostFx(getRenderer() -> getMaster() -> getPostFx()));
+            gui -> setRenderer(new GtkRenderer((Renderer *)getRenderer()));
         }
 
         DEBUG("MainApplication::init - after  new Renderer: " << glfwGetTime());

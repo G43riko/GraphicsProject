@@ -34,6 +34,8 @@ if(el == nullptr){              \
 #define COSI(a) (int)cos(num)
 #define COSF(a) (float)cos(a)
 
+#define MAP_CONTAINS_KEY(map, key) (map.find(key) != map.end())
+
 #ifndef ABS
     #define ABS(x) (x < 0 ? -x : x)
 #endif
@@ -74,9 +76,12 @@ if(el == nullptr){              \
     #define CLAMP(a, b, c) (a < b ? b : a > c ? c : a);
 #endif
 
+#define SIGNUM(x) (x > 0 ? 1 : x < 0 ? -1 : 0)
 
 //Linerar Interpolation
-#define LERP(a, b, c) (a + c * (b - a));
+#define LERP(a, b, c) (a + c * (b - a))
+#define LERP2(a, b, c) (a * c + b * (1 - c))
+
 
 /*******************************************OTHERS******************************************************/
 

@@ -11,7 +11,6 @@
 #include "../../rendering/RenderUtil.h"
 #include <src/rendering/shader/GuiShader.h>
 
-#define GUI_VERTICES {-1,  1, -1, -1,  1,  1,  1, -1}
 
 class GuiMaster {
 private:

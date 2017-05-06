@@ -34,7 +34,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
 
             while(itEnt != it->second.end()){ //prejde všetky entity
                 shader -> updateUniform4m(TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
-                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+                glDrawElements(model -> getRenderType(), model -> getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 itEnt++;
             }

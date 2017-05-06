@@ -7,11 +7,8 @@
 
 #include "Vectors.h"
 #include <vector>
+#include <src/utils/GTypes.h>
 
-#define NO_INDEX -1
-
-class Vertex;
-typedef std::shared_ptr<Vertex> PointerVertex;
 class Vertex {
 private:
     int textureIndex = NO_INDEX;

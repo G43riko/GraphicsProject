@@ -7,7 +7,6 @@
 
 #include <src/utils/Vectors.h>
 
-#define SIGNUM(x) (x > 0 ? 1 : x < 0 ? -1 : 0)
 /**
  * 1. The normal to the plane is: n = (S2 - S1) x (S3 - S1)
  *  A point M belongs to this plane iff it satisfies this equation: n . ( M - S1 ) = 0

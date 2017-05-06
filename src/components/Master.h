@@ -14,21 +14,7 @@
 #include "../components/entities/EntityMaster.h"
 #include "../components/water/WaterMaster.h"
 
-typedef struct masterOptions{
-    bool useShadows;
-    bool useGuis;
-    bool useSkybox;
-    bool useParticles;
-    bool useEntities;
-    bool useWaters;
-    bool useVoxels;
-    bool usePostFx;
-    bool useTextures;
-    bool useNormals;
-    bool useLights;
-    bool useSpeculars;
-    bool useEnviromentals;
-}MasterOptions;
+
 
 class EntityMaster;
 class Master {
@@ -62,14 +48,14 @@ public:
     inline void setSky(bool val){ options.useSkybox = val; }
 
     //GETTERS
-    inline GuiMaster * getGui(void){return guiMaster; }
-    inline WaterMaster * getWater(void){return waterMaster; }
-    inline PostFxMaster * getPostFx(void){return postFxMaster; }
-    inline ShadowMaster * getShadow(void){return shadowMaster; }
-    inline EntityMaster * getEntity(void){return entityMaster; }
-    inline SkyBoxMaster * getSkyBox(void){ return skyBoxMaster; }
-    inline ParticleMaster * getParticle(void){return particleMaster; }
-    inline VoxelMaster * getVoxel(void){return voxelMaster; }
+    inline GuiMaster * getGui(void)const {return guiMaster; }
+    inline WaterMaster * getWater(void)const {return waterMaster; }
+    inline PostFxMaster * getPostFx(void)const {return postFxMaster; }
+    inline ShadowMaster * getShadow(void)const {return shadowMaster; }
+    inline EntityMaster * getEntity(void)const {return entityMaster; }
+    inline SkyBoxMaster * getSkyBox(void)const { return skyBoxMaster; }
+    inline ParticleMaster * getParticle(void)const {return particleMaster; }
+    inline VoxelMaster * getVoxel(void)const {return voxelMaster; }
 
     inline bool useParticles(void) const{return options.useParticles; }
     inline bool useShadows(void) const{return options.useShadows; }

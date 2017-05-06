@@ -11,8 +11,6 @@
 #include <memory>
 #include <src/static_libs/lodepng.h>
 
-class CubeTexture;
-
 class CubeTexture {
     private:
         const GLuint textureID;
@@ -26,7 +24,6 @@ class CubeTexture {
 };
 
 
-typedef std::shared_ptr<CubeTexture> PointerCubeTexture;
 inline PointerCubeTexture createCubeTexture(std::string title, GLuint textureID){
     return PointerCubeTexture(new CubeTexture(title, textureID));
 }

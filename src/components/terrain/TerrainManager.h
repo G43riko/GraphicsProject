@@ -9,9 +9,7 @@
 #include <src/core/BasicScene.h>
 #include <map>
 #include "Terrain.h"
-#define DEFAULT_HEIGHT 0
-#define VERTICAL_OFFSET 1.0f
-#define MAP_CONTAINS_KEY(map, key) (map.find(key) != map.end())
+
 
 class TerrainManager {
 private:
@@ -33,7 +31,7 @@ private:
 //            }
         };
 
-        void generateTerrain(PointerTexture2D texture, int vertices, float height, int textures, int posX, int posZ){
+        void generateTerrain(PointerTexture2D texture, GLuint vertices, float height, float textures, int posX, int posZ){
             Terrain * t = new Terrain(loader,
                                 texture,
                                 (unsigned int)size,
@@ -42,7 +40,7 @@ private:
                                 textures);
 
             scene -> addEntity(createEntity(t -> getModel(),
-                                            Vector3f((float)posX * size, VERTICAL_OFFSET, (float)posZ * size),
+                                            Vector3f((float)posX * size, VERTICAL_TERRAIN_OFFSET, (float)posZ * size),
                                             Vector3f(0.0f, 0.0f, 0.0f),
                                             Vector3f(1.0f, 1.0f, 1.0f)));
 
@@ -66,7 +64,7 @@ private:
 //                                            Vector3f(0.0f, 0.0f, 0.0f),
 //                                            Vector3f(1.0f, 1.0f, 1.0f)));
 
-            PRINT("terrain: [" << posX << ", " << posZ);
+            //PRINT("terrain: [" << posX << ", " << posZ);
             terrains[hash(posX, posZ)] = t;
         }
 
@@ -85,10 +83,10 @@ private:
             float posZ = ((z - (float)surZ * size) / size);
             int hashVal = hash((int)floor(posX), (int)floor(posZ));
             if(!MAP_CONTAINS_KEY(terrains, hashVal)){
-                return DEFAULT_HEIGHT;
+                return DEFAULT_TERRAIN_HEIGHT;
             }
 
-            return terrains[hashVal] -> getHeight((int)(x * 128 / size), (int)(z * 128 / size)) + VERTICAL_OFFSET;
+            return terrains[hashVal] -> getHeight((int)(x * 128 / size), (int)(z * 128 / size)) + VERTICAL_TERRAIN_OFFSET;
         }
 
         void cleanUp(void){

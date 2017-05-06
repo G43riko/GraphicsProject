@@ -7,6 +7,7 @@
 
 
 #include <src/utils/Vectors.h>
+#include <src/utils/GTypes.h>
 #include "src/utils/utils.h"
 class PointLight {
 private:
@@ -25,7 +26,6 @@ public:
     inline Vector3f getDiffuseColor(void)const{return color; };
 };
 
-typedef std::shared_ptr<PointLight> PointerPointLight;
 
 inline PointerPointLight createPointLight(Vector3f position, Vector3f color){
     return PointerPointLight(new PointLight(position, color));

@@ -6,6 +6,7 @@
 #define GRAPHICSPROJECT_DIRICTIONALLIGHT_H
 
 
+#include <src/utils/GTypes.h>
 #include <src/utils/Vectors.h>
 
 class DirectionalLight {
@@ -26,7 +27,6 @@ public:
     inline Vector3f getSpecularColor(void) const{return specularColor; }
 };
 
-typedef std::shared_ptr<DirectionalLight> PointerDirectionalLight;
 
 inline PointerDirectionalLight createDirectionalLight(Vector3f diffuseColor, Vector3f direction){
     return PointerDirectionalLight(new DirectionalLight(diffuseColor, direction));

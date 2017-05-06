@@ -18,61 +18,22 @@ public:
     inline ~Terrain(){
         clearMap();
     }
-
-    inline Terrain(Loader loader, PointerTexture2D texture, GLuint size, int vertices, float height, int textMulti, float **mapa)
-            : map(mapa),
-              height(height),
-              texture(texture),
-              generator(HeightGenerator(height)),
-              vertices(vertices),
-              size(size){
-        std::vector<float> verticesVector, normals, textures;
-        std::vector<GLuint> indices;
-        for(unsigned int i=0 ; i<(unsigned int)vertices ; i++){
-            for(unsigned int j=0 ; j<(unsigned int)vertices ; j++){
-
-                verticesVector.push_back((float)j / ((float)vertices - 1) * (float)size);
-                verticesVector.push_back(mapa[j][i]);
-                verticesVector.push_back((float)i / ((float)vertices - 1) * (float)size);
-
-                textures.push_back((float)j / ((float)vertices - 1) * (float)textMulti);
-                textures.push_back((float)i / ((float)vertices - 1) * (float)textMulti);
-            }
-        }
-        //vypočíta normály
-        for(unsigned int gz=0 ; gz<(unsigned int)vertices ; gz++){
-            for(unsigned int gx=0 ; gx<(unsigned int)vertices ; gx++){
-                Vector3f normal = calculateNormal(gx, gz);
-                normals.push_back(normal.x);
-                normals.push_back(normal.y);
-                normals.push_back(normal.z);
-                if(gz < (unsigned int)vertices - 1 && gx < (unsigned int)vertices - 1){
-                    GLuint topLeft = gz * vertices + gx;
-                    GLuint topRight = topLeft + 1;
-                    GLuint bottomLeft = (gz + 1) * vertices + gx;
-                    GLuint bottomRight = bottomLeft + 1;
-
-                    indices.push_back(topLeft);
-                    indices.push_back(bottomLeft);
-                    indices.push_back(topRight);
-                    indices.push_back(topRight);
-                    indices.push_back(bottomLeft);
-                    indices.push_back(bottomRight);
-                }
-            }
-        }
-
-        //vráti nový rawPointer
-        model = createMaterialedModel(loader.loadToVao(verticesVector, textures, normals, indices),  createMaterial(texture));
-    }
-    Terrain(Loader loader,const PointerTexture2D texture, const GLuint size, const int vertices, const float height, const int textures)
+    inline Terrain(Loader loader, PointerTexture2D texture, GLuint size, GLuint vertices, float height, float textMulti, float **mapa = nullptr)
             : height(height),
               texture(texture),
               generator(HeightGenerator(height)),
               vertices(vertices),
               size(size){
-        initMap((unsigned int)vertices, (unsigned int)vertices);
-        model = createMaterialedModel(generateTerrain(loader, textures), createMaterial(texture));
+        if(IS_NOT_NULL(mapa)){
+            if(map){
+                clearMap();
+            }
+            map = mapa;
+        }
+        else{
+            initMap(vertices, vertices);
+        }
+        model = createMaterialedModel(generateTerrain(loader, textMulti), createMaterial(texture));
     }
 
     inline PointerMaterialedModel getModel(void) const{return model; }
@@ -83,28 +44,29 @@ private:
     const float height;
     const PointerTexture2D texture;
     const HeightGenerator generator;
-    const int vertices;
+    const GLuint vertices;
     const GLuint size;
     PointerMaterialedModel model = nullptr;
 
     inline void clearMap(void){
-        for(int i=0 ; i<vertices ; i++){
+        for(GLuint i=0 ; i<vertices ; i++){
             delete[] map[i];
         }
+
         delete[] map;
     }
 
-    inline void initMap(const unsigned int x, const unsigned int y){
+    inline void initMap(const GLuint x, const GLuint y){
         if(map){
             clearMap();
         }
         map = new float * [x];
-        for(unsigned int i=0 ; i<x; i++){
+        for(GLuint i=0 ; i<x; i++){
             map[i] = new float[y];
         }
     }
 
-    inline Vector3f calculateNormal(const int x, const int z) const{
+    inline Vector3f calculateNormal(const GLuint x, const GLuint z) const{
         float heightL = getTerrainHeight(x - 1, z);
         float heightR = getTerrainHeight(x + 1, z);
         float heightD = getTerrainHeight(x, z - 1);
@@ -112,42 +74,43 @@ private:
         return Vector3f(heightL - heightR, 2.0f, heightD - heightU).normalize();
     }
 
-    inline float getTerrainHeight(const int x, const int z) const{
-        if(x < 0 || z < 0 || x >= vertices || z >= vertices){
+    inline float getTerrainHeight(const GLuint x, const GLuint z) const{
+        if(x >= vertices || z >= vertices){
             return 0;
         }
-        float height = map[x][z];
-        return height;
+        return map[x][z];
     }
-    inline PointerRawModel generateTerrain(Loader loader,const int textMulti) const{
-        std::vector<float> verticesVector, normals, textures;
-        std::vector<GLuint> indices;
+    inline PointerRawModel generateTerrain(Loader loader, const float textMulti) const{
+        VectorF verticesVector, normals, textures;
+        VectorUI indices;
 
+        float premulSize = (float)size / (float)(vertices - 1);
+        float premulTexture = textMulti / (float)(vertices - 1);
         //vygeneruje výškovú mapu pre terén a vypočíta súradnice pre textúru
-        for(unsigned int i=0 ; i<(unsigned int)vertices ; i++){
-            for(unsigned int j=0 ; j<(unsigned int)vertices ; j++){
-                map[j][i] = generator.generateHeight(j, i);
+//        for(GLuint i=0 ; i<vertices ; i++){
+//            for(GLuint j=0 ; j<vertices ; j++){
+//                map[j][i] = generator.generateHeight(j, i);
+//
+//                verticesVector.push_back((float)j * premulSize);
+//                verticesVector.push_back(map[j][i]);
+//                verticesVector.push_back((float)i * premulSize);
+//
+//                textures.push_back((float)j * premulTexture);
+//                textures.push_back((float)i * premulTexture);
+//            }
+//        }
 
-                verticesVector.push_back((float)j / ((float)vertices - 1) * (float)size);
-                verticesVector.push_back(map[j][i]);
-                verticesVector.push_back((float)i / ((float)vertices - 1) * (float)size);
-
-                textures.push_back((float)j / ((float)vertices - 1) * (float)textMulti);
-                textures.push_back((float)i / ((float)vertices - 1) * (float)textMulti);
-            }
+        map[0][0] = generator.generateHeight(0, 0);
+        for(GLuint i=0 ; i<vertices ; i++) {
+            map[0][i] = generator.generateHeight(0, i);
+            map[i][0] = generator.generateHeight(i, 0);
         }
-        PRINT(map[0][0] << ", " << map[10][0] << ", " << map[0][10] << ", " << map[10][10]);
-        PRINT(map[0][0] << ", " << map[20][0] << ", " << map[0][20] << ", " << map[20][20]);
-        PRINT(map[0][0] << ", " << map[30][0] << ", " << map[0][30] << ", " << map[30][30]);
-
         //vypočíta normály
-        for(unsigned int gz=0 ; gz<(unsigned int)vertices ; gz++){
-            for(unsigned int gx=0 ; gx<(unsigned int)vertices ; gx++){
-                Vector3f normal = calculateNormal(gx, gz);
-                normals.push_back(normal.x);
-                normals.push_back(normal.y);
-                normals.push_back(normal.z);
-                if(gz < (unsigned int)vertices - 1 && gx < (unsigned int)vertices - 1){
+        for(GLuint gz=0 ; gz<vertices ; gz++){
+            for(GLuint gx=0 ; gx<vertices ; gx++){
+                if(gz < vertices - 1 && gx < vertices - 1){
+                    map[gx + 1][gz + 1] = generator.generateHeight(gx + 1,  gz + 1);
+
                     GLuint topLeft = gz * vertices + gx;
                     GLuint topRight = topLeft + 1;
                     GLuint bottomLeft = (gz + 1) * vertices + gx;
@@ -160,6 +123,19 @@ private:
                     indices.push_back(bottomLeft);
                     indices.push_back(bottomRight);
                 }
+
+                verticesVector.push_back((float)gx * premulSize);
+                verticesVector.push_back(map[gx][gz]);
+                verticesVector.push_back((float)gz * premulSize);
+
+                textures.push_back((float)gx * premulTexture);
+                textures.push_back((float)gz * premulTexture);
+
+
+                Vector3f normal = calculateNormal(gx, gz);
+                normals.push_back(normal.x);
+                normals.push_back(normal.y);
+                normals.push_back(normal.z);
             }
         }
 

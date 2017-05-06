@@ -21,15 +21,10 @@
 #include <map>
 #include "../static_libs/lodepng.h"
 #include "../rendering/material/CubeTexture.h"
+#include "GTypes.h"
 //#include <src/static_libs/tiny_obj_loader.cpp>
 
-typedef struct cubeImagedata{
-    std::vector<unsigned char> data;
-    unsigned int width;
 
-    unsigned int height;
-    std::string title;
-} CubeImageData;
 
 class ContentLoader {
 public:
@@ -42,7 +37,7 @@ private:
 
     static void split(const std::string text, char divider, std::vector<std::string>& result);
 
-    static PointerVertex processVertex(Vector3f vertex, std::vector<PointerVertex>& vertices, std::vector<GLuint>& indices);
+    static PointerVertex processVertex(Vector3f vertex, std::vector<PointerVertex>& vertices, VectorUI& indices);
 
     static void removeUnusedVertices(std::vector<PointerVertex>& vertices);
 
@@ -52,16 +47,16 @@ private:
     static PointerVertex dealWithAlreadyProcessedVertex(PointerVertex previousVertex,
                                                         int newTextureIndex,
                                                         int newNormalIndex,
-                                                        std::vector<GLuint>& indices,
+                                                        VectorUI& indices,
                                                         std::vector<PointerVertex>& vertices);
 
     static float convertDataToArrays(std::vector<PointerVertex> vertices,
                                      std::vector<Vector2f> textures,
                                      std::vector<Vector3f> normals,
-                                     std::vector<GLfloat>& verticesArray,
-                                     std::vector<GLfloat>& texturesArray,
-                                     std::vector<GLfloat>& normalsArray,
-                                     std::vector<GLfloat>& tangentsArray);
+                                     VectorF& verticesArray,
+                                     VectorF& texturesArray,
+                                     VectorF& normalsArray,
+                                     VectorF& tangentsArray);
 
 
     /*

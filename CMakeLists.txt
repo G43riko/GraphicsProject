@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(GameEngine)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -lpthread -lm")
 
 #
 # CONFIGURATION
@@ -102,7 +102,6 @@ set(GL_MAIN_SRC
         src/components/water/WaterMaster.cpp
         src/GUI/GtkIntroGui.cpp
         src/rendering/material/TextureManager.cpp
-        src/rendering/model/Mesh.cpp
         src/utils/FileLoader.cpp
         src/utils/MousePicker.cpp
         src/rendering/WindowManager.cpp
@@ -110,7 +109,7 @@ set(GL_MAIN_SRC
         src/components/voxel/World.cpp
         src/components/voxel/Chunk.cpp
         src/components/voxel/Block.cpp
-        src/components/voxel/VoxelMaster.cpp src/components/voxel/advanced/BlockDatabase.h src/components/voxel/advanced/BlockData.h src/components/voxel/advanced/BlockID.h src/components/voxel/advanced/BlockType.h src/components/voxel/advanced/GrassType.h src/components/voxel/advanced/AirType.h src/utils/grandom.h src/components/voxel/WoldConst.h src/utils/Array3D.h)
+        src/components/voxel/VoxelMaster.cpp src/components/voxel/advanced/BlockDatabase.h src/components/voxel/advanced/BlockData.h src/components/voxel/advanced/BlockID.h src/components/voxel/advanced/BlockType.h src/components/voxel/advanced/GrassType.h src/components/voxel/advanced/AirType.h src/utils/grandom.h src/components/voxel/WoldConst.h src/utils/Array3D.h src/rendering/model/GObjects.h src/Messages.h src/utils/OBJLoader.h src/utils/GTypes.h)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 

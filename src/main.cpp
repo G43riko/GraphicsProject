@@ -7,9 +7,35 @@
 //static gpointer threadOpenGl(gpointer user_data){
 //    printf("aaaaaaaaa\n");
 //}
+struct funcArgs{
+    void * func;
+    void * args;
+};
+/**
+ * Táto funkcia sa vola v novom vlakne a spusti funkciu ktorú dostane na vstupe
+ *
+ * @param user_data
+ * @return
+ */
+inline gpointer unitedFunc(gpointer user_data){
+    struct funcArgs * data = static_cast<struct funcArgs *>(user_data);
+    ((void (*)(void *))data -> func)(data -> args);
+    return nullptr;
+}
+
+/**
+ * Táto funkcia dostane na vstup funkciu ktorú má spustiť v novom vlákne a jej argumenty
+ *
+ * @param func
+ * @param pointer
+ * @return
+ */
+void * callAsyncFunc(void * func, void * pointer){
+    struct funcArgs arguments = {func, pointer};
+    return g_thread_new(nullptr, unitedFunc, &arguments);
+}
 
 int main(int argc, char *argv[]){
-
 //    Array3D<int, 3, 3, 3> test;
 //    for(int i=0 ; i< 3 ; i++) {
 //        for (int j = 0; j < 3; j++) {

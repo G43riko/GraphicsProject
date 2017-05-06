@@ -16,7 +16,6 @@ public:
     const int columns;
     ParticleTexture(PointerTexture2D texture, int rows, int columns) : texture(texture), rows(rows), columns(columns){}
 };
-typedef std::shared_ptr<ParticleTexture> PointerParticleTexture;
 
 
 #endif //GRAPHICSPROJECT_PARTICLETEXTURE_H

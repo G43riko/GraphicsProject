@@ -20,7 +20,7 @@ class Camera {
 private:
     glm::mat4 projectionMatrix;
     Transform transform     = Transform();
-    const bool VERTICAL           = true;
+    const bool VERTICAL           = false;
     //MousePicker * picker    = nullptr;
 //    Vector3f forward        = Vector3f(1, 0, 0);
 //    Vector3f position   = Vector3f(DEFAULT_CAMERA_POSITION);//TODO deprecated

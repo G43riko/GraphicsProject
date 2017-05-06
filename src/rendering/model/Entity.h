@@ -9,7 +9,10 @@
 #include "../../utils/Vectors.h"
 #include "MaterialedModel.h"
 #include "src/utils/Transform.h"
+#include "src/utils/GTypes.h"
 #include "../../utils/utils.h"
+#include <map>
+#include <vector>
 
 class Entity {
 private:
@@ -34,7 +37,6 @@ public:
     inline void setAlive(bool value){ alive = immortal || value; }
     inline bool isAlive(void) const{return alive;}
 };
-typedef std::shared_ptr<Entity> PointerEntity;
 
 inline PointerEntity createEntity(PointerMaterialedModel model, const Vector3f & pos, const Vector3f & rot, const Vector3f & scale){
     return PointerEntity(new Entity(model, pos, rot, scale));

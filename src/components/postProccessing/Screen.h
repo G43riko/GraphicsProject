@@ -30,7 +30,6 @@ public:
 private:
 };
 
-#define POINTS {-1, 1, -1, -1, 1, 1, 1, -1}
 
 class Screen {
 private:
@@ -57,7 +56,7 @@ private:
     int levels = 0;
 public:
     Screen(int width, int height, Loader loader) {
-        MODEL = loader.loadToVao(POINTS, 2);
+        MODEL = loader.loadToVao(SCREEN_POINTS, 2);
         frameRenderer = ToFrameBufferRendering(width, height);
         texture = frameRenderer.getTexture();
         position = Vector2f();

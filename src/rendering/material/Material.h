@@ -35,7 +35,6 @@ class Material {
         inline bool hasEnvironmentalMap(void) const{return environmentalMap == nullptr; };
 };
 
-typedef std::shared_ptr<Material> PointerMaterial;
 
 inline PointerMaterial createMaterial(PointerTexture2D texture){
     return PointerMaterial(new Material(texture));

@@ -17,13 +17,9 @@
 #include "src/rendering/shader/DeferredShader.h"
 #include "src/rendering/shader/ShadowShader.h"
 #include "RenderUtil.h"
+#include <src/Messages.h>
 #include "../components/postProccessing/Screen.h"
 
-#define SHADOW_SHADER "shadowShader"
-#define OBJECT_SHADER "objectShader"
-#define POSTFX_SHADER "postFxShader"
-#define PARTICLE_SHADER "particleShader"
-#define DEFERRED_SHADER "deferredShader"
 
 class Screen;
 class Scene;

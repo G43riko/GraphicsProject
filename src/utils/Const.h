@@ -5,6 +5,49 @@
 #ifndef GRAPHICSPROJECT_CONST_H
 #define GRAPHICSPROJECT_CONST_H
 
+#define NO_INDEX -1
+
+#define GRAVITY_EFFECT 0.8f
+#define DEFRACTION_EFFECT 0.95f
+#define BALL_SIZE 1
+
+#define SKYBOX_SIZE 500
+
+#define SHADOW_OFFSET 10.0f
+#define SHADOW_DISTANCE 100.0f
+#define DIR_UP {0.0f, 0.1f, 0.0f, 0.0f}
+#define DIR_FORWARD {0.0f, 0.0f, -1.0f, 0.0f}
+
+#define FBO_DEPTH_NONE 0
+#define FBO_DEPTH_TEXTURE 1
+#define FBO_DEPTH_RENDER_BUFFER 2
+
+#define SHADOW_MAP_SIZE 2048
+
+#define THREAD_TITLE "objLoaderThread"
+
+#define SHADOW_SHADER "shadowShader"
+#define OBJECT_SHADER "objectShader"
+#define POSTFX_SHADER "postFxShader"
+#define PARTICLE_SHADER "particleShader"
+#define DEFERRED_SHADER "deferredShader"
+
+#define DEFAULT_WATER_SIZE 50
+#define DEFAULT_WATER_HEIGHT 1.5f
+#define WATER_VERTICES    { -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f,  1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f}
+#define PARTICLE_VERTICES { -0.5f,  0.5f, -0.5f, -0.5f,  0.5f,  0.5f,  0.5f, -0.5f}
+#define GUI_VERTICES      { -1.0f,  1.0f, -1.0f, -1.0f,  1.0f,  1.0f,  1.0f, -1.0f}
+#define POST_FX_POSITIONS { -1.0f,  1.0f, -1.0f, -1.0f,  1.0f,  1.0f,  1.0f, -1.0f}
+#define SCREEN_POINTS     { -1.0f,  1.0f, -1.0f, -1.0f,  1.0f,  1.0f,  1.0f, -1.0f}
+
+#define WATER_REFLECTION_WIDTH 2560 //320 * 8
+#define WATER_REFLECTION_HEIGHT 1440 //180 * 8
+#define WATER_REFRACTION_WIDTH 1280
+#define WATER_REFRACTION_HEIGHT 720
+
+#define DEFAULT_TERRAIN_HEIGHT 0
+#define VERTICAL_TERRAIN_OFFSET 1.0f
+
 #define ERROR_MISSING_FILE "Missing file: "
 #define ERROR_INITIAL_GLFW "Failed to initialize GLFW!"
 #define ERROR_INITIAL_GLEW "Failed to initialize GLEW with OpenGL 3.3!"

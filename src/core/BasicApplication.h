@@ -36,6 +36,7 @@ protected:
     inline BasicRenderer *getRenderer(void)const{return _renderer; };
     inline BasicScene *getScene(void)const{ return _scene; };
     inline Loader getLoader(void)const{ return *_loader; };
+
 public:
     inline void localCleanUp(void){
         CHECK_AND_CLEAR(_renderer);
