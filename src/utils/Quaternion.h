@@ -11,9 +11,9 @@ class Quaternion : public Vector4f{
 public:
     inline Quaternion(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f) : Vector4f(x, y, z, w){}
 
-    inline Quaternion(Vector4f v) : Vector4f(v.x, v.y, v.z, v.w) {}
+    inline Quaternion(const Vector4f v) : Vector4f(v.x, v.y, v.z, v.w) {}
 
-    inline Quaternion(Vector3f axis, float angle) {
+    inline Quaternion(const Vector3f axis, const float angle) {
         float sinHalfAngle = sinf(angle / 2);
         float cosHalfAngle = cosf(angle / 2);
 
@@ -23,7 +23,7 @@ public:
         w = cosHalfAngle;
     }
 
-    inline Quaternion(Matrix4f m) {
+    inline Quaternion(const Matrix4f m) {
         float trace = m.m00 + m.m11 + m.m22;
 
         if(trace > 0) {

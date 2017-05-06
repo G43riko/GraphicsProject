@@ -19,8 +19,6 @@ uniform vec3 lightColor[8];
 uniform float colorMatrix[NUM_X * NUM_Y];
 
 void main() {
-    out_color = color;
-    return;
     vec3 unitNormal = normalize(surfaceNormal);
     vec3 totalDifuse = vec3(0);
     vec3 totalSpecular = vec3(0);

@@ -60,9 +60,14 @@ private:
     inline void update(float i_delta){
         _fpsCounter++;
 
+        //double renderTime, updateTime;
         if(_running){
+//            updateTime = glfwGetTime();
             _app -> update(i_delta);
+//            printf("update: %f ", glfwGetTime() - updateTime);
+//            renderTime = glfwGetTime();
             _app -> render();
+//            printf("render: %f ", glfwGetTime() - renderTime);
         }
         if(_showGui){
             if(Input::getKeyDown(GLFW_KEY_M)){
@@ -80,8 +85,10 @@ private:
 
             _gui.update();
         }
+//        updateTime = glfwGetTime();
         Input::update();
         WindowManager::update();
+//        printf("update2: %f \n", glfwGetTime() - updateTime);
     };
 public:
     inline BasicEngine(BasicApplication * i_app, int i_width, int i_height) : _app(i_app), _width(i_width), _height(i_height){
@@ -172,7 +179,6 @@ public:
         double currentTime  = glfwGetTime();
         float delta         = 1;
         int fps             = 0;
-
         init();
         while((_showGui && !_gui.getExitRequest()) || (!_showGui && _running)){
             if(_running){

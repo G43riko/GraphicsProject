@@ -8,22 +8,22 @@
 
 class WaterTile {
 private:
-    const float x, z;
-    float height;
-    const float size;
+    const float _x, _z;
+    float _height;
+    const float _size;
 public:
-    inline WaterTile(float centerX, float centerZ, float height, float size) : x(centerX), z(centerZ), height(height), size(size){}
+    inline WaterTile(float x, float z, float height, float size) : _x(x), _z(z), _height(height), _size(size){}
 
     //GETTERS
 
-    inline float getSize() const{return size; }
-    inline float getHeight() const{return height; }
-    inline float getX() const{return x; }
-    inline float getZ() const{return z; }
+    inline float getSize(void) const{return _size; }
+    inline float getHeight(void) const{return _height; }
+    inline float getX(void) const{return _x; }
+    inline float getZ(void) const{return _z; }
 
     //SETTERS
 
-    inline void setHeight(float height){this -> height = height; }
+    inline void setHeight(float height){_height = height; }
 };
 
 

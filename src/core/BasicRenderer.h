@@ -33,9 +33,9 @@ public:
     virtual void renderScene(BasicScene * scene) = 0;
 
     //GETTERS
-    inline Master * getMaster(void){ return &master; }
-    inline PointerCamera getActualCamera(void){ return actualCamera; };
-    inline void setSun(PointerPointLight sun){ this -> sun = sun; };
+    inline Master * getMaster(void){return &master; }
+    inline PointerCamera getActualCamera(void) const{return actualCamera; };
+    inline void setSun(PointerPointLight sun){this -> sun = sun; };
 };
 
 #endif //GRAPHICSPROJECT_BASICRENDERER_H

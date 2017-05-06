@@ -10,12 +10,12 @@
 #include <src/rendering/shader/SkyBoxShader.h>
 
 #define SIZE 500
-#define  SKYBOX_VERTICES {-SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE,\
-                          -SIZE, -SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE,\
-                           SIZE, -SIZE, -SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE, -SIZE,\
-                          -SIZE, -SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,\
-                          -SIZE,  SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE,\
-                          -SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE}
+#define SKYBOX_VERTICES {-SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE,\
+                         -SIZE, -SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE,\
+                          SIZE, -SIZE, -SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE, -SIZE,\
+                         -SIZE, -SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE, -SIZE,  SIZE,\
+                         -SIZE,  SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE,  SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE, -SIZE,\
+                         -SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE, -SIZE,  SIZE, -SIZE, -SIZE, -SIZE, -SIZE,  SIZE,  SIZE, -SIZE,  SIZE}
 
 class SkyBoxMaster {
 private:

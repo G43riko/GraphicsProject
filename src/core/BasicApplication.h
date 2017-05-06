@@ -11,46 +11,46 @@
 
 class BasicApplication{
 private:
-    bool l_running              = false;
-    BasicRenderer * l_renderer  = nullptr;
-    BasicScene * l_scene        = nullptr;
-    BasicView * l_view          = nullptr;
-    Loader * l_loader           = nullptr;
+    bool _running              = false;
+    BasicRenderer * _renderer  = nullptr;
+    BasicScene * _scene        = nullptr;
+    BasicView * _view          = nullptr;
+    Loader * _loader           = nullptr;
 
 protected:
 
     inline void setRenderer(BasicRenderer * i_renderer){
-        SET_IF_IS_NULL(l_renderer, i_renderer);
+        SET_IF_IS_NULL(_renderer, i_renderer);
     };
     inline void setView(BasicView * i_view){
-        SET_IF_IS_NULL(l_view, i_view);
+        SET_IF_IS_NULL(_view, i_view);
     };
     inline void setScene(BasicScene * i_scene){
-        SET_IF_IS_NULL(l_scene, i_scene);
+        SET_IF_IS_NULL(_scene, i_scene);
     };
     inline void stop(void){
-        l_running = false;
+        _running = false;
     };
 
-    inline BasicView& getView(void) const{return *l_view; };
-    inline BasicRenderer *getRenderer(void)const{return l_renderer; };
-    inline BasicScene *getScene(void)const{ return l_scene; };
-    inline Loader getLoader(void)const{ return *l_loader; };
+    inline BasicView& getView(void) const{return *_view; };
+    inline BasicRenderer *getRenderer(void)const{return _renderer; };
+    inline BasicScene *getScene(void)const{ return _scene; };
+    inline Loader getLoader(void)const{ return *_loader; };
 public:
     inline void localCleanUp(void){
-        CHECK_AND_CLEAR(l_renderer);
-        CHECK_AND_CLEAR(l_view);
-        CHECK_AND_CLEAR(l_scene);
+        CHECK_AND_CLEAR(_renderer);
+        CHECK_AND_CLEAR(_view);
+        CHECK_AND_CLEAR(_scene);
     };
 
     virtual ~BasicApplication(void){};
-    inline void setLoader(Loader * i_loader){ this -> l_loader = i_loader; };
-    inline bool isRunning(void) const{return l_running; };
+    inline void setLoader(Loader * i_loader){ this -> _loader = i_loader; };
+    inline bool isRunning(void) const{return _running; };
     inline void start(void){
         PRINT("startujem");
 
 
-        l_running = true;
+        _running = true;
     };
     virtual void loadContent(void){};
 

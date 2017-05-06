@@ -17,12 +17,12 @@ private:
 public:
     inline PointLight(Vector3f position, Vector3f color) : position(position), color(color){};
     inline PointLight(Vector3f position, Vector3f color, Vector3f attenuation) : position(position), color(color), attenuation(attenuation){};
-    inline void setPosition(const float x, const float y, const float z){position.set(x, y, z); };
+    inline void setPosition(float x, float y, float z){position.set(x, y, z); };
 
-    inline Vector3f getPosition(void) const{return position; };
-    inline Vector3f getDiffuseColor(void)const{return color; };
     inline Vector3f getSpecularColor(void) const{return specularColor; };
     inline Vector3f getAttenuation(void) const{return attenuation; };
+    inline Vector3f getPosition(void) const{return position; };
+    inline Vector3f getDiffuseColor(void)const{return color; };
 };
 
 typedef std::shared_ptr<PointLight> PointerPointLight;

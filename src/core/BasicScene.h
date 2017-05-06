@@ -10,8 +10,11 @@
 #include <src/components/particles/ParticleManager.h>
 #include <src/game/GameObject.h>
 
+class TerrainManager;
 
 class BasicScene{
+private:
+    TerrainManager * _terrainManager = nullptr;
 protected:
     PointerCubeTexture sky = nullptr;
     EntityManager entities;
@@ -52,10 +55,20 @@ public:
     inline ParticlesList getParticles(void) const{ return particles.getParticles(); }
     inline EntitiesList  getEntities(void){ return entities.getEntities(); };
     inline PointerCubeTexture getSky(void) const{ return sky; };
-
+    inline TerrainManager * getTerrainManager(void) const{ return _terrainManager; }
     //SETTERS
-    void setSky(PointerCubeTexture sky){
+    inline void setSky(PointerCubeTexture sky){
         this -> sky = sky;
+    }
+    inline void setTerrainManager(TerrainManager * terrainManager){
+        if(IS_NOT_NULL(_terrainManager)){
+            /*
+            _terrainManager->cleanUp();
+            delete _terrainManager;
+             */
+            throw "nemôžeš priradiť terén keď už jeden existuje!!!";
+        }
+        _terrainManager = terrainManager;
     }
 };
 

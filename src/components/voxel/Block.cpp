@@ -13,7 +13,6 @@ Block::Block(int x, int y, int z, Chunk * parent, const BlockType type)
           parent(parent),
           color(getColorByType(type)){
     parent -> getWorld() -> blocks.push_back(this);
-    PRINT("data: " << options);
 }
 
 bool Block::isVisible(void){

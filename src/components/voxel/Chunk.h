@@ -15,16 +15,10 @@
 //23.4.2016 64*16*64 = 11FPS
 //23.4.2016 128*16*128 = 15FPS - všetky kocky
 
-#define MAX_BLOCKS_X 64
-#define MAX_BLOCKS_Y 4
-#define MAX_BLOCKS_Z 64
 
+#include "WoldConst.h"
 #include "Block.h"
 #include "World.h"
-
-#define CHUNK_SIZE_X (MAX_BLOCKS_X * BLOCK_SIZE_X * 2)
-#define CHUNK_SIZE_Y (MAX_BLOCKS_Y * BLOCK_SIZE_Y * 2)
-#define CHUNK_SIZE_Z (MAX_BLOCKS_Z * BLOCK_SIZE_Z * 2)
 
 class Block;
 class World;

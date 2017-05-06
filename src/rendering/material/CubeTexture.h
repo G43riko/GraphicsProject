@@ -18,11 +18,11 @@ class CubeTexture {
         const GLuint textureID;
         const std::string title;
     public:
-        inline CubeTexture(std::string title, GLuint textureID) : textureID(textureID), title(title){};
+        inline CubeTexture(const std::string& title, const GLint& textureID) : textureID(textureID), title(title){};
         inline GLuint getId(void)const {return textureID;};
         inline void cleanUp(void) const {glDeleteTextures(1, &textureID);};
         inline void bind(void)const {glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);};
-        inline void bind(GLuint num) const{glActiveTexture(num); bind();};
+        inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
 };
 
 

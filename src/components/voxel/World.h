@@ -6,19 +6,12 @@
 #define GAMEENGINE_WORLD_H
 
 
-#define MAX_CHUNKS_X 3
-#define MAX_CHUNKS_Y 3
-#define MAX_CHUNKS_Z 3
+#include "WoldConst.h"
 
 #include <src/utils/Vectors.h>
 #include <src/core/BasicScene.h>
 #include <src/rendering/material/TextureManager.h>
 #include "Chunk.h"
-
-#define WOLD_MAX_X (MAX_CHUNKS_X * MAX_BLOCKS_X)
-#define WOLD_MAX_Y (MAX_CHUNKS_Y * MAX_BLOCKS_Y)
-#define WOLD_MAX_Z (MAX_CHUNKS_Z * MAX_BLOCKS_Z)
-
 
 class Chunk;
 class Block;
@@ -59,8 +52,14 @@ private:
     PointerRawModel boxModel;
     BasicScene * scene = nullptr;
 
-    inline void generateChunks(Vector3f from, Vector3f to){
-        //TODO
+    inline void generateChunks(int minX, int minY, int minZ, int maxX, int maxY, int maxZ){
+        for(int i=minX ; i<maxX ; i++){
+            for(int j=minY ; j<maxY ; j++){
+                for(int k=minZ ; k<maxZ ; k++){
+                    generateChunk(i, j, k);
+                }
+            }
+        }
     }
     void generateChunk(int x, int y, int z);
 };

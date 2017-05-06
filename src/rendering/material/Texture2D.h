@@ -16,13 +16,13 @@ private:
     const GLuint id;
     const GLenum type;
 public:
-    inline TextureData(GLuint id, GLenum type) : id(id), type(type){};
+    inline TextureData(const GLuint& id, const GLenum& type) : id(id), type(type){};
 
-    inline void setFilter(GLint filter) const{//GL_LINEAR, GL_NEAREST
+    inline void setFilter(const GLint& filter) const{//GL_LINEAR, GL_NEAREST
         glTexParameteri(type, GL_TEXTURE_MAG_FILTER, filter);
         glTexParameteri(type, GL_TEXTURE_MIN_FILTER, filter);
     }
-    inline void setWrap(GLint wrap) const{
+    inline void setWrap(const GLint& wrap) const{
         glTexParameteri(type, GL_TEXTURE_WRAP_S, wrap);
         glTexParameteri(type, GL_TEXTURE_WRAP_T, wrap);
     }
@@ -36,7 +36,7 @@ public:
         glBindTexture(type, id);
     }
 
-    inline void bind(GLuint num) const{
+    inline void bind(const GLint& num) const{
         glActiveTexture(num);
         bind();
     }
@@ -48,15 +48,15 @@ public:
 class Texture2D {
     private:
         const GLuint id;
-        const int width         = 0;
-        const int height        = 0;
+        const GLint width       = 0;
+        const GLint height      = 0;
         const std::string title = 0;
     public:
-        inline Texture2D(GLuint i_id) : id(i_id){};
-        inline Texture2D(std::string title, GLuint id, int width, int height) : id(id), width(width), height(height), title(title){};
+        inline Texture2D(const GLint& i_id) : id(i_id){};
+        inline Texture2D(const std::string& title, const GLint& id, const GLint& width, const GLint& height) : id(id), width(width), height(height), title(title){};
         inline GLuint getTextureID(void)const {return id; };
         inline void bind(void) const {glBindTexture(GL_TEXTURE_2D, id);};
-        inline void bind(GLuint num) const{glActiveTexture(num); bind();};
+        inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
         inline std::string getTitle(void) const{return title; };
         inline int getWidth(void) const{return width; };
         inline int getHeight(void) const{return height; };

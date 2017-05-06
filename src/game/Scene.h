@@ -7,7 +7,7 @@
 
 
 #include <src/core/BasicScene.h>
-
+#include <src/components/terrain/TerrainManager.h>
 class BasicScene;
 
 class Scene : public BasicScene{
@@ -36,6 +36,11 @@ class Scene : public BasicScene{
                 auto itObj = objects.begin();
                 while(itObj != objects.end()){
                     itObj -> get() -> update(delta);
+                    Vector3f position = itObj -> get() -> getNextPos();
+                    float height = getTerrainManager()->getHeight(position.x, position.z);
+                    if(position.y <= height){
+                        itObj -> get() -> hitFloor(height);
+                    }
                     itObj++;
                 }
             }

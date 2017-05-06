@@ -17,17 +17,13 @@ private:
     int textureIndex = NO_INDEX;
     int normalIndex = NO_INDEX;
     PointerVertex duplicateVertex = nullptr;
-    long unsigned int index;
-    float length;
+    const long unsigned int index;
+    const float length;
     std::vector<Vector3f> tangents = std::vector<Vector3f>();
     Vector3f averagedTangent = Vector3f(0, 0, 0);
 public:
-    Vector3f position;
-    inline Vertex(long unsigned int index,Vector3f position){
-        this -> index = index;
-        this -> position = position;
-        this -> length = position.length();
-    }
+    const Vector3f position;
+    inline Vertex(const long unsigned int& index, const Vector3f& position) : index(index), length(position.length()), position(position){}
     inline void show(void) const{
         printf("texture: %d, normal: %d\n", textureIndex, normalIndex);
         position.show();
@@ -46,11 +42,9 @@ public:
         }
     }
 
-
-
     inline bool isSet(void) const{return textureIndex != NO_INDEX && normalIndex != NO_INDEX;}
 
-    inline bool hasSameTextureAndNormal(int textureIndexOther,int normalIndexOther)const{
+    inline bool hasSameTextureAndNormal(const int& textureIndexOther, const int& normalIndexOther)const{
         return textureIndexOther == textureIndex && normalIndexOther == normalIndex;
     }
 
@@ -63,8 +57,8 @@ public:
     inline int getNormalIndex(void)const{return normalIndex; }
     inline PointerVertex getDuplicateVertex(void)const{return duplicateVertex; }
 
-    inline void setTextureIndex(int textureIndex){this -> textureIndex = textureIndex; }
-    inline void setNormalIndex(int normalIndex){this -> normalIndex = normalIndex; }
+    inline void setTextureIndex(const int& textureIndex){this -> textureIndex = textureIndex; }
+    inline void setNormalIndex(const int& normalIndex){this -> normalIndex = normalIndex; }
     inline void setDuplicateVertex(PointerVertex duplicateVertex){this -> duplicateVertex = duplicateVertex; }
 };
 

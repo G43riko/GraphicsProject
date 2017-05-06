@@ -5,14 +5,7 @@
 #ifndef GAMEENGINE_BLOCK_H
 #define GAMEENGINE_BLOCK_H
 
-
-#define BLOCK_SIZE_X 1
-#define BLOCK_SIZE_Y 1
-#define BLOCK_SIZE_Z 1
-
-#define VISIBLE_ALL 63
-#define VISIBLE_NONE 0
-
+#include "WoldConst.h"
 #include <src/utils/Vectors.h>
 #include <src/rendering/shader/BasicShader.h>
 #include <src/rendering/model/RawModel.h>

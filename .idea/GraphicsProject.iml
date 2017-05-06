@@ -24,13 +24,20 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Block.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/WoldConst.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Chunk.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Chunk.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Block.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/World.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/BlockData.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/GrassType.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/BlockType.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/BlockID.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/BlockDatabase.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/AirType.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Block.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/World.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkIntroGui.h" isTestSource="false" />
@@ -40,8 +47,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/grandom.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/Array3D.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.h" isTestSource="false" />

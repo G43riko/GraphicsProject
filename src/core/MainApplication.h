@@ -65,19 +65,21 @@ public:
         getScene() -> addEntity(createEntity(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
         getScene() -> addEntity(createEntity(floor, Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 1, 10)));
 
-        TerrainManager terrainManager = TerrainManager(getLoader(), 100, (Scene *)getScene());
-        terrainManager.generateTerrain(diffuse, 128, 5, 40, 0, 0);
+//        TerrainManager terrainManager = TerrainManager(getLoader(), 100, (Scene *)getScene());
+//        terrainManager.generateTerrain(diffuse, 128, 5, 40, 0, 0);
+        getScene() -> setTerrainManager(new TerrainManager(getLoader(), 100, getScene()));
+        getScene() -> getTerrainManager() ->generateTerrain(diffuse, 128, 5, 40, 0, 0);
 //        getRenderer()->getMaster()->getVoxel()->setWorld(new World(getScene(), rawModel));
 
 //        for(int i=0 ; i<3000 ; i++){
 //            float x = (float)random(0, 100);
 //            float y = (float)random(0, 100);
 //            PRINT("x: " << x << ", z: " << y);
-//            getScene() -> addEntity(createEntity(model, Vector3f(x, terrainManager.getHeight(x, y) , y), Vector3f(0, 0, 0), Vector3f(0.01, 0.01, 0.01)));
+//            getScene() -> addEntity(createEntity(model, Vector3f(x, terrainManager.getHeight(x, y) , y), Vector3f(0, 0, 0), Vector3f(0.05, 0.05, 0.05)));
 //        }
-        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(10, 0) << ", " << terrainManager.getHeight(0, 10) << ", " << terrainManager.getHeight(10, 10));
-        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(20, 0) << ", " << terrainManager.getHeight(0, 20) << ", " << terrainManager.getHeight(20, 20));
-        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(30, 0) << ", " << terrainManager.getHeight(0, 30) << ", " << terrainManager.getHeight(30, 30));
+//        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(10, 0) << ", " << terrainManager.getHeight(0, 10) << ", " << terrainManager.getHeight(10, 10));
+//        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(20, 0) << ", " << terrainManager.getHeight(0, 20) << ", " << terrainManager.getHeight(20, 20));
+//        PRINT(terrainManager.getHeight(0, 0) << ", " << terrainManager.getHeight(30, 0) << ", " << terrainManager.getHeight(0, 30) << ", " << terrainManager.getHeight(30, 30));
         //((Scene*)getScene()) -> createParticleSystem();
         getRenderer()->getMaster()->getWater()->addWater(-50, -50, 1.5f);
         /*
@@ -146,6 +148,7 @@ public:
 
         if(Input::getMouseDown(0)){
             PointerGameObject entity = PointerGameObject(new GameObject(createEntity(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(1, 1, 1))));
+            entity->setGravityEffect(0.01f);
             entity->setVelocity(getRenderer() -> getActualCamera() -> getForward());
             getScene()->addObject(entity);
         }

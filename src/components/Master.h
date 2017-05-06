@@ -71,12 +71,12 @@ public:
     inline ParticleMaster * getParticle(void){return particleMaster; }
     inline VoxelMaster * getVoxel(void){return voxelMaster; }
 
-    inline bool useParticles(void){ return options.useParticles; }
-    inline bool useShadows(void){ return options.useShadows; }
-    inline bool useSkybox(void){ return options.useSkybox; }
-    inline bool useWaters(void){ return options.useWaters; }
-    inline bool usePostFx(void){ return options.usePostFx; }
-    inline bool useSky(void){ return options.useSkybox; };
-    inline bool useVoxels(void){ return options.useVoxels; };
+    inline bool useParticles(void) const{return options.useParticles; }
+    inline bool useShadows(void) const{return options.useShadows; }
+    inline bool useSkybox(void) const{return options.useSkybox; }
+    inline bool useWaters(void) const{return options.useWaters; }
+    inline bool usePostFx(void) const{return options.usePostFx; }
+    inline bool useSky(void) const{return options.useSkybox; };
+    inline bool useVoxels(void) const{return options.useVoxels; };
 };
 #endif //GRAPHICSPROJECT_MASTER_H
