@@ -35,7 +35,7 @@ public:
         createVAO(&data -> vaoID);
         storeDataInAttributeList(0, 3, positions, &data -> vboVertices);
         unbindVAO();
-        return createRawModel(data -> vaoID, (GLuint)positions.size() / 3);
+        return RawModel::create(data -> vaoID, (GLuint)positions.size() / 3);
     }
 
     inline PointerRawModel loadToVao(const VectorF positions, const VectorUI indices){
@@ -44,7 +44,7 @@ public:
         bindIndicesBuffer(indices, &data -> vboIndices);
         storeDataInAttributeList(0, 3, positions, &data -> vboVertices);
         unbindVAO();
-        return createRawModel(data -> vaoID, (int)indices.size());
+        return RawModel::create(data -> vaoID, (int)indices.size());
     }
 
     inline PointerRawModel loadToVao(const VectorF positions,
@@ -58,7 +58,7 @@ public:
         storeDataInAttributeList(1, 2, texts, &data -> vboTextures);
         storeDataInAttributeList(2, 3, normals, &data -> vboNormals);
         unbindVAO();
-        return createRawModel(data -> vaoID, (int)indices.size());
+        return RawModel::create(data -> vaoID, (int)indices.size());
     }
     inline PointerRawModel loadToVaoA(const GLfloat * vertices,
                                       const GLfloat * textures,
@@ -71,7 +71,7 @@ public:
         storeDataInAttributeArray(1, 2, textures, &data -> vboTextures);
         storeDataInAttributeArray(2, 3, normals, &data -> vboNormals);
         unbindVAO();
-        return createRawModel(data -> vaoID, sizeof(indices) / sizeof(GLuint));
+        return RawModel::create(data -> vaoID, sizeof(indices) / sizeof(GLuint));
     }
 
     inline PointerRawModel loadToVao(const VectorF positions,
@@ -83,7 +83,7 @@ public:
         storeDataInAttributeList(0, 3, positions, &data -> vboVertices);
         storeDataInAttributeList(1, 2, texts, &data -> vboTextures);
         unbindVAO();
-        return createRawModel(data -> vaoID, (int)indices.size());
+        return RawModel::create(data -> vaoID, (int)indices.size());
     }
 
     inline PointerRawModel loadToVao(const VectorF positions, const int dimensions) {
@@ -91,7 +91,7 @@ public:
         createVAO(&data -> vaoID);
         storeDataInAttributeList(0, dimensions, positions, &data -> vboVertices);
         unbindVAO();
-        return createRawModel(data -> vaoID, (GLuint)(positions.size() / dimensions));
+        return RawModel::create(data -> vaoID, (GLuint)(positions.size() / dimensions));
     }
 
     inline PointerRawModel loadToVao(const PointerMesh mesh, GLenum renderType = GL_TRIANGLES){
@@ -103,7 +103,7 @@ public:
         storeDataInAttributeList(2, 3,  mesh -> getNormals(), &data -> vboNormals);
         storeDataInAttributeList(3, 3,  mesh -> getTangents(), &data -> vboTangents);
         unbindVAO();
-        return createRawModel(data -> vaoID, (GLuint)mesh -> getIndices().size(), renderType);
+        return RawModel::create(data -> vaoID, (GLuint)mesh -> getIndices().size(), renderType);
     }
 
     inline void cleanUp(void){

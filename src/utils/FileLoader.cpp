@@ -11,20 +11,7 @@
  * TEXT FILES
  */
 
-void ContentLoader::loadTextFile(std::string fileName, std::string *content){
-    std::ifstream ifs(fileName, std::ios::in);
-    std::string line = "";
 
-    if(ifs.is_open()) {
-        while(!ifs.eof()) {
-            std::getline(ifs, line);
-            content -> append(line + "\n");
-        }
-        ifs.close();
-        return;
-    }
-    ERROR(ERROR_MISSING_FILE + fileName);
-}
 
 /*
  * TEXTURES
@@ -34,7 +21,7 @@ void ContentLoader::loadTextFile(std::string fileName, std::string *content){
 
 CubeImageData * ContentLoader::loadCubeTexture(std::string title){
     CubeImageData * datas = new CubeImageData[6];
-    std::vector<std::string> TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
+    VectorS TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
     for(int i=0 ; i<6 ; i++){
         DEBUG("načitava sa: " << std::string("res/textures/skies/" + title + TITLES[i] + ".png").c_str());
         lodepng::decode(datas[i].data, datas[i].width, datas[i].height, "res/textures/skies/" + title + TITLES[i] + ".png");
@@ -90,11 +77,11 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
 
     std::string line;
     std::vector<PointerVertex> vertices = std::vector<PointerVertex>();
-    std::vector<Vector2f> textures = std::vector<Vector2f>();
-    std::vector<Vector3f> normals = std::vector<Vector3f>();
+    VectorV2 textures = VectorV2();
+    VectorV3 normals = VectorV3();
     VectorUI indices = VectorUI();
 
-    std::vector<std::string> currentLine;
+    VectorS currentLine;
 
     while (std::getline(ifs, line)) {
         if (line.find("v ") == 0) {
@@ -125,9 +112,7 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
     }
     while (!ifs.eof() && line.find("f ") == 0) {
         currentLine.clear();
-        std::vector<std::string> ver1;
-        std::vector<std::string> ver2;
-        std::vector<std::string> ver3;
+        VectorS ver1, ver2, ver3;
 
         split(line, ' ', currentLine);
         split(currentLine[1], '/', ver1);
@@ -175,14 +160,15 @@ PointerMesh ContentLoader::loadOBJ(std::string fileName) {
 //            printf("uvsFinal: %f\n" , i);
 //        }
 //    }
-    return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices));
+//    return PointerMesh(new Mesh(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices));
+    return Mesh::create(verticesFinal, uvsFinal, normalsFinal, tangentsFinal, indices);
     //float furthest = convertDataToArrays(vertices, textures, normals, verticesArray, texturesArray, normalsArray, tangentsArray);
     // ModelData data = new ModelData(verticesArray, texturesArray,
     // normalsArray, tangentsArray, indicesArray,
     // furthest);
 }
 
-void ContentLoader::split(const std::string text, char divider, std::vector<std::string>& result) {
+void ContentLoader::split(const std::string text, char divider, VectorS& result) {
     unsigned long i = 0;
     auto pos = text.find(divider);
     while (pos != std::string::npos) {
@@ -241,7 +227,7 @@ void ContentLoader::removeUnusedVertices(std::vector<PointerVertex>& vertices) {
     }
 }
 
-void ContentLoader::calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, std::vector<Vector2f> textures) {
+void ContentLoader::calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, VectorV2 textures) {
     Vector3f deltaPos1 = v1.getPosition() - v0.getPosition();
     Vector3f deltaPos2 = v2.getPosition() - v0.getPosition();
     Vector2f uv0 = textures[v0.getTextureIndex()];
@@ -262,12 +248,12 @@ void ContentLoader::calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, std
 }
 
 float ContentLoader::convertDataToArrays(std::vector<PointerVertex> vertices,
-                          std::vector<Vector2f> textures,
-                          std::vector<Vector3f> normals,
-                          VectorF& verticesArray,
-                          VectorF& texturesArray,
-                          VectorF& normalsArray,
-                          VectorF& tangentsArray) {
+                                         VectorV2 textures,
+                                         VectorV3 normals,
+                                          VectorF& verticesArray,
+                                          VectorF& texturesArray,
+                                          VectorF& normalsArray,
+                                          VectorF& tangentsArray) {
     float furthestPoint = 0;
     for (unsigned int i = 0; i < vertices.size(); i++) {
         PointerVertex currentVertex = vertices[i];

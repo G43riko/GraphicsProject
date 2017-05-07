@@ -48,8 +48,8 @@ int main(int argc, char *argv[]){
 //    threadOGL = g_thread_new(NULL, threadOpenGl, nullptr);
 //    g_thread_join(threadOGL);
 
-    BasicEngine engine = BasicEngine(new MainApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
-//    BasicEngine engine = BasicEngine(new VoxelApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
+//    BasicEngine engine = BasicEngine(new MainApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
+    BasicEngine engine = BasicEngine(new VoxelApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
 //    BasicEngine engine = BasicEngine(nullptr, RES_X_DEFAULT, RES_Y_DEFAULT);
     engine.start();
 //    engine.setUpApp(new MainApplication());

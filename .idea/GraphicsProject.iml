@@ -5,6 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/GObjects.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/BasicMesh.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.cpp" isTestSource="false" />
@@ -25,6 +26,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/WoldConst.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Chunk.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/BlockTypes.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Chunk.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Block.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/World.cpp" isTestSource="false" />

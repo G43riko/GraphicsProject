@@ -4,6 +4,7 @@
 
 #include <src/rendering/RenderUtil.h>
 #include "VoxelMaster.h"
+#include "BlockTypes.h"
 
 void VoxelMaster::renderBlock(Block *block) {
     if (block == nullptr) {
@@ -14,7 +15,7 @@ void VoxelMaster::renderBlock(Block *block) {
     }
 }
 
-void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> lights) {
+void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> lights, PointerDirectionalLight sun) {
     if(world == nullptr || world -> blocks.empty()){
         return;
     }
@@ -42,9 +43,12 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
     Matrix4f zMinusRotation = scaleMat * Matrix4f::initRotation(90, 0, 0);
 
     Vector3f cameraPosition = camera -> getPosition();
-
+    if(IS_NOT_NULL(sun)){
+        shader -> updateLight("sun", sun -> getData());
+    }
     for(unsigned int i=0 ; i<lights.size() ; i++){
-        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
+//        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
+        shader -> updateLight("lightData[" + std::to_string(i) + "]", lights[i] -> getData());
     }
 
     //int threeFacesBoxes = 0;
@@ -60,6 +64,7 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
         translation = Matrix4f::initTranslation(position.x, position.y, position.z);
 //        translation = *block -> getTranslation();
         shader -> updateUniform4f("color", block -> getColor());
+        shader -> updateMaterial("material", BlockTypes::getMaterialOf(block->getType()));
 
 //      continue;
 //        shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * translation);

@@ -109,7 +109,7 @@ set(GL_MAIN_SRC
         src/components/voxel/World.cpp
         src/components/voxel/Chunk.cpp
         src/components/voxel/Block.cpp
-        src/components/voxel/VoxelMaster.cpp src/components/voxel/advanced/BlockDatabase.h src/components/voxel/advanced/BlockData.h src/components/voxel/advanced/BlockID.h src/components/voxel/advanced/BlockType.h src/components/voxel/advanced/GrassType.h src/components/voxel/advanced/AirType.h src/utils/grandom.h src/components/voxel/WoldConst.h src/utils/Array3D.h src/rendering/model/GObjects.h src/Messages.h src/utils/OBJLoader.h src/utils/GTypes.h)
+        src/components/voxel/VoxelMaster.cpp src/components/voxel/advanced/BlockDatabase.h src/components/voxel/advanced/BlockData.h src/components/voxel/advanced/BlockID.h src/components/voxel/advanced/BlockType.h src/components/voxel/advanced/GrassType.h src/components/voxel/advanced/AirType.h src/utils/grandom.h src/components/voxel/WoldConst.h src/utils/Array3D.h src/rendering/model/GObjects.h src/Messages.h src/utils/OBJLoader.h src/utils/GTypes.h src/rendering/model/BasicMesh.h src/components/voxel/BlockTypes.h)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 

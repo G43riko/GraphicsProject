@@ -8,7 +8,7 @@
 #include "../utils/Const.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <src/utils/utils.h>
+#include <src/utils/GUtils.h>
 
 #define CONTENT_ATTRIBUTES_MINOR_VERSION 3
 #define CONTENT_ATTRIBUTES_MAJOR_VERSION 3

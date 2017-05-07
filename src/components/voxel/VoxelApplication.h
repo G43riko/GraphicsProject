@@ -11,7 +11,9 @@
 
 class VoxelApplication : public BasicApplication{
     PointerMaterialedModel ball = nullptr;
+    PointerEntity ballEntity = nullptr;
     PointerGameObject ballObject = nullptr;
+    PointerSpotLight spotLight = nullptr;
     void loadContent() override {
         DEBUG("načítavam content");
         auto skyTexture = TextureManager::instance.createCubeTexture("sky");
@@ -24,11 +26,27 @@ class VoxelApplication : public BasicApplication{
         auto cursor = TextureManager::instance.createTexture2D("res/textures/aim_cursor.png");
         float size = 50;
         getRenderer() -> addTexture(GuiTexture(cursor->getTextureID(), Vector2f(), Vector2f(size / (float)WindowManager::width, size / (float)WindowManager::height)));
-        auto material = createMaterial(diffuse, normal);
-        ball = createMaterialedModel(sphere, material);
+        auto material = Material::create(diffuse, normal);
+        ball = MaterialedModel::create(sphere, material);
         getScene()->setSky(skyTexture);
 
         getRenderer()->getMaster()->getVoxel()->setWorld(new World(getScene(), plane, box));
+
+
+
+        PointerPointLight sun = PointLight::create(Vector3f(100000, 100000, -100000), Vector3f(0.6f, 0.6f, 0.6f));
+
+//        getScene() -> addLight(PointLight::create(Vector3f(-6.0f, 0.0f, -6.0f), Vector3f(1, 0, 1)));
+        getScene() -> addLight(sun);
+        getRenderer() -> setLight(sun);
+        ballEntity = Entity::create(ball, sun->getPosition(), Vector3f(0, 0, 0), Vector3f(0.1, 0.1, 0.1));
+        getScene() -> addEntity(ballEntity);
+
+        spotLight = SpotLight::create(getRenderer()->getActualCamera()->getPosition(), {1, 1, 1}, {1.0f, 0.1f, 0.0002f}, {0, 0, 1}, (float)cos(TO_RADIANS(3.5f)), (float)cos(TO_RADIANS(14.5f)));
+        getScene() -> addLight(spotLight);
+
+
+        getRenderer() -> setSun(DirectionalLight::create({1, 1, 1}, getRenderer()->getActualCamera()->getForward()));
     }
     void init(BasicGtkGui * gui) override{
         setRenderer(new Renderer(getLoader(), WindowManager::width, WindowManager::height));
@@ -36,10 +54,6 @@ class VoxelApplication : public BasicApplication{
         setView(new FpsView(getRenderer() -> getActualCamera(), true));
 
 
-        PointerPointLight sun = createPointLight(Vector3f(100000, 100000, -100000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
-
-        getScene() -> addLight(sun);
-        getRenderer() -> setSun(sun);
 
 
         DEBUG("MainApplication::init - end: " << glfwGetTime());
@@ -48,6 +62,10 @@ class VoxelApplication : public BasicApplication{
         if(Input::getKeyDown(GLFW_KEY_X)){
             delta = EQ(delta, 1.0f) ? 0.2f : 1.0f;
         }
+
+        spotLight->setPosition(getRenderer() -> getActualCamera() -> getPosition());
+        spotLight->setDirection(getRenderer() -> getActualCamera() -> getForward());
+
         getRenderer() -> prepareRenderer(0, 0, 0, 1);
         getRenderer() -> init3D();
         getRenderer() -> input();
@@ -55,15 +73,26 @@ class VoxelApplication : public BasicApplication{
         getScene() -> update(delta);
         getView().update(delta);
 
+
         if(Input::isKeyDown(GLFW_KEY_ESCAPE)){
             //glfwSetWindowShouldClose(WindowManager::window, 1);
             stop();
         }
         if(IS_NULL(ballObject)){
             if(Input::getMouseDown(0)){
-                ballObject = PointerGameObject(new GameObject(createEntity(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(0.1, 0.1, 0.1))));
-                ballObject->setVelocity(getRenderer() -> getActualCamera() -> getForward());
-                getScene()->addObject(ballObject);
+//                getRenderer() -> getSun() -> setDirection(getRenderer()->getActualCamera()->getForward());
+
+
+                PointerPointLight sun = getRenderer() -> getLight();
+                Vector3f newPos = getRenderer() -> getActualCamera() -> getPosition() + getRenderer() -> getActualCamera() -> getForward() * 5;
+                ballEntity -> getTransform() -> setPosition(newPos);
+                sun->setPosition(newPos.x, newPos.y, newPos.z);
+
+
+
+//                ballObject = GameObject::create(Entity::create(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(0.1, 0.1, 0.1)));
+//                ballObject->setVelocity(getRenderer() -> getActualCamera() -> getForward());
+//                getScene()->addObject(ballObject);
             }
         }
         else{

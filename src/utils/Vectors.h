@@ -9,7 +9,8 @@
 #include <string.h>
 #include <memory>
 #include <math.h>
-#include "../utils/utils.h"
+#include "GUtils.h"
+#include "../utils/GTypes.h"
 
 
 
@@ -142,6 +143,7 @@ public:
     inline int getXi(void) const{return (int)x;}
     inline int getYi(void) const{return (int)y;}
     inline int getZi(void) const{return (int)z;}
+    inline Vec3 getVec(void) const{return {x, y, z}; }
 
     inline Vector2f getXY(void) const {return {x, y};}
     inline Vector2f getXZ(void) const {return {x, z};}

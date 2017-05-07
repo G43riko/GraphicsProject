@@ -14,7 +14,7 @@ private:
     Vector3f diffuseColor;
     Vector3f specularColor = Vector3f(1, 1, 1);
     Vector3f direction;
-public:
+
     inline DirectionalLight(Vector3f diffuseColor, Vector3f dir) : DirectionalLight(diffuseColor, specularColor, dir){};
 
     inline DirectionalLight(Vector3f diffuseColor, Vector3f specularColor, Vector3f di) :
@@ -22,16 +22,23 @@ public:
             specularColor(specularColor),
             direction(di){
     }
+public:
     inline Vector3f getDirection(void) const{return direction; }
     inline Vector3f getDiffuseColor(void) const{return diffuseColor; }
     inline Vector3f getSpecularColor(void) const{return specularColor; }
+
+    inline static PointerDirectionalLight create(Vector3f diffuseColor, Vector3f direction){
+        return PointerDirectionalLight(new DirectionalLight(diffuseColor, direction));
+    }
+    inline static PointerDirectionalLight create(Vector3f diffuseColor, Vector3f specularColor, Vector3f direction){
+        return PointerDirectionalLight(new DirectionalLight(diffuseColor, specularColor, direction));
+    }
+    inline LightData getData(void) const{
+        return {LightTypes::DIRECTIONAL, {0, 0, 0}, getDiffuseColor().getVec(), getSpecularColor().getVec(), {1, 0, 0}, direction.getVec(), 0, 0};
+    }
+    inline void setDirection(Vector3f dir){direction = dir; };
 };
 
 
-inline PointerDirectionalLight createDirectionalLight(Vector3f diffuseColor, Vector3f direction){
-    return PointerDirectionalLight(new DirectionalLight(diffuseColor, direction));
-}
-inline PointerDirectionalLight createDirectionalLight(Vector3f diffuseColor, Vector3f specularColor, Vector3f direction){
-    return PointerDirectionalLight(new DirectionalLight(diffuseColor, specularColor, direction));
-}
+
 #endif //GRAPHICSPROJECT_DIRICTIONALLIGHT_H

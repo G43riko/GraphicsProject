@@ -47,30 +47,31 @@ public:
 };
 
 class Texture2D {
-    private:
-        const GLuint id;
-        const GLint width       = 0;
-        const GLint height      = 0;
-        const std::string title = 0;
-    public:
-        inline Texture2D(const GLint& i_id) : id(i_id){};
-        inline Texture2D(const std::string& title, const GLint& id, const GLint& width, const GLint& height) : id(id), width(width), height(height), title(title){};
-        inline GLuint getTextureID(void)const {return id; };
-        inline void bind(void) const {glBindTexture(GL_TEXTURE_2D, id);};
-        inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
-        inline std::string getTitle(void) const{return title; };
-        inline int getWidth(void) const{return width; };
-        inline int getHeight(void) const{return height; };
-        inline void cleanUp(void)const {glDeleteTextures(1, &id);}
-};
-//PointerTexture2D initTexture2D(std::string, std::vector<unsigned char>, int, int);
-inline PointerTexture2D createTexture2D(std::string title, GLuint id, int width, int height){
-    return PointerTexture2D(new Texture2D(title, id, width, height));
-}
+    const GLuint id;
+    const GLint width       = 0;
+    const GLint height      = 0;
+    const std::string title = 0;
 
-inline PointerTexture2D createTexture2D(GLuint id){
-    return PointerTexture2D(new Texture2D(id));
-}
+    inline Texture2D(const GLint& i_id) : id(i_id){};
+    inline Texture2D(const std::string& title, const GLint& id, const GLint& width, const GLint& height) : id(id), width(width), height(height), title(title){};
+public:
+    inline GLuint getTextureID(void)const {return id; };
+    inline void bind(void) const {glBindTexture(GL_TEXTURE_2D, id);};
+    inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
+    inline std::string getTitle(void) const{return title; };
+    inline int getWidth(void) const{return width; };
+    inline int getHeight(void) const{return height; };
+    inline void cleanUp(void)const {glDeleteTextures(1, &id);}
+
+    inline static PointerTexture2D create(std::string title, GLuint id, int width, int height){
+        return PointerTexture2D(new Texture2D(title, id, width, height));
+    }
+
+    inline static PointerTexture2D create(GLuint id){
+        return PointerTexture2D(new Texture2D(id));
+    }
+};
+
 
 
 #endif //GRAPHICSPROJECT_TEXTURE2D_H

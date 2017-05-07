@@ -39,10 +39,10 @@ private:
                                 height,
                                 textures);
 
-            scene -> addEntity(createEntity(t -> getModel(),
-                                            Vector3f((float)posX * size, VERTICAL_TERRAIN_OFFSET, (float)posZ * size),
-                                            Vector3f(0.0f, 0.0f, 0.0f),
-                                            Vector3f(1.0f, 1.0f, 1.0f)));
+            scene -> addEntity(Entity::create(t -> getModel(),
+                                              Vector3f((float)posX * size, VERTICAL_TERRAIN_OFFSET, (float)posZ * size),
+                                              Vector3f(0.0f, 0.0f, 0.0f),
+                                              Vector3f(1.0f, 1.0f, 1.0f)));
 
 //            float **map;
 //            map = new float * [vertices];

@@ -16,6 +16,7 @@ class BasicScene{
 private:
     TerrainManager * _terrainManager = nullptr;
 protected:
+
     PointerCubeTexture sky = nullptr;
     EntityManager entities;
     ParticleManager particles;

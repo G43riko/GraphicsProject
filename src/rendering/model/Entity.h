@@ -10,7 +10,7 @@
 #include "MaterialedModel.h"
 #include "src/utils/Transform.h"
 #include "src/utils/GTypes.h"
-#include "../../utils/utils.h"
+#include "src/utils/GUtils.h"
 #include <map>
 #include <vector>
 
@@ -19,14 +19,14 @@ private:
     bool alive                      = true;
     PointerMaterialedModel model    = nullptr;
     Transform transform             = Transform();
-public:
-    bool immortal = false;
+    bool immortal                   = false;
+
     inline Entity(PointerMaterialedModel model, const Vector3f & position, const Vector3f & rotation, const Vector3f & scale) {
         this -> model = model;
         transform.init(position, rotation, scale);
         //transform = Transform(position, rotation, scale);
     }
-
+public:
     inline void move(float x, float y, float z){
         transform.move(x, y, z);
     }
@@ -36,9 +36,10 @@ public:
     inline bool isWireframe(void) const{return false; }
     inline void setAlive(bool value){ alive = immortal || value; }
     inline bool isAlive(void) const{return alive;}
+
+    inline static PointerEntity create(PointerMaterialedModel model, Vector3f pos, Vector3f rot, Vector3f scale){
+        return PointerEntity(new Entity(model, pos, rot, scale));
+    }
 };
 
-inline PointerEntity createEntity(PointerMaterialedModel model, const Vector3f & pos, const Vector3f & rot, const Vector3f & scale){
-    return PointerEntity(new Entity(model, pos, rot, scale));
-}
 #endif //GRAPHICSPROJECT_ENTITY_H

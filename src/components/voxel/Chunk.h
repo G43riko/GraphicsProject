@@ -50,18 +50,18 @@ public:
     }
     void setUpVisibility(void);
     void setUpNeigbors(void);
-    inline static BlockType getRandomType(void){
-        switch((int)random(1, 9)){
-            case 1: return BlockType::red;
-            case 2: return BlockType::aqua;
-            case 3: return BlockType::blue;
-            case 4: return BlockType::magenta;
-            case 5: return BlockType::yellow;
-            case 6: return BlockType::green;
-            case 8: return BlockType::black;
-            default: return BlockType::white;
-        }
-    }
+//    inline static BlockType getRandomType(void){
+//        switch((int)random(1, 9)){
+//            case 1: return BlockType::red;
+//            case 2: return BlockType::aqua;
+//            case 3: return BlockType::blue;
+//            case 4: return BlockType::magenta;
+//            case 5: return BlockType::yellow;
+//            case 6: return BlockType::green;
+//            case 8: return BlockType::black;
+//            default: return BlockType::white;
+//        }
+//    }
     inline bool isTransparent(int x, int y, int z) const{
         //ak blok neexistuje tak je priehladný
         if(x < 0 || y < 0 || z < 0 || x >= MAX_BLOCKS_X || y >= MAX_BLOCKS_Y || z >= MAX_BLOCKS_Z){

@@ -13,10 +13,10 @@ protected:
     Vector3f velocity;
     float reflectance = 0.0f;
     float _gravityEffect = 0;
-public:
     GameObject(PointerEntity object){
         this -> object = object;
     }
+public:
     virtual void hitFloor(float height){
         if(NEZ(reflectance)){
             object->getTransform()->getPosition()->setY(height);
@@ -51,7 +51,10 @@ public:
     inline void setGravityEffect(float gravityEffect){
         _gravityEffect = gravityEffect;
     }
+
+    inline static PointerGameObject create(PointerEntity entity){
+        return PointerGameObject(new GameObject(entity));
+    }
 };
-typedef std::shared_ptr<GameObject> PointerGameObject;
 
 #endif //GRAPHICSPROJECT_GAMEOBJECT_H

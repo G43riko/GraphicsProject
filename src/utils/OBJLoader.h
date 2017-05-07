@@ -17,11 +17,11 @@
 
 class OBJLoader{
 private:
-    SSMap loadedObjects;
+    SOMap loadedObjects;
     GThread * objLoaderThread = nullptr;
 
     inline static gpointer loadModels(gpointer user_data){
-        SSMap * titles = static_cast<SSMap*>(user_data);
+        SOMap * titles = static_cast<SOMap*>(user_data);
         for(auto title : *titles){
             if(IS_NULL(title .second -> mesh)){
                 title .second -> mesh = ContentLoader::loadOBJ(title . second -> title);
@@ -30,10 +30,10 @@ private:
         return nullptr;
     }
 public:
-    inline OBJLoader(std::vector<std::string> titles){
+    inline OBJLoader(VectorS titles){
         setTitles(titles);
     };
-    inline void setTitles(std::vector<std::string> titles){
+    inline void setTitles(VectorS titles){
         for(std::string title : titles){
             if(!MAP_CONTAINS_KEY(loadedObjects, title)){
                 loadedObjects[title] = new objectType(MODELS_FOLDER + title + MODELS_EXTENSION, nullptr);

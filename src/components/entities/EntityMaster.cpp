@@ -11,7 +11,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
     }
     shader -> bind();
     shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform3f("cameraPosition", camera -> getPosition());
+    shader -> updateUniform3f(CAMERA_POSITION, camera -> getPosition());
     //shader -> updateUniform2f("levels", 4);
     if(master.getShadow() != nullptr){
         shader -> updateUniform4m("toShadowSpace", master.getShadow() -> getToShadowMapSpaceMatrix());
@@ -20,7 +20,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
         shader -> updateUniform4f("plane", clipPlane);
     glActiveTexture(GL_TEXTURE2);
     for(unsigned int i=0 ; i<lights.size() ; i++){
-        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
+        //RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
 
     glEnable(GL_TEXTURE);
@@ -40,62 +40,6 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
             }
         }
     }
-    RenderUtil::finishRender(3);
-}
-
-void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Master& master){
-    if(entities.empty()){
-        return;
-    }
-    shader -> bind();
-    glActiveTexture(GL_TEXTURE3);
-
-    if(master.getShadow() != nullptr) {
-        glBindTexture(GL_TEXTURE_2D, master.getShadow() -> getShadowMap());
-        shader->updateUniform4m("toShadowSpace", master.getShadow() -> getToShadowMapSpaceMatrix());
-    }
-    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform3f("cameraPosition", camera -> getPosition());
-    //shader -> updateUniform2f("levels", 4);
-    shader -> updateUniform4f("plane", clipPlane);
-    for(unsigned int i=0 ; i<lights.size() ; i++){
-        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
-    }
-
-    for(PointerEntity entity : entities){
-        PointerRawModel model = entity -> getModel() -> getModel();
-        glEnable(GL_TEXTURE);
-
-        shader -> updateUniform4m("transformationMatrix", entity -> getTransform() -> getTransformation());
-
-        RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
-        RenderUtil::prepareModel(model, 3);
-
-        glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-    }
-    RenderUtil::finishRender(3);
-}
-void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane){
-    shader -> bind();
-
-    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform3f("cameraPosition", camera -> getPosition());
-    //shader -> updateUniform2f("levels", 4);
-
-    for(unsigned int i=0 ; i<lights.size() ; i++){
-        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
-    }
-
-    PointerRawModel model = entity -> getModel() -> getModel();
-    glEnable(GL_TEXTURE);
-
-    shader -> updateUniform4m(TRANSFORMATION_MATRIX, entity -> getTransform() -> getTransformation());
-
-    RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
-    RenderUtil::prepareModel(model, 3);
-
-    glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-
     RenderUtil::finishRender(3);
 }
 
@@ -122,18 +66,64 @@ void EntityMaster::renderWireFrame(EntitiesList entities, PointerCamera camera){
         }
     }
     RenderUtil::finishRender(1);
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-EntityMaster::EntityMaster(PointerCamera camera){
-    RenderUtil::updateProjectionMatrix(shader, camera);
+/*
+void EntityMaster::renderEntities(std::vector<PointerEntity> entities, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane, Master& master){
+    if(entities.empty()){
+        return;
+    }
+    shader -> bind();
+    glActiveTexture(GL_TEXTURE3);
+
+    if(master.getShadow() != nullptr) {
+        glBindTexture(GL_TEXTURE_2D, master.getShadow() -> getShadowMap());
+        shader->updateUniform4m("toShadowSpace", master.getShadow() -> getToShadowMapSpaceMatrix());
+    }
+    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
+    shader -> updateUniform3f(CAMERA_POSITION, camera -> getPosition());
+    //shader -> updateUniform2f("levels", 4);
+    shader -> updateUniform4f("plane", clipPlane);
+    for(unsigned int i=0 ; i<lights.size() ; i++){
+        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
+    }
+
+    for(PointerEntity entity : entities){
+        PointerRawModel model = entity -> getModel() -> getModel();
+        glEnable(GL_TEXTURE);
+
+        shader -> updateUniform4m(TRANSFORMATION_MATRIX, entity -> getTransform() -> getTransformation());
+
+        RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
+        RenderUtil::prepareModel(model, 3);
+
+        glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+    }
+    RenderUtil::finishRender(3);
+}
+void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLight> lights, PointerCamera camera, int options, Vector4f clipPlane){
+    shader -> bind();
+
+    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
+    shader -> updateUniform3f(CAMERA_POSITION, camera -> getPosition());
+    //shader -> updateUniform2f("levels", 4);
+
+    for(unsigned int i=0 ; i<lights.size() ; i++){
+        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
+    }
+
+    PointerRawModel model = entity -> getModel() -> getModel();
+    glEnable(GL_TEXTURE);
+
+    shader -> updateUniform4m(TRANSFORMATION_MATRIX, entity -> getTransform() -> getTransformation());
+
+    RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
+    RenderUtil::prepareModel(model, 3);
+
+    glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+
+    RenderUtil::finishRender(3);
 }
 
-void EntityMaster::cleanUp(void){
-    shader -> cleanUp();
-    delete shader;
-}
-
-BasicShader * EntityMaster::getShader(void){
-    return shader;
-}
+ */

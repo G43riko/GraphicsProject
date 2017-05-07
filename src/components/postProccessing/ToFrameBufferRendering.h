@@ -18,7 +18,7 @@ private:
 
 	PointerTexture2D initTexture(int width, int height){
 		glGenTextures(1, &textureID);
-		PointerTexture2D txt(new Texture2D("FBO", textureID, width, height));
+		PointerTexture2D txt = Texture2D::create("FBO", textureID, width, height);
 
 		glBindTexture(GL_TEXTURE_2D, txt -> getTextureID());
 

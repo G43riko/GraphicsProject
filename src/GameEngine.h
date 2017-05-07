@@ -7,7 +7,7 @@
 
 #include <src/utils/Const.h>
 #include <src/utils/Maths.h>
-#include <src/utils/utils.h>
+#include <src/utils/GUtils.h>
 
 #include <src/rendering/Renderer.h>
 #include <src/components/movement/BasicView.h>

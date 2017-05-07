@@ -31,8 +31,8 @@ public:
     inline static void prepareMaterial(const PointerMaterial material, const PointerBasicShader shader, const int options){
         if(shader){
             if(options & FLAG_SPECULAR){
-                shader -> updateUniformf("shineDumper", material -> shineDumber);
-                shader -> updateUniformf("reflectivity", material -> reflectivity);
+                shader -> updateUniformf("shineDumper", material -> getShineDumper());
+                shader -> updateUniformf("reflectivity", material -> getReflectivity());
             }
             shader -> connectTextures();
 
@@ -54,10 +54,10 @@ public:
     }
 
     inline static void prepareMaterial(const PointerMaterial material, BasicShader * shader, const int options){
-        if(shader){
+        if(shader && IS_NOT_NULL(material)){
             if(options & FLAG_SPECULAR){
-                shader -> updateUniformf("shineDumper", material -> shineDumber);
-                shader -> updateUniformf("reflectivity", material -> reflectivity);
+                shader -> updateUniformf("shineDumper", material -> getShineDumper());
+                shader -> updateUniformf("reflectivity", material -> getReflectivity());
             }
             shader -> connectTextures();
 
@@ -88,7 +88,7 @@ public:
                                            const PointerCamera camera,
                                            const int index,
                                            bool const eyeSpace = true){
-        Vector3f position = eyeSpace ? getEyeSpacePosition(light, camera -> getViewMatrix()) : light->getPosition();
+        Vector3f position = eyeSpace ? getEyeSpacePosition(light->getPosition(), camera -> getViewMatrix()) : light->getPosition();
         std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
         shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);
         shader -> updateUniform3f("lightColor[" + std::to_string(index) + "]", light->getDiffuseColor());
@@ -100,15 +100,15 @@ public:
                                            const PointerCamera camera,
                                            const int index,
                                            const bool eyeSpace = true){
-        Vector3f position = eyeSpace ? getEyeSpacePosition(light, camera -> getViewMatrix()) : light->getPosition();
+        Vector3f position = eyeSpace ? getEyeSpacePosition(light->getPosition(), camera -> getViewMatrix()) : light->getPosition();
         std::string positionName = eyeSpace ? "lightPositionEyeSpace" : "lightPosition";
         shader -> updateUniform3f(positionName + "[" + std::to_string(index) + "]", position);
         shader -> updateUniform3f("lightColor[" + std::to_string(index) + "]", light->getDiffuseColor());
         shader -> updateUniform3f("attenuation[" + std::to_string(index) + "]", light -> getAttenuation());
     }
 
-    inline static Vector3f getEyeSpacePosition(const PointerPointLight light, const glm::mat4 view){
-        Vector3f position = light -> getPosition();
+
+    inline static Vector3f getEyeSpacePosition(const Vector3f position , const glm::mat4 view){
         return Vector3f(view[0][0] * position.x + view[1][0] * position.y + view[2][0] * position.z + view[3][0],
                         view[0][1] * position.x + view[1][1] * position.y + view[2][1] * position.z + view[3][1],
                         view[0][2] * position.x + view[1][2] * position.y + view[2][2] * position.z + view[3][2]);

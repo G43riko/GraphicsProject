@@ -18,7 +18,8 @@ class Master;
 class BasicRenderer {
 protected:
     Master master;
-    PointerPointLight sun = nullptr;
+    PointerPointLight light = nullptr;
+    PointerDirectionalLight sun = nullptr;
     PointerCamera actualCamera = nullptr;
 public:
     virtual ~BasicRenderer(){};
@@ -33,9 +34,13 @@ public:
     virtual void renderScene(BasicScene * scene) = 0;
 
     //GETTERS
-    inline Master * getMaster(void){return &master; }
+    inline Master * getMaster(void){return &master; };
     inline PointerCamera getActualCamera(void) const{return actualCamera; };
-    inline void setSun(PointerPointLight sun){this -> sun = sun; };
+    inline PointerPointLight getLight(void) const{return light;};
+    inline PointerDirectionalLight getSun(void) const{return sun; };
+
+    inline void setSun(PointerDirectionalLight sun){this -> sun = sun; };
+    inline void setLight(PointerPointLight light){this -> light = light; };
 };
 
 #endif //GRAPHICSPROJECT_BASICRENDERER_H

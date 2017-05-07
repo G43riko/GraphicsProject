@@ -39,8 +39,10 @@ private:
 
         std::string content;
 
-        ContentLoader::loadTextFile(fileName, &content);
-
+        ContentLoader::loadShader(fileName, &content);
+        if(fileName == "VoxelShader.frag"){
+            PRINT(content);
+        }
         const char * shaderContentPointer = content.c_str();
 
         //načíta obsah shadera
@@ -64,9 +66,9 @@ public:
     inline BasicShader(const std::string vertex, const std::string fragment): vertexFileName(vertex), fragmentFileName(fragment){
         this -> shader = glCreateProgram();
 
-        this -> vertexShader = this -> addShader(GL_VERTEX_SHADER, SHADERS_FOLDER + vertex + EXTENSION_VERTEX);
+        this -> vertexShader = this -> addShader(GL_VERTEX_SHADER, vertex + EXTENSION_VERTEX);
         //this -> geometryShader = this -> addShader(GL_GEOMETRY_SHADER, SHADERS_FOLDER + title + EXTENSION_GEOMETRY);
-        this -> fragmentShader = this -> addShader(GL_FRAGMENT_SHADER, SHADERS_FOLDER + fragment + EXTENSION_FRAGMENT);
+        this -> fragmentShader = this -> addShader(GL_FRAGMENT_SHADER, fragment + EXTENSION_FRAGMENT);
 
         glAttachShader(shader, vertexShader);
         glAttachShader(shader, fragmentShader);
@@ -130,13 +132,28 @@ public:
         glUniformMatrix4fv(uniforms[name], 1, GL_FALSE, f);
         delete[] f;
     }
-
+    inline void updateUniform3f(const std::string& name, float x, float y, float z){
+        glUniform3f(uniforms[name], x, y, z);
+    }
+    inline void updateUniform3f(const std::string& name, const Vec3 & value){
+        glUniform3f(uniforms[name], value.x, value.y, value.z);
+    }
     inline void updateUniform3f(const std::string& name, const Vector3f & value){
         glUniform3f(uniforms[name], value.x, value.y, value.z);
     }
     inline void updateUniformNf(const std::string& name, const float * value, unsigned int size){
         glUniform1fv(uniforms[name], size, value);
+    }
 
+    inline void updateLight(const std::string& name, const LightData light){
+        updateUniformi(name + ".type", light.type);
+        updateUniform3f(name + ".position", light.position);
+        updateUniform3f(name + ".diffuseColor", light.diffuseColor);
+        updateUniform3f(name + ".specularColor", light.specularColor);
+        updateUniform3f(name + ".attenuation", light.attenuation);
+        updateUniform3f(name + ".direction", light.direction);
+        updateUniformf(name + ".cutOff", light.cutOff);
+        updateUniformf(name + ".outerCutOff", light.outerCutOff);
     }
     inline void updateDirLight(const std::string& name, const DirectionalLight light){
         updateUniformi(name + ".type", 1);
@@ -160,6 +177,13 @@ public:
         updateUniformf(name + ".outerCutOff", light.getOuterCutOff());
         updateUniformf(name + ".cutOff", light.getCutOff());
     }
+    inline void updateMaterial(const std::string& name, const MaterialData& mat){
+        updateUniform3f(name + ".specularColor", mat.specularColor);
+        updateUniform3f(name + ".ambientColor", mat.ambientColor);
+        updateUniform3f(name + ".diffuseColor", mat.diffuseColor);
+        updateUniformf(name + ".reflectivity", mat.reflectivity);
+        updateUniformf(name + ".shineDumper", mat.shineDumper);
+    }
 protected:
     virtual void setAllAttributes(void) = 0;
     virtual void setAllUniforms(void) = 0;
@@ -172,6 +196,5 @@ protected:
     }
 };
 
-typedef std::shared_ptr<BasicShader> PointerBasicShader;
 
 #endif //GRAPHICSPROJECT_BASICSHADER_H

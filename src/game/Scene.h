@@ -37,7 +37,7 @@ class Scene : public BasicScene{
                 while(itObj != objects.end()){
                     itObj -> get() -> update(delta);
                     Vector3f position = itObj -> get() -> getNextPos();
-                    float height = getTerrainManager()->getHeight(position.x, position.z);
+                    float height = IS_NULL(getTerrainManager()) ? DEFAULT_TERRAIN_HEIGHT : getTerrainManager() -> getHeight(position.x, position.z);
                     if(position.y <= height){
                         itObj -> get() -> hitFloor(height);
                     }

@@ -14,6 +14,8 @@ class DirectionalLight;
 class MaterialedModel;
 class ParticleTexture;
 class CubeTexture;
+class BasicShader;
+class GameObject;
 class PointLight;
 class Texture2D;
 class SpotLight;
@@ -30,7 +32,9 @@ typedef std::shared_ptr<DirectionalLight> PointerDirectionalLight;
 typedef std::shared_ptr<MaterialedModel> PointerMaterialedModel;
 typedef std::shared_ptr<ParticleTexture> PointerParticleTexture;
 typedef std::shared_ptr<CubeTexture> PointerCubeTexture;
+typedef std::shared_ptr<BasicShader> PointerBasicShader;
 typedef std::shared_ptr<PointLight> PointerPointLight;
+typedef std::shared_ptr<GameObject> PointerGameObject;
 typedef std::shared_ptr<Texture2D> PointerTexture2D;
 typedef std::shared_ptr<SpotLight> PointerSpotLight;
 typedef std::shared_ptr<RawModel> PointerRawModel;
@@ -42,13 +46,13 @@ typedef std::shared_ptr<Mesh> PointerMesh;
 typedef std::map<PointerParticleTexture, std::vector<Particle>> ParticlesList;
 typedef std::map<PointerMaterialedModel, std::vector<PointerEntity>> EntitiesList;
 
-typedef std::vector<float> VectorF;
-typedef std::vector<Vector3f> VectorV2;
-typedef std::vector<Vector2f> VectorV3;
 typedef std::vector<int> VectorI;
+typedef std::vector<float> VectorF;
+typedef std::vector<Vector3f> VectorV3;
+typedef std::vector<Vector2f> VectorV2;
+typedef std::vector<std::string> VectorS;
 typedef std::vector<unsigned int> VectorUI;
 typedef std::vector<unsigned char> VectorUC;
-typedef std::vector<std::string> VectorS;
 
 typedef struct objectType{
     std::string title;
@@ -56,8 +60,52 @@ typedef struct objectType{
     objectType(std::string title, PointerMesh mesh) : title(title), mesh(mesh){};
 } ObjectType;
 
-typedef std::map<std::string, ObjectType*> SSMap;
+typedef std::map<std::string, ObjectType*> SOMap;
+typedef std::map<std::string, std::string> SSMap;
 
+typedef struct renderOptions{
+    bool deferred   = false;
+    bool blinn      = true;
+    bool grey       = false;
+    bool inverse    = false;
+    bool normals    = false;
+    bool parallax   = false;
+    bool ssao       = false;
+    float fixGamma  = 0;
+    float hdri      = 0;
+
+} RenderOptions;
+
+typedef struct vec3{
+    float x;
+    float y;
+    float z;
+} Vec3;
+
+enum LightTypes{
+    POINT = 1,
+    SPOT = 2,
+    DIRECTIONAL = 3
+};
+
+typedef struct materialData{
+    Vec3 diffuseColor;
+    Vec3 ambientColor;
+    Vec3 specularColor;
+    float reflectivity;
+    float shineDumper;
+} MaterialData;
+
+typedef struct lightData{
+    LightTypes type;
+    Vec3 position;
+    Vec3 diffuseColor;
+    Vec3 specularColor;
+    Vec3 attenuation;
+    Vec3 direction;
+    float cutOff;
+    float outerCutOff;
+} LightData;
 
 typedef struct masterOptions{
     bool useShadows;

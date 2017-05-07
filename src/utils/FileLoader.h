@@ -32,17 +32,50 @@ public:
     static CubeImageData loadTextureColor(Vector3f color);
     static CubeImageData loadTexturePNG(std::string fileName);
     static PointerMesh loadOBJ(std::string fileName);
-    static void loadTextFile(std::string, std::string *);
+    inline static void loadShader(std::string fileName, std::string * content){
+
+        std::ifstream ifs(SHADERS_FOLDER + fileName, std::ios::in);
+        std::string line = "";
+
+        if(ifs.is_open()) {
+            while(!ifs.eof()) {
+                std::getline(ifs, line);
+                if(START_WITH(line, INCLUDE_IDENTIFICATOR " ")){
+                    loadShader(line.substr(9) + EXTENSION_GLSL, content);
+                }
+                else{
+                    content -> append(line + "\n");
+                }
+            }
+            ifs.close();
+            return;
+        }
+        ERROR(ERROR_MISSING_FILE SHADERS_FOLDER + fileName);
+    }
+    inline static void loadTextFile(std::string fileName, std::string *content){
+        std::ifstream ifs(fileName, std::ios::in);
+        std::string line = "";
+
+        if(ifs.is_open()) {
+            while(!ifs.eof()) {
+                std::getline(ifs, line);
+                content -> append(line + "\n");
+            }
+            ifs.close();
+            return;
+        }
+        ERROR(ERROR_MISSING_FILE + fileName);
+    }
 private:
 
-    static void split(const std::string text, char divider, std::vector<std::string>& result);
+    static void split(const std::string text, char divider, VectorS& result);
 
     static PointerVertex processVertex(Vector3f vertex, std::vector<PointerVertex>& vertices, VectorUI& indices);
 
     static void removeUnusedVertices(std::vector<PointerVertex>& vertices);
 
 
-    static void calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, std::vector<Vector2f> textures);
+    static void calculateTangents(Vertex & v0, Vertex & v1, Vertex & v2, VectorV2 textures);
 
     static PointerVertex dealWithAlreadyProcessedVertex(PointerVertex previousVertex,
                                                         int newTextureIndex,
@@ -51,8 +84,8 @@ private:
                                                         std::vector<PointerVertex>& vertices);
 
     static float convertDataToArrays(std::vector<PointerVertex> vertices,
-                                     std::vector<Vector2f> textures,
-                                     std::vector<Vector3f> normals,
+                                     VectorV2 textures,
+                                     VectorV3 normals,
                                      VectorF& verticesArray,
                                      VectorF& texturesArray,
                                      VectorF& normalsArray,

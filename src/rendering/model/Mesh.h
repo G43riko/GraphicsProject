@@ -20,7 +20,7 @@ private:
     VectorF normals;
     VectorUI indices;
     VectorF uvs;
-public:
+
     inline Mesh(VectorF vertices, VectorUI indices){
         this -> vertices    = vertices;
         this -> indices     = indices;
@@ -43,6 +43,8 @@ public:
         this -> tangents    = tangents;
         this -> uvs         = uvs;
     }
+
+public:
     inline void show(void) const{
         std::cout << "vertices: " << std::endl;
         for(auto i : vertices){
@@ -74,6 +76,15 @@ public:
     inline VectorUI getIndices(void) const{return indices; }
     inline VectorF getUvs(void) const{return uvs; }
 
+    inline static PointerMesh create(VectorF vertices, VectorUI indices){
+        return PointerMesh(new Mesh(vertices, indices));
+    }
+    inline static PointerMesh create(VectorF vertices, VectorF uvs, VectorUI indices){
+        return PointerMesh(new Mesh(vertices, uvs, indices));
+    }
+    inline static PointerMesh create(VectorF vertices, VectorF uvs, VectorF normals, VectorF tangents, VectorUI indices){
+        return PointerMesh(new Mesh(vertices, uvs, normals, tangents, indices));
+    }
 };
 
 #endif //GRAPHICSPROJECT_MESH_H

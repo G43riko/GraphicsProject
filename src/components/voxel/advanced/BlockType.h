@@ -12,9 +12,7 @@ class BlockType{
 private:
     BlockData _data;
 protected:
-    BlockType(const std::string fileName){
-
-    };
+    virtual BlockType(const std::string fileName) = 0;
 public:
 };
 

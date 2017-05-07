@@ -12,21 +12,23 @@
 #include <src/static_libs/lodepng.h>
 
 class CubeTexture {
-    private:
-        const GLuint textureID;
-        const std::string title;
-    public:
-        inline CubeTexture(const std::string& title, const GLint& textureID) : textureID(textureID), title(title){};
-        inline GLuint getId(void)const {return textureID;};
-        inline void cleanUp(void) const {glDeleteTextures(1, &textureID);};
-        inline void bind(void)const {glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);};
-        inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
+private:
+    const GLuint textureID;
+    const std::string title;
+    inline CubeTexture(const std::string& title, const GLint& textureID) : textureID(textureID), title(title){};
+public:
+    inline GLuint getId(void)const {return textureID;};
+    inline void cleanUp(void) const {glDeleteTextures(1, &textureID);};
+    inline void bind(void)const {glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);};
+    inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
+
+    inline static PointerCubeTexture create(std::string title, GLuint textureID){
+        return PointerCubeTexture(new CubeTexture(title, textureID));
+    }
+
 };
 
 
-inline PointerCubeTexture createCubeTexture(std::string title, GLuint textureID){
-    return PointerCubeTexture(new CubeTexture(title, textureID));
-}
 
 
 #endif //GRAPHICSPROJECT_CUBETEXTURE_H

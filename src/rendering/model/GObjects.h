@@ -19,11 +19,11 @@ enum Directions{
 
 namespace GObjects{
     inline PointerMesh createLine(Vector3f a, Vector3f b){
-        return PointerMesh(new Mesh({a.x, a.y, a.z, b.x, b.y, b.z}, {0, 1}));
+        return Mesh::create({a.x, a.y, a.z, b.x, b.y, b.z}, {0, 1});
     }
-    inline PointerMesh createLine(std::vector<Vector3f> points){
-        std::vector<float> vertices;
-        std::vector<unsigned int> indices;
+    inline PointerMesh createLine(VectorV3 points){
+        VectorF vertices;
+        VectorUI indices;
         unsigned int index = 0;
         for(auto point : points){
             vertices.push_back(point.x);
@@ -31,13 +31,13 @@ namespace GObjects{
             vertices.push_back(point.z);
             indices.push_back(index++);
         }
-        return PointerMesh(new Mesh(vertices, indices));
+        return Mesh::create(vertices, indices);
     }
     inline PointerMesh createPlane(float size, Directions direction = Directions::FORWARD){
         float sizeX = size;
         float sizeY = size;
         //float sizeZ = size;
-        std::vector<float> vertices;
+        VectorF vertices;
         if(direction == Directions::FORWARD){
             vertices = {-sizeX,  sizeY, 0.0f,
                         -sizeX, -sizeY, 0.0f,
@@ -53,12 +53,12 @@ namespace GObjects{
         else{
             throw getMessage(WRONG_DIRECTION);
         }
-        return PointerMesh(new Mesh(vertices, {0.0f, 0.0f,
-                                               0.0f, 1.0f,
-                                               1.0f, 1.0f,
-                                               1.0f, 0.0f},
-                                              {0, 1, 3,
-                                               3, 1, 2}));
+        return Mesh::create(vertices, {0.0f, 0.0f,
+                                       0.0f, 1.0f,
+                                       1.0f, 1.0f,
+                                       1.0f, 0.0f},
+                                      {0, 1, 3,
+                                       3, 1, 2});
     }
     /*
     PointerMesh plane = PointerMesh(new Mesh({-1.0f,  1.0f, 0.0f,

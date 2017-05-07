@@ -41,6 +41,7 @@ class EntityShader : public BasicShader{
                 this -> setUniform("attenuation[" + std::to_string(i)+ "]");
             }
 
+
             this -> setUniform("levels");
 
             this -> setUniform("environmentalMap");

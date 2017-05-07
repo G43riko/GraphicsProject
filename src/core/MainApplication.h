@@ -42,8 +42,8 @@ public:
         getScene() -> setTerrainManager(new TerrainManager(getLoader(), 100, getScene()));
         getScene() -> getTerrainManager() -> generateTerrain(diffuse, 128, 5, 40, 1, 0);
 
-        auto teaMaterial = createMaterial(green);
-        auto material = createMaterial(diffuse, normal);
+        auto teaMaterial = Material::create(green);
+        auto material = Material::create(diffuse, normal);
 
 
         auto line = getLoader().loadToVao(GObjects::createLine({Vector3f(), {0, 5, 0}, {0, 5, 5,}, {5, 5, 5}}), GL_LINE_STRIP);
@@ -57,30 +57,30 @@ public:
         auto sphere = objLoader.getRawModel(getLoader(), "sphere");
         objLoader.cleanUp();
 
-        ball = createMaterialedModel(sphere, material);
-        auto teaModel = createMaterialedModel(tea, teaMaterial);
-        auto model = createMaterialedModel(rawModel, material);
-        auto floor = createMaterialedModel(plane, createMaterial(diffuse, normal));
-        auto barrelModel = createMaterialedModel("barrel", getLoader());
+        ball = MaterialedModel::create(sphere, material);
+        auto teaModel = MaterialedModel::create(tea, teaMaterial);
+        auto model = MaterialedModel::create(rawModel, material);
+        auto floor = MaterialedModel::create(plane, Material::create(diffuse, normal));
+        auto barrelModel = MaterialedModel::create("barrel", getLoader());
 
 
-        getScene() -> addEntity(createEntity(createMaterialedModel(line, teaMaterial), Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 2, 1)));
+        getScene() -> addEntity(Entity::create(MaterialedModel::create(line, nullptr), Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 2, 1)));
 
-        teaEntity = createEntity(teaModel, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+        teaEntity = Entity::create(teaModel, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1));
         teaMaterial -> setEnvironmentalMap(skyTexture);
 
         getScene() -> addEntity(teaEntity);
-        barrel = createEntity(barrelModel, Vector3f(0, 4, 0), Vector3f(0.0f, 0.0f, (float)(M_PI / 2)), Vector3f(0.1f, 1.0f, 0.1f));
+        barrel = Entity::create(barrelModel, Vector3f(0, 4, 0), Vector3f(0.0f, 0.0f, (float)(M_PI / 2)), Vector3f(0.1f, 1.0f, 0.1f));
         getScene() -> addEntity(barrel);
 
-        getScene() -> addEntity(createEntity(model, Vector3f(5, 3, -10), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
-        getScene() -> addEntity(createEntity(model, Vector3f(-5, 3, -10), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
-        getScene() -> addEntity(createEntity(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
-        getScene() -> addEntity(createEntity(model, Vector3f(5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
-        getScene() -> addEntity(createEntity(model, Vector3f(-5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+        getScene() -> addEntity(Entity::create(model, Vector3f(5, 3, -10), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+        getScene() -> addEntity(Entity::create(model, Vector3f(-5, 3, -10), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+        getScene() -> addEntity(Entity::create(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+        getScene() -> addEntity(Entity::create(model, Vector3f(5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+        getScene() -> addEntity(Entity::create(model, Vector3f(-5, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
 
-        getScene() -> addEntity(createEntity(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
-        getScene() -> addEntity(createEntity(floor, Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 1, 10)));
+        getScene() -> addEntity(Entity::create(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
+        getScene() -> addEntity(Entity::create(floor, Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 1, 10)));
 
     }
 
@@ -104,12 +104,12 @@ public:
 
 //    auto screen = Screen(WindowManager::width, WindowManager::height, getLoader());
         DEBUG("MainApplication::init - after  auto screen = Screen: " << glfwGetTime());
-        PointerPointLight sun = createPointLight(Vector3f(100000, 100000, -100000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
-        PointerPointLight light = createPointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
-        PointerPointLight light1 = createPointLight(Vector3f(200, 10, 200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
+        PointerPointLight sun = PointLight::create(Vector3f(100000, 100000, -100000), Vector3f(1.3f, 1.3f, 1.3f), Vector3f(1.0f, 0.0f, 0.0f));
+        PointerPointLight light = PointLight::create(Vector3f(0, 0, 0), Vector3f(1, 1, 1), Vector3f(1.0f, 0.01f, 0.002f));
+        PointerPointLight light1 = PointLight::create(Vector3f(200, 10, 200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
 
         getScene() -> addLight(sun);
-        getRenderer() -> setSun(sun);
+        getRenderer() -> setLight(sun);
 
 //        renderer -> setPostFx(true);
 
@@ -132,7 +132,7 @@ public:
         getRenderer() -> input();
         getRenderer() -> update(delta);
         if(Input::isKeyDown(GLFW_KEY_F)){
-            ((Scene*)getScene()) -> createParticle(particleTexture, Vector3f(0.0f, 2.0f, -2.0f), Vector3f(random(-0.02, 0.02), random(0.01, 0.1), random(-0.02, 0.02)), 0, 100, 0, 1);
+            ((Scene*)getScene()) -> createParticle(particleTexture, Vector3f(0.0f, 2.0f, -2.0f), Vector3f(grandom(-0.02, 0.02), grandom(0.01, 0.1), grandom(-0.02, 0.02)), 0, 100, 0, 1);
         }
 
         if(Input::isKeyDown(GLFW_KEY_ESCAPE)){
@@ -141,7 +141,7 @@ public:
         }
 
         if(Input::getMouseDown(0)){
-            PointerGameObject entity = PointerGameObject(new GameObject(createEntity(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(1, 1, 1))));
+            PointerGameObject entity = GameObject::create(Entity::create(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(1, 1, 1)));
             entity->setGravityEffect(0.01f);
             entity->setVelocity(getRenderer() -> getActualCamera() -> getForward());
             getScene()->addObject(entity);

@@ -11,24 +11,23 @@
 #include "../../utils/FileLoader.h"
 #include "../../utils/Loader.h"
 class MaterialedModel {
-private:
     PointerRawModel model     = nullptr;
     PointerMaterial material  = nullptr;
-public:
     MaterialedModel(PointerRawModel model, PointerMaterial material) : model(model), material(material){};
+public:
 
     inline PointerRawModel getModel(void) const{return model;}
     inline PointerMaterial getMaterial(void) const{return material;}
+
+    inline static PointerMaterialedModel create(std::string fileName, Loader loader){
+        auto diffuse = TextureManager::instance.createTexture2D(TEXTURES_FOLDER + fileName + TEXTURES_EXTENSION);
+        auto rawModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ(MODELS_FOLDER + fileName + MODELS_EXTENSION)));
+        return PointerMaterialedModel(new MaterialedModel(rawModel, Material::create(diffuse/*, normal*/)));
+    }
+
+    inline static PointerMaterialedModel create(PointerRawModel model, PointerMaterial material){
+        return PointerMaterialedModel(new MaterialedModel(model, material));
+    }
 };
-typedef std::shared_ptr<MaterialedModel> PointerMaterialedModel;
 
-inline PointerMaterialedModel createMaterialedModel(std::string fileName, Loader loader){
-    auto diffuse = TextureManager::instance.createTexture2D(TEXTURES_FOLDER + fileName + TEXTURES_EXTENSION);
-    auto rawModel = PointerRawModel(loader.loadToVao(ContentLoader::loadOBJ(MODELS_FOLDER + fileName + MODELS_EXTENSION)));
-    return PointerMaterialedModel(new MaterialedModel(rawModel, createMaterial(diffuse/*, normal*/)));
-}
-
-inline PointerMaterialedModel createMaterialedModel(PointerRawModel model, PointerMaterial material){
-    return PointerMaterialedModel(new MaterialedModel(model, material));
-}
 #endif //GRAPHICSPROJECT_MATERIALEDMODEL_H

@@ -6,11 +6,13 @@
 #define GAMEENGINE_BLOCK_H
 
 #include "WoldConst.h"
+#include "BlockTypes.h"
 #include <src/utils/Vectors.h>
 #include <src/rendering/shader/BasicShader.h>
 #include <src/rendering/model/RawModel.h>
+#include <src/components/voxel/advanced/BlockID.h>
 
-enum BlockType { red, green, blue, yellow, magenta, aqua, white, black};
+//enum BlockType { red, green, blue, yellow, magenta, aqua, white, black};
 #include "Chunk.h"
 
 class Chunk;
@@ -23,7 +25,8 @@ public:
     const static unsigned char Y_MINUS  = 0x08; // hex for 0000 1000
     const static unsigned char Z_PLUS   = 0x10; // hex for 0001 0000
     const static unsigned char Z_MINUS  = 0x20; // hex for 0010 0000
-    Block(int x, int y, int z, Chunk * parent, BlockType type);
+//    Block(int x, int y, int z, Chunk * parent, BlockType type);
+    Block(int x, int y, int z, Chunk * parent, const BlockIDs type);
 
     inline void show(void) const{
         printf("block[%d, %d, %d]\n", x, y, z);
@@ -47,18 +50,18 @@ public:
 
 
     bool isVisible(void);
-    inline static Vector4f getColorByType(BlockType type){
-        switch (type){
-            case BlockType::yellow: return Vector4f(1, 1, 0, 1);
-            case BlockType::aqua: return Vector4f(0, 1, 1, 1);
-            case BlockType::magenta: return Vector4f(1, 0, 1, 1);
-            case BlockType::red: return Vector4f(1, 0, 0, 1);
-            case BlockType::green: return Vector4f(0, 1, 0, 1);
-            case BlockType::blue: return Vector4f(0, 0, 1, 1);
-            case BlockType::black: return Vector4f(0, 0, 0, 1);
-            default: return Vector4f(1, 1, 1, 1);
-        }
-    }
+//    inline static Vector4f getColorByType(BlockType type){
+//        switch (type){
+//            case BlockType::yellow: return Vector4f(1, 1, 0, 1);
+//            case BlockType::aqua: return Vector4f(0, 1, 1, 1);
+//            case BlockType::magenta: return Vector4f(1, 0, 1, 1);
+//            case BlockType::red: return Vector4f(1, 0, 0, 1);
+//            case BlockType::green: return Vector4f(0, 1, 0, 1);
+//            case BlockType::blue: return Vector4f(0, 0, 1, 1);
+//            case BlockType::black: return Vector4f(0, 0, 0, 1);
+//            default: return Vector4f(1, 1, 1, 1);
+//        }
+//    }
 
     inline void setUpVisibility(void){
         xNeighborPlus && xNeighborPlus->isVisible() ? turnOffOption(X_PLUS) : turnOnOption(X_PLUS);
@@ -73,6 +76,7 @@ public:
     void setNeighbor(Block * block);
     inline Vector4f getColor(void) const{ return color; }
     inline Chunk * getParent(void) const{ return parent; }
+    inline BlockIDs getType(void) const{return blockType; }
     inline int getRenderOptions(void){return options;}
     inline Matrix4f * getTranslation(void){return &translation;}
     inline Vector3f getScale(void) const{return scale;}
@@ -100,7 +104,8 @@ private:
     Block * zNeighborPlus   = nullptr;
     Block * zNeighborMinus  = nullptr;
     int options = VISIBLE_ALL;
-    const BlockType type;
+//    const BlockType type;
+    const BlockIDs blockType;
     const int x, y, z;
     Chunk * parent;
     const Vector4f color;

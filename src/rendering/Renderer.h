@@ -38,7 +38,6 @@ class Renderer : public BasicRenderer{
         void addShader(std::string key, PointerBasicShader shader);
         void cleanUp(void) override;
         void initShaders(void);
-
         void addTexture(GuiTexture texture){
             textures.push_back(texture);
         }
@@ -76,7 +75,7 @@ class Renderer : public BasicRenderer{
         WaterFrameBuffer wf;
 
         std::map<std::string, PointerBasicShader> shaders;
-        const PointLight * light = new PointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1));
+//        const PointLight * light = new PointLight(Vector3f(0, 0, 0), Vector3f(1, 1, 1));
         std::vector<GuiTexture> textures;
         //PRIVATE METHODS
 };

@@ -62,7 +62,7 @@ class PostProccessing {
             }
         }
 private:
-    std::vector<float> POSITIONS{ -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f};
+    VectorF POSITIONS{ -1.0f, 1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f, -1.0f};
     PointerRawModel quad;
     Filter * contrastChanger;
     Filter * vBlur;

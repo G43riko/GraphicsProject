@@ -32,6 +32,9 @@
 #define PARTICLE_SHADER "particleShader"
 #define DEFERRED_SHADER "deferredShader"
 
+#define DEFAUL_MOVE_SPEED 1.0f
+#define DEFAUL_ROT_SPEED 0.05f
+
 #define DEFAULT_WATER_SIZE 50
 #define DEFAULT_WATER_HEIGHT 1.5f
 #define WATER_VERTICES    { -1.0f, -1.0f, -1.0f,  1.0f,  1.0f, -1.0f,  1.0f, -1.0f, -1.0f, 1.0f, 1.0f, 1.0f}
@@ -57,10 +60,13 @@
 #define EXTENSION_FRAGMENT ".frag"
 #define EXTENSION_VERTEX ".vert"
 #define EXTENSION_GEOMETRY ".geom"
+#define EXTENSION_GLSL ".glsl"
 
 #define TEXTURES_FOLDER "res/textures/"
+#define SKIES_FOLDER "res/textures/skies/"
 #define MODELS_FOLDER "res/models/"
 #define SHADERS_FOLDER "res/shaders/"
+#define INCLUDE_IDENTIFICATOR "#include"
 #define MODELS_EXTENSION ".obj"
 #define TEXTURES_EXTENSION ".png"
 
@@ -81,7 +87,7 @@
 #define DEFAULT_CAMERA_FOV 70.0f
 #define DEFAULT_CAMERA_NEAR_PLANE 0.1f
 #define DEFAULT_CAMERA_FAR_PLANE 1000.0f
-#define DEFAULT_CAMERA_POSITION 0, 0, 0
+#define DEFAULT_CAMERA_POSITION {0, 0, 0}
 
 
 

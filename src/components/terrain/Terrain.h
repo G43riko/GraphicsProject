@@ -33,7 +33,7 @@ public:
         else{
             initMap(vertices, vertices);
         }
-        model = createMaterialedModel(generateTerrain(loader, textMulti), createMaterial(texture));
+        model = MaterialedModel::create(generateTerrain(loader, textMulti), Material::create(texture));
     }
 
     inline PointerMaterialedModel getModel(void) const{return model; }

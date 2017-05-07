@@ -10,11 +10,9 @@
 #include <math.h>
 #include <random>
 #include <src/utils/Vectors.h>
+#include <src/utils/GTypes.h>
 
-#define SET_IF_IS_NULL(el, val) \
-if(el == nullptr){              \
-    el = val;                   \
-}
+#define SET_IF_IS_NULL(el, val) if(el == nullptr){el = val; }
 
 #define CHECK_AND_CLEAR(el) \
     if(el){                 \
@@ -22,7 +20,7 @@ if(el == nullptr){              \
         delete el;          \
         el = nullptr;       \
     }
-
+#define START_WITH(x, y) (x.find(y) == 0)
 #define ERROR(x) std::cerr << x << ": " <<  __FILE__ << " > " << __FUNCTION__ << " > " <<  __LINE__ << std::endl
 #define PRINT(x) std::cout << x << std::endl
 #define DEBUG(x) //std::cerr << x << std::endl
@@ -85,8 +83,7 @@ if(el == nullptr){              \
 
 /*******************************************OTHERS******************************************************/
 
-class Vector3f;
-std::vector<Vector3f> getKerner(void);
+VectorV3 getKerner(void);
 
 double random(double min, double max);
 /*
@@ -98,16 +95,19 @@ int randomI(double min, double max){
     return (int)random(min, max);
 }
 */
+#define RANDOMI(LO, HI) (LO + static_cast <int> (rand()) / ( static_cast <int> (RAND_MAX / (HI - LO))))
+#define RANDOM(LO, HI) (LO + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (HI - LO))))
+#define RANDOMF(LO, HI) (LO + rand() / ( RAND_MAX / (HI - LO)))
 
-inline double random(double LO, double HI){
-    return LO + static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX / (HI - LO)));
+inline double grandom(double LO, double HI){
+    return RANDOMF(LO, HI);
 }
 /*
-inline std::vector<Vector3f> getKerner(void){
+inline VectorV3 getKerner(void){
     std::uniform_real_distribution<float> randomFloats(0.0, 1.0);
     std::default_random_engine generator;
 
-    std::vector<Vector3f> ssaoKernel;
+    VectorV3 ssaoKernel;
     for(int i=0 ; i<64 ; i++){
         float scale = (float)i / 64;
         scale =  LERP(0.1f, 1.0f, scale * scale);

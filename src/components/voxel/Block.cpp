@@ -4,14 +4,26 @@
 
 #include "Block.h"
 
-Block::Block(int x, int y, int z, Chunk * parent, const BlockType type)
-          : //translation(Matrix4f::initTranslation((x * BLOCK_SIZE_X) << 1, (y * BLOCK_SIZE_Y) << 1, (z * BLOCK_SIZE_Z) << 1)),
-          type(type),
-          x(x),
-          y(y),
-          z(z),
-          parent(parent),
-          color(getColorByType(type)){
+//Block::Block(int x, int y, int z, Chunk * parent, const BlockType type)
+//          : //translation(Matrix4f::initTranslation((x * BLOCK_SIZE_X) << 1, (y * BLOCK_SIZE_Y) << 1, (z * BLOCK_SIZE_Z) << 1)),
+//          type(type),
+//          blockType(BlockIDs::NUM_BLOCK_TYPES),
+//          x(x),
+//          y(y),
+//          z(z),
+//          parent(parent),
+//          color(getColorByType(type)){
+//    parent -> getWorld() -> blocks.push_back(this);
+//}
+
+Block::Block(int x, int y, int z, Chunk * parent, const BlockIDs type)
+        : //translation(Matrix4f::initTranslation((x * BLOCK_SIZE_X) << 1, (y * BLOCK_SIZE_Y) << 1, (z * BLOCK_SIZE_Z) << 1)),
+//        type(BlockType::aqua),
+        blockType(type),
+        x(x),
+        y(y),
+        z(z),
+        parent(parent){
     parent -> getWorld() -> blocks.push_back(this);
 }
 

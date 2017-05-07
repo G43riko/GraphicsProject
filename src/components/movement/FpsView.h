@@ -24,9 +24,6 @@ private:
     bool rotate = false;
     bool move = false;
     bool flyMode = true;
-
-    inline float getMoveSpeed(void) const{return 1.0f; }
-    inline float getRotSpeed(void) const{return 0.05f; }
     inline void checkMoveKeys(float delta){
         /*	MOVING KEYS
          * 	W, A, S, D

@@ -17,6 +17,9 @@ private:
     BasicShader * shader = new EntityShader();
     BasicShader * wireFrameShader = new WireframeShader();
 public:
+    inline EntityMaster(PointerCamera camera){
+        RenderUtil::updateProjectionMatrix(shader, camera);
+    }
     void renderEntities(EntitiesList entities,
                         std::vector<PointerPointLight> lights,
                         PointerCamera camera,
@@ -24,6 +27,18 @@ public:
                         Vector4f clipPlane,
                         Master& master);
 
+    void renderWireFrame(EntitiesList entities, PointerCamera camera);
+
+
+    inline void cleanUp(void) const{
+        shader -> cleanUp();
+        delete shader;
+    }
+
+    inline BasicShader * getShader(void) const{
+        return shader;
+    }
+    /*
     void renderEntities(std::vector<PointerEntity> entities,
                         std::vector<PointerPointLight> lights,
                         PointerCamera camera,
@@ -36,11 +51,7 @@ public:
                       PointerCamera camera,
                       int options,
                       Vector4f clipPlane);
-
-    void renderWireFrame(EntitiesList entities, PointerCamera camera);
-    EntityMaster(PointerCamera camera);
-    void cleanUp(void);
-    BasicShader * getShader(void);
+    */
 };
 
 

@@ -3,6 +3,7 @@
 //
 
 #include "Chunk.h"
+#include "BlockTypes.h"
 
 
 void Chunk::setUpNeigbors(void){
@@ -113,8 +114,9 @@ void Chunk::generateAllBlocks(void){
 }
 
 void Chunk::generateBlock(int x, int y, int z){
-    if(random(0, 5) > 1){
-        setBlock(new Block(x, y, z, this, getRandomType()), x, y, z);
+    if(grandom(0, 5) > 1){
+        //setBlock(new Block(x, y, z, this, getRandomType()), x, y, z);
+        setBlock(new Block(x, y, z, this, BlockTypes::getRandomType()), x, y, z);
     }
     else{
         setBlock(nullptr, x, y, z);

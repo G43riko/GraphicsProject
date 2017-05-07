@@ -5,7 +5,7 @@
 #ifndef GRAPHICSPROJECT_HEIGHTGENERATOR_H
 #define GRAPHICSPROJECT_HEIGHTGENERATOR_H
 
-#include "src/utils/utils.h"
+#include "src/utils/GUtils.h"
 
 class HeightGenerator {
     private:

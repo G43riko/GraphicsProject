@@ -81,11 +81,11 @@ private:
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -2.4f);
 
-        return PointerTexture2D(new Texture2D(data.title, texture_id, data.width, data.height));
+        return Texture2D::create(data.title, texture_id, data.width, data.height);
     };
 
     inline PointerCubeTexture initCubeTexture(CubeImageData * datas){
-        std::vector<std::string> TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
+        VectorS TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
         GLuint texture_id;
         glGenTextures(1, &texture_id);
         glActiveTexture(GL_TEXTURE0);
@@ -94,14 +94,14 @@ private:
         for(unsigned int i=0 ; i<6 ; i++){
             unsigned int width;
             unsigned int height;
-            std::vector<unsigned char> image;
-            lodepng::decode(image, width, height, "res/textures/skies/" + datas[0].title + TITLES[i] + ".png");
+            VectorUC image;
+            lodepng::decode(image, width, height, SKIES_FOLDER + datas[0].title + TITLES[i] + TEXTURES_EXTENSION);
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.data());
         }
 
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        PointerCubeTexture result = PointerCubeTexture(new CubeTexture(datas[0].title, texture_id));
+        PointerCubeTexture result = CubeTexture::create(datas[0].title, texture_id);
         delete[] datas;
         return result;
     };
