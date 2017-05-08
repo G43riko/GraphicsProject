@@ -19,6 +19,9 @@
 #define MAX_LIGHTS 8
 #define INFO_LENGTH 1024
 
+#define KEYWORD_UNIFORM "uniform"
+#define KEYWORD_SEMICOLUM ";"
+
 class BasicShader{
 private:
     std::map<std::string, int> uniforms;
@@ -29,6 +32,26 @@ private:
     const std::string vertexFileName;
     const std::string fragmentFileName;
 
+    inline void addAllUniforms(std::string content){
+        long int uniformLocation = content.find(KEYWORD_UNIFORM, 0);
+        while(uniformLocation != -1){
+            long int begin = uniformLocation + sizeof(KEYWORD_UNIFORM);
+            long int end = content.find(KEYWORD_SEMICOLUM, begin);
+            std::string uniformLine = content.substr(begin, end - begin);
+            std::string uniformName = uniformLine.substr(uniformLine.find(" "));
+            uniformLocation = content.find(KEYWORD_UNIFORM, uniformLocation + sizeof(KEYWORD_UNIFORM));
+        }
+    }
+//    inline void addAllUniforms(std::string content){
+//        long int uniformLocation = content.find(KEYWORD_UNIFORM, 0);
+//        while(uniformLocation != -1){
+//            long int begin = uniformLocation + sizeof(KEYWORD_UNIFORM);
+//            long int end = content.find(KEYWORD_SEMICOLUM, begin);
+//            std::string uniformLine = content.substr(begin, end - begin);
+//            std::string uniformName = uniformLine.substr(uniformLine.find(" "));
+//            uniformLocation = content.find(KEYWORD_UNIFORM, uniformLocation + sizeof(KEYWORD_UNIFORM));
+//        }
+//    }
     inline int getUniformLocation(const std::string uniformName) const{
         return glGetUniformLocation(this -> shader, uniformName.c_str());
     }
@@ -40,9 +63,9 @@ private:
         std::string content;
 
         ContentLoader::loadShader(fileName, &content);
-        if(fileName == "VoxelShader.frag"){
-            PRINT(content);
-        }
+//        if(fileName == "VoxelShader.frag"){
+//            updateAllUniforms(content);
+//        }
         const char * shaderContentPointer = content.c_str();
 
         //načíta obsah shadera

@@ -26,6 +26,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/WoldConst.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Chunk.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/BlockTypes.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Chunk.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Block.cpp" isTestSource="false" />
@@ -37,23 +38,25 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/BlockDatabase.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/advanced/AirType.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Block.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/AbstractChunk.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/World.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/Block.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/ChunkManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkIntroGui.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkIntroGui.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/ThreadUtils.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Vectors.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/OBJLoader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/grandom.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/GTypes.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Array3D.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/FileLoader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.h" isTestSource="false" />
@@ -71,16 +74,16 @@
           <root url="file:///usr/include" />
           <root url="file:///usr/lib/x86_64-linux-gnu/dbus-1.0/include" />
           <root url="file:///usr/lib/x86_64-linux-gnu/glib-2.0/include" />
-          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
           <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
           <root url="file:///usr/local/include" />
         </CLASSES>
         <SOURCES>
           <root url="file:///usr/include" />
           <root url="file:///usr/lib/x86_64-linux-gnu/dbus-1.0/include" />
           <root url="file:///usr/lib/x86_64-linux-gnu/glib-2.0/include" />
-          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
           <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include" />
+          <root url="file:///usr/lib/gcc/x86_64-linux-gnu/5/include-fixed" />
           <root url="file:///usr/local/include" />
         </SOURCES>
       </library>

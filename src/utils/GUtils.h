@@ -32,7 +32,8 @@
 #define COSI(a) (int)cos(num)
 #define COSF(a) (float)cos(a)
 
-#define MAP_CONTAINS_KEY(map, key) (map.find(key) != map.end())
+//#define MAP_CONTAINS_KEY(map, key) (map.find(key) != map.end())
+#define MAP_CONTAINS_KEY(map, key) (!map.empty() && map.count(key) > 0)
 
 #ifndef ABS
     #define ABS(x) (x < 0 ? -x : x)
