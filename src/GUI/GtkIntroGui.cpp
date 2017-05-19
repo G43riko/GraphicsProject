@@ -3,7 +3,7 @@
 //
 
 #include <src/core/BasicEngine.h>
-#include <src/core/MainApplication.h>
+#include <src/misc/MainApplication.h>
 #include "GtkIntroGui.h"
 
 void GtkIntroGui::gameStart(GtkWidget *widget, gpointer data){

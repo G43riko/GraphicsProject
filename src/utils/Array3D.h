@@ -3,6 +3,7 @@
 //
 
 #ifndef GAMEENGINE_ARRAY3D_H
+
 #define GAMEENGINE_ARRAY3D_H
 
 #include <array>
@@ -24,4 +25,3 @@ private:
     const uint32_t _sizeXY = sizeX * sizeY;
     std::array<T, sizeX * sizeY * sizeZ> _array;
 };
-#endif //GAMEENGINE_ARRAY3D_H

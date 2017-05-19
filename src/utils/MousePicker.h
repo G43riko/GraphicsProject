@@ -6,21 +6,22 @@
 #define GRAPHICSPROJECT_MOUSEPICKER_H
 
 
-#include "Vectors.h"
-#include "Matrix4f.h"
-#include "../rendering/Camera.h"
+#include "src/utils/math/objects/Vectors.h"
+#include "src/utils/math/objects/Matrix4f.h"
 #include "../utils/Input.h"
-class Camera;
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+class BasicCamera;
 
 class MousePicker {
 private:
     Vector3f currentRay;
 	Matrix4f projectionMatrix;
 	Matrix4f viewMatrix;
-	Camera * camera;
+	BasicCamera * camera;
 
 
-	inline Vector3f toWorldCoords(Vector4f eyeCoords){
+	inline Vector3f toWorldCoords(const Vector4f& eyeCoords){
 		Matrix4f invertedview = Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(viewMatrix)));
 
 		Vector4f rayWorld = Matrix4f::transform(invertedview, eyeCoords);
@@ -28,7 +29,7 @@ private:
 		return mouseRay.normalize();
 	}
 
-	inline Vector4f toEyeCoords(Vector4f clipCoords){
+	inline Vector4f toEyeCoords(const Vector4f& clipCoords){
 		Matrix4f invertedProjection =  Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(projectionMatrix)));
 		Vector4f eyeCoords = Matrix4f::transform(invertedProjection, clipCoords);
 		return Vector4f(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);
@@ -41,9 +42,7 @@ private:
 	}
 
 	void update(void);
-	MousePicker(Camera * camera);
 
-public:
 	inline Vector3f calculateMouseRay(void){
 		Vector2f mousePos;// = Input::getMousePosition();
 		float mouseX = mousePos.x;
@@ -56,7 +55,9 @@ public:
 		Vector3f worlRay = toWorldCoords(eyeCoords);
 		return worlRay;
 	}
-	inline Vector3f getCurrentRay() {
+public:
+	MousePicker(BasicCamera * camera);
+	inline Vector3f getCurrentRay(void) {
 		update();
 		return currentRay;
 	}

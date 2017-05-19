@@ -6,7 +6,7 @@
 #define GRAPHICSPROJECT_ENVIRONMENT_H
 
 
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 
 class Environment {
     private:

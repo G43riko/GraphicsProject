@@ -140,10 +140,6 @@ void main2() {
     vec3 unitNormal = normalize(surfaceNormal);
     vec3 totalDifuse = material.ambientColor;
     vec3 totalSpecular = vec3(0);
-
-
-
-
     vec3 unitVectorToCamera = normalize(toCameraVector);
     for(int i=0 ; i<MAX_LIGHTS ; i++){
         vec3 unitLightVector = normalize(toLightVector[i]);

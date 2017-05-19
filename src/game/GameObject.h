@@ -19,12 +19,12 @@ protected:
 public:
     virtual void hitFloor(float height){
         if(NEZ(reflectance)){
-            object->getTransform()->getPosition()->setY(height);
+            object->getTransform()->getPosition().setY(height);
             velocity.y *= -reflectance;
         }
         else{
             velocity.x = velocity.y = velocity.z = 0;
-            object->getTransform()->getPosition()->setY(height);
+            object->getTransform()->getPosition().setY(height);
         }
     }
     virtual void update(float delta){
@@ -35,7 +35,7 @@ public:
     }
 
     inline Vector3f getNextPos(void) const{
-        return *object->getTransform()->getPosition() + velocity;
+        return object -> getTransform() -> getPosition() + velocity;
     }
     inline void setVelocity(const Vector3f & value){
         velocity = value;

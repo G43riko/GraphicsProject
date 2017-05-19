@@ -7,7 +7,7 @@
 
 
 #include <src/rendering/material/Texture2D.h>
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 #include <src/utils/Loader.h>
 #include "ToFrameBufferRendering.h"
 #include <src/rendering/shader/BasicShader.h>

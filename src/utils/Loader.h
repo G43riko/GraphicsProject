@@ -94,7 +94,7 @@ public:
         return RawModel::create(data -> vaoID, (GLuint)(positions.size() / dimensions));
     }
 
-    inline PointerRawModel loadToVao(const PointerMesh mesh, GLenum renderType = GL_TRIANGLES){
+    inline PointerRawModel loadToVao(const PointerMesh& mesh, GLenum renderType = GL_TRIANGLES){
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         bindIndicesBuffer(mesh -> getIndices(), &data -> vboIndices);

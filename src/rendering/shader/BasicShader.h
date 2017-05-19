@@ -10,9 +10,9 @@
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <src/utils/Matrix4f.h>
-#include <src/utils/FileLoader.h>
-#include <src/utils/Const.h>
+#include <src/utils/math/objects/Matrix4f.h>
+#include <src/utils/resources/FileLoader.h>
+#include <src/utils/GConst.h>
 #include <src/components/lights/SpotLight.h>
 #include <src/components/lights/DirectionalLight.h>
 
@@ -32,7 +32,7 @@ private:
     const std::string vertexFileName;
     const std::string fragmentFileName;
 
-    inline void addAllUniforms(std::string content){
+    inline void addAllUniforms(const std::string content){
         long int uniformLocation = content.find(KEYWORD_UNIFORM, 0);
         while(uniformLocation != -1){
             long int begin = uniformLocation + sizeof(KEYWORD_UNIFORM);

@@ -24,6 +24,7 @@ class Vector3f;
 class Material;
 class RawModel;
 class Particle;
+class Camera;
 class Entity;
 class Vertex;
 class Mesh;
@@ -41,6 +42,7 @@ typedef std::shared_ptr<RawModel> PointerRawModel;
 typedef std::shared_ptr<Material> PointerMaterial;
 typedef std::shared_ptr<Entity> PointerEntity;
 typedef std::shared_ptr<Vertex> PointerVertex;
+typedef std::shared_ptr<Camera> PointerCamera;
 typedef std::shared_ptr<Mesh> PointerMesh;
 
 typedef std::map<PointerParticleTexture, std::vector<Particle>> ParticlesList;
@@ -51,8 +53,8 @@ typedef std::vector<float> VectorF;
 typedef std::vector<Vector3f> VectorV3;
 typedef std::vector<Vector2f> VectorV2;
 typedef std::vector<std::string> VectorS;
-typedef std::vector<unsigned int> VectorUI;
-typedef std::vector<unsigned char> VectorUC;
+typedef std::vector<uint> VectorUI;
+typedef std::vector<u_char> VectorUC;
 
 typedef struct objectType{
     std::string title;
@@ -62,6 +64,15 @@ typedef struct objectType{
 
 typedef std::map<std::string, ObjectType*> SOMap;
 typedef std::map<std::string, std::string> SSMap;
+
+enum Directions{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    FORWARD,
+    BACK
+};
 
 typedef struct renderOptions{
     bool deferred   = false;
@@ -125,8 +136,8 @@ typedef struct masterOptions{
 
 typedef struct cubeImagedata{
     VectorUC data;
-    unsigned int width;
-    unsigned int height;
+    uint width;
+    uint height;
     std::string title;
 } CubeImageData;
 

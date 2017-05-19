@@ -3,10 +3,11 @@
 //
 
 #include "ParticleManager.h"
+#include "ParticleSystemSimple.h"
 
 void ParticleManager::createSystem(PointerTexture2D texture, float pps, float speed, float gravityComplient, float lifeLength){
     PointerParticleTexture pointerTexture = textures[texture->getTitle()];
-    std::shared_ptr<ParticleSystemSimple> system = std::shared_ptr<ParticleSystemSimple>(new ParticleSystemSimple(pointerTexture, this, pps, speed, gravityComplient, lifeLength));
+    std::shared_ptr<ParticleSystemSimple> system = std::shared_ptr<ParticleSystemSimple>(new ParticleSystemSimple(pointerTexture, *this, pps, speed, gravityComplient, lifeLength));
     systems.push_back(system);
 }
 void ParticleManager::update(float delta){

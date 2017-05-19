@@ -9,14 +9,22 @@
 #include <set>
 #include <math.h>
 #include <random>
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 #include <src/utils/GTypes.h>
 
 #define SET_IF_IS_NULL(el, val) if(el == nullptr){el = val; }
 
+#define IS_NULL(x) (x == nullptr)
+#define IS_NOT_NULL(x) (x != nullptr)
+
 #define CHECK_AND_CLEAR(el) \
-    if(el){                 \
+    if(IS_NOT_NULL(el)){    \
         el -> cleanUp();    \
+        delete el;          \
+        el = nullptr;       \
+    }
+#define CHECK_AND_DEL(el)   \
+    if(IS_NOT_NULL(el)){    \
         delete el;          \
         el = nullptr;       \
     }
@@ -46,8 +54,6 @@
 //Equal
 #define EQ(a, b) !(a < b || a > b)
 
-#define IS_NULL(x) (x == nullptr)
-#define IS_NOT_NULL(x) (x != nullptr)
 
 //Not Equal
 #define NEQ(a, b) !EQ(a, b)
@@ -64,11 +70,11 @@
 #define TO_DEGREES(x) (float)((x) * 180.0f / MATH_PI)
 
 #ifndef MAX
-    #define MIN (a, b) a < b ? a : b
+    #define MIN (a, b) (a < b ? a : b)
 #endif
 
 #ifndef MAX
-    #define MAX (a, b) a > b ? a : b
+    #define MAX (a, b) (a > b ? a : b)
 #endif
 
 #ifndef CLAMP
@@ -84,7 +90,10 @@
 
 /*******************************************OTHERS******************************************************/
 
-VectorV3 getKerner(void);
+template<typename T, typename ...Args>
+inline std::unique_ptr<T> make_unique( Args&& ...args ) {
+    return std::unique_ptr<T>( new T( std::forward<Args>(args)... ) );
+}
 
 double random(double min, double max);
 /*

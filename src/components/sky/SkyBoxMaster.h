@@ -56,7 +56,7 @@ public:
             return;
         }
         shader -> bind();
-        shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
+        shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
 
         RenderUtil::prepareModel(model, 1);
         sky -> bind();

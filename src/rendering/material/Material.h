@@ -23,6 +23,7 @@ class Material {
 public:
 
 
+//    inline Texture2D& getSpecular(void) const{return *specular;};
     inline PointerTexture2D getSpecular(void) const{return specular;};
     inline PointerTexture2D getDiffuse(void) const{return diffuse;};
     inline PointerTexture2D getNormal(void) const{return normal;};

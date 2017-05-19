@@ -9,6 +9,8 @@
 #include <vector>
 #include <time.h>
 
+#include <chrono>
+
 #include <src/core/BasicApplication.h>
 
 class BasicEngine {
@@ -175,6 +177,48 @@ public:
      * Funkcia sa zavolá len raz a spustí celý engine
      */
     inline void start(void){
+        const uint FPS = 30, frameTime = 1000000 / FPS;
+        uint fps;
+        auto start = std::chrono::high_resolution_clock::now();
+        auto startLoopTime = start, middleLoopTime = start, endLoopTime = start;
+        float delta = 1;
+        long long microseconds, loopTime;
+
+        init();
+        while((_showGui && !_gui.getExitRequest()) || (!_showGui && _running)){
+            fps = 0;
+            start = std::chrono::high_resolution_clock::now();
+            do{
+                startLoopTime = std::chrono::high_resolution_clock::now();
+                //UPDATE
+                fps++;
+                if(_running){
+                    if(WindowManager::isCloseRequest() || !_app -> isRunning()){
+                        appStop();
+                    }
+                }
+                update(delta);
+
+                //////////SYS
+                middleLoopTime = std::chrono::high_resolution_clock::now();
+                loopTime = std::chrono::duration_cast<std::chrono::microseconds>(middleLoopTime - startLoopTime).count();
+                if(loopTime <= frameTime){
+                    usleep((uint)(frameTime - loopTime));
+                }
+                endLoopTime = std::chrono::high_resolution_clock::now();
+                microseconds = std::chrono::duration_cast<std::chrono::microseconds>(endLoopTime - start).count();
+
+                delta = (float)frameTime /  std::chrono::duration_cast<std::chrono::microseconds>(endLoopTime - startLoopTime).count();
+
+            } while(microseconds < 1000000);
+
+            if(_running){
+                _app -> onSecondElapse(fps);
+            }
+        }
+        cleanUp();
+    }
+    inline void start2(void){
         DEBUG("BasicEngine::start - start: " << glfwGetTime());
         double currentTime  = glfwGetTime();
         float delta         = 1;

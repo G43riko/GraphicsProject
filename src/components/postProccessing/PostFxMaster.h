@@ -65,7 +65,7 @@ public:
 //            hBlur -> render(colorTexture);
 //            vBlur -> render(hBlur->getOutputTexture());
         filters[FILTER::CONTRAST] ->getShader() -> bind();
-        filters[FILTER::CONTRAST] ->getShader() -> updateUniformf("contrast", contrast);
+        filters[FILTER::CONTRAST] ->getShader() -> updateUniformf(UNIFORM_CONTRAST, contrast);
         filters[FILTER::CONTRAST] -> render(fbos[fboName]->getColourTexture());
 //            contrastChanger -> render(vBlur->getOutputTexture());
 //            combineFilter -> render(colorTexture, contrastChanger -> getOutputTexture());

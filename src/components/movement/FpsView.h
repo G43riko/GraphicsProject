@@ -49,12 +49,12 @@ private:
          */
 
         if(Input::isKeyDown(GLFW_KEY_Q)){
-            camera -> getTransform() -> getRotation()->rotate(Vector3f(0.0f, getRotSpeed() * delta, 0.0f));
+            camera -> getTransform() -> getRotation().rotate(Vector3f(0.0f, getRotSpeed() * delta, 0.0f));
             rotate = true;
         }
 
         if(Input::isKeyDown(GLFW_KEY_E)){
-            camera -> getTransform() -> getRotation() -> rotate(Vector3f(0.0f, getRotSpeed() * -delta, 0.0f));
+            camera -> getTransform() -> getRotation().rotate(Vector3f(0.0f, getRotSpeed() * -delta, 0.0f));
             rotate = true;
         }
 
@@ -85,7 +85,7 @@ private:
             camera->getTransform()->rotate(Vector3f(0, 1, 0), TO_RADIANS(-deltaPos.x * getRotSpeed()));
         }
         if (rotX) {
-            camera->getTransform()->rotate(camera->getTransform()->getRotation()->getRight(), TO_RADIANS(-deltaPos.y * getRotSpeed()));
+            camera->getTransform()->rotate(camera->getTransform()->getRotation().getRight(), TO_RADIANS(-deltaPos.y * getRotSpeed()));
         }
 
         if (rotY || rotX) {

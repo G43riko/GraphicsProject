@@ -6,7 +6,7 @@
 #define GRAPHICSPROJECT_PARTICLESYSTEMSIMPLE_H
 
 
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 #include "ParticleManager.h"
 
 class ParticleManager;
@@ -17,11 +17,12 @@ private:
     float speed;
     float gravityComplient;
     float lifeLength;
-    ParticleManager *parent;
+    ParticleManager parent;
     PointerParticleTexture texture;
 public:
-    inline ParticleSystemSimple(PointerParticleTexture texture, ParticleManager *parent, float pps, float speed, float gravityComplient, float lifeLength) : texture(texture) {
-        this->parent = parent;
+    inline ParticleSystemSimple(PointerParticleTexture texture, ParticleManager& parent, float pps, float speed, float gravityComplient, float lifeLength) :
+            parent(parent),
+            texture(texture){
         this->pps = pps;
         this->speed = speed;
         this->gravityComplient = gravityComplient;

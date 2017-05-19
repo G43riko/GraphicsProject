@@ -76,7 +76,7 @@ void Master::init(Loader loader, int width, int height, PointerCamera camera, Po
     if (options.useWaters) {
         waterMaster = new WaterMaster(camera, loader);
     };
-    voxelMaster = new VoxelMaster(camera);
+    voxelMaster = new VoxelMaster(camera, nullptr);
     postFxMaster = new PostFxMaster(loader, false, width, height);
     postFxMaster->addFbo("fbo1", width, height, FBO_DEPTH_TEXTURE);
 }

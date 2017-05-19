@@ -8,6 +8,7 @@
 #include <src/rendering/RenderUtil.h>
 #include "Particle.h"
 #include "ParticleManager.h"
+
 class ParticleMaster {
 private:
     PointerRawModel model;

@@ -6,7 +6,7 @@
 #define GRAPHICSPROJECT_ENTITY_H
 
 
-#include "../../utils/Vectors.h"
+#include "src/utils/math/objects/Vectors.h"
 #include "MaterialedModel.h"
 #include "src/utils/Transform.h"
 #include "src/utils/GTypes.h"

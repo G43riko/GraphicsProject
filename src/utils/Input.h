@@ -6,7 +6,7 @@
 #define GRAPHICSPROJECT_INPUT_H
 
 
-#include "Vectors.h"
+#include "src/utils/math/objects/Vectors.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "../rendering/WindowManager.h"

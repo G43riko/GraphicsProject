@@ -8,10 +8,9 @@
 #include <string>
 #include <map>
 #include <vector>
-#include <src/utils/FileLoader.h>
+#include <src/utils/resources/FileLoader.h>
 #include "ParticleTexture.h"
 #include "Particle.h"
-#include "ParticleSystemSimple.h"
 
 class ParticleSystemSimple;
 

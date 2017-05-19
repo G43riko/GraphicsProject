@@ -7,7 +7,7 @@
 
 
 #include <src/rendering/material/Texture2D.h>
-#include <src/utils/FileLoader.h>
+#include <src/utils/resources/FileLoader.h>
 
 class ParticleTexture {
 public:

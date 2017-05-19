@@ -47,7 +47,8 @@ uniform int levels;
 
 const vec3 ambientLight = vec3(1, 0.9, 1);
 void main() {
-    //FragmentColor = vec4(vec3(0.0f, 1.0f, 1.0f), 1.0f);
+    FragmentColor = texture(textureSampler, pass_Texture);
+    return;
     float objectNearestLight = texture(shadowMap, shadowCoords.xy).r;
     float lightFactor = 1.0f;
     //SHADOWS

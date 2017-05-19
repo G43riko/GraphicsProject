@@ -32,10 +32,10 @@ void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
 
     shader -> updateUniformf("refractiveRation", refractiveRation);
     //waveStrength
-    shader -> updateUniform3f(CAMERA_POSITION, camera -> getPosition());
+    shader -> updateUniform3f(UNIFORM_CAMERA_POSITION, camera -> getPosition());
     shader -> updateUniformf("moveFactor", moveFactor);
     moveFactor = (float)fmod(moveFactor, 1);
-    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
+    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
 
     RenderUtil::prepareModel(quad, 1);
 
@@ -43,7 +43,7 @@ void WaterMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
         Matrix4f modelMatrix = Maths::createTransformationMatrix(water -> getX(), water -> getHeight(), water -> getZ(),
                                                                  0, 0, 0,
                                                                  water -> getSize(), water -> getSize(), water -> getSize());
-        shader -> updateUniform4m("modelMatrix", modelMatrix);
+        shader -> updateUniform4m(UNIFORM_MODEL_MATRIX, modelMatrix);
         glDrawArrays(GL_TRIANGLES, 0, quad -> getVertexCount());
     }
 

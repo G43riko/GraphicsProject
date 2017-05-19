@@ -6,7 +6,7 @@
 #define GRAPHICSPROJECT_OBJECT_H
 
 
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 #include <src/rendering/model/Entity.h>
 
 class Object {

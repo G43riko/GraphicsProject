@@ -15,14 +15,14 @@ class CubeTexture {
 private:
     const GLuint textureID;
     const std::string title;
-    inline CubeTexture(const std::string& title, const GLint& textureID) : textureID(textureID), title(title){};
+    inline CubeTexture(const std::string& title, GLint textureID) : textureID(textureID), title(title){};
 public:
     inline GLuint getId(void)const {return textureID;};
     inline void cleanUp(void) const {glDeleteTextures(1, &textureID);};
     inline void bind(void)const {glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);};
-    inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
+    inline void bind(GLint num) const{glActiveTexture(num); bind();};
 
-    inline static PointerCubeTexture create(std::string title, GLuint textureID){
+    inline static PointerCubeTexture create(const std::string& title, GLuint textureID){
         return PointerCubeTexture(new CubeTexture(title, textureID));
     }
 

@@ -6,7 +6,7 @@
 #define GRAPHICSPROJECT_LIGHT_H
 
 
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 #include <src/utils/GTypes.h>
 #include "src/utils/GUtils.h"
 class PointLight {

@@ -8,7 +8,7 @@
 #include "RawModel.h"
 #include <src/rendering/material/TextureManager.h>
 #include "../material/Material.h"
-#include "../../utils/FileLoader.h"
+#include "src/utils/resources/FileLoader.h"
 #include "../../utils/Loader.h"
 class MaterialedModel {
     PointerRawModel model     = nullptr;

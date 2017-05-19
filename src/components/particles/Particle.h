@@ -5,8 +5,8 @@
 #ifndef GRAPHICSPROJECT_PARTICLE_H
 #define GRAPHICSPROJECT_PARTICLE_H
 
-#include <src/utils/Const.h>
-#include <src/utils/Vectors.h>
+#include <src/utils/GConst.h>
+#include <src/utils/math/objects/Vectors.h>
 #include "ParticleTexture.h"
 
 
@@ -37,11 +37,12 @@ class Particle {
         }
 
     inline void setTextreOffset(Vector2f& offset, int index){
-        int column = index % texture -> rows;
-        int row = index / texture -> rows;
-        offset.x = (float) (column / texture -> rows);
-        offset.y = (float) (row / texture -> rows);
+        float column = (float)(index % texture -> rows);
+        float row = (float)(index / texture -> rows);
+        offset.x = column / (float)texture -> rows;
+        offset.y = row / (float)texture -> rows;
     }
+
 public:
     inline Particle(PointerParticleTexture texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale)
             :texture(texture){
@@ -65,7 +66,11 @@ public:
     inline float getScale(void) const{ return scale; }
     inline Vector2f getTextureOffset1(void) const{return textureOffset1;}
     inline Vector2f getTextureOffset2(void) const{return textureOffset2;}
-    inline Vector2f getTextureInfo(void){return Vector2f((float)getTexture() ->rows, getBlend());}
+    inline Vector4f getTextureOffsets(void) const{return Vector4f(textureOffset1.x,
+                                                                  textureOffset1.y,
+                                                                  textureOffset2.x,
+                                                                  textureOffset2.y);}
+    inline Vector2f getTextureInfo(void) const{return Vector2f((float)getTexture() ->rows, getBlend());}
     inline float getBlend(void) const{return blend;}
     inline PointerParticleTexture getTexture(void) const{return texture; };
 };

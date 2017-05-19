@@ -9,19 +9,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../rendering/WindowManager.h"
 #include <sys/time.h>
-#include "../utils/Vectors.h"
+#include "src/utils/math/objects/Vectors.h"
 #include <math.h>
-#include <src/utils/Transform.h>
-#include <src/utils/MousePicker.h>
+#include <src/core/BasicCamera.h>
 
 
 class MousePicker;
-class Camera {
+class Camera : public BasicCamera{
 private:
-    glm::mat4 projectionMatrix;
-    Transform transform     = Transform();
     const bool VERTICAL           = false;
-    //MousePicker * picker    = nullptr;
 //    Vector3f forward        = Vector3f(1, 0, 0);
 //    Vector3f position   = Vector3f(DEFAULT_CAMERA_POSITION);//TODO deprecated
 public:
@@ -60,30 +56,19 @@ public:
 //    }
 
     //GETTERS
-
-    inline glm::mat4 getViewMatrix(void){
-        Vector3f pos = *transform.getPosition();
-        return Matrix4f::toGlmMatrix(transform .getRotation() -> toRotationMatrix()) * glm::translate(glm::vec3(-pos.x, -pos.y, -pos.z));
-    }
-    inline Vector3f getForward(void){return transform.getRotation()->getBack(); }
-    inline glm::mat4 getProjectionMatrix(void) const{return projectionMatrix; }
     inline Vector3f getForwardVector(void){
-        const Vector3f forward = transform.getRotation()->getForward();
+        const Vector3f forward = transform.getRotation().getForward();
         if(VERTICAL){
             return (forward * -1).getNormal();
         }
         return (Vector3f(0, 1, 0).cross(forward).getCross(Vector3f(0, 1, 0)) * -1).normalize();
     }
-    inline Vector3f getPosition(void){
-        return * transform.getPosition();
-    }
     inline Vector3f getRightVector(void){
-        const Vector3f forward = transform.getRotation()->getForward();
+        const Vector3f forward = transform.getRotation().getForward();
         return Vector3f(0, 1, 0).cross(forward).normalize();
     }
 };
 
-typedef std::shared_ptr<Camera> PointerCamera;
 
-#include "../utils/Maths.h"
+#include "src/utils/math/Maths.h"
 #endif //GRAPHICSPROJECT_CAMERA_H

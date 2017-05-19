@@ -9,7 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 #include <src/utils/GTypes.h>
 
 

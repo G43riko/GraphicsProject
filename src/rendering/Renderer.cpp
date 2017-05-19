@@ -52,13 +52,13 @@ void Renderer::setCamera(PointerCamera camera){
 void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader shader){
     if(shader){
         shader -> bind();
-        shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
+        shader -> updateUniform4m(UNIFORM_PROJECTION_MATRIX, camera -> getProjectionMatrix());
     }
     else {
         for (auto it = shaders.begin(); it != shaders.end(); ++it){
-            if (it->second->hasUniform(PROJECTION_MATRIX)) {
+            if (it->second->hasUniform(UNIFORM_PROJECTION_MATRIX)) {
                 it->second->bind();
-                it->second->updateUniform4m(PROJECTION_MATRIX, camera->getProjectionMatrix());
+                it->second->updateUniform4m(UNIFORM_PROJECTION_MATRIX, camera->getProjectionMatrix());
             }
         }
     }
@@ -98,7 +98,7 @@ void Renderer::initShaders(void){
 
 void Renderer::addShader(std::string key, PointerBasicShader shader){
     shaders[key] = shader;
-    if(actualCamera && shader -> hasUniform(PROJECTION_MATRIX))
+    if(actualCamera && shader -> hasUniform(UNIFORM_PROJECTION_MATRIX))
         updateProjectionMatrix(actualCamera, shader);
 }
 
@@ -125,7 +125,7 @@ void Renderer::renderSceneDeferred(BasicScene * scene){
 
     shader -> bind();
 
-    shader -> updateUniform4m(VIEW_MATRIX, actualCamera -> getViewMatrix());
+    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, actualCamera -> getViewMatrix());
     shader -> updateUniform3f("cameraPosition", actualCamera -> getPosition());
     glEnable(GL_TEXTURE);
     EntitiesList entities = scene -> getEntities();
@@ -139,7 +139,7 @@ void Renderer::renderSceneDeferred(BasicScene * scene){
             RenderUtil::prepareMaterial(it->first-> getMaterial(), shader, options);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
-                shader -> updateUniform4m(TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
+                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 itEnt++;
@@ -175,7 +175,7 @@ void Renderer::renderScene(BasicScene * scene){
         master.getShadow() -> renderShadows(scene -> getEntities(), getLight(), actualCamera);
     }
 
-    //entityMaster -> renderWireFrame(scene.getEntities(), actualCamera);
+//    master.getEntity() -> renderWireFrame(scene -> getEntities(), actualCamera);
     master.getEntity() -> renderEntities(scene -> getEntities(), scene -> getLights(), actualCamera, options, Vector4f(0, 1, 0, -master.getWater() -> getWaterHeight()), master);
     master.getVoxel() -> render(actualCamera, scene -> getLights(), getSun());
 
@@ -229,7 +229,7 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
     shader -> bind();
 
     shader -> updateUniformi("options", options);
-    shader -> updateUniform4m(VIEW_MATRIX, actualCamera -> getViewMatrix());
+    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, actualCamera -> getViewMatrix());
 
     if(options & FLAG_LIGHT){
         for(unsigned int i=0 ; i<lights.size() ; i++)
@@ -240,7 +240,7 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
     for(unsigned int i=0 ; i< entities.size() ; i++){
         PointerRawModel model = entities[i] -> getModel() -> getModel();
 
-        shader -> updateUniform4m(TRANSFORMATION_MATRIX, entities[i] -> getTransform() -> getTransformation());
+        shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, entities[i] -> getTransform() -> getTransformation());
         if(options & FLAG_TEXTURE)
             RenderUtil::prepareMaterial(entities[i] -> getModel() -> getMaterial(), shader, options);
         RenderUtil::prepareModel(model, items);
@@ -267,7 +267,7 @@ void Renderer::renderScreen(Screen screen) {
     glActiveTexture(GL_TEXTURE0);
     screen.getTexture() -> bind();
 
-    shader -> updateUniform4m(TRANSFORMATION_MATRIX, screen.getTransformationMatrix());
+    shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, screen.getTransformationMatrix());
     glDrawArrays(GL_TRIANGLE_STRIP, 0, screen.getModel() -> getVertexCount());
 
     //shader -> unbind();
@@ -281,7 +281,7 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerPointLight>
         return;
     shader -> bind();
 
-    shader -> updateUniform4m(VIEW_MATRIX, actualCamera -> getViewMatrix());
+    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, actualCamera -> getViewMatrix());
     //shader -> updateUniform2f("levels", 4);
 
     for(unsigned int i=0 ; i<lights.size() ; i++)
@@ -290,7 +290,7 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerPointLight>
     PointerRawModel model = object -> getModel() -> getModel();
     glEnable(GL_TEXTURE);
 
-    shader -> updateUniform4m(TRANSFORMATION_MATRIX, object->getTransform()->getTransformation());
+    shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, object->getTransform()->getTransformation());
     RenderUtil::prepareMaterial(object -> getModel() -> getMaterial(), shader, options);
     RenderUtil::prepareModel(model, 4);
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);

@@ -100,14 +100,14 @@ set(GL_MAIN_SRC
         src/components/water/WaterMaster.cpp
         src/GUI/GtkIntroGui.cpp
         src/rendering/material/TextureManager.cpp
-        src/utils/FileLoader.cpp
+        src/utils/resources/FileLoader.cpp
         src/utils/MousePicker.cpp
         src/rendering/WindowManager.cpp
-        src/utils/Vectors.cpp
-        src/components/voxel/World.cpp
-        src/components/voxel/Chunk.cpp
-        src/components/voxel/Block.cpp
-        src/components/voxel/VoxelMaster.cpp src/components/voxel/advanced/BlockDatabase.h src/components/voxel/advanced/BlockData.h src/components/voxel/advanced/BlockID.h src/components/voxel/advanced/BlockType.h src/components/voxel/advanced/GrassType.h src/components/voxel/advanced/AirType.h src/utils/grandom.h src/components/voxel/WoldConst.h src/utils/Array3D.h src/rendering/model/GObjects.h src/Messages.h src/utils/OBJLoader.h src/utils/GTypes.h src/rendering/model/BasicMesh.h src/components/voxel/BlockTypes.h src/components/voxel/AbstractChunk.h src/components/voxel/ChunkManager.h src/utils/ThreadUtils.h)
+        src/utils/math/objects/Vectors.cpp
+        src/components/voxel_old/World_old.cpp
+        src/components/voxel_old/Chunk_old.cpp
+        src/components/voxel_old/Block.cpp
+        src/components/voxel/VoxelMaster.cpp src/utils/generator/PerilNoise.h src/utils/resources/PPM.h src/physics/BoundingSphere.h src/physics/IntersectData.h src/physics/AABB.h src/physics/Plane.h src/physics/PhysicsObject.h src/physics/PhysicsEngine.h src/physics/Collider.h src/physics/Collider.cpp)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 

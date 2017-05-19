@@ -21,14 +21,14 @@ public:
     const static unsigned char FLAG_WATER           = 0x40; // hex for 0100 0000
     const static unsigned char FLAG_SHADOW          = 0x80; // hex for 1000 0000
 
-    inline static void prepareModel(const PointerRawModel model, const GLuint numberOfAttributes){
+    inline static void prepareModel(const PointerRawModel& model, const GLuint numberOfAttributes){
         glBindVertexArray(model -> getVaoID());
         for(GLuint i=0 ; i<=numberOfAttributes ; i++){
             glEnableVertexAttribArray(i);
         }
     }
 
-    inline static void prepareMaterial(const PointerMaterial material, const PointerBasicShader shader, const int options){
+    inline static void prepareMaterial(const PointerMaterial& material, const PointerBasicShader& shader, const int options){
         if(shader){
             if(options & FLAG_SPECULAR){
                 shader -> updateUniformf("shineDumper", material -> getShineDumper());
@@ -53,7 +53,7 @@ public:
         }
     }
 
-    inline static void prepareMaterial(const PointerMaterial material, BasicShader * shader, const int options){
+    inline static void prepareMaterial(const PointerMaterial& material, BasicShader * shader, const int options){
         if(shader && IS_NOT_NULL(material)){
             if(options & FLAG_SPECULAR){
                 shader -> updateUniformf("shineDumper", material -> getShineDumper());
@@ -116,7 +116,7 @@ public:
 
     inline static void updateProjectionMatrix(BasicShader *shader, const PointerCamera camera) {
         shader -> bind();
-        shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
+        shader -> updateUniform4m(UNIFORM_PROJECTION_MATRIX, camera -> getProjectionMatrix());
     }
 
 

@@ -58,12 +58,12 @@ public:
         fbo.bindReflectionFrameBuffer();
         distance = 2 * (camera -> getPosition().y - water.getHeight());
         camera -> getTransform() ->move(0, -distance, 0);
-        camera -> getTransform()->getRotation()->x = -camera -> getTransform()->getRotation() -> x;
-        camera -> getTransform()->getRotation()->z = -camera -> getTransform()->getRotation() -> z;
+        camera -> getTransform()->getRotation().x = -camera -> getTransform()->getRotation(). x;
+        camera -> getTransform()->getRotation().z = -camera -> getTransform()->getRotation().z;
     };
     void starRenderRefraction(PointerCamera camera){
-        camera -> getTransform()->getRotation()->x = -camera -> getTransform()->getRotation()->x;
-        camera -> getTransform()->getRotation()->z = -camera -> getTransform()->getRotation()->z;
+        camera -> getTransform()->getRotation().x = -camera -> getTransform()->getRotation().x;
+        camera -> getTransform()->getRotation().z = -camera -> getTransform()->getRotation().z;
         camera -> getTransform() ->move(0, distance, 0);
 //        camera -> position.y += distance;
         fbo.bindRefractionFrameBuffer();

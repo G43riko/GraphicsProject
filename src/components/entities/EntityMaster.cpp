@@ -10,14 +10,14 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
         return;
     }
     shader -> bind();
-    shader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform3f(CAMERA_POSITION, camera -> getPosition());
+    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
+    shader -> updateUniform3f(UNIFORM_CAMERA_POSITION, camera -> getPosition());
     //shader -> updateUniform2f("levels", 4);
     if(master.getShadow() != nullptr){
-        shader -> updateUniform4m("toShadowSpace", master.getShadow() -> getToShadowMapSpaceMatrix());
+        shader -> updateUniform4m(UNIFORM_TO_SHADOW_SPACE, master.getShadow() -> getToShadowMapSpaceMatrix());
         glBindTexture(GL_TEXTURE_2D, master.getShadow() -> getShadowMap());
     }
-        shader -> updateUniform4f("plane", clipPlane);
+        shader -> updateUniform4f(UNIFORM_PLANE, clipPlane);
     glActiveTexture(GL_TEXTURE2);
     for(unsigned int i=0 ; i<lights.size() ; i++){
         //RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
@@ -33,7 +33,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
             RenderUtil::prepareMaterial(it -> first -> getMaterial(), shader, options);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
-                shader -> updateUniform4m(TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
+                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
                 glDrawElements(model -> getRenderType(), model -> getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 itEnt++;
@@ -47,8 +47,8 @@ void EntityMaster::renderWireFrame(EntitiesList entities, PointerCamera camera){
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     wireFrameShader -> bind();
-    wireFrameShader -> updateUniform4m(VIEW_MATRIX, camera -> getViewMatrix());
-    wireFrameShader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
+    wireFrameShader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
+    wireFrameShader -> updateUniform4m(UNIFORM_PROJECTION_MATRIX, camera -> getProjectionMatrix());
 
     for (auto it = entities.begin(); it != entities.end(); ++it){ //pre všetky materialy
         if(it -> second.size()){
@@ -58,7 +58,7 @@ void EntityMaster::renderWireFrame(EntitiesList entities, PointerCamera camera){
             RenderUtil::prepareModel(model, 1);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
-                wireFrameShader -> updateUniform4m(TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
+                wireFrameShader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 itEnt++;

@@ -6,7 +6,7 @@
 #define GRAPHICSPROJECT_SHADOWBOX_H
 
 
-#include <src/utils/Matrix4f.h>
+#include <src/utils/math/objects/Matrix4f.h>
 #include <src/rendering/Camera.h>
 
 class ShadowBox {

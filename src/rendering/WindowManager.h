@@ -5,7 +5,7 @@
 #ifndef GRAPHICSPROJECT_WINDOWMANAGER_H
 #define GRAPHICSPROJECT_WINDOWMANAGER_H
 
-#include "../utils/Const.h"
+#include "src/utils/GConst.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <src/utils/GUtils.h>

@@ -10,6 +10,7 @@
 enum Messages{
     WRONG_DIRECTION,
     CANT_FIND_SHADER,
+    UNINITIALIZED_MOUSE_PICKER
 };
 
 inline const char * getMessage(Messages type){
@@ -18,6 +19,8 @@ inline const char * getMessage(Messages type){
             return "Zlý smer roviny";
         case Messages::CANT_FIND_SHADER :
             return "Nenašiel sa shader";
+        case Messages::UNINITIALIZED_MOUSE_PICKER :
+            return "Mouse picker ešte nebol inicializovaný";
         default:
             return "Neznámy typ správy";
     }

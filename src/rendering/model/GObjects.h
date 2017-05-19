@@ -8,14 +8,6 @@
 #include "Mesh.h"
 #include <src/Messages.h>
 
-enum Directions{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    FORWARD,
-    BACK
-};
 
 namespace GObjects{
     inline PointerMesh createLine(Vector3f a, Vector3f b){

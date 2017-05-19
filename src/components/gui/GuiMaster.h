@@ -31,7 +31,7 @@ public:
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         for(unsigned int i=0 ; i<textures.size() ; i++){
             glBindTexture(GL_TEXTURE_2D, textures[i].getTexture());
-            shader -> updateUniform4m(TRANSFORMATION_MATRIX, Maths::createTransformationMatrix(textures[i].getPosition(), textures[i].getScale()));
+            shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, Maths::createTransformationMatrix(textures[i].getPosition(), textures[i].getScale()));
             glDrawArrays(GL_TRIANGLE_STRIP, 0, model -> getVertexCount());
         }
         glEnable(GL_DEPTH_TEST);

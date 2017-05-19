@@ -7,7 +7,7 @@
 
 
 #include <src/utils/GTypes.h>
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 
 class DirectionalLight {
 private:

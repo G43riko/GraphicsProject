@@ -23,7 +23,7 @@ public:
             return;
         }
         object -> getTransform() -> move(velocity * delta);
-        object -> getTransform() -> getRotation() -> rotate(Vector3f(-velocity.z * 0.4f, 0.0f, velocity.x * 0.4f) * delta);
+        object -> getTransform() -> getRotation().rotate(Vector3f(-velocity.z * 0.4f, 0.0f, velocity.x * 0.4f) * delta);
         checkCollision(this);
         //float DEFRACTION_EFFECT = 0.95f;
         velocity *= DEFRACTION_EFFECT * delta;
@@ -32,18 +32,18 @@ public:
     inline static bool checkCollision(Ball * el) {
         checkBorder(el->object->getTransform(), &el->velocity, el->size, Vector2f(-50, -50), Vector2f(100, 100));
 
-        Vector3f * thisPos = el -> object ->getTransform() -> getPosition();
+        Vector3f thisPos = el -> object ->getTransform() -> getPosition();
 
         for (Ball * b : balls) {
-            Vector3f * ballPos = b -> object -> getTransform() -> getPosition();
-            if (collision(*thisPos, *ballPos, el -> size)) {
+            Vector3f ballPos = b -> object -> getTransform() -> getPosition();
+            if (collision(thisPos, ballPos, el -> size)) {
 //                b -> getObject() -> setAlive(false);
-                Vector3f center = (*thisPos + *ballPos) / 2;
-                b -> velocity.x -= (thisPos -> x - center.x);
-                b -> velocity.z -= (thisPos -> z - center.z);
+                Vector3f center = (thisPos + ballPos) / 2;
+                b -> velocity.x -= (thisPos.x - center.x);
+                b -> velocity.z -= (thisPos.z - center.z);
 
-                el -> velocity.x -= ballPos -> x - center.x;
-                el -> velocity.z -= ballPos -> z - center.z;
+                el -> velocity.x -= ballPos.x - center.x;
+                el -> velocity.z -= ballPos.z - center.z;
             }
         }
         return false;
@@ -56,20 +56,20 @@ public:
     }
     inline static void checkBorder(Transform * a, Vector3f * velocity, float size, Vector2f pos, Vector2f scale){
         Vector2f max = pos + scale;
-        if (a -> getPosition() -> x + size > max.x) {
-            a -> getPosition() -> x = max.x - size;
+        if (a -> getPosition().x + size > max.x) {
+            a -> getPosition().x = max.x - size;
             velocity -> x = (float)-abs((int)velocity -> x);
         }
-        if (a -> getPosition() -> x - size < pos.x) {
-            a -> getPosition() -> x = pos.x + size;
+        if (a -> getPosition().x - size < pos.x) {
+            a -> getPosition().x = pos.x + size;
             velocity -> x = (float)abs((int)velocity -> x);
         }
-        if (a -> getPosition() -> z + size > max.y) {
-            a -> getPosition() -> z = max.y - size;
+        if (a -> getPosition().z + size > max.y) {
+            a -> getPosition().z = max.y - size;
             velocity -> z = (float)-abs((int)velocity -> z);
         }
-        if (a -> getPosition() -> z - size < pos.y) {
-            a -> getPosition() -> z = pos.y + size;
+        if (a -> getPosition().z - size < pos.y) {
+            a -> getPosition().z = pos.y + size;
             velocity -> z = (float)abs((int)velocity -> z);
         }
 

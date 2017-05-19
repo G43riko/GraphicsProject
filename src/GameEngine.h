@@ -5,8 +5,8 @@
 #ifndef GAMEENGINE_GAMEENGINE_H
 #define GAMEENGINE_GAMEENGINE_H
 
-#include <src/utils/Const.h>
-#include <src/utils/Maths.h>
+#include <src/utils/GConst.h>
+#include <src/utils/math/Maths.h>
 #include <src/utils/GUtils.h>
 
 #include <src/rendering/Renderer.h>

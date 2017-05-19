@@ -22,7 +22,7 @@ protected:
     PointerDirectionalLight sun = nullptr;
     PointerCamera actualCamera = nullptr;
 public:
-    virtual ~BasicRenderer(){};
+    virtual ~BasicRenderer(void){};
     virtual void init3D(void) = 0;
     virtual void prepareRenderer(GLfloat red  = 0, GLfloat green  = 0, GLfloat blue  = 0, GLfloat alpha = 1) = 0;
     virtual void update(float delta) = 0;
@@ -34,7 +34,7 @@ public:
     virtual void renderScene(BasicScene * scene) = 0;
 
     //GETTERS
-    inline Master * getMaster(void){return &master; };
+    inline Master& getMaster(void) {return master; };
     inline PointerCamera getActualCamera(void) const{return actualCamera; };
     inline PointerPointLight getLight(void) const{return light;};
     inline PointerDirectionalLight getSun(void) const{return sun; };

@@ -9,7 +9,7 @@
 #include <src/rendering/model/RawModel.h>
 #include <src/rendering/material/Texture2D.h>
 #include <src/utils/Loader.h>
-#include <src/utils/Vectors.h>
+#include <src/utils/math/objects/Vectors.h>
 #include <src/rendering/model/MaterialedModel.h>
 #include "HeightGenerator.h"
 

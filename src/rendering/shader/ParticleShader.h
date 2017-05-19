@@ -22,8 +22,13 @@ public:
         this -> setUniform("projectionMatrix");
         this -> setUniform("modelViewMatrix");
 
-        this -> setUniform("textOffset1");
-        this -> setUniform("textOffset2");
+//        this -> setUniform("textOffset1");
+//        this -> setUniform("textOffset2");
+        this -> setUniform("textOffsets");
+        this -> setUniform("blendFactor");
+        this -> setUniform("numberOfRows");
+
+
         this -> setUniform("textCoordInfo");
     }
 };

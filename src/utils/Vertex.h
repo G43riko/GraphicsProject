@@ -5,7 +5,7 @@
 #ifndef GRAPHICSPROJECT_VERTEX_H
 #define GRAPHICSPROJECT_VERTEX_H
 
-#include "Vectors.h"
+#include "src/utils/math/objects/Vectors.h"
 #include <vector>
 #include <src/utils/GTypes.h>
 

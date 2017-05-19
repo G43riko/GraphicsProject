@@ -17,10 +17,10 @@ private:
         entities[model] = std::vector<PointerEntity>();
     }
 public:
-    int size(void){
+    inline int size(void) const{
         return count;
     }
-    void addEntity(PointerEntity entity) {
+    inline void addEntity(const PointerEntity& entity) {
         if (entities.find(entity->getModel()) == entities.end()) {
             addModel(entity->getModel());
         }
@@ -28,7 +28,7 @@ public:
         entities[entity->getModel()].push_back(entity);
     }
 
-    void removeEntity(PointerEntity entity){
+    inline void removeEntity(const PointerEntity& entity){
         if (entities.find(entity->getModel()) == entities.end()) {
             return;
         }
@@ -39,10 +39,10 @@ public:
             }
         }
     }
-    EntitiesList getEntities(void){
+    inline const EntitiesList& getEntities(void) const{
         return entities;
     }
-    void update(float delta){
+    inline void update(float delta){
         for (auto it = entities.begin(); it != entities.end(); ++it){ //pre všetky materialy
             if(it -> second.size()){
                 auto itEnt = it->second.begin();
