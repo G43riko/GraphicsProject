@@ -14,8 +14,8 @@ public:
     inline Quaternion(const Vector4f v) : Vector4f(v.x, v.y, v.z, v.w) {}
 
     inline Quaternion(const Vector3f axis, const float angle) {
-        float sinHalfAngle = sinf(angle / 2);
-        float cosHalfAngle = cosf(angle / 2);
+        const float sinHalfAngle = sinf(angle / 2);
+        const float cosHalfAngle = cosf(angle / 2);
 
         x = axis.x * sinHalfAngle;
         y = axis.y * sinHalfAngle;
@@ -24,38 +24,38 @@ public:
     }
 
     inline Quaternion(const Matrix4f m) {
-        float trace = m.m00 + m.m11 + m.m22;
+        const float trace = m.m00 + m.m11 + m.m22;
 
         if(trace > 0) {
-            float s = 0.5f / sqrtf(trace + 1.0f);
+            const float s = 0.5f / sqrtf(trace + 1.0f);
             w = 0.25f / s;
             x = (m.m12 - m.m21) * s;
             y = (m.m20 - m.m02) * s;
             z = (m.m01 - m.m10) * s;
         }
         else if(m.m00 > m.m11 && m.m00 > m.m22){
-            float s = 2.0f * sqrtf(1.0f + m.m00 - m.m11 - m.m22);
+            const float s = 2.0f * sqrtf(1.0f + m.m00 - m.m11 - m.m22);
             w = (m.m12 - m.m21) / s;
             x = 0.25f * s;
             y = (m.m10 + m.m01) / s;
             z = (m.m20 + m.m02) / s;
         }
         else if(m.m11 > m.m22){
-            float s = 2.0f * sqrtf(1.0f + m.m11 - m.m00 - m.m22);
+            const float s = 2.0f * sqrtf(1.0f + m.m11 - m.m00 - m.m22);
             w = (m.m20 - m.m02) / s;
             x = (m.m10 + m.m01) / s;
             y = 0.25f * s;
             z = (m.m21 + m.m12) / s;
         }
         else {
-            float s = 2.0f * sqrtf(1.0f + m.m22 - m.m11 - m.m00);
+            const float s = 2.0f * sqrtf(1.0f + m.m22 - m.m11 - m.m00);
             w = (m.m01 - m.m10) / s;
             x = (m.m20 + m.m02) / s;
             y = (m.m12 + m.m21) / s;
             z = 0.25f * s;
         }
 
-        float len = length();
+        const float len = length();
         w = w / len;
         x = x / len;
         y = y / len;

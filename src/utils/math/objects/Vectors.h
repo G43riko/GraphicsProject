@@ -144,6 +144,9 @@ public:
     inline Vector3f getNormal(void)const {float l = (float)sqrt(x * x + y * y + z * z); return Vector3f(x / l, y / l, z / l);}
     inline Vector3f& normalize(void){float l = (float)sqrt(x * x + y * y + z * z); x /= l, y /= l, z /= l;return *this;}
 
+    inline Vector3f getInverted(void) const{return Vector3f(-x, -y, -z);}
+    inline Vector3f& invert(void){x = -x, y = -y, z = -z; return *this;}
+
     inline float dot(const Vector3f& vec) const{return x * vec.x + y * vec.y + z * vec.z;}
 
     inline Vector3f getCross(const Vector3f& v) const{return Vector3f(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);}

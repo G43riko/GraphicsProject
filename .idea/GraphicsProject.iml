@@ -8,8 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel_old/Chunk_old.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel_old/World_old.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel_old/Block.cpp" isTestSource="false" />
@@ -18,16 +18,16 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel_old/World_old.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/shadows/ShadowMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/shadows/ShadowMaster.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/Master.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/entities/EntityMaster.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/Master.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleMaster.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleSystemSimple.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleManager.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleSystemSimple.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleManager.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/particles/emitters/Emitter.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleManager.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/particles/ParticleMaster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/Master.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/Master.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/chunks/ChunkGenerator.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
@@ -43,13 +43,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/utils/generator/PerilNoise.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/GameLoop.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/physics/Collider.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/physics/Plane.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/physics/AABB.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/physics/Plane.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/physics/PhysicsObject.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/physics/IntersectData.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/physics/PhysicsEngine.h" isTestSource="false" />

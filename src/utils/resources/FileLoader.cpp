@@ -22,7 +22,7 @@
 CubeImageData * ContentLoader::loadCubeTexture(const std::string& title){
     CubeImageData * datas = new CubeImageData[6];
     VectorS TITLES = {"Right", "Left", "Top", "Bottom", "Back", "Front"};
-    for(int i=0 ; i<6 ; i++){
+    LOOP(6, i){
         DEBUG("načitava sa: " << std::string("res/textures/skies/" + title + TITLES[i] + ".png").c_str());
         lodepng::decode(datas[i].data, datas[i].width, datas[i].height, "res/textures/skies/" + title + TITLES[i] + ".png");
     }
@@ -37,7 +37,7 @@ CubeImageData ContentLoader::loadTextureColor(const Vector3f& color){
     result.title = color.toString();
 
 
-    result.data.clear();
+    result.data.reserve(16);
     result.data.push_back((unsigned char)color.getX());
     result.data.push_back((unsigned char)color.getY());
     result.data.push_back((unsigned char)color.getZ());
@@ -119,9 +119,9 @@ PointerMesh ContentLoader::loadOBJ(const std::string& fileName) {
         split(currentLine[2], '/', ver2);
         split(currentLine[3], '/', ver3);
 
-        Vector3f vertex1 = Vector3f(atof(ver1[0].c_str()), atof(ver1[1].c_str()), atof(ver1[2].c_str()));
-        Vector3f vertex2 = Vector3f(atof(ver2[0].c_str()), atof(ver2[1].c_str()), atof(ver2[2].c_str()));;
-        Vector3f vertex3 = Vector3f(atof(ver3[0].c_str()), atof(ver3[1].c_str()), atof(ver3[2].c_str()));;
+        const Vector3f vertex1 = Vector3f(atof(ver1[0].c_str()), atof(ver1[1].c_str()), atof(ver1[2].c_str()));
+        const Vector3f vertex2 = Vector3f(atof(ver2[0].c_str()), atof(ver2[1].c_str()), atof(ver2[2].c_str()));;
+        const Vector3f vertex3 = Vector3f(atof(ver3[0].c_str()), atof(ver3[1].c_str()), atof(ver3[2].c_str()));;
 
         PointerVertex v0 = processVertex(vertex1, vertices, indices);
         PointerVertex v1 = processVertex(vertex2, vertices, indices);
@@ -172,7 +172,7 @@ void ContentLoader::split(const std::string& text, char divider, VectorS& result
     unsigned long i = 0;
     auto pos = text.find(divider);
     while (pos != std::string::npos) {
-        result.push_back(text.substr(i, pos-i));
+        result.push_back(text.substr(i, pos - i));
         i = static_cast<int>(++pos);
         pos = text.find(divider, pos);
 
@@ -182,10 +182,10 @@ void ContentLoader::split(const std::string& text, char divider, VectorS& result
 }
 
 PointerVertex ContentLoader::processVertex(const Vector3f& vertex, std::vector<PointerVertex>& vertices, VectorUI& indices) {
-    GLuint index = (GLuint)vertex.x - 1;
+    const GLuint index = (GLuint)vertex.x - 1;
     PointerVertex currentVertex = vertices[index];
-    int textureIndex = (int)vertex.y - 1;
-    int normalIndex = (int)vertex.z - 1;
+    const int textureIndex = (int)vertex.y - 1;
+    const int normalIndex = (int)vertex.z - 1;
     if (!currentVertex -> isSet()) {
         currentVertex -> setTextureIndex(textureIndex);
         currentVertex -> setNormalIndex(normalIndex);
@@ -255,12 +255,16 @@ float ContentLoader::convertDataToArrays(const std::vector<PointerVertex>& verti
                                          VectorF& normalsArray,
                                          VectorF& tangentsArray) {
     float furthestPoint = 0;
-    for (unsigned int i = 0; i < vertices.size(); i++) {
-        PointerVertex currentVertex = vertices[i];
-        Vector3f position = currentVertex -> getPosition();
-        Vector2f textureCoord = textures[currentVertex -> getTextureIndex()];
-        Vector3f normalVector = normals[currentVertex-> getNormalIndex()];
-        Vector3f tangent = currentVertex -> getAverageTangent();
+    verticesArray.reserve(vertices.size() * 3);
+    tangentsArray.reserve(vertices.size() * 3);
+    texturesArray.reserve(vertices.size() * 2);
+    normalsArray.reserve(vertices.size()  * 3);
+    ITERATE_VECTOR(vertices, i){
+        const PointerVertex currentVertex = vertices[i];
+        const Vector3f position = currentVertex -> getPosition();
+        const Vector2f textureCoord = textures[currentVertex -> getTextureIndex()];
+        const Vector3f normalVector = normals[currentVertex-> getNormalIndex()];
+        const Vector3f tangent = currentVertex -> getAverageTangent();
         //tangent -> show();
         verticesArray.push_back(position.x);
         verticesArray.push_back(position.y);

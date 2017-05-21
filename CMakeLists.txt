@@ -95,7 +95,6 @@ set(GL_MAIN_SRC
         src/components/Master.cpp
         src/components/particles/ParticleManager.cpp
         src/components/particles/ParticleMaster.cpp
-        src/components/particles/ParticleSystemSimple.cpp
         src/components/shadows/ShadowMaster.cpp
         src/components/water/WaterMaster.cpp
         src/GUI/GtkIntroGui.cpp
@@ -107,7 +106,7 @@ set(GL_MAIN_SRC
         src/components/voxel_old/World_old.cpp
         src/components/voxel_old/Chunk_old.cpp
         src/components/voxel_old/Block.cpp
-        src/components/voxel/VoxelMaster.cpp src/utils/generator/PerilNoise.h src/utils/resources/PPM.h src/physics/BoundingSphere.h src/physics/IntersectData.h src/physics/AABB.h src/physics/Plane.h src/physics/PhysicsObject.h src/physics/PhysicsEngine.h src/physics/Collider.h src/physics/Collider.cpp)
+        src/components/voxel/VoxelMaster.cpp src/utils/generator/PerilNoise.h src/utils/resources/PPM.h src/physics/BoundingSphere.h src/physics/IntersectData.h src/physics/AABB.h src/physics/Plane.h src/physics/PhysicsObject.h src/physics/PhysicsEngine.h src/physics/Collider.h src/physics/Collider.cpp src/core/GameLoop.h src/components/particles/emitters/Emitter.h src/components/voxel/chunks/ChunkGenerator.h)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 

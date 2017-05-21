@@ -10,6 +10,7 @@
 #include <random>
 #include <algorithm>
 #include <numeric>
+#include <src/utils/resources/PPM.h>
 
 class PerlinNoise {
     // The permutation vector
@@ -63,9 +64,9 @@ public:
         z -= floor(z);
 
         // Compute fade curves for each of x, y, z
-        double u = fade(x);
-        double v = fade(y);
-        double w = fade(z);
+        const double u = fade(x);
+        const double v = fade(y);
+        const double w = fade(z);
 
         // Hash coordinates of the 8 cube corners
         int A = p[X] + Y;
@@ -76,8 +77,22 @@ public:
         int BB = p[B + 1] + Z;
 
         // Add blended results from 8 corners of cube
-        double res = lerp(w, lerp(v, lerp(u, grad(p[AA], x, y, z), grad(p[BA], x-1, y, z)), lerp(u, grad(p[AB], x, y-1, z), grad(p[BB], x-1, y-1, z))),	lerp(v, lerp(u, grad(p[AA+1], x, y, z-1), grad(p[BA+1], x-1, y, z-1)), lerp(u, grad(p[AB+1], x, y-1, z-1),	grad(p[BB+1], x-1, y-1, z-1))));
-        return (res + 1.0)/2.0;
+        const double res = lerp(w,
+                                lerp(v,
+                                     lerp(u,
+                                          grad(p[AA], x, y, z),
+                                          grad(p[BA], x - 1, y, z)),
+                                     lerp(u,
+                                          grad(p[AB], x, y - 1, z),
+                                          grad(p[BB], x - 1, y - 1, z))),
+                                lerp(v,
+                                     lerp(u,
+                                          grad(p[AA+1], x, y, z - 1),
+                                          grad(p[BA+1], x - 1, y, z - 1)),
+                                     lerp(u,
+                                          grad(p[AB+1], x, y - 1, z - 1),
+                                          grad(p[BB+1], x - 1, y-1, z - 1))));
+        return (res + 1.0) / 2.0;
     };
 private:
     inline double fade(double t) const{
@@ -87,10 +102,10 @@ private:
         return a + t * (b - a);
     };
     inline double grad(int hash, double x, double y, double z) const{
-        int h = hash & 15;
+        const int h = hash & 15;
         // Convert lower 4 bits of hash into 12 gradient directions
-        double u = h < 8 ? x : y,
-                v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+        const double u = h < 8 ? x : y;
+        const double v = h < 4 ? y : h == 12 || h == 14 ? x : z;
         return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
     };
 };
@@ -109,8 +124,8 @@ inline void testPerlinNoise1(void){
     // Visit every pixel of the image and assign a color generated with Perlin noise
     for(unsigned int i = 0; i < height; ++i) {     // y
         for(unsigned int j = 0; j < width; ++j) {  // x
-            double x = (double)j/((double)width);
-            double y = (double)i/((double)height);
+            const double x = (double)j/((double)width);
+            const double y = (double)i/((double)height);
 
             // Typical Perlin noise
             double n = pn.noise(10 * x, 10 * y, 0.8);
@@ -121,9 +136,9 @@ inline void testPerlinNoise1(void){
 
             // Map the values to the [0, 255] interval, for simplicity we use
             // tones of grey
-            image.r[kk] = floor(255 * n);
-            image.g[kk] = floor(255 * n);
-            image.b[kk] = floor(255 * n);
+            image.r[kk] = (u_char)floor(255 * n);
+            image.g[kk] = (u_char)floor(255 * n);
+            image.b[kk] = (u_char)floor(255 * n);
             kk++;
         }
     }
@@ -146,11 +161,11 @@ inline void testPerlinNoise2(void){
     // Visit every pixel of the image and assign a color generated with Perlin noise
     for(unsigned int i = 0; i < height; ++i) {     // y
         for(unsigned int j = 0; j < width; ++j) {  // x
-            double x = (double)j/((double)width);
-            double y = (double)i/((double)height);
+            const double x = (double)j/((double)width);
+            const double y = (double)i/((double)height);
 
             // Typical Perlin noise
-            double n = pn.noise(10 * x, 10 * y, 0.8);
+            const double n = pn.noise(10 * x, 10 * y, 0.8);
 
             // Wood like structure
             //n = 20 * pn.noise(x, y, 0.8);
@@ -158,9 +173,9 @@ inline void testPerlinNoise2(void){
 
             // Map the values to the [0, 255] interval, for simplicity we use
             // tones of grey
-            image.r[kk] = floor(255 * n);
-            image.g[kk] = floor(255 * n);
-            image.b[kk] = floor(255 * n);
+            image.r[kk] = (u_char)floor(255 * n);
+            image.g[kk] = (u_char)floor(255 * n);
+            image.b[kk] = (u_char)floor(255 * n);
             kk++;
         }
     }

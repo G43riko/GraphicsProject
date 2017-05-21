@@ -6,7 +6,7 @@
 #define GAMEENGINE_VOXELWORLD_H
 
 #include <unordered_map>
-#include "VoxelChunk.h"
+#include "src/components/voxel/chunks/VoxelChunk.h"
 #include "VoxelRenderer.h"
 #include "VoxelPosition.h"
 
@@ -23,15 +23,15 @@ public:
 
         VoxelPosition position;
 
-        for(std::pair<std::string, VoxelChunk *> chunk : chunks){
-            position.setWorldPosition(Vector2f(chunk.first));
-            chunk.second -> render(renderer, position);
+        ITERATE_MAP_AUTO(chunks, chunk){
+            position.setWorldPosition(Vector2f(chunk -> first));
+            chunk -> second -> render(renderer, position);
         }
 
         renderer.finish();
     }
     void generateChunk(Vector2f pos, Loader * loader){
-        chunks[pos.toString()] = new VoxelChunk(loader);
+        chunks[pos.toString()] = new VoxelChunk(pos, loader);
     }
     void generateChunk(int x, int y, int z, Loader * loader){
     }

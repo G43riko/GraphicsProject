@@ -33,7 +33,7 @@ protected:
     };
 
     inline BasicView& getView(void) const{return *_view; };
-    inline BasicRenderer *getRenderer(void)const{return _renderer; };
+    inline BasicRenderer& getRenderer(void)const{return *_renderer; };
     inline BasicScene *getScene(void)const{ return _scene; };
     inline Loader getLoader(void)const{ return *_loader; };
 

@@ -9,6 +9,24 @@
 #include <src/utils/math/objects/Vectors.h>
 #include <src/rendering/model/Mesh.h>
 
+struct LightBlockData{
+    float x, y, z;
+    float w = BLOCK_SIZE, h = BLOCK_SIZE, d = BLOCK_SIZE;
+    BlockID type = BlockID ::Air;
+    LightBlockData * parent = this;
+    LightBlockData(float x = 0, float y = 0, float z = 0, BlockID type = BlockID::Air) :
+            x(x),
+            y(y),
+            z(z),
+            type(type){}
+    inline bool operator==(const LightBlockData& rhs){
+        return EQ(x, rhs.x) && EQ(y, rhs.y) && EQ(z, rhs.z);
+    }
+    inline bool operator!=( const LightBlockData& rhs){ return !(*this == rhs); }
+};
+
+#include "ChunkGenerator.h"
+
 struct Vert{
     Vector3f pos;
     Vector2f tex;
@@ -18,21 +36,18 @@ struct Vert{
 class ChunkBuilder{
     const std::vector<uint> clockWiseIndices = {3, 1, 0, 2, 1, 3};
     const std::vector<uint> antiClockWiseIndices = {0, 1, 3, 3, 1, 2};
-    float _size;
+    const ChunkGenerator generator = ChunkGenerator(1.0f, 1);
+    const float _size;
     VectorV3 positions;
     VectorV2 textures;
     VectorV3 normals;
+    VectorUI indices;
     std::map<std::string, uint> data;
     std::map<std::string, Vert> vertices;
     uint maxIndice = 0;
-    float   w = _size,
-            h = _size,
-            d = _size;
-    VectorUI indices;
-    inline std::string toString(float x, float y, float z){
-        return std::to_string(x) + "_" + std::to_string(y) + "_" + std::to_string(z);
-    }
-    void generateFront(Vector3f position){
+    const float w = _size, h = _size, d = _size;
+    const Vector3f _chunkSize;
+    inline void generateFront(Vector3f position){
         generate({{position.x + -w, position.y +  h, position.z + -d},
                   {position.x + -w, position.y + -h, position.z + -d},
                   {position.x +  w, position.y + -h, position.z + -d},
@@ -67,7 +82,7 @@ class ChunkBuilder{
         indices.push_back(maxIndice + 3);
         maxIndice += 4;
     };
-    void generateBack(Vector3f position){
+    inline void generateBack(Vector3f position){
         positions.push_back({position.x + -w, position.y +  h, position.z + d});
         positions.push_back({position.x + -w, position.y + -h, position.z + d});
         positions.push_back({position.x +  w, position.y + -h, position.z + d});
@@ -92,7 +107,7 @@ class ChunkBuilder{
         indices.push_back(maxIndice + 2);
         maxIndice += 4;
     };
-    void generateRight(Vector3f position){
+    inline void generateRight(Vector3f position){
         generate({{position.x + w, position.y +  h, position.z + -d},
                   {position.x + w, position.y + -h, position.z + -d},
                   {position.x + w, position.y + -h, position.z +  d},
@@ -127,7 +142,7 @@ class ChunkBuilder{
         indices.push_back(maxIndice + 3);
         maxIndice += 4;
     };
-    void generateLeft(Vector3f position){
+    inline void generateLeft(Vector3f position){
         positions.push_back({position.x + -w, position.y +  h, position.z + -d});
         positions.push_back({position.x + -w, position.y + -h, position.z + -d});
         positions.push_back({position.x + -w, position.y + -h, position.z +  d});
@@ -152,7 +167,7 @@ class ChunkBuilder{
         indices.push_back(maxIndice + 2);
         maxIndice += 4;
     };
-    void generateBottom(Vector3f position){
+    inline void generateBottom(Vector3f position){
         positions.push_back({position.x + -w, position.y + -h, position.z +  d});
         positions.push_back({position.x + -w, position.y + -h, position.z + -d});
         positions.push_back({position.x +  w, position.y + -h, position.z + -d});
@@ -177,7 +192,7 @@ class ChunkBuilder{
         indices.push_back(maxIndice + 2);
         maxIndice += 4;
     };
-    void generateUp(Vector3f position){
+    inline void generateUp(Vector3f position){
         generate({{position.x + -w, position.y + h, position.z +  d},
                   {position.x + -w, position.y + h, position.z + -d},
                   {position.x +  w, position.y + h, position.z + -d},
@@ -214,7 +229,7 @@ class ChunkBuilder{
         maxIndice += 4;
     };
 
-    void generateUp2(Vector3f position){
+    inline void generateUp2(Vector3f position){
         Vector3f v0 = {position.x + -w, position.y + h, position.z +  d};
         Vector3f v1 = {position.x + -w, position.y + h, position.z + -d};
         Vector3f v2 = {position.x +  w, position.y + h, position.z + -d};
@@ -272,7 +287,7 @@ class ChunkBuilder{
         maxIndice += indiceIncrease;
     };
 
-    void generate(VectorV3 pos, VectorV2 texts, Vector3f normal, bool clockWise){
+    inline void generate(const VectorV3& pos, const VectorV2& texts, const Vector3f& normal, bool clockWise){
         positions.push_back(pos[0]);
         positions.push_back(pos[1]);
         positions.push_back(pos[2]);
@@ -320,63 +335,93 @@ class ChunkBuilder{
 
         maxIndice += 4;
     }
+
+    inline static bool isOpaque2(BlockID block){
+        //TODO toto zistovať v BlockDatabase podla blockTypu
+        return block == BlockID ::Air;
+    }
+    inline static bool isOpaque(LightBlockData block){
+        //TODO toto zistovať v BlockDatabase podla blockTypu
+        return block.type == BlockID ::Air;
+    }
+
 public:
-    ChunkBuilder(float size) : _size(size){
-        generateFromMap(nullptr, {16, 256, 16}, {0, 0, 0});
-    }
-    ChunkBuilder(Vector3f chunkSize, float size, Vector3f position = Vector3f()) : _size(size) {
-        int *** map = new int ** [chunkSize.getXi()];
-        for (int i = 0; i < chunkSize.x; i++) {
-            map[i] = new int * [chunkSize.getYi()];
-            for (int j = 0; j < chunkSize.y; j++) {
-                map[i][j] = new int [chunkSize.getZi()];
-                for (int k = 0; k < chunkSize.z; k++) {
-                    map[i][j][k] = RANDOMI(-1, 2);
-                }
-            }
-        }
+    inline ChunkBuilder(Vector3f chunkSize, float size) :
+            _size(size / 2),
+            _chunkSize(chunkSize){}
 
-        generateFromMap(map, chunkSize, position);
+    inline void generate(Vector3f position = Vector3f()){
+        //BlockID *** map = generator.generateMap(_chunkSize, position.getXi(), position.getYi(), position.getZi());
+        LightBlockData *** map = generator.generateMap(_chunkSize, position.getXi(), position.getYi(), position.getZi());
 
-        for (int i = 0; i < chunkSize.x; i++) {
-            for (int j = 0; j < chunkSize.y; j++) {
-                for (int k = 0; k < chunkSize.z; k++) {
-                }
-                delete[] map[i][j];
-            }
-            delete[] map[i];
-        }
-        delete[] map;
+//        simplifyMap(map);
 
+        generateFromMap(map, position);
+
+        generator.clearMap(map, _chunkSize);
     }
 
-    void generateFromMap(int *** map, Vector3f size, Vector3f position){
-        for(int i=0 ; i<size.x ; i++){
-            for(int j=0 ; j<size.y ; j++){
-                for(int k=0 ; k<size.z ; k++){
-                    if(map[i][j][k] <= 0){
+    void simplifyMap(LightBlockData *** & map){
+        //X - axis
+        for(int i=1 ; i<_chunkSize.x ; i++){
+            for(int j=0 ; j<_chunkSize.y ; j++){
+                for(int k=0 ; k<_chunkSize.z ; k++){
+                    LightBlockData * actBlock = &map[i][j][k];
+                    LightBlockData * cmpBlock = &map[i - 1][j][k];
+                    if(isOpaque(*actBlock) || *actBlock -> parent != map[i][j][k]){
                         continue;
                     }
-                    Vector3f pos = position + Vector3f(i * 2, j * 2, k * 2);
+                    if(!isOpaque(*cmpBlock) &&
+                       cmpBlock -> parent -> type == actBlock -> type &&
+                       EQ(cmpBlock -> parent -> h, actBlock -> h) &&
+                       EQ(cmpBlock -> parent -> w, actBlock -> w) &&
+                       EQ(cmpBlock -> parent -> y, actBlock -> y) &&
+                       EQ(cmpBlock -> parent -> z, actBlock -> z)){
+                        actBlock -> parent = map[i - 1][j][k].parent;
+                        actBlock -> parent -> w += actBlock -> w;
+                    }
+                }
+            }
+        }
+    }
 
-                    if(i == 0 || (i > 0 && map[i - 1][j][k] <= 0)){
+    void generateFromMap(LightBlockData *** map, Vector3f position){
+        for(int i=0 ; i<_chunkSize.x ; i++){
+            for(int j=0 ; j<_chunkSize.y ; j++){
+                for(int k=0 ; k<_chunkSize.z ; k++){
+                    if(isOpaque(map[i][j][k]) /*|| map[i][j][k].parent != &map[i][j][k]*/){
+                        continue;
+                    }
+                    Vector3f pos = position + Vector3f(i, j, k);
+
+                    if(i == 0 || (i > 0 && isOpaque(map[i - 1][j][k]))){
                         generateLeft(pos);
                     }
-                    if(i == size.getXi() - 1 || (i < size.x - 1 && map[i + 1][j][k] <= 0)){
+                    if(i == _chunkSize.getXi() - 1 || (i < _chunkSize.x - 1 && isOpaque(map[i + 1][j][k]))){
                         generateRight(pos);
                     }
 
-                    if(j == 0 || (j > 0 && map[i][j - 1][k] <= 0)){
-                        generateBottom(pos);
+                    if(j == 0 || (j > 0 && isOpaque(map[i][j - 1][k]))){
+                        if(false && j == 0 && position.y  > 0 && !isOpaque(generator.getBlockType(i, position.y - 1, k))){
+//                            printf("dole\n");
+                        }
+                        else{
+                            generateBottom(pos);
+                        }
                     }
-                    if(j == size.getYi() - 1 || (j < size.y - 1 && map[i][j + 1][k] <= 0)){
-                        generateUp(pos);
+                    if(j == _chunkSize.getYi() - 1 || (j < _chunkSize.y - 1 && isOpaque(map[i][j + 1][k]))){
+                        if(false && j == _chunkSize.getYi() - 1  && !isOpaque(generator.getBlockType(i, pos.y + 1, j))){
+//                            printf("hore\n");
+                        }
+                        else{
+                            generateUp(pos);
+                        }
                     }
 
-                    if(k == 0 || (k > 0 && map[i][j][k - 1] <= 0)){
+                    if(k == 0 || (k > 0 && isOpaque(map[i][j][k - 1]))){
                         generateFront(pos);
                     }
-                    if(k == size.getZi() - 1 || (k < size.z - 1 && map[i][j][k + 1] <= 0)){
+                    if(k == _chunkSize.getZi() - 1 || (k < _chunkSize.z - 1 && isOpaque(map[i][j][k + 1]))){
                         generateBack(pos);
                     }
                 }
@@ -384,98 +429,73 @@ public:
         }
     }
 
-    void generateBlock(Vector3f pos){
-        generateUp(pos);
-        generateBottom(pos);
-        generateLeft(pos);
-        generateRight(pos);
-        generateFront(pos);
-        generateBack(pos);
-    }
+//    void generateFromMap(BlockID *** map, Vector3f position){
+//        for(int i=0 ; i<_chunkSize.x ; i++){
+//            for(int j=0 ; j<_chunkSize.y ; j++){
+//                for(int k=0 ; k<_chunkSize.z ; k++){
+//                    if(isOpaque(map[i][j][k])){
+//                        continue;
+//                    }
+//                    Vector3f pos = position + Vector3f(i, j, k);
+//
+//                    if(i == 0 || (i > 0 && isOpaque(map[i - 1][j][k]))){
+//                        generateLeft(pos);
+//                    }
+//                    if(i == _chunkSize.getXi() - 1 || (i < _chunkSize.x - 1 && isOpaque(map[i + 1][j][k]))){
+//                        generateRight(pos);
+//                    }
+//
+//                    if(j == 0 || (j > 0 && isOpaque(map[i][j - 1][k]))){
+//                        if(false && j == 0 && position.y  > 0 && !isOpaque(generator.getBlockType(i, position.y - 1, k))){
+////                            printf("dole\n");
+//                        }
+//                        else{
+//                            generateBottom(pos);
+//                        }
+//                    }
+//                    if(j == _chunkSize.getYi() - 1 || (j < _chunkSize.y - 1 && isOpaque(map[i][j + 1][k]))){
+//                        if(false && j == _chunkSize.getYi() - 1  && !isOpaque(generator.getBlockType(i, pos.y + 1, j))){
+////                            printf("hore\n");
+//                        }
+//                        else{
+//                            generateUp(pos);
+//                        }
+//                    }
+//
+//                    if(k == 0 || (k > 0 && isOpaque(map[i][j][k - 1]))){
+//                        generateFront(pos);
+//                    }
+//                    if(k == _chunkSize.getZi() - 1 || (k < _chunkSize.z - 1 && isOpaque(map[i][j][k + 1]))){
+//                        generateBack(pos);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     PointerMesh getMesh(void){
         VectorF finalPositions;
         VectorF finalNormals;
         VectorF finalTangents;
         VectorF finalTextures;
-//        std::map<std::string, int> data;
-//        int counter = 0;
-        for(auto position : positions){
-//            if(data.find(position.toString()) == data.end()){
-//                data[position.toString()] = 0;
-//            }
-//            else{
-//                data[position.toString()]++;
-//                counter++;
-//            }
-            finalPositions.push_back(position.x);
-            finalPositions.push_back(position.y);
-            finalPositions.push_back(position.z);
+        finalPositions.reserve(indices.size() * 3);
+        finalTextures.reserve(indices.size() * 2);
+        finalNormals.reserve(indices.size() * 3);
+        ITERATE_VECTOR(indices, i){
+            finalPositions.push_back(positions[i].x);
+            finalPositions.push_back(positions[i].y);
+            finalPositions.push_back(positions[i].z);
+
+            finalTextures.push_back(textures[i].x);
+            finalTextures.push_back(textures[i].y);
+
+            finalNormals.push_back(normals[i].x);
+            finalNormals.push_back(normals[i].y);
+            finalNormals.push_back(normals[i].z);
         }
-        printf("text:");
-        for(auto texture : textures){
-            finalTextures.push_back(texture.x);
-            finalTextures.push_back(texture.y);
-        }
-        printf("norm:");
-        for(auto normal : normals){
-            finalNormals.push_back(normal.x);
-            finalNormals.push_back(normal.y);
-            finalNormals.push_back(normal.z);
-        }
-        //      50686
-        //pos: 202752, texts: 135168, indices: 101376 -> 16 * 256 * 16;
-//        printf("pos: %lu, texts: %lu, indices: %lu, opakujucich: %d\n", finalPositions.size(), finalTextures.size(), indices.size(), counter);
+
         return Mesh::create(finalPositions, finalTextures, finalNormals, finalTangents, indices);
     }
 };
 
 #endif //GAMEENGINE_CHUNKBUILDER_H
-
-/*
- const float w = 0.5;
-const float h = 0.5;
-const float d = 0.5;
-
-PointerMesh cube = PointerMesh(new Mesh({-w, h,-d,//BACK
-                                         -w,-h,-d,
-                                          w,-h,-d,
-                                          w, h,-d,
-
-                                         -w, h, d,//FORWARD
-                                         -w,-h, d,
-                                          w,-h, d,
-                                          w, h, d,
-
-                                          w, h,-d,//RIGHT
-                                          w,-h,-d,
-                                          w,-h, d,
-                                          w, h, d,
-
-                                         -w, h,-d,//LEFT
-                                         -w,-h,-d,
-                                         -w,-h, d,
-                                         -w, h, d,
-
-                                         -w, h, d,//UP
-                                         -w, h,-d,
-                                          w, h,-d,
-                                          w, h, d,
-
-                                         -w,-h, d,//BOTTOM
-                                         -w,-h,-d,
-                                          w,-h,-d,
-                                          w,-h, d},
-                                        { 0,0,0,1,1,1,1,0,
-                                          0,0,0,1,1,1,1,0,
-                                          0,0,0,1,1,1,1,0,
-                                          0,0,0,1,1,1,1,0,
-                                          0,0,0,1,1,1,1,0,
-                                          0,0,0,1,1,1,1,0},
-                                        {  0,  1,  3,  3,  1,  2,
-                                           4,  5,  7,  7,  5,  6,
-                                           8,  9, 11, 11,  9, 10,
-                                          12, 13, 15, 15, 13, 14,
-                                          16, 17, 19, 19, 17, 18,
-                                          20, 21, 23, 23, 21, 22}));
- */

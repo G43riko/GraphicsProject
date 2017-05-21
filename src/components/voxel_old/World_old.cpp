@@ -16,12 +16,10 @@ World_old::World_old(BasicScene * scene, PointerRawModel planeModel, PointerRawM
 //    model4 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(255, 255, 0))));
 //    model5 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(0, 255, 255))));
 //    model6 = createMaterialedModel(model, createMaterial(TextureManager::createTexture2D(Vector3f(255, 0, 255))));
-    double initTime = glfwGetTime();;
     init();
     //generateChunks(0, 0, 0, 5, 1, 5);
     generateChunk(0, 0, 0);
     setUpNeighbors();
-    printf("%ld kociek sa vytvorilo za %f \n", blocks.size(), glfwGetTime() - initTime);
 }
 void World_old::init(void){
     map = new Chunk_old *** [WORLD_SIZE];

@@ -27,34 +27,42 @@ public:
             glEnableVertexAttribArray(i);
         }
     }
+    inline static void prepareModel(const RawModel& model, const GLuint numberOfAttributes){
+        glBindVertexArray(model.getVaoID());
+        for(GLuint i=0 ; i<=numberOfAttributes ; i++){
+            glEnableVertexAttribArray(i);
+        }
+    }
 
-    inline static void prepareMaterial(const PointerMaterial& material, const PointerBasicShader& shader, const int options){
+    inline static void prepareMaterial(const PointerMaterial& material, const PointerBasicShader& shader, int options){
+        prepareMaterial(*material, shader, options);
+    }
+    inline static void prepareMaterial(const Material& material, const PointerBasicShader& shader, int options){
         if(shader){
             if(options & FLAG_SPECULAR){
-                shader -> updateUniformf("shineDumper", material -> getShineDumper());
-                shader -> updateUniformf("reflectivity", material -> getReflectivity());
+                shader -> updateUniformf("shineDumper", material.getShineDumper());
+                shader -> updateUniformf("reflectivity", material.getReflectivity());
             }
             shader -> connectTextures();
 
-            material -> getDiffuse() -> bind(GL_TEXTURE0);
+            material.getDiffuse() -> bind(GL_TEXTURE0);
 
             if(options & FLAG_ENVIRONMENTAL){
-                if(material -> hasEnvironmentalMap()){
-                    material -> getEnvironmentalMap() -> bind(GL_TEXTURE1);
+                if(material.hasEnvironmentalMap()){
+                    material.getEnvironmentalMap() -> bind(GL_TEXTURE1);
                 }
             }
 
             if(options & FLAG_NORMAL_MAP){
-                PointerTexture2D normal = material -> getNormal();
+                PointerTexture2D normal = material.getNormal();
                 if(normal){
                     normal -> bind(GL_TEXTURE1);
                 }
             }
         }
     }
-
-    inline static void prepareMaterial(const PointerMaterial& material, BasicShader * shader, const int options){
-        if(shader && IS_NOT_NULL(material)){
+    inline static void prepareMaterial(const PointerMaterial& material, BasicShader * shader, int options){
+        if(IS_NOT_NULL(shader) && IS_NOT_NULL(material)){
             if(options & FLAG_SPECULAR){
                 shader -> updateUniformf("shineDumper", material -> getShineDumper());
                 shader -> updateUniformf("reflectivity", material -> getReflectivity());
@@ -108,10 +116,15 @@ public:
     }
 
 
-    inline static Vector3f getEyeSpacePosition(const Vector3f position , const glm::mat4 view){
-        return Vector3f(view[0][0] * position.x + view[1][0] * position.y + view[2][0] * position.z + view[3][0],
-                        view[0][1] * position.x + view[1][1] * position.y + view[2][1] * position.z + view[3][1],
-                        view[0][2] * position.x + view[1][2] * position.y + view[2][2] * position.z + view[3][2]);
+//    inline static Vector3f getEyeSpacePosition(const Vector3f position , const glm::mat4 view){//DEPRECATED 20.5.2017
+//        return Vector3f(view[0][0] * position.x + view[1][0] * position.y + view[2][0] * position.z + view[3][0],
+//                        view[0][1] * position.x + view[1][1] * position.y + view[2][1] * position.z + view[3][1],
+//                        view[0][2] * position.x + view[1][2] * position.y + view[2][2] * position.z + view[3][2]);
+//    }
+    inline static Vector3f getEyeSpacePosition(const Vector3f position , const Matrix4f view){
+        return Vector3f(view.m00 * position.x + view.m01 * position.y + view.m02 * position.z + view.m03,
+                        view.m10 * position.x + view.m11 * position.y + view.m12 * position.z + view.m13,
+                        view.m20 * position.x + view.m21 * position.y + view.m22 * position.z + view.m23);
     }
 
     inline static void updateProjectionMatrix(BasicShader *shader, const PointerCamera camera) {

@@ -17,8 +17,8 @@ void VoxelMaster::renderBlock(Block *block) {
 
 void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> lights, PointerDirectionalLight sun) {
 
-//    _world.render(renderer, camera, lights, texture, sun);
-//    return;
+    _world.render(renderer, camera, lights, texture, sun);
+    return;
 
     if(world == nullptr || world -> blocks.empty()){
         return;

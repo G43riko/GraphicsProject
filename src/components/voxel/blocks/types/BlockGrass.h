@@ -5,7 +5,7 @@
 #ifndef GAMEENGINE_GRASSTYPE_H
 #define GAMEENGINE_GRASSTYPE_H
 
-#include "src/components/voxel/BlockType.h"
+#include "src/components/voxel/blocks/BlockType.h"
 
 class BlockGrass : public BlockType{
     public:

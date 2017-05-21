@@ -10,7 +10,7 @@
 #include <src/utils/math/objects/Vectors.h>
 #include <src/rendering/shader/BasicShader.h>
 #include <src/rendering/model/RawModel.h>
-#include <src/components/voxel/BlockID.h>
+#include <src/components/voxel/blocks/BlockID.h>
 
 //enum BlockType { red, green, blue, yellow, magenta, aqua, white, black};
 #include "Chunk_old.h"

@@ -13,19 +13,20 @@
 #include <vector>
 
 class TextureData{
-private:
-    const GLuint id;
-    const GLenum type;
+    const GLuint _id;
+    const GLenum _type;
 public:
-    inline TextureData(const GLuint& id, const GLenum& type) : id(id), type(type){};
+    inline TextureData(const GLuint id, const GLenum type) :
+            _id(id),
+            _type(type){};
 
-    inline void setFilter(const GLint& filter) const{//GL_LINEAR, GL_NEAREST
-        glTexParameteri(type, GL_TEXTURE_MAG_FILTER, filter);
-        glTexParameteri(type, GL_TEXTURE_MIN_FILTER, filter);
+    inline void setFilter(const GLint filter) const{//GL_LINEAR, GL_NEAREST
+        glTexParameteri(_type, GL_TEXTURE_MAG_FILTER, filter);
+        glTexParameteri(_type, GL_TEXTURE_MIN_FILTER, filter);
     }
-    inline void setWrap(const GLint& wrap) const{
-        glTexParameteri(type, GL_TEXTURE_WRAP_S, wrap);
-        glTexParameteri(type, GL_TEXTURE_WRAP_T, wrap);
+    inline void setWrap(const GLint wrap) const{
+        glTexParameteri(_type, GL_TEXTURE_WRAP_S, wrap);
+        glTexParameteri(_type, GL_TEXTURE_WRAP_T, wrap);
     }
     inline void setMipmapping(void) const{
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -34,40 +35,46 @@ public:
     }
 
     inline void bind(void) const{
-        glBindTexture(type, id);
+        glBindTexture(_type, _id);
     }
 
-    inline void bind(const GLint& num) const{
+    inline void bind(GLint num) const{
         glActiveTexture(num);
         bind();
     }
     inline void cleanUp(void) const{
-        glDeleteTextures(1, &id);
+        glDeleteTextures(1, &_id);
     }
 };
 
 class Texture2D {
-    const GLuint id;
-    const GLint width       = 0;
-    const GLint height      = 0;
-    const std::string title = 0;
+    const GLuint _id;
+    const GLint _width          = 0;
+    const GLint _height         = 0;
+    const std::string _title    = 0;
 
-    inline Texture2D(const GLint& i_id) : id(i_id){};
-    inline Texture2D(const std::string& title, const GLint& id, const GLint& width, const GLint& height) : id(id), width(width), height(height), title(title){};
+    inline Texture2D(const GLint i_id) : _id(i_id){};
+    inline Texture2D(const std::string& title, const GLint id, const GLint width, const GLint height) :
+            _id(id),
+            _width(width),
+            _height(height),
+            _title(title){};
 public:
-    inline GLuint getTextureID(void)const {return id; };
-    inline void bind(void) const {glBindTexture(GL_TEXTURE_2D, id);};
-    inline void bind(const GLint& num) const{glActiveTexture(num); bind();};
-    inline std::string getTitle(void) const{return title; };
-    inline int getWidth(void) const{return width; };
-    inline int getHeight(void) const{return height; };
-    inline void cleanUp(void)const {glDeleteTextures(1, &id);}
+    inline void cleanUp(void)const {glDeleteTextures(1, &_id);}
+    inline void bind(void) const {glBindTexture(GL_TEXTURE_2D, _id);};
+    inline void bind(const GLint num) const{glActiveTexture(num); bind();};
 
-    inline static PointerTexture2D create(std::string title, GLuint id, int width, int height){
+    //GETTERS
+    inline int getWidth(void) const{return _width; };
+    inline int getHeight(void) const{return _height; };
+    inline GLuint getTextureID(void)const {return _id; };
+    inline std::string getTitle(void) const{return _title; };
+
+    inline static PointerTexture2D create(const std::string& title, const GLuint id, const int width, const int height){
         return PointerTexture2D(new Texture2D(title, id, width, height));
     }
 
-    inline static PointerTexture2D create(GLuint id){
+    inline static PointerTexture2D create(const GLuint id){
         return PointerTexture2D(new Texture2D(id));
     }
 };

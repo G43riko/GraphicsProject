@@ -8,8 +8,8 @@
 #include <memory>
 #include <vector>
 #include "BlockType.h"
-#include "src/components/voxel/blocks/BlockAir.h"
-#include "src/components/voxel/blocks/BlockGrass.h"
+#include "src/components/voxel/blocks/types/BlockAir.h"
+#include "src/components/voxel/blocks/types/BlockGrass.h"
 #include "BlockID.h"
 
 

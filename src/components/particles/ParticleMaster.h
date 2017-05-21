@@ -10,15 +10,14 @@
 #include "ParticleManager.h"
 
 class ParticleMaster {
-private:
-    PointerRawModel model;
-    PointerBasicShader shader;
+    const PointerBasicShader shader;
+    const PointerRawModel model;
 public:
     void renderParticles(ParticlesList particles, PointerCamera camera);
     void renderParticles(std::vector<Particle> particles, PointerCamera camera);
-    ParticleMaster(PointerBasicShader shader, Loader loader) : shader(shader){
-        model = loader.loadToVao(PARTICLE_VERTICES, 2);
-    };
+    ParticleMaster(PointerBasicShader shader, Loader loader) :
+            shader(shader),
+            model(loader.loadToVao(PARTICLE_VERTICES, 2)){};
     void cleanUp(void){};
 };
 

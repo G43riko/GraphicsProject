@@ -55,7 +55,8 @@ void Renderer::updateProjectionMatrix(PointerCamera camera, PointerBasicShader s
         shader -> updateUniform4m(UNIFORM_PROJECTION_MATRIX, camera -> getProjectionMatrix());
     }
     else {
-        for (auto it = shaders.begin(); it != shaders.end(); ++it){
+        //for (auto it = shaders.begin(); it != shaders.end(); ++it){
+        ITERATE_MAP_AUTO(shaders, it){
             if (it->second->hasUniform(UNIFORM_PROJECTION_MATRIX)) {
                 it->second->bind();
                 it->second->updateUniform4m(UNIFORM_PROJECTION_MATRIX, camera->getProjectionMatrix());
@@ -98,8 +99,9 @@ void Renderer::initShaders(void){
 
 void Renderer::addShader(std::string key, PointerBasicShader shader){
     shaders[key] = shader;
-    if(actualCamera && shader -> hasUniform(UNIFORM_PROJECTION_MATRIX))
+    if(actualCamera && shader -> hasUniform(UNIFORM_PROJECTION_MATRIX)){
         updateProjectionMatrix(actualCamera, shader);
+    }
 }
 
 void Renderer::init3D(){
@@ -130,19 +132,16 @@ void Renderer::renderSceneDeferred(BasicScene * scene){
     glEnable(GL_TEXTURE);
     EntitiesList entities = scene -> getEntities();
 
-    for (auto it = entities.begin(); it != entities.end(); ++it){ //pre všetky materialy
+    ITERATE_MAP_AUTO(entities, it){ //pre všetky materialy
         if(it -> second.size()){
-            auto itEnt = it->second.begin();
 
-            PointerRawModel model = it->first -> getModel();
+            RawModel model = it->first->getModel();
             RenderUtil::prepareModel(model, 3);
-            RenderUtil::prepareMaterial(it->first-> getMaterial(), shader, options);
+            RenderUtil::prepareMaterial(it->first->getMaterial(), shader, options);
 
-            while(itEnt != it->second.end()){ //prejde všetky entity
-                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
-                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-
-                itEnt++;
+            ITERATE_VECTOR(it->second, i){
+                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, it->second[i] -> getTransform() -> getTransformation());
+                glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
             }
         }
     }
@@ -238,13 +237,13 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
 
     glEnable(GL_TEXTURE);
     for(unsigned int i=0 ; i< entities.size() ; i++){
-        PointerRawModel model = entities[i] -> getModel() -> getModel();
+        RawModel model = entities[i]->getModel()->getModel();
 
         shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, entities[i] -> getTransform() -> getTransformation());
         if(options & FLAG_TEXTURE)
-            RenderUtil::prepareMaterial(entities[i] -> getModel() -> getMaterial(), shader, options);
+            RenderUtil::prepareMaterial(entities[i]->getModel()->getMaterial(), shader, options);
         RenderUtil::prepareModel(model, items);
-        glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
     }
     RenderUtil::finishRender(items);
 }
@@ -287,13 +286,13 @@ void Renderer::renderObject(PointerEntity object, std::vector<PointerPointLight>
     for(unsigned int i=0 ; i<lights.size() ; i++)
         RenderUtil::updateLightUniforms(lights[i], shader, actualCamera, i);
 
-    PointerRawModel model = object -> getModel() -> getModel();
+    RawModel model = object->getModel()->getModel();
     glEnable(GL_TEXTURE);
 
     shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, object->getTransform()->getTransformation());
-    RenderUtil::prepareMaterial(object -> getModel() -> getMaterial(), shader, options);
+    RenderUtil::prepareMaterial(object->getModel()->getMaterial(), shader, options);
     RenderUtil::prepareModel(model, 4);
-    glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
     RenderUtil::finishRender(4);
 }
 
@@ -307,11 +306,11 @@ void Renderer::render(PointerRawModel model){
 }
 
 void Renderer::render(PointerMaterialedModel materialedModel){
-    PointerRawModel model = materialedModel -> getModel();
+    RawModel model = materialedModel->getModel();
     glEnable(GL_TEXTURE);
-    RenderUtil::prepareMaterial(materialedModel -> getMaterial(), nullptr, options);
+    RenderUtil::prepareMaterial(materialedModel->getMaterial(), nullptr, options);
     RenderUtil::prepareModel(model, 1);
-    glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
     RenderUtil::finishRender(1);
 }
 void Renderer::update(float delta) {

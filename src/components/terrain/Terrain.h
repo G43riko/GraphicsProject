@@ -18,12 +18,12 @@ public:
     inline ~Terrain(){
         clearMap();
     }
-    inline Terrain(Loader loader, PointerTexture2D texture, GLuint size, GLuint vertices, float height, float textMulti, float **mapa = nullptr)
-            : height(height),
-              texture(texture),
-              generator(HeightGenerator(height)),
-              vertices(vertices),
-              size(size){
+    inline Terrain(Loader loader, PointerTexture2D texture, GLuint size, GLuint vertices, float height, float textMulti, float **mapa = nullptr) :
+            height(height),
+            texture(texture),
+            generator(HeightGenerator(height)),
+            vertices(vertices),
+            size(size){
         if(IS_NOT_NULL(mapa)){
             if(map){
                 clearMap();
@@ -61,16 +61,16 @@ private:
             clearMap();
         }
         map = new float * [x];
-        for(GLuint i=0 ; i<x; i++){
+        LOOP_U(x, i){
             map[i] = new float[y];
         }
     }
 
     inline Vector3f calculateNormal(const GLuint x, const GLuint z) const{
-        float heightL = getTerrainHeight(x - 1, z);
-        float heightR = getTerrainHeight(x + 1, z);
-        float heightD = getTerrainHeight(x, z - 1);
-        float heightU = getTerrainHeight(x, z + 1);
+        const float heightL = getTerrainHeight(x - 1, z);
+        const float heightR = getTerrainHeight(x + 1, z);
+        const float heightD = getTerrainHeight(x, z - 1);
+        const float heightU = getTerrainHeight(x, z + 1);
         return Vector3f(heightL - heightR, 2.0f, heightD - heightU).normalize();
     }
 
@@ -84,21 +84,10 @@ private:
         VectorF verticesVector, normals, textures;
         VectorUI indices;
 
-        float premulSize = (float)size / (float)(vertices - 1);
-        float premulTexture = textMulti / (float)(vertices - 1);
+        const float premulSize = (float)size / (float)(vertices - 1);
+        const float premulTexture = textMulti / (float)(vertices - 1);
+
         //vygeneruje výškovú mapu pre terén a vypočíta súradnice pre textúru
-//        for(GLuint i=0 ; i<vertices ; i++){
-//            for(GLuint j=0 ; j<vertices ; j++){
-//                map[j][i] = generator.generateHeight(j, i);
-//
-//                verticesVector.push_back((float)j * premulSize);
-//                verticesVector.push_back(map[j][i]);
-//                verticesVector.push_back((float)i * premulSize);
-//
-//                textures.push_back((float)j * premulTexture);
-//                textures.push_back((float)i * premulTexture);
-//            }
-//        }
 
         map[0][0] = generator.generateHeight(0, 0);
         for(GLuint i=0 ; i<vertices ; i++) {

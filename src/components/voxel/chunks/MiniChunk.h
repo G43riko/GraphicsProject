@@ -5,10 +5,10 @@
 #ifndef GAMEENGINE_MINICHUNK_H
 #define GAMEENGINE_MINICHUNK_H
 
-#include "VoxelPosition.h"
-#include "VoxelBlock.h"
-#include "VoxelRenderer.h"
-#include "../voxel_old/ChunkBuilder.h"
+#include "src/components/voxel/VoxelPosition.h"
+#include "src/components/voxel/blocks/VoxelBlock.h"
+#include "src/components/voxel/VoxelRenderer.h"
+#include "ChunkBuilder.h"
 
 typedef unsigned int UInt;
 

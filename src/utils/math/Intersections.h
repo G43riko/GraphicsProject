@@ -30,25 +30,25 @@
  * @param S3
  * @return
  */
-bool intersectRayWithSquare(const Vector3f R1, const Vector3f R2, const Vector3f S1, const Vector3f S2, const Vector3f S3) {
+bool intersectRayWithSquare(const Vector3f& R1, const Vector3f& R2, const Vector3f& S1, const Vector3f& S2, const Vector3f& S3) {
     // 1.
-    Vector3f dS21 = S2 - S1;
-    Vector3f dS31 = S3 - S1;
-    Vector3f n = dS21.getCross(dS31);
+    const Vector3f dS21 = S2 - S1;
+    const Vector3f dS31 = S3 - S1;
+    const Vector3f n = dS21.getCross(dS31);
     // 2.
-    Vector3f dR = R1 - R2;
-    float ndotdR = n.dot(dR);
+    const Vector3f dR = R1 - R2;
+    const float ndotdR = n.dot(dR);
 
     if (ABS(ndotdR) < 1e-6f) { // Choose your tolerance
         return false;
     }
-    float t = -n.dot(R1 - S1) / ndotdR;
-    Vector3f M = R1 + (dR * t);
+    const float t = -n.dot(R1 - S1) / ndotdR;
+    const Vector3f M = R1 + (dR * t);
 
     // 3.
-    Vector3f dMS1 = M - S1;
-    float u = dMS1.dot(dS21);
-    float v = dMS1.dot(dS31);
+    const Vector3f dMS1 = M - S1;
+    const float u = dMS1.dot(dS21);
+    const float v = dMS1.dot(dS31);
 
     // 4.
     return (u >= 0.0f && u <= dS21.dot(dS21) && v >= 0.0f && v <= dS31.dot(dS31));
@@ -83,7 +83,7 @@ bool callback(const int x, const int y, const int z, const Vector3f face){
     return false;
 }
 
-void raycast(const Vector3f origin, const Vector3f direction, float radius = 100) {
+void raycast(const Vector3f& origin, const Vector3f& direction, float radius = 100) {
     // From "A Fast Voxel Traversal Algorithm for Ray Tracing"
     // by John Amanatides and Andrew Woo, 1987
     // <http://www.cse.yorku.ca/~amana/research/grid.pdf>
@@ -103,28 +103,28 @@ void raycast(const Vector3f origin, const Vector3f direction, float radius = 100
     // tMaxX, tMaxY, and tMaxZ.
 
     // Cube containing origin point.
-    int x = (int)floor(origin.x);
-    int y = (int)floor(origin.y);
-    int z = (int)floor(origin.z);
+    const int x = (int)floor(origin.x);
+    const int y = (int)floor(origin.y);
+    const int z = (int)floor(origin.z);
     // Break out direction vector.
-    float dx = direction.x;
-    float dy = direction.y;
-    float dz = direction.z;
+    const float dx = direction.x;
+    const float dy = direction.y;
+    const float dz = direction.z;
     // Direction to increment x,y,z when stepping.
-    float stepX = SIGNUM(dx);
-    float stepY = SIGNUM(dy);
-    float stepZ = SIGNUM(dz);
+    const float stepX = SIGNUM(dx);
+    const float stepY = SIGNUM(dy);
+    const float stepZ = SIGNUM(dz);
     // See description above. The initial values depend on the fractional
     // part of the origin.
-    float tMaxX = intbound(origin.x, dx);
-    float tMaxY = intbound(origin.y, dy);
-    float tMaxZ = intbound(origin.z, dz);
+    const float tMaxX = intbound(origin.x, dx);
+    const float tMaxY = intbound(origin.y, dy);
+    const float tMaxZ = intbound(origin.z, dz);
     // The change in t when taking a step (always positive).
-    float tDeltaX = stepX / dx;
-    float tDeltaY = stepY / dy;
-    float tDeltaZ = stepZ / dz;
+    const float tDeltaX = stepX / dx;
+    const float tDeltaY = stepY / dy;
+    const float tDeltaZ = stepZ / dz;
     // Buffer for reporting faces to the callback.
-    Vector3f face;
+    const Vector3f face;
 
     // Avoids an infinite loop.
     if (EZ(dx) && EZ(dy) && EZ(dz)){
@@ -136,9 +136,9 @@ void raycast(const Vector3f origin, const Vector3f direction, float radius = 100
     // compare with 't'.
     radius /= (float)sqrt(dx * dx + dy * dy + dz * dz);
 
-    int wx = 1000;
-    int wy = 1000;
-    int wz = 1000;
+    const int wx = 1000;
+    const int wy = 1000;
+    const int wz = 1000;
 
     while (/* ray has not gone past bounds of world */
             (stepX > 0 ? x < wx : x >= 0) &&

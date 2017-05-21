@@ -26,7 +26,7 @@ private:
 public:
     inline void loadContent() override {
         DEBUG("načítavam content");
-        auto skyTexture = TextureManager::instance.createCubeTexture("sky");
+        const PointerCubeTexture skyTexture = TextureManager::instance.createCubeTexture("sky");
         getScene()->setSky(skyTexture);
 
         OBJLoader objLoader = OBJLoader({"box", "plane", "sphere", "tea"});
@@ -34,35 +34,35 @@ public:
         //////////////////////////////////////////////////////////Začiatok načítavanie OBJ súborov
 
         particleTexture = TextureManager::instance.createTexture2D("res/textures/particle_1.png");
-        auto diffuse = TextureManager::instance.createTexture2D("res/textures/texture.png");
-        auto normal = TextureManager::instance.createTexture2D("res/textures/textureNormal.png");
-        auto green = TextureManager::instance.createTexture2D("res/textures/green.png");
+        const PointerTexture2D diffuse = TextureManager::instance.createTexture2D("res/textures/texture.png");
+        const PointerTexture2D normal = TextureManager::instance.createTexture2D("res/textures/textureNormal.png");
+        const PointerTexture2D green = TextureManager::instance.createTexture2D("res/textures/green.png");
 
 
         getScene() -> setTerrainManager(new TerrainManager(getLoader(), 100, getScene()));
         getScene() -> getTerrainManager() -> generateTerrain(diffuse, 128, 5, 40, 1, 0);
 
-        auto teaMaterial = Material::create(green);
-        auto material = Material::create(diffuse, normal);
+        const PointerMaterial teaMaterial = Material::create(green);
+        const PointerMaterial material = Material::create(diffuse, normal);
 
 
-        auto line = getLoader().loadToVao(GObjects::createLine({Vector3f(), {0, 5, 0}, {0, 5, 5,}, {5, 5, 5}}), GL_LINE_STRIP);
+        const PointerRawModel line = getLoader().loadToVao(GObjects::createLine({Vector3f(), {0, 5, 0}, {0, 5, 5,}, {5, 5, 5}}), GL_LINE_STRIP);
 
         //////////////////////////////////////////////////////////Koniec načítavanie OBJ súborov
         objLoader.waitLoadAsynch();
 
-        auto rawModel = objLoader.getRawModel(getLoader(), "box");
-        auto tea = objLoader.getRawModel(getLoader(), "tea");
-        auto plane = objLoader.getRawModel(getLoader(), "plane");
-        auto sphere = objLoader.getRawModel(getLoader(), "sphere");
+        const PointerRawModel rawModel = objLoader.getRawModel(getLoader(), "box");
+        const PointerRawModel tea = objLoader.getRawModel(getLoader(), "tea");
+        const PointerRawModel plane = objLoader.getRawModel(getLoader(), "plane");
+        const PointerRawModel sphere = objLoader.getRawModel(getLoader(), "sphere");
         objLoader.cleanUp();
 
         ((Scene*)getScene())->loadParticleTexture(particleTexture, 4, 4);
         ball = MaterialedModel::create(sphere, material);
-        auto teaModel = MaterialedModel::create(tea, teaMaterial);
-        auto model = MaterialedModel::create(rawModel, material);
-        auto floor = MaterialedModel::create(plane, Material::create(diffuse, normal));
-        auto barrelModel = MaterialedModel::create("barrel", getLoader());
+        const PointerMaterialedModel teaModel = MaterialedModel::create(tea, teaMaterial);
+        const PointerMaterialedModel model = MaterialedModel::create(rawModel, material);
+        const PointerMaterialedModel floor = MaterialedModel::create(plane, Material::create(diffuse, normal));
+        const PointerMaterialedModel barrelModel = MaterialedModel::create("barrel", getLoader());
 
 
         getScene() -> addEntity(Entity::create(MaterialedModel::create(line, nullptr), Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 2, 1)));
@@ -92,9 +92,9 @@ public:
         //renderer = new Renderer(getLoader(), WindowManager::width, WindowManager::height);
         setRenderer(new Renderer(getLoader(), WindowManager::width, WindowManager::height));
         if(gui){
-            gui -> setWater(new GtkWater(getRenderer() -> getMaster().getWater()));
-            gui -> setPostFx(new GtkPostFx(getRenderer() -> getMaster().getPostFx()));
-            gui -> setRenderer(new GtkRenderer((Renderer *)getRenderer()));
+            gui -> setWater(new GtkWater(getRenderer().getMaster().getWater()));
+            gui -> setPostFx(new GtkPostFx(getRenderer().getMaster().getPostFx()));
+            gui -> setRenderer(new GtkRenderer(((Renderer*)&getRenderer())));
         }
 
         DEBUG("MainApplication::init - after  new Renderer: " << glfwGetTime());
@@ -110,11 +110,11 @@ public:
         PointerPointLight light1 = PointLight::create(Vector3f(200, 10, 200), Vector3f(0.5f, 0.0f, 0.8f), Vector3f(1.0f, 0.1f, 0.02f));
 
         getScene() -> addLight(sun);
-        getRenderer() -> setLight(sun);
+        getRenderer().setLight(sun);
 
 //        renderer -> setPostFx(true);
 
-        setView(new FpsView(getRenderer() -> getActualCamera(), true));
+        setView(new FpsView(getRenderer().getActualCamera(), true));
         DEBUG("MainApplication::init - end: " << glfwGetTime());
     }
 
@@ -125,15 +125,17 @@ public:
         barrel -> getTransform() -> getRotation().rotate(Vector3f(0.00f, 0.05f, 0.0f) * delta);
         teaEntity -> getTransform() -> getRotation().rotate(Vector3f(0.0f, 0.005f, 0.0f) * delta);
 
-        getRenderer() -> prepareRenderer(0, 0, 0, 1);
+        getRenderer().prepareRenderer(0, 0, 0, 1);
         time += 0.02f * delta;
-        getRenderer() -> init3D();
+        getRenderer().init3D();
         getScene() -> update(delta);
         getView().update(delta);
-        getRenderer() -> input();
-        getRenderer() -> update(delta);
+        getRenderer().input();
+        getRenderer().update(delta);
         if(Input::isKeyDown(GLFW_KEY_F)){
-            ((Scene*)getScene()) -> createParticle(particleTexture, Vector3f(0.0f, 2.0f, -2.0f), Vector3f(grandom(-0.02, 0.02), grandom(0.01, 0.1), grandom(-0.02, 0.02)), 0, 100, 0, 1);
+            for(int i=0 ; i<10 ; i++){
+                ((Scene*)getScene()) -> createParticle(particleTexture, Vector3f(0.0f, 2.0f, -2.0f), Vector3f(grandom(-0.02, 0.02), grandom(0.01, 0.1), grandom(-0.02, 0.02)), 0, 100, 0, 1);
+            }
         }
 
         if(Input::isKeyDown(GLFW_KEY_ESCAPE)){
@@ -142,9 +144,9 @@ public:
         }
 
         if(Input::getMouseDown(0)){
-            PointerGameObject entity = GameObject::create(Entity::create(ball, getRenderer() -> getActualCamera() -> getPosition(), Vector3f(), Vector3f(1, 1, 1)));
+            PointerGameObject entity = GameObject::create(Entity::create(ball, getRenderer().getActualCamera() -> getPosition(), Vector3f(), Vector3f(1, 1, 1)));
             entity->setGravityEffect(0.01f);
-            entity->setVelocity(getRenderer() -> getActualCamera() -> getForward());
+            entity->setVelocity(getRenderer().getActualCamera() -> getForward());
             getScene()->addObject(entity);
         }
     }
@@ -154,7 +156,7 @@ public:
         PRINT("FPS: " << fps);
     };
     inline void render(void) override {
-        getRenderer() -> renderScene(((Scene *)getScene()));
+        getRenderer().renderScene(((Scene *)getScene()));
 
 //        renderer -> renderSceneDeferred(((Scene *)getScene()));
     };

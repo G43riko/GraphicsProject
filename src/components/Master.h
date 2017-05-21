@@ -17,8 +17,8 @@
 
 
 class EntityMaster;
+
 class Master {
-private:
     GuiMaster *guiMaster            = nullptr;
     WaterMaster *waterMaster        = nullptr;
     SkyBoxMaster *skyBoxMaster      = nullptr;

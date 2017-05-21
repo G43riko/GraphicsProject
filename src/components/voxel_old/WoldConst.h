@@ -10,6 +10,7 @@
 
 #define BLOCK_SIZE 1
 
+#define NUMBER_OF_MINICHUNKS 2
 #define CHUNK_SIZE 16
 #define CHUNK_HEIGHT 256
 

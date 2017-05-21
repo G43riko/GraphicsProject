@@ -5,7 +5,7 @@
 #ifndef GAMEENGINE_AIRTYPE_H
 #define GAMEENGINE_AIRTYPE_H
 
-#include "src/components/voxel/BlockType.h"
+#include "src/components/voxel/blocks/BlockType.h"
 
 class BlockAir : public BlockType{
 public:

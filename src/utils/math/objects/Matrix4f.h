@@ -217,36 +217,36 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
     static inline Matrix4f rotate(const float angle, const Vector3f axis, const Matrix4f src, Matrix4f * dest = nullptr) {
         Matrix4f res = Matrix4f();
 
-        float c = (float) cos(angle);
-        float s = (float) sin(angle);
-        float oneminusc = 1.0f - c;
-        float xy = axis.x * axis.y;
-        float yz = axis.y * axis.z;
-        float xz = axis.x * axis.z;
-        float xs = axis.x * s;
-        float ys = axis.y * s;
-        float zs = axis.z * s;
+        const float c = (float) cos(angle);
+        const float s = (float) sin(angle);
+        const float oneminusc = 1.0f - c;
+        const float xy = axis.x * axis.y;
+        const float yz = axis.y * axis.z;
+        const float xz = axis.x * axis.z;
+        const float xs = axis.x * s;
+        const float ys = axis.y * s;
+        const float zs = axis.z * s;
 
-        float f00 = axis.x * axis.x * oneminusc + c;
-        float f01 = xy * oneminusc + zs;
-        float f02 = xz * oneminusc - ys;
+        const float f00 = axis.x * axis.x * oneminusc + c;
+        const float f01 = xy * oneminusc + zs;
+        const float f02 = xz * oneminusc - ys;
         // n[3] not used
-        float f10 = xy * oneminusc - zs;
-        float f11 = axis.y * axis.y * oneminusc + c;
-        float f12 = yz * oneminusc + xs;
+        const float f10 = xy * oneminusc - zs;
+        const float f11 = axis.y * axis.y * oneminusc + c;
+        const float f12 = yz * oneminusc + xs;
         // n[7] not used
-        float f20 = xz * oneminusc + ys;
-        float f21 = yz * oneminusc - xs;
-        float f22 = axis.z * axis.z * oneminusc + c;
+        const float f20 = xz * oneminusc + ys;
+        const float f21 = yz * oneminusc - xs;
+        const float f22 = axis.z * axis.z * oneminusc + c;
 
-        float t00 = src.m00 * f00 + src.m10 * f01 + src.m20 * f02;
-        float t01 = src.m01 * f00 + src.m11 * f01 + src.m21 * f02;
-        float t02 = src.m02 * f00 + src.m12 * f01 + src.m22 * f02;
-        float t03 = src.m03 * f00 + src.m13 * f01 + src.m23 * f02;
-        float t10 = src.m00 * f10 + src.m10 * f11 + src.m20 * f12;
-        float t11 = src.m01 * f10 + src.m11 * f11 + src.m21 * f12;
-        float t12 = src.m02 * f10 + src.m12 * f11 + src.m22 * f12;
-        float t13 = src.m03 * f10 + src.m13 * f11 + src.m23 * f12;
+        const float t00 = src.m00 * f00 + src.m10 * f01 + src.m20 * f02;
+        const float t01 = src.m01 * f00 + src.m11 * f01 + src.m21 * f02;
+        const float t02 = src.m02 * f00 + src.m12 * f01 + src.m22 * f02;
+        const float t03 = src.m03 * f00 + src.m13 * f01 + src.m23 * f02;
+        const float t10 = src.m00 * f10 + src.m10 * f11 + src.m20 * f12;
+        const float t11 = src.m01 * f10 + src.m11 * f11 + src.m21 * f12;
+        const float t12 = src.m02 * f10 + src.m12 * f11 + src.m22 * f12;
+        const float t13 = src.m03 * f10 + src.m13 * f11 + src.m23 * f12;
         res.m20 = src.m00 * f20 + src.m10 * f21 + src.m20 * f22;
         res.m21 = src.m01 * f20 + src.m11 * f21 + src.m21 * f22;
         res.m22 = src.m02 * f20 + src.m12 * f21 + src.m22 * f22;
@@ -297,7 +297,9 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
 
         return result;
     }
-
+    static inline Matrix4f initTranslation(const Vector3f& position){
+        return initTranslation(position.x, position.y, position.z);
+    }
     static inline Matrix4f initTranslation(const float x, const float y, const float z){
         Matrix4f result = Matrix4f();
 

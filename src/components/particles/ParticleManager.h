@@ -41,12 +41,18 @@ public:
     }
     void update(float delta);
     inline bool hasTexture(std::string name) const{return textures.find(name) != textures.end(); }
-    inline void loadTexture(PointerTexture2D texture, int rows, int columns){;
+    inline void loadTexture(PointerTexture2D texture, uint rows, uint columns){;
         if(!hasTexture(texture -> getTitle())){
             textures[texture -> getTitle()] = PointerParticleTexture(new ParticleTexture(texture, rows, columns));
         }
     }
-    inline void createParticle(PointerTexture2D texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale){
+    inline void createParticle(const PointerTexture2D texture,
+                               const Vector3f &position,
+                               const Vector3f &velocity,
+                               const float gravityEffect,
+                               const float lifeLength,
+                               const float rotation,
+                               const float scale){
         PointerParticleTexture pointerTexture = textures[texture -> getTitle()];
         addParticle(Particle(pointerTexture, position, velocity, gravityEffect, lifeLength, rotation, scale));
     }

@@ -14,12 +14,12 @@
 class TerrainManager {
 private:
     std::map<int, Terrain *> terrains;
-    float size;
+    const float size;
     Loader loader;
     BasicScene * scene = nullptr;
     int hash(int x, int z){
-        int k1 = x >= 0 ? x * 2 : -x * 2 - 1;
-        int k2 = z >= 0 ? z * 2 : -z * 2 - 1;
+        const int k1 = x >= 0 ? x * 2 : -x * 2 - 1;
+        const int k2 = z >= 0 ? z * 2 : -z * 2 - 1;
         return (k1 + k2) * (k1 + k2 + 1) / 2 + k1;
     }
     public:
@@ -44,27 +44,6 @@ private:
                                               Vector3f(0.0f, 0.0f, 0.0f),
                                               Vector3f(1.0f, 1.0f, 1.0f)));
 
-//            float **map;
-//            map = new float * [vertices];
-//            for(unsigned int i=0 ; i<(unsigned int)vertices ; i++) {
-//                map[i] = new float[vertices];
-//                for (unsigned int j = 0; j < (unsigned int)vertices; j++) {
-//                    map[i][j] = t->getHeight(i, j);
-//                }
-//            }
-//            Terrain * t2 = new Terrain(loader,
-//                                      texture,
-//                                       (unsigned int)size,
-//                                      vertices,
-//                                      height,
-//                                      textures, map);
-//
-//            scene -> addEntity(createEntity(t2 -> getModel(),
-//                                            Vector3f((float)posX * size, 0.0f, (float)posZ * size),
-//                                            Vector3f(0.0f, 0.0f, 0.0f),
-//                                            Vector3f(1.0f, 1.0f, 1.0f)));
-
-            //PRINT("terrain: [" << posX << ", " << posZ);
             terrains[hash(posX, posZ)] = t;
         }
 
@@ -77,11 +56,12 @@ private:
             return x;
         }
         float getHeight(float x, float z){
-            int surX = (int)(x / size);
-            int surZ = (int)(z / size);
-            float posX = ((x - (float)surX * size) / size);
-            float posZ = ((z - (float)surZ * size) / size);
-            int hashVal = hash((int)floor(posX), (int)floor(posZ));
+            const int surX = (int)(x / size);
+            const int surZ = (int)(z / size);
+            const float posX = ((x - (float)surX * size) / size);
+            const float posZ = ((z - (float)surZ * size) / size);
+            const int hashVal = hash((int)floor(posX), (int)floor(posZ));
+
             if(!MAP_CONTAINS_KEY(terrains, hashVal)){
                 return DEFAULT_TERRAIN_HEIGHT;
             }
@@ -91,8 +71,8 @@ private:
 
         void cleanUp(void){
             //vymažeme všetky terény
-            for(auto terrain : terrains){
-                delete terrain . second;
+            ITERATE_MAP_AUTO(terrains, it){
+                delete it -> second;
             }
             //vyčistíme mapu terénov
             terrains.clear();

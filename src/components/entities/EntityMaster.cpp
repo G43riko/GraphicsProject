@@ -28,13 +28,13 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
         if(it -> second.size()){
             auto itEnt = it->second.begin();
 
-            PointerRawModel model = it -> first -> getModel();
+            RawModel model = it->first->getModel();
             RenderUtil::prepareModel(model, 3);
-            RenderUtil::prepareMaterial(it -> first -> getMaterial(), shader, options);
+            RenderUtil::prepareMaterial(it->first->getMaterial(), shader, options);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
                 shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
-                glDrawElements(model -> getRenderType(), model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+                glDrawElements(model.getRenderType(), model.getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 itEnt++;
             }
@@ -54,12 +54,12 @@ void EntityMaster::renderWireFrame(EntitiesList entities, PointerCamera camera){
         if(it -> second.size()){
             auto itEnt = it->second.begin();
 
-            PointerRawModel model = it -> first -> getModel();
+            RawModel model = it->first->getModel();
             RenderUtil::prepareModel(model, 1);
 
             while(itEnt != it->second.end()){ //prejde všetky entity
                 wireFrameShader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, itEnt -> get() -> getTransform() -> getTransformation());
-                glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+                glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
 
                 itEnt++;
             }
@@ -118,7 +118,7 @@ void EntityMaster::renderEntity(PointerEntity entity, std::vector<PointerPointLi
 
     shader -> updateUniform4m(TRANSFORMATION_MATRIX, entity -> getTransform() -> getTransformation());
 
-    RenderUtil::prepareMaterial(entity -> getModel() -> getMaterial(), shader, options);
+    RenderUtil::prepareMaterial(entity -> getModelP() -> getMaterial(), shader, options);
     RenderUtil::prepareModel(model, 3);
 
     glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);

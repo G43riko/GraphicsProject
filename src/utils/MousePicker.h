@@ -22,22 +22,21 @@ private:
 
 
 	inline Vector3f toWorldCoords(const Vector4f& eyeCoords){
-		Matrix4f invertedview = Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(viewMatrix)));
+		const Matrix4f invertedview = Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(viewMatrix)));
 
-		Vector4f rayWorld = Matrix4f::transform(invertedview, eyeCoords);
-		Vector3f mouseRay = Vector3f(rayWorld.x, rayWorld.y, rayWorld.z);
-		return mouseRay.normalize();
+		const Vector4f rayWorld = Matrix4f::transform(invertedview, eyeCoords);
+		return Vector3f(rayWorld.x, rayWorld.y, rayWorld.z).normalize();
 	}
 
 	inline Vector4f toEyeCoords(const Vector4f& clipCoords){
-		Matrix4f invertedProjection =  Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(projectionMatrix)));
-		Vector4f eyeCoords = Matrix4f::transform(invertedProjection, clipCoords);
+		const Matrix4f invertedProjection =  Matrix4f(glm::inverse(Matrix4f::toGlmMatrix(projectionMatrix)));
+		const Vector4f eyeCoords = Matrix4f::transform(invertedProjection, clipCoords);
 		return Vector4f(eyeCoords.x, eyeCoords.y, -1.0f, 0.0f);
 	}
 
 	inline Vector2f getNormalizedDeviceCoords(float mouseX, float mouseY){
-		float x = (2.0f * mouseX) / (float)WindowManager::width - 1;
-		float y = (2.0f * mouseY) / (float)WindowManager::height - 1;
+		const float x = (2.0f * mouseX) / (float)WindowManager::width - 1;
+		const float y = (2.0f * mouseY) / (float)WindowManager::height - 1;
 		return Vector2f(x, -y);
 	}
 
@@ -49,15 +48,14 @@ private:
 		float mouseY = mousePos.y;
 		mouseX = (float)(WindowManager::width / 2);
 		mouseY = (float)(WindowManager::height / 2);
-		Vector2f normalizedCoords = getNormalizedDeviceCoords(mouseX, mouseY);
-		Vector4f clipCoords = Vector4f(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
-		Vector4f eyeCoords = toEyeCoords(clipCoords);
-		Vector3f worlRay = toWorldCoords(eyeCoords);
-		return worlRay;
+		const Vector2f normalizedCoords = getNormalizedDeviceCoords(mouseX, mouseY);
+		const Vector4f clipCoords = Vector4f(normalizedCoords.x, normalizedCoords.y, -1.0f, 1.0f);
+		const Vector4f eyeCoords = toEyeCoords(clipCoords);
+		return toWorldCoords(eyeCoords);
 	}
 public:
 	MousePicker(BasicCamera * camera);
-	inline Vector3f getCurrentRay(void) {
+	inline const Vector3f& getCurrentRay(void){
 		update();
 		return currentRay;
 	}

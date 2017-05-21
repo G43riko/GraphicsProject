@@ -13,15 +13,13 @@ class EntityManager {
 private:
     EntitiesList entities;
     int count = 0;
-    void addModel(PointerMaterialedModel model){
+    inline void addModel(PointerMaterialedModel model){
         entities[model] = std::vector<PointerEntity>();
     }
 public:
-    inline int size(void) const{
-        return count;
-    }
+    inline int size(void) const{ return count; }
     inline void addEntity(const PointerEntity& entity) {
-        if (entities.find(entity->getModel()) == entities.end()) {
+        if(!MAP_CONTAINS_KEY(entities, entity -> getModel())){
             addModel(entity->getModel());
         }
         count++;
@@ -29,12 +27,14 @@ public:
     }
 
     inline void removeEntity(const PointerEntity& entity){
-        if (entities.find(entity->getModel()) == entities.end()) {
+        if(MAP_CONTAINS_KEY(entities, entity->getModel())){
             return;
         }
-        for(auto iter = entities[entity -> getModel()].begin(); iter != entities[entity -> getModel()].end(); ++iter){
+        std::vector<PointerEntity> actualEntities = entities[entity -> getModel()];
+
+        ITERATE_VECTOR_ITERATOR_AUTO(actualEntities, iter){
             if( *iter == entity ){
-                entities[entity -> getModel()].erase(iter);
+                actualEntities.erase(iter);
                 break;
             }
         }
@@ -43,11 +43,10 @@ public:
         return entities;
     }
     inline void update(float delta){
-        for (auto it = entities.begin(); it != entities.end(); ++it){ //pre všetky materialy
+        ITERATE_MAP_AUTO(entities, it){ // pre všetky materialy
             if(it -> second.size()){
-                auto itEnt = it->second.begin();
-                while(itEnt != it->second.end()){ //prejde všetky entity
-                    if(itEnt -> get() -> isAlive()){
+                ITERATE_VECTOR_ITERATOR_AUTO_ENDLESS(it->second, itEnt){ //prejde všetky entity
+                    if((*itEnt)-> isAlive()){
                         itEnt++;
                     }
                     else{

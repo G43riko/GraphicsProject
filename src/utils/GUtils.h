@@ -28,7 +28,15 @@
         delete el;          \
         el = nullptr;       \
     }
-#define START_WITH(x, y) (x.find(y) == 0)
+
+
+#define C_STRING_START_WITH(x, y) (strstr(x, y) == x ? 1 : 0)
+#define C_STRING_CONTAINS(x, y) (strstr(x, y) != NULL ? 1 : 0)
+
+#define STRING_START_WITH(x, y) (x.find(y) == 0)
+#define STRING_END_WITH(x, y) (x.size() >= y.size() && x.compare(x.size() - y.size(), y.size(), y) == 0)
+#define STRING_CONTAINS(x, y) (x.find(y) != std::string::npos)
+
 #define ERROR(x) std::cerr << x << ": " <<  __FILE__ << " > " << __FUNCTION__ << " > " <<  __LINE__ << std::endl
 #define PRINT(x) std::cout << x << std::endl
 #define DEBUG(x) //std::cerr << x << std::endl
@@ -42,6 +50,12 @@
 
 //#define MAP_CONTAINS_KEY(map, key) (map.find(key) != map.end())
 #define MAP_CONTAINS_KEY(map, key) (!map.empty() && map.count(key) > 0)
+#define ITERATE_VECTOR(x, y) for(long unsigned int y=0, __j__=x.size() ; y<__j__ ; y++)
+#define ITERATE_VECTOR_ITERATOR_AUTO_ENDLESS(x, y) for(auto y = x.begin() ; y != x.end();)
+#define ITERATE_VECTOR_ITERATOR_AUTO(x, y) for(auto y = x.begin() ; y != x.end(); ++y)
+#define ITERATE_VECTOR_ITERATOR(x, y, z) for(z y = x.begin() ; y != x.end() ; ++y)
+#define ITERATE_MAP_AUTO(x, y) for(auto y = x.begin() ;  y != x.end() ; ++y)
+#define ITERATE_MAP(x, y, z) for(z y = x.begin() ; y != x.end() ; ++y)
 
 #ifndef ABS
     #define ABS(x) (x < 0 ? -x : x)
@@ -69,12 +83,12 @@
 #define TO_RADIANS(x) (float)((x) * MATH_PI / 180.0f)
 #define TO_DEGREES(x) (float)((x) * 180.0f / MATH_PI)
 
-#ifndef MAX
-    #define MIN (a, b) (a < b ? a : b)
+#ifndef GMIN
+    #define GMIN(a, b) (a < b ? a : b)
 #endif
 
-#ifndef MAX
-    #define MAX (a, b) (a > b ? a : b)
+#ifndef GMAX
+    #define GMAX(a, b) (a > b ? a : b)
 #endif
 
 #ifndef CLAMP
@@ -84,8 +98,10 @@
 #define SIGNUM(x) (x > 0 ? 1 : x < 0 ? -1 : 0)
 
 //Linerar Interpolation
-#define LERP(a, b, c) (a + c * (b - a))
-#define LERP2(a, b, c) (a * c + b * (1 - c))
+#define LERP(a, b, c) (b + c * (a - b))
+
+#define LOOP(x, y) for(int y = 0 ; y < x ; y++)
+#define LOOP_U(x, y) for(uint y = 0 ; y < x ; y++)
 
 
 /*******************************************OTHERS******************************************************/

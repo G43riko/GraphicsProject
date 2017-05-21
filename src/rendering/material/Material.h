@@ -10,31 +10,37 @@
 #include "CubeTexture.h"
 
 class Material {
-    PointerCubeTexture environmentalMap = nullptr;
-    PointerTexture2D diffuse            = nullptr;
-    PointerTexture2D specular           = nullptr;
-    PointerTexture2D normal             = nullptr;
-    PointerTexture2D alpha              = nullptr;
-    PointerTexture2D bump               = nullptr;
+    PointerCubeTexture _environmentalMap    = nullptr;
+    PointerTexture2D _diffuse               = nullptr;
+    PointerTexture2D _specular              = nullptr;
+    PointerTexture2D _normal                = nullptr;
+    PointerTexture2D _alpha                 = nullptr;
+    PointerTexture2D _bump                  = nullptr;
 
-    float shineDumber = DEFAULT_MATERIAL_SHINE_DUMPER;
-    float reflectivity = DEFAULT_MATERIAL_REFLECTIVITY;
-    inline Material(PointerTexture2D diffuse, PointerTexture2D normal = nullptr) : diffuse(diffuse), normal(normal){};
+    float _shineDumber = DEFAULT_MATERIAL_SHINE_DUMPER;
+    float _reflectivity = DEFAULT_MATERIAL_REFLECTIVITY;
+
+    inline Material(PointerTexture2D diffuse, PointerTexture2D normal = nullptr) :
+            _diffuse(diffuse),
+            _normal(normal){};
 public:
+    inline bool hasEnvironmentalMap(void) const{return IS_NULL(_environmentalMap); };
 
+    //GETTERS
+    inline PointerCubeTexture getEnvironmentalMap(void) const{return _environmentalMap; };
+    inline PointerTexture2D getSpecular(void) const{return _specular;};
+    inline PointerTexture2D getDiffuse(void) const{return _diffuse;};
+    inline PointerTexture2D getNormal(void) const{return _normal;};
+    inline PointerTexture2D getAlpha(void) const{return _alpha;};
+    inline PointerTexture2D getBump(void) const{return _bump;};
 
-//    inline Texture2D& getSpecular(void) const{return *specular;};
-    inline PointerTexture2D getSpecular(void) const{return specular;};
-    inline PointerTexture2D getDiffuse(void) const{return diffuse;};
-    inline PointerTexture2D getNormal(void) const{return normal;};
-    inline PointerTexture2D getAlpha(void) const{return alpha;};
-    inline PointerTexture2D getBump(void) const{return bump;};
+    inline float getReflectivity(void) const{return _reflectivity; };
+    inline float getShineDumper(void) const{return _shineDumber; };
 
-    inline void setEnvironmentalMap(PointerCubeTexture texture){environmentalMap = texture; };
-    inline PointerCubeTexture getEnvironmentalMap(void) const{return environmentalMap; };
-    inline bool hasEnvironmentalMap(void) const{return environmentalMap == nullptr; };
-    inline float getReflectivity(void) const{return reflectivity; };
-    inline float getShineDumper(void) const{return shineDumber; };
+    //SETTERS
+
+    inline void setEnvironmentalMap(PointerCubeTexture texture){_environmentalMap = texture; };
+
 
     inline static PointerMaterial create(PointerTexture2D texture, PointerTexture2D normal = nullptr){
         return PointerMaterial(new Material(texture, normal));

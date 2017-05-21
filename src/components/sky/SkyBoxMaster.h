@@ -64,8 +64,7 @@ public:
         RenderUtil::finishRender(1);
     }
     inline void cleanUp(void){
-        shader -> cleanUp();
-        delete shader;
+        CHECK_AND_CLEAR(shader);
     };
     inline SkyBoxMaster(const PointerCamera camera, Loader loader){
         RenderUtil::updateProjectionMatrix(shader, camera);

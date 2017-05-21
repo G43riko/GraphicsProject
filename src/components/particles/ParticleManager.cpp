@@ -10,11 +10,11 @@ void ParticleManager::createSystem(PointerTexture2D texture, float pps, float sp
     std::shared_ptr<ParticleSystemSimple> system = std::shared_ptr<ParticleSystemSimple>(new ParticleSystemSimple(pointerTexture, *this, pps, speed, gravityComplient, lifeLength));
     systems.push_back(system);
 }
+
 void ParticleManager::update(float delta){
-    for (auto it = particles.begin(); it != particles.end(); ++it){ //pre všetky texture
+    ITERATE_MAP_AUTO(particles, it){ //pre všetky textury
         if(it -> second.size()){
-            auto itPart = it->second.begin();
-            while(itPart != it->second.end()){ //prejde všetky častice
+            ITERATE_VECTOR_ITERATOR_AUTO_ENDLESS(it->second, itPart){ //prejde všetky častice
                 bool stillAlive = itPart -> update(delta);
                 if(stillAlive){
                     itPart++;
@@ -25,6 +25,9 @@ void ParticleManager::update(float delta){
                 }
             }
         }
+    }
+    ITERATE_VECTOR(systems, i){
+        systems[i] -> update(delta, Vector3f(5, 5, 5));
     }
     for(auto system : systems){
         system ->update(delta, Vector3f(5, 5, 5));

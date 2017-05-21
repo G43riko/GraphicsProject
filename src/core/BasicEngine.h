@@ -208,10 +208,9 @@ public:
                 endLoopTime = std::chrono::high_resolution_clock::now();
                 microseconds = std::chrono::duration_cast<std::chrono::microseconds>(endLoopTime - start).count();
 
-                delta = (float)frameTime /  std::chrono::duration_cast<std::chrono::microseconds>(endLoopTime - startLoopTime).count();
+                delta = (float)frameTime /  (float)std::chrono::duration_cast<std::chrono::microseconds>(endLoopTime - startLoopTime).count();
 
             } while(microseconds < 1000000);
-
             if(_running){
                 _app -> onSecondElapse(fps);
             }

@@ -32,9 +32,9 @@ void ShadowMaster::renderShadows(EntitiesList entities, PointerPointLight sun, P
             auto itEnt = it->second.begin();
 
             while(itEnt != it->second.end()){ //prejde všetky entity
-                glBindVertexArray(itEnt ->get() -> getModel() -> getModel() -> getVaoID());
+                glBindVertexArray(itEnt->get()->getModel()->getModel().getVaoID());
                 shader -> updateUniform4m("mpvMatrix", projectionViewMatrix * itEnt -> get() -> getTransform() -> getTransformation());
-                glDrawElements(GL_TRIANGLES, itEnt ->get() -> getModel() -> getModel() -> getVertexCount(), GL_UNSIGNED_INT, 0);
+                glDrawElements(GL_TRIANGLES, itEnt->get()->getModel()->getModel().getVertexCount(), GL_UNSIGNED_INT, 0);
                 itEnt++;
             }
         }
@@ -65,11 +65,11 @@ void ShadowMaster::renderShadows(std::vector<PointerEntity> entities, PointerPoi
     shader -> updateUniform4m("mvpMatrix", projectionViewMatrix);
 
     for(PointerEntity entity : entities){
-        glBindVertexArray(entity -> getModel() -> getModel() -> getVaoID());
+        glBindVertexArray(entity->getModel()->getModel().getVaoID());
         Matrix4f modelMatrix = entity -> getTransform() -> getTransformation();
         shader -> updateUniform4m("mpvMatrix", Matrix4f(camera -> getProjectionMatrix()) * Matrix4f(camera -> getViewMatrix()) * modelMatrix);
 
-        glDrawElements(GL_TRIANGLES, entity -> getModel() -> getModel() -> getVertexCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, entity->getModel()->getModel().getVertexCount(), GL_UNSIGNED_INT, 0);
     }
 
     fbo.unbindFrameBuffer();
@@ -84,9 +84,9 @@ void ShadowMaster::renderShadow(PointerEntity entity, PointerPointLight sun, Poi
     shader -> bind();
 
 
-    //prepareMaterial(entity -> getModel() -> getMaterial(), shader);
+    //prepareMaterial(entity -> getModelP() -> getMaterial(), shader);
 
-    glBindVertexArray(entity -> getModel() -> getModel() -> getVaoID());
+    glBindVertexArray(entity->getModel()->getModel().getVaoID());
     glEnableVertexAttribArray(0);
     box.update();
     prepare(sun -> getPosition() * -1, box);
@@ -94,7 +94,7 @@ void ShadowMaster::renderShadow(PointerEntity entity, PointerPointLight sun, Poi
     Matrix4f modelMatrix = entity -> getTransform() -> getTransformation();
     shader -> updateUniform4m("mpvMatrix", Matrix4f(camera -> getProjectionMatrix()) * Matrix4f(camera -> getViewMatrix()) * modelMatrix);
 
-    glDrawElements(GL_TRIANGLES, entity -> getModel() -> getModel() -> getVertexCount(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, entity->getModel()->getModel().getVertexCount(), GL_UNSIGNED_INT, 0);
 
     fbo.unbindFrameBuffer();
     glDisableVertexAttribArray(1);

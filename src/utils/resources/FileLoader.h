@@ -40,7 +40,7 @@ public:
         if(ifs.is_open()) {
             while(!ifs.eof()) {
                 std::getline(ifs, line);
-                if(START_WITH(line, INCLUDE_IDENTIFICATOR " ")){
+                if(STRING_START_WITH(line, INCLUDE_IDENTIFICATOR " ")){
                     loadShader(line.substr(9) + EXTENSION_GLSL, content);
                 }
                 else{

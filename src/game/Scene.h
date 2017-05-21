@@ -21,7 +21,8 @@ class Scene : public BasicScene{
             entities.addEntity(object->getObject());
         }
         void removeObject(PointerGameObject object){
-            for(auto iter = objects.begin(); iter != objects.end(); ++iter){
+            //for(auto iter = objects.begin(); iter != objects.end(); ++iter){
+            ITERATE_VECTOR_ITERATOR_AUTO(objects, iter){
                 if( *iter == object ){
                     objects.erase(iter);
                     break;
@@ -31,24 +32,22 @@ class Scene : public BasicScene{
         };
         void update(float delta) override{
             particles.update(delta);
-
-            if(objects.size()){
-                auto itObj = objects.begin();
-                while(itObj != objects.end()){
-                    itObj -> get() -> update(delta);
-                    Vector3f position = itObj -> get() -> getNextPos();
-                    float height = IS_NULL(getTerrainManager()) ? DEFAULT_TERRAIN_HEIGHT : getTerrainManager() -> getHeight(position.x, position.z);
-                    if(position.y <= height){
-                        itObj -> get() -> hitFloor(height);
-                    }
-                    itObj++;
+            Vector3f position;
+            ITERATE_VECTOR(objects, i){
+                objects[i] -> update(delta);
+                position = objects[i] -> getNextPos();
+                const float height = IS_NULL(getTerrainManager()) ? DEFAULT_TERRAIN_HEIGHT : getTerrainManager() -> getHeight(position.x, position.z);
+                if(position.y <= height){
+                    objects[i] -> hitFloor(height);
                 }
             }
             entities.update(delta);
         };
 
         void cleanUp(void) override{
-            sky -> cleanUp();
+            if(IS_NOT_NULL(sky)){
+                sky -> cleanUp();
+            }
         };
 
         inline PointerRawModel getSphereModel(void) const{

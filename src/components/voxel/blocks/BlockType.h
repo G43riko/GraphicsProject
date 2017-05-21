@@ -5,7 +5,7 @@
 #ifndef GAMEENGINE_BLOCKTYPE_H
 #define GAMEENGINE_BLOCKTYPE_H
 
-#include <src/components/voxel/BlockData.h>
+#include <src/components/voxel/blocks/BlockData.h>
 #include <string>
 
 class BlockType{
