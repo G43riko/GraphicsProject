@@ -8,8 +8,6 @@
 #include <GL/glew.h>
 #include <src/utils/resources/FileLoader.h>
 #include <src/components/particles/ParticleTexture.h>
-#include "Texture2D.h"
-#include "CubeTexture.h"
 
 
 class TextureManager{
@@ -20,26 +18,31 @@ private:
 public:
     static TextureManager instance;
 
-    inline PointerTexture2D createTexture2D(const std::string fileName){
+    inline PointerTexture2D createTexture2D(const std::string& fileName){
         if(loadedTextures2D.find(fileName) == loadedTextures2D.end()){
             loadedTextures2D[fileName] = initTexture2D(ContentLoader::loadTexturePNG(fileName));
         }
         return loadedTextures2D[fileName];
     };
-    inline PointerTexture2D createTexture2D(const Vector3f color){
+    inline void removeTexture(const Vector3f& color){
+        //TODO dorobiť vymazávanie textúr
+        //TODO musí tu byť aj počítadlo či sa naozaj má odstrániť alebo sa ešte niekde používa
+    }
+
+    inline PointerTexture2D createTexture2D(const Vector3f& color){
         std::string fileName = color.toString();
         if(loadedTextures2D.find(fileName) == loadedTextures2D.end()){
             loadedTextures2D[fileName] = initTexture2D(ContentLoader::loadTextureColor(color));
         }
         return loadedTextures2D[fileName];
     };
-    inline PointerCubeTexture createCubeTexture(const std::string fileName){
+    inline PointerCubeTexture createCubeTexture(const std::string& fileName){
         if(loadedCubeTextures.find(fileName) == loadedCubeTextures.end()){
             loadedCubeTextures[fileName] = initCubeTexture(ContentLoader::loadCubeTexture(fileName));
         }
         return loadedCubeTextures[fileName];
     };
-    inline PointerParticleTexture createParticleTexture(const std::string fileName, const int rows, const int columns){
+    inline PointerParticleTexture createParticleTexture(const std::string& fileName, const int rows, const int columns){
         if(loadedParticleTextures.find(fileName) == loadedParticleTextures.end()){
             loadedParticleTextures[fileName] = PointerParticleTexture(new ParticleTexture(createTexture2D(fileName), rows, columns));
         }
@@ -60,7 +63,7 @@ public:
         loadedParticleTextures.clear();
     };
 private:
-    inline PointerTexture2D initTexture2D(const CubeImageData data){
+    inline PointerTexture2D initTexture2D(const CubeImageData& data){
         GLuint texture_id;
         glGenTextures(1, &texture_id);
         glBindTexture(GL_TEXTURE_2D, texture_id);

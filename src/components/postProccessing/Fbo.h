@@ -10,27 +10,27 @@
 
 
 class Fbo {
-private :
-    bool multisample = false;
+    const uint buffersCount;
+    const uint width;
+    const uint height;
+    const bool multisample = false;
 
-    unsigned int buffersCount;
-    int width;
-    int height;
 
-    GLuint frameBuffer;
-    GLuint colourTexture;
-    GLuint depthTexture;
+    uint frameBuffer;
+    uint colourTexture;
+    uint depthTexture;
+    uint * colorBuffers;
 
-    GLuint depthBuffer;
-    GLuint * colorBuffers;
+    uint depthBuffer;
 
-    inline void determineDrawBuffer(void){
+    inline void determineDrawBuffer(void) const{
         std::vector<GLenum> buffer;
-        for(unsigned int i=0 ; i<buffersCount ; i++)
+        LOOP_U(buffersCount, i){
             buffer.push_back(GL_COLOR_ATTACHMENT0 + i);
+        }
         glDrawBuffers(static_cast<int>(buffer.size()), buffer.data());
     }
-    inline void createFrameBuffer(void) {
+    inline void createFrameBuffer(void){
         glGenFramebuffers(1, &frameBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
         determineDrawBuffer();
@@ -75,14 +75,14 @@ private :
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
     }
 public:
-    Fbo(int width, int height) : Fbo(width, height, FBO_DEPTH_RENDER_BUFFER, 2){}
-    Fbo(int width, int height, int depthBufferType):Fbo(width, height, depthBufferType, 1){}
-    Fbo(int width, int height, int depthBufferType, unsigned int buffersCount) {
-        this -> width = width;
-        this -> height = height;
-        this -> buffersCount = buffersCount;
-        colorBuffers = new GLuint[buffersCount];
-        multisample = buffersCount > 1;
+    Fbo(const uint width, const uint height) : Fbo(width, height, FBO_DEPTH_RENDER_BUFFER, 2){}
+    Fbo(const uint width, const uint height, const uint depthBufferType):Fbo(width, height, depthBufferType, 1){}
+    Fbo(const uint width, const uint height, const uint depthBufferType, const uint buffersCount) :
+            buffersCount(buffersCount),
+            width(width),
+            height(height),
+            multisample(buffersCount > 0),
+            colorBuffers(new GLuint[buffersCount]){
         initialiseFrameBuffer(depthBufferType);
     }
 
@@ -93,7 +93,7 @@ public:
         glDeleteTextures(1, &depthTexture);
         glDeleteRenderbuffers(1, &depthBuffer);
 
-        for(unsigned int i=0 ; i<buffersCount ; i++){
+        LOOP_U(buffersCount, i){
             glDeleteRenderbuffers(1, &colorBuffers[i]);
         }
 
@@ -109,7 +109,7 @@ public:
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    inline void unbindFrameBuffer() const{
+    inline void unbindFrameBuffer(void) const{
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glViewport(0, 0, WindowManager::width, WindowManager::height);
     }
@@ -121,14 +121,14 @@ public:
     }
 
 
-    inline void resolveToFbo(GLenum readBuffer, Fbo output) const{
+    inline void resolveToFbo(const GLenum readBuffer, const Fbo& output) const{
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, output.frameBuffer);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
         glReadBuffer(readBuffer);
         glBlitFramebuffer(0, 0, width, height, 0, 0, output.width, output.height, GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT, GL_NEAREST);
         unbindFrameBuffer();
     }
-    inline void resolveToScreen(GLenum buffer = GL_COLOR_ATTACHMENT0) const{
+    inline void resolveToScreen(const GLenum buffer = GL_COLOR_ATTACHMENT0) const{
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
         glBindFramebuffer(GL_READ_FRAMEBUFFER, frameBuffer);
         glReadBuffer(buffer);//toto som sem pridal aby sa vždy prepol na GL_COLOR_ATTACHMENT0 pri vykreslovaní sceny
@@ -137,10 +137,10 @@ public:
         unbindFrameBuffer();
     }
 
-    inline void initialiseFrameBuffer(int type){
+    inline void initialiseFrameBuffer(const int type){
         createFrameBuffer();
         if(multisample){
-            for(unsigned int i=0 ; i<buffersCount ; i++){
+            LOOP_U(buffersCount, i){
                 createMultisampleColorAttachment(&colorBuffers[i], GL_COLOR_ATTACHMENT0 + i);
             }
         }
@@ -157,7 +157,7 @@ public:
         unbindFrameBuffer();
     }
 
-    inline unsigned int getBuffersCount(void) const{ return buffersCount; }
+    inline uint getBuffersCount(void) const{ return buffersCount; }
     inline GLuint getColourTexture(void) const{return colourTexture; }
     inline GLuint getDepthTexture(void) const{return depthTexture; }
     inline GLuint getDepthBuffer(void) const{return depthBuffer; }

@@ -12,22 +12,22 @@
 #include "BasicView.h"
 
 class TopView : public BasicView{
-private:
     Vector3f realPosition;
     const float speed = 1;
     const float velocityPower = 0.05f;
     float height;
 public:
-    TopView(PointerCamera camera, float height, GameObject * player = nullptr) : BasicView(camera, player, "topView"){
-        this -> height = height;
-        realPosition = camera -> getPosition();
+    TopView(PointerCamera camera, const float height, GameObject * player = nullptr) :
+            BasicView(camera, player, BasicView::Type::TOP_VIEW),
+            height(height),
+            realPosition(camera -> getPosition()){
 //        camera -> position.y = height;
-        camera -> getTransform()->getPosition()-> y = height;
+        camera -> getTransform() -> getPosition() -> y = height;
         camera -> pitch = (float)M_PI_2;
-        player->getObject()->immortal = true;
+        player -> getObject() -> immortal = true;
     }
 
-    void update(float delta){
+    void update(const float delta){
         Vector3f position = realPosition;
         //float rotSpeed = 0.2;
         if(Input::isKeyDown(GLFW_KEY_W)) {

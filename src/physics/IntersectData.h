@@ -12,7 +12,7 @@ class IntersectData{
 //    const float _distance;
     const Vector3f _direction;
 public:
-    inline IntersectData(const bool ntersect, const Vector3f direction) : _intersect(ntersect), _direction(direction){};
+    inline IntersectData(const bool intersect, const Vector3f& direction) : _intersect(intersect), _direction(direction){};
     inline bool isIntersect(void) const{return _intersect; }
     inline float getDistance(void) const{return _direction.length(); }
     inline const Vector3f& getDirection(void) const{return _direction; }

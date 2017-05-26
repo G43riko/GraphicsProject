@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(GameEngine)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -lpthread -lm -fPIC -lGL -lGLU -lBulletCollision -I /usr/local/include/bullet")
+SET(CMAKE_CXX_FLAGS "-std=c++11")
+#SET(CMAKE_CXX_FLAGS "-lBulletCollision -I /usr/local/include/bullet")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/include/freetype2 -L/usr/local/lib -lfreetype")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -lm -fPIC -lGL -lGLU")
 
 #
 # CONFIGURATION
@@ -14,12 +17,6 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Add custom target for installation in CLion
 
-# add_custom_target(run_install COMMAND ${CMAKE_MAKE_PROGRAM} install)
-
-# Use generate_shader function to convert .glsl sources to C++ headers
-# include(shaders)
-
-#
 # DEPENDENCIES
 #>>>>>>GTK
 find_package(PkgConfig REQUIRED)
@@ -30,6 +27,13 @@ link_directories(${GTK3_LIBRARY_DIRS})
 
 add_definitions(${GTK3_CFLAGS_OTHER})
 #<<<<<<<<GTK
+
+#>>>>>>FREETYPE
+find_package(Freetype REQUIRED)
+include_directories(${FREETYPE_INCLUDE_DIRS})
+link_directories(${FREETYPE_LIBRARY_DIRS})
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -v")
+#<<<<<<<<FREETYPE
 
 # Set up external dependencies for Windows users
 if (MINGW)
@@ -106,7 +110,9 @@ set(GL_MAIN_SRC
         src/components/voxel_old/World_old.cpp
         src/components/voxel_old/Chunk_old.cpp
         src/components/voxel_old/Block.cpp
-        src/components/voxel/VoxelMaster.cpp src/utils/generator/PerilNoise.h src/utils/resources/PPM.h src/physics/BoundingSphere.h src/physics/IntersectData.h src/physics/AABB.h src/physics/Plane.h src/physics/PhysicsObject.h src/physics/PhysicsEngine.h src/physics/Collider.h src/physics/Collider.cpp src/core/GameLoop.h src/components/particles/emitters/Emitter.h src/components/voxel/chunks/ChunkGenerator.h)
+        src/components/voxel/VoxelMaster.cpp
+        src/physics/Collider.cpp
+        src/GUI/openGL/Panel.h src/GUI/openGL/Header.h src/rendering/DefferedRenderer.h src/rendering/model/models/Plane.h)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
 
@@ -131,6 +137,6 @@ target_include_directories(MainEngine PUBLIC
         ${CMAKE_SOURCE_DIR}
 #        ${CMAKE_CURRENT_BINARY_DIR}
         ${GTK3_INCLUDE_DIRS})
-target_link_libraries(MainEngine ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GTK3_LIBRARIES})
+target_link_libraries(MainEngine ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GTK3_LIBRARIES} )
 install(TARGETS MainEngine DESTINATION .)
 #<<koniec projektu

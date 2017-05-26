@@ -10,17 +10,15 @@
 #include "GuiTexture.h"
 #include "../../rendering/RenderUtil.h"
 #include <src/rendering/shader/GuiShader.h>
+#include <src/GUI/openGL/GuiManager.h>
 
 
 class GuiMaster {
-private:
-    BasicShader  * shader = new GuiShader();
-    PointerRawModel model;
-public:
-    inline void renderGui(std::vector<GuiTexture> textures){
-        if(textures.empty()){
-            return;
-        }
+    BasicShader * shader = new GuiShader();
+    const PointerRawModel model;
+    GuiManager gui;
+
+    inline void prepare(void) const{
         shader -> bind();
         RenderUtil::prepareModel(model, 1);
 
@@ -28,20 +26,37 @@ public:
         glDisable(GL_DEPTH_TEST);
         glActiveTexture(GL_TEXTURE0);
         glEnable(GL_BLEND);
+
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        for(unsigned int i=0 ; i<textures.size() ; i++){
-            glBindTexture(GL_TEXTURE_2D, textures[i].getTexture());
-            shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, Maths::createTransformationMatrix(textures[i].getPosition(), textures[i].getScale()));
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, model -> getVertexCount());
-        }
+    }
+    inline void finish(void) const{
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_BLEND);
 
         RenderUtil::finishRender(1);
     }
-    inline GuiMaster(PointerCamera camera, Loader loader){
-        model = loader.loadToVao(GUI_VERTICES, 2);
-    };
+public:
+    inline GuiMaster(PointerCamera camera, Loader loader) :
+            model(loader.loadToVao(GUI_VERTICES, 2)),
+            gui(shader, model){};
+
+    inline void renderGui(std::vector<GuiTexture*> textures){
+        if(textures.empty() && gui.isEmpty()){
+            return;
+        }
+        prepare();
+        ITERATE_VECTOR(textures, i){
+            glBindTexture(GL_TEXTURE_2D, textures[i] -> getTexture());
+            shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX,
+                                      Maths::createTransformationMatrix(textures[i] -> getPosition(),
+                                                                        textures[i] -> getScale()));
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, model -> getVertexCount());
+        }
+        gui.update(1.0f);
+        gui.render();
+
+        finish();
+    }
     inline void cleanUp(void){
         shader -> cleanUp();
         delete shader;

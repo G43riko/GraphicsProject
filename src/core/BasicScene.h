@@ -7,7 +7,7 @@
 
 #include "src/components/lights/PointLight.h"
 #include <src/components/entities/EntityManager.h>
-#include <src/components/particles/ParticleManager.h>
+#include <src/components/particles/emitters/BoxEmitter.h>
 #include <src/game/GameObject.h>
 
 class TerrainManager;
@@ -29,7 +29,7 @@ public:
     //OTHERS
     virtual void cleanUp(void) = 0;
     virtual void update(float delta) = 0;
-    inline void loadParticleTexture(PointerTexture2D texture, int rows, int columns){
+    inline void loadParticleTexture(const PointerTexture2D texture, const int rows, const int columns){
         particles.loadTexture(texture, rows, columns);
     }
 
@@ -42,11 +42,25 @@ public:
     inline void addEntity(PointerEntity entity){ entities.addEntity(entity); }
 
     //CREATORS
-    inline void createParticleSystem(PointerTexture2D texture, float pps, float speed, float gravityComplient, float lifeLength){
-        particles.createSystem(texture, pps, speed, gravityComplient, lifeLength);
-
+    inline void createParticleSystem(PointerTexture2D texture,
+                                     float pps,
+                                     float speed,
+                                     float gravityComplient,
+                                     float lifeLength){
+        particles.addEmitter(new BoxEmitter(particles.getTexture(texture->getTitle()),
+                                         particles,
+                                         pps,
+                                         speed,
+                                         gravityComplient,
+                                         lifeLength, Vector3f(0, 0, 0), Vector3f(5, 5, 5)));
     }
-    inline void createParticle(PointerTexture2D texture, const Vector3f &position, const Vector3f &velocity, float gravityEffect, float lifeLength, float rotation, float scale){
+    inline void createParticle(PointerTexture2D texture,
+                               const Vector3f &position,
+                               const Vector3f &velocity,
+                               float gravityEffect,
+                               float lifeLength,
+                               float rotation,
+                               float scale){
         particles.createParticle(texture, position, velocity, gravityEffect, lifeLength, rotation, scale);
     }
 

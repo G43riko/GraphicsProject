@@ -29,7 +29,7 @@ public:
         }
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
-    void render(Vector3f position, PointerRawModel model){
+    void render(PointerRawModel model){
         RenderUtil::prepareModel(model, 3);
         glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
     }

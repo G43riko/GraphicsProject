@@ -1,1 +1,5 @@
 1-opraviť MousePicker aby npoužíval yaw a pitch
+2-opraviť vodu
+3-spraviť tiene
+4-spraviť lensFlares
+5-spraviť instanceRendering na častice

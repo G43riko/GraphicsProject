@@ -5,8 +5,7 @@
 #ifndef GRAPHICSPROJECT_PARTICLE_H
 #define GRAPHICSPROJECT_PARTICLE_H
 
-#include <src/utils/GConst.h>
-#include <src/utils/math/objects/Vectors.h>
+#include <src/utils/GUtils.h>
 #include "ParticleTexture.h"
 
 
@@ -50,9 +49,10 @@ public:
             lifeLength(lifeLength),
             rotation(rotation),
             scale(scale),
-            texture(texture){}
+            texture(texture){
+    }
 
-    inline bool update(float delta){
+    inline bool update(const float delta){
         velocity.y += gravityEffect * delta * GRAVITY;
         position += velocity * delta;
         elapsedTime += delta;

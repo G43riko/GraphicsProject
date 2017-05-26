@@ -9,39 +9,41 @@
 #include <map>
 #include <vector>
 #include <src/utils/resources/FileLoader.h>
-#include "ParticleTexture.h"
 #include "Particle.h"
 
-class ParticleSystemSimple;
+//class ParticleSystemSimple;
+class Emitter;
 
 class ParticleManager {
 private:
-    int count = 0;
+    uint count = 0;
     std::map<std::string, PointerParticleTexture> textures;
-    std::vector<std::shared_ptr<ParticleSystemSimple>> systems;
+    std::vector<Emitter*> emitters;
     ParticlesList particles;
 
-//    void addParticle(Particle particle, PointerParticleTexture texture);
     inline void initParticles(PointerParticleTexture texture){
         particles[texture] = std::vector<Particle>();
     }
-
-
 public:
     inline ParticlesList getParticles(void) const{return particles; }
-    inline int size(void) const{return count; }
+    inline uint size(void) const{return count; }
 
-    void createSystem(PointerTexture2D texture, float pps, float speed, float gravityComplient, float lifeLength);
-    inline void addParticle(Particle particle){
+    inline void addEmitter(Emitter* emitter){ emitters.push_back(emitter); }
+
+    inline PointerParticleTexture getTexture(const std::string& texture){ return textures[texture]; }
+
+    inline void addParticle(const Particle& particle){
         if(particles.find(particle.getTexture()) == particles.end()){
             initParticles(particle.getTexture());
         }
         count++;
         particles[particle.getTexture()].push_back(particle);
     }
-    void update(float delta);
-    inline bool hasTexture(std::string name) const{return textures.find(name) != textures.end(); }
-    inline void loadTexture(PointerTexture2D texture, uint rows, uint columns){;
+    void update(const float delta);
+
+    inline bool hasTexture(const std::string& name) const{return MAP_CONTAINS_KEY(textures, name); }
+
+    inline void loadTexture(const PointerTexture2D texture, const uint rows, const uint columns){;
         if(!hasTexture(texture -> getTitle())){
             textures[texture -> getTitle()] = PointerParticleTexture(new ParticleTexture(texture, rows, columns));
         }

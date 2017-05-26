@@ -5,7 +5,6 @@
 #ifndef GRAPHICSPROJECT_TEXTURE2D_H
 #define GRAPHICSPROJECT_TEXTURE2D_H
 
-#include <src/utils/GConst.h>
 #include <src/utils/GTypes.h>
 #include <GL/glew.h>
 #include <iostream>

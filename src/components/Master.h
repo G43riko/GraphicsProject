@@ -39,7 +39,7 @@ public:
 
     void update(float delta);
 
-    void init(Loader loader, int width, int height, PointerCamera camera, PointerBasicShader shadowShader, PointerBasicShader particleShader);
+    void init(Loader loader, int width, int height, PointerCamera camera, PointerBasicShader shadowShader);
 
     //SETTERS
     inline void setPostFx(bool val){ options.usePostFx = val; }

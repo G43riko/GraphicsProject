@@ -18,7 +18,16 @@ private:
     Loader * _loader           = nullptr;
 
 protected:
-
+    inline void updateApp(const float delta){
+        if(IS_NOT_NULL(_renderer)){
+            _renderer -> prepareRenderer(0, 0, 0, 1);
+            _renderer -> init3D();
+            _renderer -> input();
+            _renderer -> update(delta);
+        }
+        CHECK_AND_CALL(_scene, update(delta));
+        CHECK_AND_CALL(_view, update(delta));
+    }
     inline void setRenderer(BasicRenderer * i_renderer){
         SET_IF_IS_NULL(_renderer, i_renderer);
     };
@@ -35,7 +44,7 @@ protected:
     inline BasicView& getView(void) const{return *_view; };
     inline BasicRenderer& getRenderer(void)const{return *_renderer; };
     inline BasicScene *getScene(void)const{ return _scene; };
-    inline Loader getLoader(void)const{ return *_loader; };
+    inline Loader& getLoader(void)const{ return *_loader; };
 
 public:
     inline void localCleanUp(void){
@@ -69,7 +78,7 @@ public:
     virtual void update(float i_delta){};
     virtual void render(void){};
     virtual void cleanUp(void){};
-    virtual void onSecondElapse(const int i_fps){};
+    virtual void onSecondElapse(const int i_fps){PRINT("FPS: " << i_fps);};
 };
 
 #endif //GRAPHICSPROJECT_BASICAPPLICATION_H

@@ -59,7 +59,7 @@ private:
      *
      * @param i_delta - časový koeficient podla aktuálneho FPS
      */
-    inline void update(float i_delta){
+    inline void update(const float i_delta){
         _fpsCounter++;
 
         //double renderTime, updateTime;

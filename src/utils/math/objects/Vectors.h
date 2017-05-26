@@ -10,7 +10,6 @@
 #include <memory>
 #include <math.h>
 #include "src/utils/GUtils.h"
-#include "src/utils/GTypes.h"
 
 #define VECTOR_DIVIDER "_"
 
@@ -57,6 +56,13 @@ public:
     inline Vector2f operator - (const Vector2f &v)const{ return Vector2f(x - v.x, y - v.y); }
     inline Vector2f operator - (const float& v)const{ return Vector2f(x - v, y - v); }
 
+
+    inline Vector2f operator >> (const Vector2f &v)const{ return Vector2f(getXi() >> v.getXi(), getYi() >> v.getYi()); }
+    inline Vector2f operator >> (const int& v)const{ return Vector2f(getXi() >> v, getYi() >> v); }
+
+    inline Vector2f operator << (const Vector2f &v)const{ return Vector2f(getXi() << v.getXi(), getYi() << v.getYi()); }
+    inline Vector2f operator << (const int& v)const{ return Vector2f(getXi() << v, getYi() << v); }
+
     inline Vector2f& operator = (const Vector2f& v){x = v.x, y = v.y;return *this;}
 
     friend std::ostream& operator << (std::ostream& os, const Vector2f& v){
@@ -73,7 +79,9 @@ public:
     inline std::string toString(void) const{return "[" + std::to_string(x) + VECTOR_DIVIDER + std::to_string(y) + "]";}
     inline float dot(const Vector2f& vec) const{return x * vec.x + y * vec.y;}
 
-    inline void show(void) const{printf("[%f, %f]\n", x, y);}
+    inline void show(std::string text = "", bool breakLine = true) const{
+        printf("%s[%f, %f]%c", text.empty() ? "" : (text + ": ").c_str(), x, y, breakLine ? '\n' : ' ');
+    }
     /*GETTERS*/
     inline float getX(void) const{return x;}
     inline float getY(void) const{return y;}
@@ -167,7 +175,9 @@ public:
     inline int getYi(void) const{return (int)y;}
     inline int getZi(void) const{return (int)z;}
     inline Vec3 getVec(void) const{return {x, y, z}; }
-
+    inline static Vector3f interpolate(const Vector3f& a, const Vector3f& b, float value){
+        return Vector3f(LERP(a.x, b.x, value), LERP(a.y, b.y, value), LERP(a.z, b.z, value));
+    }
     inline Vector2f getXY(void) const {return {x, y};}
     inline Vector2f getXZ(void) const {return {x, z};}
     inline Vector2f getYZ(void) const {return {y, z};}
@@ -199,7 +209,7 @@ class Vector4f{
         };
         ~Vector4f(){
             Vector4f::count--;
-        }
+        };
         Vector4f normalize(void){
             float len = length();
             x /= len;
@@ -208,7 +218,13 @@ class Vector4f{
             w /= len;
             return *this;
         };
-
+        friend bool operator == (const Vector4f &c1, const Vector4f& c2){
+            return (EQ(c1.x, c2.x) &&
+                    EQ(c1.y, c2.y) &&
+                    EQ(c1.z, c2.z) &&
+                    EQ(c1.w, c2.w));
+        };
+        friend bool operator != (const Vector4f &c1, const Vector4f& c2){ return !(c1 == c2);}
         Vector4f getNormal(void){
             float len = length();
             return Vector4f(x /= len, y /= len, z /= len, w /= len);

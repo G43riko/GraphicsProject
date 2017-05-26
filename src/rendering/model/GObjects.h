@@ -16,7 +16,7 @@ namespace GObjects{
     inline PointerMesh createLine(VectorV3 points){
         VectorF vertices;
         VectorUI indices;
-        unsigned int index = 0;
+        uint index = 0;
         for(auto point : points){
             vertices.push_back(point.x);
             vertices.push_back(point.y);

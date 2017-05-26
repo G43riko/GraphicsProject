@@ -2,6 +2,9 @@
 // Created by gabriel on 15.10.2016.
 //
 
+#ifndef GAMEENGINE_CONTRASTSHADER_H
+#define GAMEENGINE_CONTRASTSHADER_H
+
 #include "BasicShader.h"
 
 class ContrastShader : public BasicShader{
@@ -16,3 +19,5 @@ class ContrastShader : public BasicShader{
             this -> setUniform("contrast");
         }
 };
+
+#endif //GAMEENGINE_CONTRASTSHADER_H

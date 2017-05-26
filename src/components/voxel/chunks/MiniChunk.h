@@ -36,10 +36,6 @@ public:
             blocks[getLocation(x, y, z)] = block;
         }
     }
-
-    void render(VoxelRenderer renderer, VoxelPosition position) const{
-        renderer.render({0, (int)position.getVerticalOffset() * 16, 0}, model);
-    }
 };
 
 #endif //GAMEENGINE_MINICHUNK_H

@@ -22,7 +22,7 @@ void EntityMaster::renderEntities(EntitiesList entities, std::vector<PointerPoin
     for(unsigned int i=0 ; i<lights.size() ; i++){
         //RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
     }
-
+    glLineWidth(5);
     glEnable(GL_TEXTURE);
     for (auto it = entities.begin(); it != entities.end(); ++it){ //pre všetky materialy
         if(it -> second.size()){

@@ -7,7 +7,6 @@
 
 #include "src/utils/math/objects/Vectors.h"
 #include <vector>
-#include <src/utils/GTypes.h>
 
 class Vertex {
 private:

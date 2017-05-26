@@ -9,36 +9,31 @@
 
 class ImageRenderer {
 private:
-    Fbo * fbo = nullptr;
+    Fbo * _fbo = nullptr;
 public:
-    inline ImageRenderer(int width, int height) {
-        this -> fbo = new Fbo(width, height, FBO_DEPTH_NONE);
-    }
-    inline ImageRenderer(void){
-
-    }
-    inline void renderQuad(void) const{
-        if (fbo){
-            fbo -> bindFrameBuffer();
+    inline ImageRenderer(const uint width = 0, const uint height = 0) {
+        if(width > 0 && height > 0){
+            this -> _fbo = new Fbo(width, height, FBO_DEPTH_NONE);
         }
+    }
+//    inline ImageRenderer(void){
+//
+//    }
+    inline void renderQuad(void) const{
+        CHECK_AND_CALL(_fbo, bindFrameBuffer());
+
         glClear(GL_COLOR_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-        if (fbo){
-            fbo -> unbindFrameBuffer();
-        }
+        CHECK_AND_CALL(_fbo, unbindFrameBuffer());
     }
 
     inline int getOutputTexture(void) const{
-        return fbo -> getColourTexture();
+        return _fbo -> getColourTexture();
     }
 
     inline void cleanUp(void) {
-        if (fbo){
-            fbo -> cleanUp();
-            delete fbo;
-            fbo = nullptr;
-        }
+        CHECK_AND_CLEAR(_fbo);
     }
 };
 

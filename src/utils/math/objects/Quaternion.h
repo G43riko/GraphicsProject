@@ -91,7 +91,7 @@ public:
         Vector3f forward = Vector3f(2.0f * (x * z - w * y), 2.0f * (y * z + w * x), 1.0f - 2.0f * (x * x + y * y));
         Vector3f up      = Vector3f(2.0f * (x * y + w * z), 1.0f - 2.0f * (x * x + z * z), 2.0f * (y * z - w * x));
         Vector3f right   = Vector3f(1.0f - 2.0f * (y * y + z * z), 2.0f * (x * y - w * z), 2.0f * (x * z + w * y));
-        return Matrix4f().InitRotationFromVectors(forward, up, right);
+        return Matrix4f::initRotationFromVectors(forward, up, right);
     }
 
     inline Vector3f getForward(void) const{return Vector3f(0, 0, 1).rotate(*this);}
@@ -102,7 +102,6 @@ public:
     inline Vector3f getLeft(void) const{return Vector3f(-1, 0, 0).rotate(*this);}
 
     inline Quaternion conjugate(void) const{ return Quaternion(-x, -y, -z, w); }
-
     inline void rotate(const Vector3f & vec){
         Quaternion result = *this;
         if(NEQ(vec.x, 0)){

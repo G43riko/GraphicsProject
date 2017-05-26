@@ -21,8 +21,6 @@ public:
         updateUniformi("dudvMap", 2);
         updateUniformi("normalMap", 3);
         updateUniformi("depthMap", 4);
-
-
     }
     void setAllUniforms(void){
         this -> setUniform("projectionMatrix");

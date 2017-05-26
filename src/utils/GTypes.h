@@ -9,6 +9,7 @@
 #include <string>
 #include <memory>
 #include <map>
+#include "GConst.h"
 
 class DirectionalLight;
 class MaterialedModel;

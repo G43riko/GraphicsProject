@@ -10,7 +10,6 @@
 #include <iostream>
 #include <memory>
 #include <src/utils/math/objects/Vectors.h>
-#include <src/utils/GTypes.h>
 
 
 class Mesh {

@@ -16,7 +16,6 @@
 //#define RIGHT GLFW_KEY_D
 
 class FpsView : public BasicView{
-private:
     bool mouseLocked = false;
     Vector2f center = center;
     const float velocityPower = 0.05f;
@@ -24,7 +23,8 @@ private:
     bool rotate = false;
     bool move = false;
     bool flyMode = true;
-    inline void checkMoveKeys(float delta){
+
+    inline void checkMoveKeys(const float delta){
         /*	MOVING KEYS
          * 	W, A, S, D
          */
@@ -43,7 +43,7 @@ private:
         }
     }
 
-    inline void checkRotateAndFlyKeys(float delta){
+    inline void checkRotateAndFlyKeys(const float delta){
         /*	ROTATION
          * 	Q and E
          */
@@ -75,17 +75,18 @@ private:
         }
     }
 
-    inline bool mouseMove(float delta) {
-        Vector2f deltaPos = Input::getMousePosition() - center;
+    inline bool mouseMove(const float delta) {
+        const Vector2f deltaPos = Input::getMousePosition() - center;
 
-        bool rotY = NEZ(deltaPos.x);
-        bool rotX = NEZ(deltaPos.x);
+        const bool rotY = NEZ(deltaPos.x);
+        const bool rotX = NEZ(deltaPos.y);
 
         if (rotY) {
             camera->getTransform()->rotate(Vector3f(0, 1, 0), TO_RADIANS(-deltaPos.x * getRotSpeed()));
         }
         if (rotX) {
-            camera->getTransform()->rotate(camera->getTransform()->getRotation().getRight(), TO_RADIANS(-deltaPos.y * getRotSpeed()));
+            camera->getTransform()->rotate(camera -> getTransform() -> getRotation().getRight(),
+                                           TO_RADIANS(-deltaPos.y * getRotSpeed()));
         }
 
         if (rotY || rotX) {
@@ -96,11 +97,12 @@ private:
         return false;
     }
 public:
-    inline FpsView(PointerCamera camera, bool flyMode = false, GameObject * player = nullptr) : BasicView(camera, player, "fpsView"){
+    inline FpsView(PointerCamera camera, const bool flyMode = false, GameObject * player = nullptr) :
+            BasicView(camera, player, BasicView::Type::FPS_VIEW){
         center = Input::getMousePosition();
     }
 
-    inline void update(float delta){
+    inline void update(const float delta){
         if(Input::getKeyDown(GLFW_KEY_P)) {
             mouseLocked = !mouseLocked;
             if(mouseLocked){

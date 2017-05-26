@@ -386,9 +386,9 @@ public:
     }
 
     void generateFromMap(LightBlockData *** map, Vector3f position){
-        for(int i=0 ; i<_chunkSize.x ; i++){
-            for(int j=0 ; j<_chunkSize.y ; j++){
-                for(int k=0 ; k<_chunkSize.z ; k++){
+        LOOP(_chunkSize.x, i){
+            LOOP(_chunkSize.y, j){
+                LOOP(_chunkSize.z, k){
                     if(isOpaque(map[i][j][k]) /*|| map[i][j][k].parent != &map[i][j][k]*/){
                         continue;
                     }
@@ -429,58 +429,16 @@ public:
         }
     }
 
-//    void generateFromMap(BlockID *** map, Vector3f position){
-//        for(int i=0 ; i<_chunkSize.x ; i++){
-//            for(int j=0 ; j<_chunkSize.y ; j++){
-//                for(int k=0 ; k<_chunkSize.z ; k++){
-//                    if(isOpaque(map[i][j][k])){
-//                        continue;
-//                    }
-//                    Vector3f pos = position + Vector3f(i, j, k);
-//
-//                    if(i == 0 || (i > 0 && isOpaque(map[i - 1][j][k]))){
-//                        generateLeft(pos);
-//                    }
-//                    if(i == _chunkSize.getXi() - 1 || (i < _chunkSize.x - 1 && isOpaque(map[i + 1][j][k]))){
-//                        generateRight(pos);
-//                    }
-//
-//                    if(j == 0 || (j > 0 && isOpaque(map[i][j - 1][k]))){
-//                        if(false && j == 0 && position.y  > 0 && !isOpaque(generator.getBlockType(i, position.y - 1, k))){
-////                            printf("dole\n");
-//                        }
-//                        else{
-//                            generateBottom(pos);
-//                        }
-//                    }
-//                    if(j == _chunkSize.getYi() - 1 || (j < _chunkSize.y - 1 && isOpaque(map[i][j + 1][k]))){
-//                        if(false && j == _chunkSize.getYi() - 1  && !isOpaque(generator.getBlockType(i, pos.y + 1, j))){
-////                            printf("hore\n");
-//                        }
-//                        else{
-//                            generateUp(pos);
-//                        }
-//                    }
-//
-//                    if(k == 0 || (k > 0 && isOpaque(map[i][j][k - 1]))){
-//                        generateFront(pos);
-//                    }
-//                    if(k == _chunkSize.getZi() - 1 || (k < _chunkSize.z - 1 && isOpaque(map[i][j][k + 1]))){
-//                        generateBack(pos);
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     PointerMesh getMesh(void){
         VectorF finalPositions;
         VectorF finalNormals;
         VectorF finalTangents;
         VectorF finalTextures;
+
         finalPositions.reserve(indices.size() * 3);
         finalTextures.reserve(indices.size() * 2);
         finalNormals.reserve(indices.size() * 3);
+
         ITERATE_VECTOR(indices, i){
             finalPositions.push_back(positions[i].x);
             finalPositions.push_back(positions[i].y);

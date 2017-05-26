@@ -4,7 +4,7 @@
 
 #ifndef GRAPHICSPROJECT_CONTENTLOADER_H
 
-#include <src/rendering/Camera.h>
+//#include <src/rendering/Camera.h>
 #include "FileLoader.h"
 
 /*
@@ -29,32 +29,20 @@ CubeImageData * ContentLoader::loadCubeTexture(const std::string& title){
     datas[0].title = title;
     return datas;
 }
-
 CubeImageData ContentLoader::loadTextureColor(const Vector3f& color){
     CubeImageData result;
-    result.width = 2;
-    result.height = 2;
+    result.width = MIN_COLOR_TEXTURE_WIDTH;
+    result.height = MIN_COLOR_TEXTURE_HEIGHT;
     result.title = color.toString();
 
-
-    result.data.reserve(16);
-    result.data.push_back((unsigned char)color.getX());
-    result.data.push_back((unsigned char)color.getY());
-    result.data.push_back((unsigned char)color.getZ());
-    result.data.push_back(255);
-    result.data.push_back((unsigned char)color.getX());
-    result.data.push_back((unsigned char)color.getY());
-    result.data.push_back((unsigned char)color.getZ());
-    result.data.push_back(255);
-    result.data.push_back((unsigned char)color.getX());
-    result.data.push_back((unsigned char)color.getY());
-    result.data.push_back((unsigned char)color.getZ());
-    result.data.push_back(255);
-    result.data.push_back((unsigned char)color.getX());
-    result.data.push_back((unsigned char)color.getY());
-    result.data.push_back((unsigned char)color.getZ());
-    result.data.push_back(255);
-
+    const uint resolution = result.width * result.height;
+    result.data.reserve(resolution * 4);
+    LOOP_U(resolution, i){
+        result.data.push_back((u_char)color.getX());
+        result.data.push_back((u_char)color.getY());
+        result.data.push_back((u_char)color.getZ());
+        result.data.push_back(MAX_COLOR_VALUE);
+    }
     return result;
 }
 
@@ -83,33 +71,64 @@ PointerMesh ContentLoader::loadOBJ(const std::string& fileName) {
 
     VectorS currentLine;
 
+
+//    std::ifstream inFile;
+//    inFile.open(fileName);
+//    std::string word;
+//    while(!inFile.eof()){
+//        inFile >> word;
+//        if(word == "v"){
+//            Vector3f v3;
+//            inFile >> v3.x >> v3.y >> v3.z;
+//            vertices.push_back(PointerVertex(new Vertex(vertices.size(), v3)));
+//        }
+//        else if(word == "vt"){
+//            Vector2f v2;
+//            inFile >> v2.x >> v2.y;
+//            textures.push_back(v2);
+//        }
+//        else if(word == "vn"){
+//            Vector3f v3;
+//            inFile >> v3.x >> v3.y >> v3.z;
+//            normals.push_back(v3);
+//        }
+//        else if(word == "f"){
+//            Vector3f v1, v2, v3;
+//            inFile >> v1.x >> v1.y >> v1.z >> v2.x >> v2.y >> v2.z >> v3.x >> v3.y >> v3.z;
+//
+//            PointerVertex vert0 = processVertex(v1, vertices, indices);
+//            PointerVertex vert1 = processVertex(v2, vertices, indices);
+//            PointerVertex vert2 = processVertex(v3, vertices, indices);
+//            calculateTangents(*vert0, *vert1, *vert2, textures);
+//        }
+//
+//    };
+
     while (std::getline(ifs, line)) {
         if (line.find("v ") == 0) {
             currentLine.clear();
             split(line, ' ', currentLine);
-            Vector3f vertex = Vector3f(atof(currentLine[1].c_str()),
-                                       atof(currentLine[2].c_str()),
-                                       atof(currentLine[3].c_str()));
-            vertices.push_back(PointerVertex(new Vertex(vertices.size(), vertex)));
+            vertices.push_back(PointerVertex(new Vertex(vertices.size(), Vector3f(atof(currentLine[1].c_str()),
+                                                                                  atof(currentLine[2].c_str()),
+                                                                                  atof(currentLine[3].c_str())))));
 
         } else if (line.find("vt ") == 0) {
             currentLine.clear();
             split(line, ' ', currentLine);
-            Vector2f texture = Vector2f(atof(currentLine[1].c_str()),
-                                        atof(currentLine[2].c_str()));
-            textures.push_back(texture);
+            textures.push_back(Vector2f(atof(currentLine[1].c_str()),
+                                        atof(currentLine[2].c_str())));
 
         } else if (line.find("vn ") == 0) {
             currentLine.clear();
             split(line, ' ', currentLine);
-            Vector3f normal = Vector3f(atof(currentLine[1].c_str()),
+            normals.push_back(Vector3f(atof(currentLine[1].c_str()),
                                        atof(currentLine[2].c_str()),
-                                       atof(currentLine[3].c_str()));
-            normals.push_back(normal);
+                                       atof(currentLine[3].c_str())));
         } else if (line.find("f ") == 0) {
             break;
         }
     }
+
     while (!ifs.eof() && line.find("f ") == 0) {
         currentLine.clear();
         VectorS ver1, ver2, ver3;
@@ -119,29 +138,20 @@ PointerMesh ContentLoader::loadOBJ(const std::string& fileName) {
         split(currentLine[2], '/', ver2);
         split(currentLine[3], '/', ver3);
 
-        const Vector3f vertex1 = Vector3f(atof(ver1[0].c_str()), atof(ver1[1].c_str()), atof(ver1[2].c_str()));
-        const Vector3f vertex2 = Vector3f(atof(ver2[0].c_str()), atof(ver2[1].c_str()), atof(ver2[2].c_str()));;
-        const Vector3f vertex3 = Vector3f(atof(ver3[0].c_str()), atof(ver3[1].c_str()), atof(ver3[2].c_str()));;
-
-        PointerVertex v0 = processVertex(vertex1, vertices, indices);
-        PointerVertex v1 = processVertex(vertex2, vertices, indices);
-        PointerVertex v2 = processVertex(vertex3, vertices, indices);
+        PointerVertex v0 = processVertex(Vector3f(atof(ver1[0].c_str()),
+                                                  atof(ver1[1].c_str()),
+                                                  atof(ver1[2].c_str())), vertices, indices);
+        PointerVertex v1 = processVertex(Vector3f(atof(ver2[0].c_str()),
+                                                  atof(ver2[1].c_str()),
+                                                  atof(ver2[2].c_str())), vertices, indices);
+        PointerVertex v2 = processVertex(Vector3f(atof(ver3[0].c_str()),
+                                                  atof(ver3[1].c_str()),
+                                                  atof(ver3[2].c_str())), vertices, indices);
         calculateTangents(*v0, *v1, *v2, textures);
-        std::getline(ifs, line);
 
+        std::getline(ifs, line);
     }
     removeUnusedVertices(vertices);
-
-//    if(fileName == "res/models/plane.obj"){
-//        printf("vertices size po: %ld\n", vertices.size());
-//        for(unsigned int i=0 ; i<vertices.size() ; i++)
-//            vertices.at(i) -> show();
-////        PRINT("textures: ");
-////        for(auto i : textures){
-////            i.show();
-////        }
-//    }
-//
 
     VectorF verticesFinal;
     VectorF uvsFinal;

@@ -7,10 +7,10 @@
 
 #include "src/utils/math/objects/Quaternion.h"
 #include "src/utils/math/Maths.h"
-template<typename T>
-inline T linearInterpolation(const T& a, const T& b, float val){
-    return a * val + b * (1 - val);
-}
+//template<typename T>
+//inline T linearInterpolation(const T& a, const T& b, float val){
+//    return a * val + b * (1 - val);
+//}
 class Transform {
 private:
     Vector3f position;
@@ -66,7 +66,12 @@ public:
         }
         return result;
     }
-
+    inline Quaternion getLookAtRotation(const Vector3f& point, const Vector3f& up) const{
+        return Quaternion(Matrix4f::InitRotationFromDirection((point - position).normalize(), up));
+    }
+    inline void lookAt(const Vector3f& point, const Vector3f& up){
+        rotation = getLookAtRotation(point, up);
+    }
     inline Vector3f& getScale(void){return scale;}
     inline Vector3f& getPosition(void){return position;}
     inline Quaternion& getRotation(void){return rotation;}
@@ -80,9 +85,9 @@ public:
     inline float getScaleZ(void) const{return scale.z;}
 
     inline static Matrix4f getAverageTransformation(Transform a, Transform b, float ratio){
-        Vector3f pos = linearInterpolation(a.getPosition(), b.getPosition(), ratio);
+        Vector3f pos = LERP(a.getPosition(), b.getPosition(), ratio);
         //Quaternion rot = Quaternion::slerp(*a.getRotation(), *b.getRotation(), ratio); //linearInterpolation(*a.getRotation(), *b.getRotation(), ratio);
-        Vector3f scale = linearInterpolation(a.getScale(), b.getScale(), ratio);
+        Vector3f scale = LERP(a.getScale(), b.getScale(), ratio);
         return Transform(pos, a.getRotation().getForward(), scale).getTransformation(true, false, true);
     }
 

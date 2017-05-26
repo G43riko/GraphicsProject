@@ -15,21 +15,10 @@
 
 
 class MousePicker;
+
 class Camera : public BasicCamera{
-private:
     const bool VERTICAL           = false;
-//    Vector3f forward        = Vector3f(1, 0, 0);
-//    Vector3f position   = Vector3f(DEFAULT_CAMERA_POSITION);//TODO deprecated
 public:
-//        void updateForward(){
-//            forward.x = (float)(sin((-yaw + 180)) * cos(-pitch));
-//            forward.y = (float)sin((-pitch + 180));
-//            forward.z = (float)(cos((-yaw)) * cos(-pitch));
-//            forward.normalize();
-//        }
-//        void setPosition(Vector3f pos){
-//            position = pos;
-//        }
     const float FOV           = DEFAULT_CAMERA_FOV;
     const float FAR_PLANE     = DEFAULT_CAMERA_FAR_PLANE;
     const float NEAR_PLANE    = DEFAULT_CAMERA_NEAR_PLANE;
@@ -41,19 +30,17 @@ public:
         return &transform;
     }
     inline Camera(void){
-        projectionMatrix = glm::perspectiveFov<float>(FOV,
-                                                      static_cast<float>(WindowManager::width),
-                                                      static_cast<float>(WindowManager::height),
-                                                      NEAR_PLANE,
-                                                      FAR_PLANE);
+        //projectionMatrix = Matrix4f::initPerspective(FOV, WindowManager::getRation(), NEAR_PLANE, FAR_PLANE); //toto nefunguje
+        projectionMatrix = Matrix4f(glm::perspectiveFov<float>(FOV,
+                                                               static_cast<float>(WindowManager::width),
+                                                               static_cast<float>(WindowManager::height),
+                                                               NEAR_PLANE,
+                                                               FAR_PLANE));
         //picker = new MousePicker(this);
     }
     inline void cleanUp(void){
         //delete picker;
     }
-//    inline void show(void) const{
-//        printf("pitch: %f, yaw: %f, roll: %f\n", pitch, yaw, roll);
-//    }
 
     //GETTERS
     inline Vector3f getForwardVector(void){

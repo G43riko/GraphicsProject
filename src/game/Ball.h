@@ -6,7 +6,6 @@
 #define GRAPHICSPROJECT_BALL_H
 
 
-#include <src/rendering/model/Entity.h>
 #include "GameObject.h"
 
 

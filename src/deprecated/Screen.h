@@ -11,8 +11,8 @@
 #include <src/utils/Loader.h>
 #include "ToFrameBufferRendering.h"
 #include <src/rendering/shader/BasicShader.h>
-#include "../../rendering/Renderer.h"
-#include "Fbo.h"
+#include "src/rendering/Renderer.h"
+#include "src/components/postProccessing/Fbo.h"
 
 
 class PostFx{

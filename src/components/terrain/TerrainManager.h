@@ -23,15 +23,17 @@ private:
         return (k1 + k2) * (k1 + k2 + 1) / 2 + k1;
     }
     public:
-        TerrainManager(Loader loader, GLuint size, BasicScene * scene) : size((float)size), loader(loader), scene(scene){
-//            for(int i=0 ; i<10 ; i++){
-//                for(int j=0 ; j<10 ; j++){
-//                    PRINT("hash (" << i << ", " << j << " je: " << hash(i, j));
-//                }
-//            }
-        };
+        TerrainManager(Loader loader, GLuint size, BasicScene * scene) :
+                size((float)size),
+                loader(loader),
+                scene(scene){};
 
-        void generateTerrain(PointerTexture2D texture, GLuint vertices, float height, float textures, int posX, int posZ){
+        void generateTerrain(PointerTexture2D texture,
+                             GLuint vertices,
+                             float height,
+                             float textures,
+                             int posX,
+                             int posZ){
             Terrain * t = new Terrain(loader,
                                 texture,
                                 (unsigned int)size,
@@ -40,7 +42,9 @@ private:
                                 textures);
 
             scene -> addEntity(Entity::create(t -> getModel(),
-                                              Vector3f((float)posX * size, VERTICAL_TERRAIN_OFFSET, (float)posZ * size),
+                                              Vector3f((float)posX * size,
+                                                       VERTICAL_TERRAIN_OFFSET,
+                                                       (float)posZ * size),
                                               Vector3f(0.0f, 0.0f, 0.0f),
                                               Vector3f(1.0f, 1.0f, 1.0f)));
 

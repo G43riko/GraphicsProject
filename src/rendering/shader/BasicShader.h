@@ -12,7 +12,6 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <src/utils/math/objects/Matrix4f.h>
 #include <src/utils/resources/FileLoader.h>
-#include <src/utils/GConst.h>
 #include <src/components/lights/SpotLight.h>
 #include <src/components/lights/DirectionalLight.h>
 
@@ -97,7 +96,6 @@ public:
         glAttachShader(shader, fragmentShader);
     }
 
-
     inline BasicShader(const std::string shader) : BasicShader(shader, shader){};
 
     virtual ~BasicShader(void){
@@ -119,7 +117,7 @@ public:
         this -> setAllAttributes();
         this -> setAllUniforms();
     }
-    void connectTextures(void){}
+    virtual void connectTextures(void){}
 
     inline void bind(void) const{
         glUseProgram(this -> shader);

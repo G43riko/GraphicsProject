@@ -10,46 +10,41 @@
 #include "src/rendering/shader/BasicShader.h"
 
 class Filter {
-private:
     ImageRenderer renderer;
-    PointerBasicShader shader;
-    int targetHeight = 0;
-    int targetWidth = 0;
+    const PointerBasicShader shader;
+    uint targetHeight = 0;
+    uint targetWidth = 0;
 public:
-    Filter(PointerBasicShader shader){
-        this -> shader = shader;
-        renderer = ImageRenderer();
-    }
-
-    Filter(PointerBasicShader shader, int width, int height){
-        this -> shader = shader;
+    inline Filter(PointerBasicShader shader, const uint width = 0, const uint height = 0) : shader(shader){
         renderer = ImageRenderer(width, height);
     }
 
-    PointerBasicShader getShader(){
+    inline PointerBasicShader getShader(void) const{
         return shader;
     }
 
-    int getOutputTexture(){
+    inline int getOutputTexture(void) const{
         return renderer.getOutputTexture();
     }
 
 
-    void setTargetWidth(int value){
+    inline void setTargetWidth(uint value){
         targetWidth = value;
     }
-    void setTargetHeight(int value){
+    inline void setTargetHeight(uint value){
         targetHeight = value;
     }
 
-    void render(int texture, int texture2 = 0){
+    inline void render(const int texture, const int texture2 = 0) const{
         shader -> bind();
 
-        if(targetWidth != 0)
-            shader -> updateUniformi("targetWidth", targetWidth);
+        if(targetWidth != 0) {
+            shader->updateUniformi("targetWidth", targetWidth);
+        }
 
-        if(targetHeight != 0)
-            shader -> updateUniformi("targetHeight", targetHeight);
+        if(targetHeight != 0) {
+            shader->updateUniformi("targetHeight", targetHeight);
+        }
 
         shader -> connectTextures();
 
@@ -63,11 +58,8 @@ public:
         shader -> unbind();
     }
 
-    void  cleanUp(){
+    inline void cleanUp(void){
         renderer.cleanUp();
-        if(shader){
-            shader -> cleanUp();
-        }
     }
 };
 

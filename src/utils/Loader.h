@@ -11,8 +11,8 @@
 #include "../rendering/model/Mesh.h"
 #include <vector>
 #include <list>
-#include <src/utils/GTypes.h>
 #include <iostream>
+
 class Loader {
 private:
     struct modelData{

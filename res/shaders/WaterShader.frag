@@ -38,7 +38,7 @@ void main(void) {
 //    vec2 distortion1 = (texture(dudvMap, vec2(textureCoords.x + moveFactor,  textureCoords.y)).rg * 2.0  - 1.0) * waveStrength;
 //    vec2 distortion2 = (texture(dudvMap, vec2(-textureCoords.x + moveFactor,  textureCoords.y + moveFactor)).rg * 2.0  - 1.0) * waveStrength;
 //    vec2 totalDistortion = distortion1 + distortion2;
-	vec2 distortedTexCoords = texture(dudvMap, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg*0.1;
+	vec2 distortedTexCoords = texture(dudvMap, vec2(textureCoords.x + moveFactor, textureCoords.y)).rg * 0.1;
 	distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y+moveFactor);
 	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength * clamp(waterDepth, 0.0f, 1.0f);
 
@@ -75,4 +75,5 @@ void main(void) {
 	//out_Color = vec4(vec3(waterDepth), 1.0f);
 
     out_Color.a = clamp(waterDepth, 0.0f, 1.0f);
+
 }

@@ -49,7 +49,7 @@ private:
     PointerMaterialedModel model = nullptr;
 
     inline void clearMap(void){
-        for(GLuint i=0 ; i<vertices ; i++){
+        LOOP_U(vertices, i){
             delete[] map[i];
         }
 
@@ -86,17 +86,21 @@ private:
 
         const float premulSize = (float)size / (float)(vertices - 1);
         const float premulTexture = textMulti / (float)(vertices - 1);
-
+        const uint premulVertices = vertices * vertices;
         //vygeneruje výškovú mapu pre terén a vypočíta súradnice pre textúru
 
         map[0][0] = generator.generateHeight(0, 0);
-        for(GLuint i=0 ; i<vertices ; i++) {
+        LOOP_U(vertices, i){
             map[0][i] = generator.generateHeight(0, i);
             map[i][0] = generator.generateHeight(i, 0);
         }
         //vypočíta normály
-        for(GLuint gz=0 ; gz<vertices ; gz++){
-            for(GLuint gx=0 ; gx<vertices ; gx++){
+        indices.reserve(premulVertices * 6);
+        verticesVector.reserve(premulVertices * 3);
+        textures.reserve(premulVertices * 2);
+        normals.reserve(premulVertices * 3);
+        LOOP_U(vertices, gz){
+            LOOP_U(vertices, gx){
                 if(gz < vertices - 1 && gx < vertices - 1){
                     map[gx + 1][gz + 1] = generator.generateHeight(gx + 1,  gz + 1);
 
@@ -121,7 +125,7 @@ private:
                 textures.push_back((float)gz * premulTexture);
 
 
-                Vector3f normal = calculateNormal(gx, gz);
+                const Vector3f normal = calculateNormal(gx, gz);
                 normals.push_back(normal.x);
                 normals.push_back(normal.y);
                 normals.push_back(normal.z);

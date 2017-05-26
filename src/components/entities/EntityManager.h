@@ -18,12 +18,13 @@ private:
     }
 public:
     inline int size(void) const{ return count; }
+
     inline void addEntity(const PointerEntity& entity) {
         if(!MAP_CONTAINS_KEY(entities, entity -> getModel())){
-            addModel(entity->getModel());
+            addModel(entity -> getModel());
         }
         count++;
-        entities[entity->getModel()].push_back(entity);
+        entities[entity -> getModel()].push_back(entity);
     }
 
     inline void removeEntity(const PointerEntity& entity){
@@ -42,7 +43,7 @@ public:
     inline const EntitiesList& getEntities(void) const{
         return entities;
     }
-    inline void update(float delta){
+    inline void update(const float delta){
         ITERATE_MAP_AUTO(entities, it){ // pre všetky materialy
             if(it -> second.size()){
                 ITERATE_VECTOR_ITERATOR_AUTO_ENDLESS(it->second, itEnt){ //prejde všetky entity

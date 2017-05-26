@@ -26,19 +26,19 @@ void Master::initOptions(void) {
 
 void Master::updateProjectionMatrix(PointerCamera camera) {
     if (waterMaster) {
-        RenderUtil::updateProjectionMatrix(waterMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(*waterMaster -> getShader(), camera);
     };
     if (skyBoxMaster) {
-        RenderUtil::updateProjectionMatrix(skyBoxMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(*skyBoxMaster -> getShader(), camera);
     };
     if (entityMaster) {
-        RenderUtil::updateProjectionMatrix(entityMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(*entityMaster -> getShader(), camera);
     };
     if (guiMaster) {
-        RenderUtil::updateProjectionMatrix(guiMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(*guiMaster -> getShader(), camera);
     };
     if (voxelMaster) {
-        RenderUtil::updateProjectionMatrix(voxelMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(*voxelMaster -> getShader(), camera);
     };
 }
 
@@ -59,7 +59,7 @@ void Master::update(float delta){
     }
 }
 
-void Master::init(Loader loader, int width, int height, PointerCamera camera, PointerBasicShader shadowShader, PointerBasicShader particleShader) {
+void Master::init(Loader loader, int width, int height, PointerCamera camera, PointerBasicShader shadowShader) {
     shadowMaster = new ShadowMaster(shadowShader, camera);
     if (options.useGuis) {
         guiMaster = new GuiMaster(camera, loader);
@@ -68,7 +68,7 @@ void Master::init(Loader loader, int width, int height, PointerCamera camera, Po
         skyBoxMaster = new SkyBoxMaster(camera, loader);
     };
     if (options.useParticles) {
-        particleMaster = new ParticleMaster(particleShader, loader);
+        particleMaster = new ParticleMaster(camera, loader);
     };
     if (options.useEntities) {
         entityMaster = new EntityMaster(camera);

@@ -6,36 +6,45 @@
 #define GRAPHICSPROJECT_LIGHT_H
 
 
-#include <src/utils/math/objects/Vectors.h>
-#include <src/utils/GTypes.h>
-#include "src/utils/GUtils.h"
+#include "src/utils/math/objects/Vectors.h"
+
 class PointLight {
-private:
-    Vector3f position;
-    Vector3f diffuseColor;
-    Vector3f specularColor  = Vector3f(0.5f, 0.5f, 0.5f);
-    Vector3f attenuation    = Vector3f(1, 0, 0);
+    Vector3f _position;
+    Vector3f _diffuseColor;
+    Vector3f _specularColor  = Vector3f(0.5f, 0.5f, 0.5f);
+    Vector3f _attenuation    = Vector3f(1, 0, 0);
 protected:
-    inline PointLight(Vector3f position, Vector3f color) : position(position), diffuseColor(color){};
-    inline PointLight(Vector3f pos, Vector3f color, Vector3f atten) : position(pos), diffuseColor(color), attenuation(atten){};
+    inline PointLight(const Vector3f& position,
+                      const Vector3f& color,
+                      const Vector3f& attenuation = Vector3f(1, 0, 0)) :
+            _position(position),
+            _diffuseColor(color),
+            _attenuation(attenuation){};
 public:
-    inline void setPosition(float x, float y, float z){position.set(x, y, z); };
-    inline void setPosition(Vector3f pos){position = pos; };
+    inline void setPosition(const float x, const float y, const float z){_position.set(x, y, z); };
+    inline void setPosition(const Vector3f& pos){_position = pos; };
 
-    inline Vector3f getSpecularColor(void) const{return specularColor; };
-    inline Vector3f getAttenuation(void) const{return attenuation; };
-    inline Vector3f getPosition(void) const{return position; };
-    inline Vector3f getDiffuseColor(void)const{return diffuseColor; };
+    inline Vector3f getSpecularColor(void) const{return _specularColor; };
+    inline Vector3f getDiffuseColor(void)const{return _diffuseColor; };
+    inline Vector3f getAttenuation(void) const{return _attenuation; };
+    inline Vector3f getPosition(void) const{return _position; };
 
-    inline static PointerPointLight create(Vector3f position, Vector3f color){
+    inline static PointerPointLight create(const Vector3f& position, const Vector3f& color){
         return PointerPointLight(new PointLight(position, color));
     }
 
-    inline static PointerPointLight create(Vector3f position, Vector3f color, Vector3f attenuation){
+    inline static PointerPointLight create(const Vector3f& position, const Vector3f& color, const Vector3f& attenuation){
         return PointerPointLight(new PointLight(position, color, attenuation));
     }
     virtual inline LightData getData(void) const{
-        return {LightTypes::POINT, getPosition().getVec(), getDiffuseColor().getVec(), getSpecularColor().getVec(), getAttenuation().getVec(), {0, 0, 0}, 0, 0};
+        return {LightTypes::POINT,
+                _position.getVec(),
+                _diffuseColor.getVec(),
+                _specularColor.getVec(),
+                _attenuation.getVec(),
+                {0, 0, 0},
+                0,
+                0};
     }
 };
 

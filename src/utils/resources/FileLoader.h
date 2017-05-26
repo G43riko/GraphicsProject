@@ -6,11 +6,9 @@
 #define GRAPHICSPROJECT_CONTENTLOADER_H
 
 #include <string>
-#include "src/utils/GConst.h"
 #include <fstream>
 #include "src/rendering/model/Mesh.h"
 #include "src/rendering/material/Texture2D.h"
-#include "src/utils/math/objects/Vectors.h"
 
 #include <vector>
 #include <GL/glew.h>
@@ -21,7 +19,6 @@
 #include <map>
 #include "src/static_libs/lodepng.h"
 #include "src/rendering/material/CubeTexture.h"
-#include "src/utils/GTypes.h"
 //#include <src/static_libs/tiny_obj_loader.cpp>
 
 

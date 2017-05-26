@@ -9,29 +9,51 @@
 #include "PointLight.h"
 
 class SpotLight : public PointLight{
-private:
-    Vector3f direction;
-    float cutOff;
-    float outerCutOff;
-    inline SpotLight(Vector3f pos, Vector3f col, Vector3f att, Vector3f dir, float cutOff, float outerCutOff) :
-            PointLight(pos, col, att),
-            direction(dir),
-            cutOff(cutOff),
-            outerCutOff(outerCutOff){
+    Vector3f _direction;
+    float _cutOff;
+    float _outerCutOff;
+    inline SpotLight(const Vector3f& position,
+                     const Vector3f& diffuseColor,
+                     const Vector3f& attenuation,
+                     const Vector3f& direction,
+                     const float cutOff,
+                     const float outerCutOff) :
+            PointLight(position, diffuseColor, attenuation),
+            _direction(direction),
+            _cutOff(cutOff),
+            _outerCutOff(outerCutOff){
     };
 public:
-    inline float getCutOff(void) const{return cutOff; };
-    inline float getOuterCutOff(void) const{return outerCutOff; };
-    inline Vector3f getDirection(void) const{return direction; };
-    inline void setDirection(Vector3f dir){direction = dir;}
+    inline float getCutOff(void) const{return _cutOff; };
+    inline float getOuterCutOff(void) const{return _outerCutOff; };
+    inline Vector3f getDirection(void) const{return _direction; };
+
+    inline void setDirection(Vector3f dir){_direction = dir;}
 
 
-    inline static PointerSpotLight create(Vector3f pos, Vector3f col, Vector3f att, Vector3f dir, float cutOff, float outerCutOff){
-        return PointerSpotLight(new SpotLight(pos, col, att, dir, cutOff, outerCutOff));
+    inline static PointerSpotLight create(const Vector3f& position,
+                                          const Vector3f& diffuseColor,
+                                          const Vector3f& attenuation,
+                                          const Vector3f& direction,
+                                          float cutOff,
+                                          float outerCutOff){
+        return PointerSpotLight(new SpotLight(position,
+                                              diffuseColor,
+                                              attenuation,
+                                              direction,
+                                              cutOff,
+                                              outerCutOff));
     }
 
     inline LightData getData(void) const{
-        return {LightTypes::SPOT, getPosition().getVec(), getDiffuseColor().getVec(), getSpecularColor().getVec(), getAttenuation().getVec(), direction.getVec(), cutOff, outerCutOff};
+        return {LightTypes::SPOT,
+                getPosition().getVec(),
+                getDiffuseColor().getVec(),
+                getSpecularColor().getVec(),
+                getAttenuation().getVec(),
+                _direction.getVec(),
+                _cutOff,
+                _outerCutOff};
     }
 };
 

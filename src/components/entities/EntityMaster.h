@@ -18,7 +18,7 @@ private:
     BasicShader * wireFrameShader = new WireframeShader();
 public:
     inline EntityMaster(PointerCamera camera){
-        RenderUtil::updateProjectionMatrix(shader, camera);
+        RenderUtil::updateProjectionMatrix(*shader, camera);
     }
     void renderEntities(EntitiesList entities,
                         std::vector<PointerPointLight> lights,

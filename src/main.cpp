@@ -1,12 +1,8 @@
 
-#include <src/GameEngine.h>
+#include <src/core/BasicEngine.h>
 #include <src/misc/MainApplication.h>
-#include <ctime>
+#include <src/misc/PreviewApplication.h>
 #include <src/components/voxel_old/VoxelApplication.h>
-#include <chrono>
-#include <src/components/voxel/chunks/ChunkGenerator.h>
-//#include <src/utils/Array3D.h>
-
 
 long int getTime(){
     struct timeval tp;
@@ -34,8 +30,9 @@ void testVectors(){
 }
 
 int main(int argc, char *argv[]){
-//    BasicEngine engine = BasicEngine(new MainApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
-    BasicEngine engine = BasicEngine(new VoxelApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
+//    BasicEngine engine = BasicEngine(new PreviewApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
+    BasicEngine engine = BasicEngine(new MainApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
+//    BasicEngine engine = BasicEngine(new VoxelApplication(), RES_X_DEFAULT, RES_Y_DEFAULT);
 //    BasicEngine engine = BasicEngine(nullptr, RES_X_DEFAULT, RES_Y_DEFAULT);
     engine.start();
 //    engine.setUpApp(new MainApplication());

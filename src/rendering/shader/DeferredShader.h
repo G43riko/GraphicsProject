@@ -6,17 +6,17 @@
 
 class DeferredShader : public BasicShader{
 public:
-    DeferredShader() : BasicShader("DeferredShader"){
+    inline DeferredShader() : BasicShader("DeferredShader"){
         compileShader();
     };
 
-    void setAllAttributes(void){
+    inline void setAllAttributes(void){
         this -> bindAttribute(0, "Position");
         this -> bindAttribute(1, "Texture");
         this -> bindAttribute(2, "Normal");
 
     };
-    void setAllUniforms(void){
+    inline void setAllUniforms(void){
 
         this -> setUniform("cameraPosition");
         this -> setUniform("projectionMatrix");

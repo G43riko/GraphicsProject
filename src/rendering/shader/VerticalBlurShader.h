@@ -2,6 +2,9 @@
 // Created by gabriel on 1.11.2016.
 //
 
+#ifndef GAMEENGINE_VERTICAL_BLUR_SHADER_H
+#define GAMEENGINE_VERTICAL_BLUR_SHADER_H
+
 #include "BasicShader.h"
 
 class VerticalBlurShader : public BasicShader{
@@ -20,3 +23,5 @@ public:
         this -> setUniform("targetHeight");
     }
 };
+
+#endif //GAMEENGINE_VERTICAL_BLUR_SHADER_H

@@ -16,7 +16,7 @@ public:
         TYPE_PLANE,
         TYPE_SIZE
     };
-    inline Collider(int type) : _type(type){};
+    inline Collider(const int type) : _type(type){};
     IntersectData intersect(const Collider& other) const;
     inline Vector3f getCenter(void) const{return Vector3f(0, 0, 0);}
     inline int getType(void) const{return _type;}

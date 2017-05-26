@@ -2,6 +2,9 @@
 // Created by gabriel on 15.10.2016.
 //
 
+#ifndef GAMEENGINE_COMBINE_SHADER_H
+#define GAMEENGINE_COMBINE_SHADER_H
+
 #include "BasicShader.h"
 
 class CombineShader : public BasicShader{
@@ -24,3 +27,5 @@ public:
 
 
 };
+
+#endif //GAMEENGINE_COMBINE_SHADER_H

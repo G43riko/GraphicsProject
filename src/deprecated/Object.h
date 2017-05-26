@@ -10,7 +10,6 @@
 #include <src/rendering/model/Entity.h>
 
 class Object {
-private:
     PointerEntity object = nullptr;
     Vector3f velocity;
     Vector3f rotSpeed;

@@ -11,14 +11,14 @@
 
 class BasicCamera{
 protected:
-    glm::mat4 projectionMatrix;//TODO prerobiť na GMatrix
+    Matrix4f projectionMatrix;//TODO prerobiť na GMatrix
     MousePicker * picker    = nullptr;
     Transform transform     = Transform();
 public:
-    inline glm::mat4 getProjectionMatrix(void) const{return projectionMatrix; }
-    inline Vector3f getForward(void){return transform.getRotation().getBack(); }
+    inline Matrix4f getProjectionMatrix(void) const{return projectionMatrix; }
+    inline Vector3f getForward(void) {return transform.getRotation().getBack(); }
 
-    inline Matrix4f getViewMatrix(void){
+    inline Matrix4f getViewMatrix(void) {
         return Matrix4f::initTranslation(transform.getPosition().getInverted()) * transform.getRotation().toRotationMatrix();
     }
 
@@ -28,12 +28,12 @@ public:
     inline void cleanUp(void){
         CHECK_AND_DEL(picker);
     }
-    inline const Vector3f& getMouseDirection(void) const{
-        if(IS_NULL(picker)){
-            throw getMessage(Messages::UNINITIALIZED_MOUSE_PICKER);
-        }
-        return picker -> getCurrentRay();
-    }
+//    inline const Vector3f& getMouseDirection(void) const{
+//        if(IS_NULL(picker)){
+//            throw getMessage(Messages::UNINITIALIZED_MOUSE_PICKER);
+//        }
+//        return picker -> getCurrentRay();
+//    }
 };
 
 #endif //GRAPHICSPROJECT_BASICCAMERA_H

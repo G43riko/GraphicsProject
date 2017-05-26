@@ -5,7 +5,6 @@
 #ifndef GRAPHICSPROJECT_WINDOWMANAGER_H
 #define GRAPHICSPROJECT_WINDOWMANAGER_H
 
-#include "src/utils/GConst.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <src/utils/GUtils.h>
@@ -16,6 +15,11 @@
 
 class WindowManager {
 public:
+    static GLFWcursor * CURSOR_HRESIZE;
+    static GLFWcursor * CURSOR_VRESIZE;
+    static GLFWcursor * CURSOR_POINTER;
+    static GLFWcursor * CURSOR_ARROW;
+
     static GLFWwindow * window;
 
     static inline void update(void){
@@ -35,6 +39,10 @@ public:
 
     static inline bool isCloseRequest(void){
         return glfwWindowShouldClose(WindowManager::window) == GL_TRUE;
+    }
+
+    static inline void setCursor(GLFWcursor * cursor){
+        glfwSetCursor(window, cursor);
     }
     static inline int init(int width, int height, std::string title, bool fullscreen){
         //inicializuje openGL

@@ -47,7 +47,6 @@
                           SKYBOX_SIZE, -SKYBOX_SIZE,  SKYBOX_SIZE}
 
 class SkyBoxMaster {
-private:
     BasicShader * shader = new SkyBoxShader();
     PointerRawModel model;
 public:
@@ -67,7 +66,7 @@ public:
         CHECK_AND_CLEAR(shader);
     };
     inline SkyBoxMaster(const PointerCamera camera, Loader loader){
-        RenderUtil::updateProjectionMatrix(shader, camera);
+        RenderUtil::updateProjectionMatrix(*shader, camera);
         model = loader.loadToVao(SKYBOX_VERTICES, 3);
     };
     inline BasicShader * getShader(void) const{ return shader; };

@@ -22,7 +22,12 @@ private:
 
     const PointerParticleTexture texture;
 public:
-    inline ParticleSystemSimple(PointerParticleTexture texture, ParticleManager& parent, float pps, float speed, float gravityComplient, float lifeLength) :
+    inline ParticleSystemSimple(PointerParticleTexture texture,
+                                ParticleManager& parent,
+                                float pps,
+                                float speed,
+                                float gravityComplient,
+                                float lifeLength) :
             pps(pps),
             speed(speed),
             gravityComplient(gravityComplient),

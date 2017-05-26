@@ -16,13 +16,13 @@ public:
         _objects.push_back(object);
     }
 
-    inline void simulate(float delta){
+    inline void simulate(const float delta){
         for(unsigned int i=0 ; i<_objects.size() ; i++){
             _objects[i].integrage(delta);
         }
     }
 
-    inline void handleCollisions(float delta){
+    inline void handleCollisions(const float delta){
         for(unsigned int i=0 ; i<_objects.size() ; i++){
             for(unsigned int j=i+1 ; j<_objects.size() ; j++) {
                 IntersectData intersectData = _objects[i].getColider().intersect(_objects[j].getColider());
@@ -37,7 +37,7 @@ public:
         }
     }
 
-    inline const PhysicsObject& getObject(unsigned int index) const{
+    inline const PhysicsObject& getObject(const uint index) const{
         return _objects[index];
     }
     inline unsigned int getNumObjects(void) const{

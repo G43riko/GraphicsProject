@@ -13,7 +13,7 @@ class ParticleTexture {
     const uint _rows;
     const uint _columns;
 public:
-    inline ParticleTexture(const PointerTexture2D& texture, uint rows, uint columns) :
+    inline ParticleTexture(const PointerTexture2D texture, const uint rows, const uint columns) :
             _texture(texture),
             _rows(rows),
             _columns(columns){}

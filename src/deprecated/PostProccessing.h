@@ -8,7 +8,7 @@
 
 #include <src/rendering/model/RawModel.h>
 #include <src/utils/Loader.h>
-#include "Filter.h"
+#include "src/components/postProccessing/Filter.h"
 #include "src/rendering/shader/ContrastShader.h"
 #include "src/rendering/shader/HorizontalBlurShader.h"
 #include "src/rendering/shader/VerticalBlurShader.h"
@@ -18,7 +18,7 @@ class PostProccessing {
     public:
         PostProccessing(Loader loader){
             quad = loader.loadToVao(POSITIONS, 2);
-            contrastChanger = new Filter(PointerBasicShader(new ContrastShader()));
+            contrastChanger = new Filter(PointerBasicShader(new ContrastShader()), 0, 0);
 
             hBlur = new Filter(PointerBasicShader(new HorizontalBlurShader()), 160, 90);
             hBlur -> setTargetWidth(1600);

@@ -335,8 +335,8 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
     }
 
     static inline Matrix4f initPerspective(const float fov, const float aspectRatio, const float zNear, const float zFar){
-        float tanHalfFOV = static_cast<float>(tan(fov / 2));
-        float zRange = zNear - zFar;
+        const float tanHalfFOV = static_cast<float>(tan(fov / 2));
+        const float zRange = zNear - zFar;
         Matrix4f result = Matrix4f();
 //        result.m00 = 0;  result.m01 = 0;  result.m02 = 0;  result.m03 = 0;
 //        result.m10 = 0;  result.m11 = 0;  result.m12 = 0;  result.m13 = 0;
@@ -367,13 +367,25 @@ Matrix4f Matrix4f::translate(Vector2f vec, Matrix4f src, Matrix4f * dest) {
         return result;
     }
 
-    inline Matrix4f InitRotationFromVectors(const Vector3f &n, const Vector3f &v, const Vector3f &u){
-        m00 = u.x;  m10 = u.y;  m20 = u.z;  m30 = 0;
-        m01 = v.x;  m11 = v.y;  m21 = v.z;  m31 = 0;
-        m02 = n.x;  m12 = n.y;  m22 = n.z;  m32 = 0;
-        m03 = 0;    m13 = 0;    m23 = 0;    m33 = 1;
+    inline static Matrix4f initRotationFromVectors(const Vector3f &n, const Vector3f &v, const Vector3f &u){
+        Matrix4f m;
+//        m.m00 = u.x;  m.m10 = u.y;  m.m20 = u.z;  m.m30 = 0;
+//        m.m01 = v.x;  m.m11 = v.y;  m.m21 = v.z;  m.m31 = 0;
+//        m.m02 = n.x;  m.m12 = n.y;  m.m22 = n.z;  m.m32 = 0;
+//        m.m03 = 0;    m.m13 = 0;    m.m23 = 0;    m.m33 = 1;
 
-        return *this;
+        m.m00 = u.x;  m.m10 = u.y;  m.m20 = u.z;
+        m.m01 = v.x;  m.m11 = v.y;  m.m21 = v.z;
+        m.m02 = n.x;  m.m12 = n.y;  m.m22 = n.z;
+
+        return m;
+    }
+
+    inline static Matrix4f InitRotationFromDirection(const Vector3f& forward, const Vector3f& up) {
+        Vector3f n = forward.getNormal();
+        Vector3f u = Vector3f(up.getNormal()).getCross(n);
+        Vector3f v = n.getCross(u);
+        return initRotationFromVectors(n, v, u);
     }
 
     Matrix4f operator * (const Matrix4f& matrix) const{

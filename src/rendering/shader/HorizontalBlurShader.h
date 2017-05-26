@@ -2,6 +2,9 @@
 // Created by gabriel on 1.11.2016.
 //
 
+#ifndef GAMEENGINE_HORIZONTAL_BLUR_SHADER_H
+#define GAMEENGINE_HORIZONTAL_BLUR_SHADER_H
+
 #include "BasicShader.h"
 
 class HorizontalBlurShader : public BasicShader{
@@ -19,3 +22,5 @@ class HorizontalBlurShader : public BasicShader{
             this -> setUniform("targetWidth");
         }
 };
+
+#endif //GAMEENGINE_HORIZONTAL_BLUR_SHADER_H

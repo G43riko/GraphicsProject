@@ -28,10 +28,12 @@ class VoxelApplication : public BasicApplication{
         auto cursor = TextureManager::instance.createTexture2D("res/textures/aim_cursor.png");
         float size = 50;
 
-        getRenderer().addTexture(GuiTexture(cursor -> getTextureID(),
-                                               Vector2f(),
-                                               Vector2f(size / (float)WindowManager::width,
-                                                        size / (float)WindowManager::height)));
+        GuiTexture * guiText = new GuiTexture(cursor -> getTextureID(),
+                                              Vector2f(),
+                                              Vector2f(size / (float)WindowManager::width,
+                                                       size / (float)WindowManager::height));
+
+        getRenderer().addTexture(guiText);
 
         auto material = Material::create(diffuse, normal);
         ball = MaterialedModel::create(sphere, material);
@@ -79,12 +81,7 @@ class VoxelApplication : public BasicApplication{
         spotLight->setPosition(getRenderer().getActualCamera() -> getPosition());
         spotLight->setDirection(getRenderer().getActualCamera() -> getForward());
 
-        getRenderer().prepareRenderer(0, 0, 0, 1);
-        getRenderer().init3D();
-        getRenderer().input();
-        getRenderer().update(delta);
-        getScene() -> update(delta);
-        getView().update(delta);
+        updateApp(delta);
 
 
         if(Input::isKeyDown(GLFW_KEY_ESCAPE)){
@@ -122,10 +119,6 @@ class VoxelApplication : public BasicApplication{
         }
     };
 
-    void onSecondElapse(const int fps) override{
-//        printf("FPS: %d\n", fps);
-        PRINT("FPS: " << fps);
-    };
 
     void render(void) override {
         getRenderer().renderScene(((Scene *)getScene()));

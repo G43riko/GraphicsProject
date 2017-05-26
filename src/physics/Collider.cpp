@@ -6,7 +6,7 @@
 #include "BoundingSphere.h"
 
 IntersectData Collider::intersect(const Collider& other) const{
-    if(_type ==TYPE_SPHERE && other._type == TYPE_SPHERE){
+    if(_type == TYPE_SPHERE && other._type == TYPE_SPHERE){
         BoudingSphere * self = (BoudingSphere *)this;
         return self ->intersect((BoudingSphere&)other);
     }

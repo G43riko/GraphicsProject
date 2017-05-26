@@ -26,7 +26,7 @@ private:
     PointerTexture2D texture;
 public:
     VoxelMaster(PointerCamera camera, PointerTexture2D texture) : renderer(VoxelRenderer(shader)){
-        RenderUtil::updateProjectionMatrix(shader, camera);
+        RenderUtil::updateProjectionMatrix(*shader, camera);
         for(int i = WOXEL_TEXTURE_NUM_X * WOXEL_TEXTURE_NUM_Y - 1; i>=0 ; i--){
             object[i] = (float)grandom(0.95, 1.05);
         }
