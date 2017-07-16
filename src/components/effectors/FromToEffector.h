@@ -17,7 +17,7 @@ class FromToEffector : public Effector{
 public:
     inline FromToEffector(const Vector3f& a,
                           const Vector3f& b,
-                          PointerEntity target,
+                          Entity& target,
                           const float speed = DEFAULT_FROM_TO_EFFECTOR_SPEED) :
             Effector(target),
             _a(a),
@@ -25,7 +25,7 @@ public:
             _step(1.0f / (float)GFLOOR((_a - _b).length() / speed)){};
 
     inline void update(const float delta) override{
-        _entity -> getTransform() -> setPosition(Vector3f::interpolate(_a, _b, _value));
+        _entity.getTransform() -> setPosition(Vector3f::interpolate(_a, _b, _value));
         _value += _step;
         if(_value <= 0 || _value >= 1){
             _step = -_step;

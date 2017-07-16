@@ -17,7 +17,8 @@ public:
             Collider(Collider::TYPE_SPHERE),
             _center(center),
             _radius(radius){};
-    IntersectData intersectBoundingSphere(const BoudingSphere& other) const{
+
+    inline IntersectData intersectBoundingSphere(const BoudingSphere& other) const{
         const float radiusDistance = _radius   + other._radius;
         Vector3f direction = other._center - _center;
         const float centerDistance = direction.length();
@@ -25,6 +26,7 @@ public:
         const float distance = centerDistance - radiusDistance;
         return IntersectData(centerDistance < radiusDistance, direction * distance);
     }
+
     inline Vector3f getCenter(void) const{return _center;}
     inline float getRadius(void) const{return _radius;}
 };

@@ -94,8 +94,8 @@ Vector3f::Vector3f(const Vector4f vec) : Vector3f(vec.x, vec.y, vec.z){}
 
  */
 
-Vector3f Vector3f::rotate(Quaternion rotation){
-    Quaternion w = rotation * (*this) * rotation.conjugate();
+Vector3f Vector3f::rotate(const Quaternion& rotation){
+    const Quaternion w = rotation * (*this) * rotation.conjugate();
 
     return Vector3f(w.x, w.y, w.z);
 }
@@ -124,23 +124,23 @@ void Vector2f::show(bool endLine){
  * Vector4f
  ***********************/
 
-int Vector4f::count = 0;
+//int Vector4f::count = 0;
 
 /************************
  * OTHER
  ***********************/
 
-template<typename T> class GVector3 : public GVector<T>{
-public:
-    template<typename S>
-    GVector3(S x, S y, S z) : GVector3(static_cast<T>(x), static_cast<T>(y), static_cast<T>(z)){}
-    GVector3(GVector3<T> * a) : GVector3(a -> getX(), a -> getY(), a -> getZ()) {};
-    GVector3(T x, T y, T z){
-        this -> size = 3;
-        this -> data = new T[this -> size]{x, y, z};
-    }
-
-    T getX(){return this -> data[0];}
-    T getY(){return this -> data[1];}
-    T getZ(){return this -> data[2];}
-};
+//template<typename T> class GVector3 : public GVector<T>{
+//public:
+//    template<typename S>
+//    GVector3(S x, S y, S z) : GVector3(static_cast<T>(x), static_cast<T>(y), static_cast<T>(z)){}
+//    GVector3(GVector3<T> * a) : GVector3(a -> getX(), a -> getY(), a -> getZ()) {};
+//    GVector3(T x, T y, T z){
+//        this -> size = 3;
+//        this -> data = new T[this -> size]{x, y, z};
+//    }
+//
+//    T getX(){return this -> data[0];}
+//    T getY(){return this -> data[1];}
+//    T getZ(){return this -> data[2];}
+//};

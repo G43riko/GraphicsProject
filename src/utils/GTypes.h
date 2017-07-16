@@ -45,6 +45,7 @@ typedef std::shared_ptr<Entity> PointerEntity;
 typedef std::shared_ptr<Vertex> PointerVertex;
 typedef std::shared_ptr<Camera> PointerCamera;
 typedef std::shared_ptr<Mesh> PointerMesh;
+//typedef std::unique_ptr<Mesh> PointerMesh;
 
 typedef std::map<PointerParticleTexture, std::vector<Particle>> ParticlesList;
 typedef std::map<PointerMaterialedModel, std::vector<PointerEntity>> EntitiesList;
@@ -62,6 +63,7 @@ typedef struct objectType{
     PointerMesh mesh;
     objectType(std::string title, PointerMesh mesh) : title(title), mesh(mesh){};
 } ObjectType;
+
 
 typedef std::map<std::string, ObjectType*> SOMap;
 typedef std::map<std::string, std::string> SSMap;

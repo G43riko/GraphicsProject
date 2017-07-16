@@ -6,12 +6,12 @@
 #define GAMEENGINE_BLOCKID_H
 
 enum class BlockID{
-    Air = 0,
-    Grass = 1,
-    Dirt = 2,
-    Stone = 3,
-    Water = 4,
-    Iron = 5,
+    Air     = 0,
+    Grass   = 1,
+    Dirt    = 2,
+    Stone   = 3,
+    Water   = 4,
+    Iron    = 5,
     NUM_BLOCK_TYPES
 };
 

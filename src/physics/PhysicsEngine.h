@@ -23,8 +23,8 @@ public:
     }
 
     inline void handleCollisions(const float delta){
-        for(unsigned int i=0 ; i<_objects.size() ; i++){
-            for(unsigned int j=i+1 ; j<_objects.size() ; j++) {
+        ITERATE_VECTOR(_objects, i){
+            for(uint j=i+1 ; j<_objects.size() ; j++) {
                 IntersectData intersectData = _objects[i].getColider().intersect(_objects[j].getColider());
                 if(intersectData.isIntersect()){
                     Vector3f direction = intersectData.getDirection().getNormal();

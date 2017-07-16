@@ -9,7 +9,6 @@
 #include <vector>
 
 class Vertex {
-private:
     int textureIndex = NO_INDEX;
     int normalIndex = NO_INDEX;
 
@@ -20,7 +19,10 @@ private:
     Vector3f averagedTangent = Vector3f(0, 0, 0);
 public:
     const Vector3f position;
-    inline Vertex(const long unsigned int& index, const Vector3f& position) : index(index), length(position.length()), position(position){}
+    inline Vertex(const long unsigned int& index, const Vector3f& position) :
+            index(index),
+            length(position.length()),
+            position(position){}
 
     inline void show(void) const{
         printf("texture: %d, normal: %d\n", textureIndex, normalIndex);

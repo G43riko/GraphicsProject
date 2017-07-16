@@ -20,7 +20,6 @@ typedef struct{
 } MousePos;
 */
 class Input {
-private:
 //        static const int NUM_KEY_CODES = 256;
 //        static const int NUM_MOUSE_BUTTONS = 5;
     static bool lastKeys[];
@@ -59,7 +58,7 @@ private:
     }
 
 public:
-    inline static void init(int width, int height){
+    inline static void init(const int width, const int height){
         glfwSetKeyCallback(WindowManager::window, onKeyDown);
         glfwSetCursorPosCallback(WindowManager::window, onMouseMove);
         glfwSetScrollCallback(WindowManager::window, onMouseScroll);
@@ -74,7 +73,7 @@ public:
             lastButtons[i] = isButtonDown(i);
         }
     }
-    inline static void setMousePos(const Vector2f pos){
+    inline static void setMousePos(const Vector2f& pos){
         glfwSetCursorPos(WindowManager::window, pos.x, pos.y);
     }
 
@@ -83,33 +82,32 @@ public:
     inline static Vector2f getMouseScroll(void){return mouseScrollOffset;}
 
     //KEYS
-    inline static bool isKeyDown(int keyCode){
+    inline static bool isKeyDown(const int keyCode){
         return glfwGetKey(WindowManager::window, keyCode) == GLFW_PRESS;
         //return keys[keyCode];
     }
 
-    inline static bool getKeyDown(int keyCode){
+    inline static bool getKeyDown(const int keyCode){
         return isKeyDown(keyCode) && !lastKeys[keyCode];
     }
 
-    inline static bool getKeyUp(int keyCode){
+    inline static bool getKeyUp(const int keyCode){
         return !isKeyDown(keyCode) && lastKeys[keyCode];
     }
 
 
     //BUTTONS
-    inline static bool isButtonDown(int buttonCode){
+    inline static bool isButtonDown(const int buttonCode){
         return glfwGetMouseButton(WindowManager::window, buttonCode) == GLFW_PRESS;
         //return buttons[buttonCode];
     }
-    inline static bool getMouseDown(int mouseButton){
+    inline static bool getMouseDown(const int mouseButton){
         return isButtonDown(mouseButton) && !lastButtons[mouseButton];
     }
 
-    inline static bool getMouseUp(int mouseButton){
+    inline static bool getMouseUp(const int mouseButton){
         return !isButtonDown(mouseButton) && lastButtons[mouseButton];
     }
-
 };
 
 

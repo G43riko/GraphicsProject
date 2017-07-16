@@ -17,7 +17,7 @@ class CircleEffector : public Effector{
     Vector3f _direction;
     const float _step;
 public:
-    inline CircleEffector(PointerEntity entity,
+    inline CircleEffector(Entity& entity,
                           const Vector3f center = Vector3f(),
                           const float distance = DEFAULT_CIRCLE_EFFECTOR_DISTANCE,
                           const float speed = DEFAULT_CIRCLE_EFFECTOR_SPEED,
@@ -27,12 +27,12 @@ public:
             _distance(distance),
             _direction(direction),
             _step(speed / distance){
-        entity -> getTransform() -> setPosition(_center + _rotation.getForward() * _distance);
+        entity.getTransform() -> setPosition(_center + _rotation.getForward() * _distance);
     };
 
     inline void update(const float delta) override{
         _rotation = Quaternion(Quaternion(_direction, _step).mul(_rotation).normalize());
-        _entity -> getTransform() -> setPosition(_center + _rotation.getForward() * _distance);
+        _entity.getTransform() -> setPosition(_center + _rotation.getForward() * _distance);
     }
 };
 #endif //GAMEENGINE_CIRCLEEFFECTOR_H

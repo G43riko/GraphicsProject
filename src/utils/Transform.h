@@ -12,14 +12,11 @@
 //    return a * val + b * (1 - val);
 //}
 class Transform {
-private:
     Vector3f position;
     Quaternion rotation;
     Vector3f scale;
     Vector3f parentAttributes = Vector3f(1, 1, 1);
     Transform * parent = nullptr;
-
-
 public:
     Transform(){};
     inline Transform(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale) {
@@ -30,13 +27,13 @@ public:
         this -> rotation.rotate(rotation);
         this -> scale = scale;
     }
-    inline void move(float x, float y, float z){
+    inline void move(const float x, const float y, const float z){
         position.x += x;
         position.y += y;
         position.z += z;
     }
 
-    inline void move(const Vector3f & dir){
+    inline void move(const Vector3f& dir){
         move(dir.x, dir.y, dir.z);
     };
     //void rotate(float, float, float);
@@ -45,10 +42,10 @@ public:
     inline void rotate(const Quaternion& rot) {
         rotation = Quaternion(rot.mul(rotation).normalize());
     }
-    inline void rotate(const Vector3f& axis, float angle){
+    inline void rotate(const Vector3f& axis, const float angle){
         rotate(Quaternion(axis, angle));
     }
-    inline Matrix4f getTransformation(bool pos = true, bool rot = true, bool sca = true) const{
+    inline Matrix4f getTransformation(const bool pos = true, const bool rot = true, const bool sca = true) const{
         Matrix4f result;
         Matrix4f::setIdentity(result);
         if (parent) {
@@ -84,7 +81,7 @@ public:
     inline float getScaleY(void) const{return scale.y;}
     inline float getScaleZ(void) const{return scale.z;}
 
-    inline static Matrix4f getAverageTransformation(Transform a, Transform b, float ratio){
+    inline static Matrix4f getAverageTransformation(Transform& a, Transform& b, const float ratio){
         Vector3f pos = LERP(a.getPosition(), b.getPosition(), ratio);
         //Quaternion rot = Quaternion::slerp(*a.getRotation(), *b.getRotation(), ratio); //linearInterpolation(*a.getRotation(), *b.getRotation(), ratio);
         Vector3f scale = LERP(a.getScale(), b.getScale(), ratio);
@@ -98,7 +95,7 @@ public:
     inline void setPosition(const Vector3f& vec){
         position = vec;
     }
-    inline void setParent(Transform * parent, bool pos, bool rot, bool scale){
+    inline void setParent(Transform * parent, const bool pos, const bool rot, const bool scale){
         this -> parent = parent;
         parentAttributes.x = pos ? 1 : 0;
         parentAttributes.y = rot ? 1 : 0;

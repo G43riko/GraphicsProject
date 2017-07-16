@@ -11,13 +11,14 @@
 #include <src/components/Master.h>
 #include <src/rendering/shader/EntityShader.h>
 #include <src/rendering/shader/WireframeShader.h>
+
 class Master;
+
 class EntityMaster {
-private:
     BasicShader * shader = new EntityShader();
     BasicShader * wireFrameShader = new WireframeShader();
 public:
-    inline EntityMaster(PointerCamera camera){
+    inline EntityMaster(BasicCamera& camera){
         RenderUtil::updateProjectionMatrix(*shader, camera);
     }
     void renderEntities(EntitiesList entities,

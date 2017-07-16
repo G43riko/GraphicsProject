@@ -14,13 +14,13 @@
 
 
 class GuiMaster {
-    BasicShader * shader = new GuiShader();
+    GuiShader shader = GuiShader();
     const PointerRawModel model;
     GuiManager gui;
 
     inline void prepare(void) const{
-        shader -> bind();
-        RenderUtil::prepareModel(model, 1);
+        shader.bind();
+        RenderUtil::prepareModel(*model, 1);
 
         glEnable(GL_TEXTURE_2D);
         glDisable(GL_DEPTH_TEST);
@@ -36,9 +36,9 @@ class GuiMaster {
         RenderUtil::finishRender(1);
     }
 public:
-    inline GuiMaster(PointerCamera camera, Loader loader) :
+    inline GuiMaster(Loader loader) :
             model(loader.loadToVao(GUI_VERTICES, 2)),
-            gui(shader, model){};
+            gui(&shader, model){};
 
     inline void renderGui(std::vector<GuiTexture*> textures){
         if(textures.empty() && gui.isEmpty()){
@@ -47,9 +47,9 @@ public:
         prepare();
         ITERATE_VECTOR(textures, i){
             glBindTexture(GL_TEXTURE_2D, textures[i] -> getTexture());
-            shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX,
-                                      Maths::createTransformationMatrix(textures[i] -> getPosition(),
-                                                                        textures[i] -> getScale()));
+            shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX,
+                                   Maths::createTransformationMatrix(textures[i] -> getPosition(),
+                                                                     textures[i] -> getScale()));
             glDrawArrays(GL_TRIANGLE_STRIP, 0, model -> getVertexCount());
         }
         gui.update(1.0f);
@@ -57,11 +57,8 @@ public:
 
         finish();
     }
-    inline void cleanUp(void){
-        shader -> cleanUp();
-        delete shader;
-    };
-    inline BasicShader * getShader(void) const{
+    inline void cleanUp(void){};
+    inline BasicShader& getShader(void){
         return shader;
     };
 };

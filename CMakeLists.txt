@@ -1,10 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 project(GameEngine)
 
-SET(CMAKE_CXX_FLAGS "-std=c++11")
+#SET(CMAKE_CXX_FLAGS "-std=c++17")
 #SET(CMAKE_CXX_FLAGS "-lBulletCollision -I /usr/local/include/bullet")
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I/usr/include/freetype2 -L/usr/local/lib -lfreetype")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -lm -fPIC -lGL -lGLU")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lfreetype")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -lm -fPIC -lGL -lGLU")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lsfml-graphics -lsfml-window -lsfml-system")
+SET(CMAKE_EXE_LINKER_FLAGS "-v")
 
 #
 # CONFIGURATION
@@ -13,7 +15,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -lm -fPIC -lGL -lGLU")
 # Basic CMake settings
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/_install)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
-set(CMAKE_CXX_STANDARD 11)
+
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Add custom target for installation in CLion
 
@@ -31,19 +34,15 @@ add_definitions(${GTK3_CFLAGS_OTHER})
 #>>>>>>FREETYPE
 find_package(Freetype REQUIRED)
 include_directories(${FREETYPE_INCLUDE_DIRS})
-link_directories(${FREETYPE_LIBRARY_DIRS})
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -v")
+#link_directories(${FREETYPE_LIBRARY_DIRS})
 #<<<<<<<<FREETYPE
 
-# Set up external dependencies for Windows users
-if (MINGW)
-    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/dependencies/include/")
-    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/dependencies/lib/mingw")
-elseif (MSVC)
-    set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${CMAKE_SOURCE_DIR}/dependencies/include/")
-    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${CMAKE_SOURCE_DIR}/dependencies/lib/vc2015")
-    set(STRICT_COMPILE_FLAGS)
-endif ()
+
+#>>>>>>SFML
+find_package(SFML REQUIRED system window graphics network audio)
+#include_directories(${SFML_INCLUDE_DIRS})
+link_directories(${SFML_LIBRARY_DIRS})
+#<<<<<<<<SFML
 
 # Warnings for Debug mode
 option(USE_STRICT_COMPILE_WARNINGS "Use strict compilation warnings in debug mode." ON)
@@ -112,14 +111,9 @@ set(GL_MAIN_SRC
         src/components/voxel_old/Block.cpp
         src/components/voxel/VoxelMaster.cpp
         src/physics/Collider.cpp
-        src/GUI/openGL/Panel.h src/GUI/openGL/Header.h src/rendering/DefferedRenderer.h src/rendering/model/models/Plane.h)
+        src/utils/GLogger.h src/utils/GConsole.h src/core/SfmlEngine.h src/components/voxel/chunks/ChunkSection.h)
 
 add_executable(MainEngine ${GL_MAIN_SRC})
-
-#file(GLOB_RECURSE HDRS ${CMAKE_SOURCE_DIR}/src/*.h)
-#file(GLOB_RECURSE SRCS ${CMAKE_SOURCE_DIR}/src/*.c ${CMAKE_SOURCE_DIR}/src/*.cpp)
-#add_executable(MainEngine ${HDRS} ${SRCS})
-
 
 add_library(MyLibrary STATIC ${MY_LIBRARIES_SRC})
 target_link_libraries(MainEngine MyLibrary)
@@ -128,15 +122,19 @@ target_link_libraries(MainEngine MyLibrary)
 target_compile_definitions(MainEngine PUBLIC -DGLM_FORCE_RADIANS -DGLEW_STATIC )
 
 target_include_directories(MainEngine PUBLIC
-#        src/lib
-#        res
         ${GLFW_INCLUDE_DIRS}
         ${GLEW_INCLUDE_DIRS}
         ${GLM_INCLUDE_DIRS}
         ${OPENGL_INCLUDE_DIRS}
         ${CMAKE_SOURCE_DIR}
-#        ${CMAKE_CURRENT_BINARY_DIR}
         ${GTK3_INCLUDE_DIRS})
-target_link_libraries(MainEngine ${GLFW_LIBRARIES} ${GLEW_LIBRARIES} ${OPENGL_LIBRARIES} ${GTK3_LIBRARIES} )
+
+target_link_libraries(MainEngine
+        ${GLFW_LIBRARIES}
+        ${GLEW_LIBRARIES}
+        ${OPENGL_LIBRARIES}
+#        ${FREETYPE_LIBRARIES}
+        ${GTK3_LIBRARIES}
+        ${SFML_LIBRARIES})
 install(TARGETS MainEngine DESTINATION .)
 #<<koniec projektu

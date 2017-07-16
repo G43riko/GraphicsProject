@@ -4,65 +4,28 @@
 
 #include "Master.h"
 
-Master::Master(void){
-    initOptions();
-}
-
-void Master::initOptions(void) {
-    options.useShadows = false;
-    options.useEntities = true;
-    options.useParticles = true;
-    options.useSkybox = true;
-    options.useWaters = true;
-    options.usePostFx = false;
-    options.useVoxels = true;
-    options.useGuis = true;
-    options.useTextures = false;
-    options.useNormals = false;
-    options.useLights = false;
-    options.useSpeculars = false;
-    options.useEnviromentals = false;
-}
-
-void Master::updateProjectionMatrix(PointerCamera camera) {
+void Master::updateProjectionMatrix(const BasicCamera& camera) {
     if (waterMaster) {
-        RenderUtil::updateProjectionMatrix(*waterMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(waterMaster -> getShader(), camera);
     };
     if (skyBoxMaster) {
-        RenderUtil::updateProjectionMatrix(*skyBoxMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(skyBoxMaster -> getShader(), camera);
     };
     if (entityMaster) {
         RenderUtil::updateProjectionMatrix(*entityMaster -> getShader(), camera);
     };
     if (guiMaster) {
-        RenderUtil::updateProjectionMatrix(*guiMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(guiMaster -> getShader(), camera);
     };
     if (voxelMaster) {
-        RenderUtil::updateProjectionMatrix(*voxelMaster -> getShader(), camera);
+        RenderUtil::updateProjectionMatrix(voxelMaster -> getShader(), camera);
     };
 }
 
-void Master::cleanUp(void) {
-    CHECK_AND_CLEAR(shadowMaster);
-    CHECK_AND_CLEAR(guiMaster);
-    CHECK_AND_CLEAR(skyBoxMaster);
-    CHECK_AND_CLEAR(entityMaster);
-    CHECK_AND_CLEAR(particleMaster);
-    CHECK_AND_CLEAR(postFxMaster);
-    CHECK_AND_CLEAR(waterMaster);
-    CHECK_AND_CLEAR(voxelMaster);
-}
-
-void Master::update(float delta){
-    if(waterMaster){
-        waterMaster -> update(delta);
-    }
-}
-
-void Master::init(Loader loader, int width, int height, PointerCamera camera, PointerBasicShader shadowShader) {
+void Master::init(Loader loader, int width, int height, BasicCamera& camera, PointerBasicShader shadowShader){
     shadowMaster = new ShadowMaster(shadowShader, camera);
     if (options.useGuis) {
-        guiMaster = new GuiMaster(camera, loader);
+        guiMaster = new GuiMaster(loader);
     };
     if (options.useSkybox) {
         skyBoxMaster = new SkyBoxMaster(camera, loader);
@@ -78,5 +41,16 @@ void Master::init(Loader loader, int width, int height, PointerCamera camera, Po
     };
     voxelMaster = new VoxelMaster(camera, nullptr);
     postFxMaster = new PostFxMaster(loader, false, width, height);
-    postFxMaster->addFbo("fbo1", width, height, FBO_DEPTH_TEXTURE);
+    postFxMaster -> addFbo("fbo1", width, height, FBO_DEPTH_TEXTURE);
+}
+
+void Master::cleanUp(void) {
+    CHECK_AND_CLEAR(shadowMaster);
+    CHECK_AND_CLEAR(guiMaster);
+    CHECK_AND_CLEAR(skyBoxMaster);
+    CHECK_AND_CLEAR(entityMaster);
+    CHECK_AND_CLEAR(particleMaster);
+    CHECK_AND_CLEAR(postFxMaster);
+    CHECK_AND_CLEAR(waterMaster);
+    CHECK_AND_CLEAR(voxelMaster);
 }

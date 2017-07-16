@@ -11,14 +11,17 @@ class VoxelRenderer{
 public:
     inline VoxelRenderer(BasicShader * shader) : _shader(shader){}
 
-    void prepare(PointerCamera camera, std::vector<PointerPointLight> lights, PointerTexture2D texture, PointerDirectionalLight sun){
+    inline void prepare(BasicCamera& camera,
+                        const std::vector<PointerPointLight>& lights,
+                        const Texture2D& texture,
+                        const PointerDirectionalLight sun = nullptr) const{
         _shader -> bind();
-        _shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
-        _shader -> updateUniform3f(UNIFORM_CAMERA_POSITION, camera -> getTransform() -> getPosition());
+        _shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera.getViewMatrix());
+        _shader -> updateUniform3f(UNIFORM_CAMERA_POSITION, camera.getTransform() -> getPosition());
         _shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, Matrix4f::initTranslation(0, 0, 0));
         _shader -> updateMaterial(UNIFORM_MATERIAL, BlockTypes::getMaterialOf(BlockIDs::GRASS));
 
-        texture -> bind();
+        texture.bind();
 
         ITERATE_VECTOR(lights, i){
             _shader -> updateLight("lightData[" + std::to_string(i) + "]", lights[i] -> getData());
@@ -29,12 +32,12 @@ public:
         }
 //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     }
-    void render(PointerRawModel model){
+    inline void render(const RawModel& model) const{
         RenderUtil::prepareModel(model, 3);
-        glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
     }
 
-    void finish(void){
+    inline void finish(void) const{
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
         RenderUtil::finishRender(3);
     }

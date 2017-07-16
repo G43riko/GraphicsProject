@@ -10,23 +10,23 @@
 class VoxelPosition{
     Vector3f _chunk;
     Vector2f _world;
-    unsigned int _offset;
+    uint _offset;
 public:
-    inline VoxelPosition(Vector2f world = {}, Vector3f chunk = {}, unsigned int offset = 0) :
+    inline VoxelPosition(const Vector2f& world = {}, const Vector3f& chunk = {}, const uint offset = 0) :
             _chunk(chunk),
             _world(world),
             _offset(offset){};
 
     //GETTERS
 
-    inline Vector3f getChunkPosition(void) const{ return _chunk; }
-    inline Vector2f getWorldPosition(void) const{ return _world; }
-    inline unsigned int getVerticalOffset(void) const{ return _offset; }
+    inline const Vector3f& getChunkPosition(void) const{ return _chunk; }
+    inline const Vector2f& getWorldPosition(void) const{ return _world; }
+    inline uint getVerticalOffset(void) const{ return _offset; }
 
     //SETTERS
 
-    inline void setVerticalOffset(unsigned int offset){ _offset = offset; }
-    inline void setWorldPosition(Vector2f world){ _world = world; }
+    inline void setVerticalOffset(uint offset){ _offset = offset; }
+    inline void setWorldPosition(const Vector2f& world){ _world = world; }
 };
 
 #endif //GAMEENGINE_VOXELPOSITION_H

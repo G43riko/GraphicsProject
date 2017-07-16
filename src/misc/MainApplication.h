@@ -114,7 +114,7 @@ public:
         getScene() -> addEntity(Entity::create(model, Vector3f(0, 3, -15), Vector3f(0, 0, 0), Vector3f(1, 1, 1)));
         getScene() -> addEntity(Entity::create(floor, Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(10, 1, 10)));
 
-        texts = new TextMaster(getRenderer().getActualCamera());
+        texts = new TextMaster(*getRenderer().getActualCamera());
 
     }
 

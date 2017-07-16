@@ -12,9 +12,13 @@ class TextLine{
     const float _x;
     const float _y;
     const float _scale;
-    const Vector3f _color;
+    const Vector3f _color = Vector3f(1, 1, 1);
 public:
-    TextLine(std::string text, float x, float y, float scale = 1, Vector3f color = Vector3f()) :
+    TextLine(const std::string& text,
+             const float x,
+             const float y,
+             const float scale = 1,
+             const Vector3f& color = Vector3f(1, 1, 1)) :
             _text(text),
             _x(x),
             _y(y),

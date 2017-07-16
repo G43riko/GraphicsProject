@@ -4,13 +4,13 @@
 
 #include "ParticleMaster.h"
 #include <glm/gtx/string_cast.hpp>
-void ParticleMaster::renderParticles(ParticlesList particles, PointerCamera camera) {
+void ParticleMaster::renderParticles(ParticlesList particles, Camera& camera) {
     if(particles.empty()){
         return;
     }
     shader -> bind();
-    RenderUtil::prepareModel(model, 1);
-    const Matrix4f GViewMatrix = camera -> getViewMatrix();
+    RenderUtil::prepareModel(*model, 1);
+    const Matrix4f GViewMatrix = camera.getViewMatrix();
     Matrix4f mat;
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
@@ -109,7 +109,7 @@ void ParticleMaster::renderParticles(std::vector<Particle> particles, PointerCam
         return;
     }
     shader -> bind();
-    RenderUtil::prepareModel(model, 1);
+    RenderUtil::prepareModel(*model, 1);
 //    glm::mat4 viewMatrix = camera -> getViewMatrix();
 
     Matrix4f viewMatrix = camera -> getViewMatrix();

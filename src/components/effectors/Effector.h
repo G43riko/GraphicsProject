@@ -9,9 +9,9 @@
 
 class Effector{
 protected:
-    PointerEntity _entity;
+    Entity _entity;
 public:
-    inline Effector(PointerEntity entity) : _entity(entity){};
+    inline Effector(Entity& entity) : _entity(entity){};
     virtual void update(const float delta) = 0;
 };
 

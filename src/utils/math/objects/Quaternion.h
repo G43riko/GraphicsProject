@@ -11,9 +11,9 @@ class Quaternion : public Vector4f{
 public:
     inline Quaternion(float x = 0.0f, float y = 0.0f, float z = 0.0f, float w = 1.0f) : Vector4f(x, y, z, w){}
 
-    inline Quaternion(const Vector4f v) : Vector4f(v.x, v.y, v.z, v.w) {}
+    inline Quaternion(const Vector4f& v) : Vector4f(v.x, v.y, v.z, v.w) {}
 
-    inline Quaternion(const Vector3f axis, const float angle) {
+    inline Quaternion(const Vector3f& axis, const float angle) {
         const float sinHalfAngle = sinf(angle / 2);
         const float cosHalfAngle = cosf(angle / 2);
 
@@ -23,7 +23,7 @@ public:
         w = cosHalfAngle;
     }
 
-    inline Quaternion(const Matrix4f m) {
+    inline Quaternion(const Matrix4f& m) {
         const float trace = m.m00 + m.m11 + m.m22;
 
         if(trace > 0) {
@@ -73,7 +73,7 @@ public:
     }
 
 
-    inline Quaternion operator *= (const Quaternion& r){
+    inline Quaternion& operator *= (const Quaternion& r){
         *this = *this * r;
         return *this;
     }
@@ -128,9 +128,15 @@ public:
         return Quaternion(_x, _y, _z, _w);
     }
 
-    static Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
+    inline static Quaternion slerp(const Quaternion& qa, const Quaternion& qb, const double t) {
         Quaternion qm = Quaternion();
-        double cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y + qa.z * qb.z;
+        const double cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y + qa.z * qb.z;
+
+        const double halfTheta = acos(cosHalfTheta);
+        const double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
+
+        const double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
+        const double ratioB = sin(t * halfTheta) / sinHalfTheta;
         if (abs((int)cosHalfTheta) >= 1.0){
             qm.w = qa.w;
             qm.x = qa.x;
@@ -138,8 +144,6 @@ public:
             qm.z = qa.z;
             return qm;
         }
-        double halfTheta = acos(cosHalfTheta);
-        double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
         if (fabs(sinHalfTheta) < 0.001){
             qm.w = (float)(qa.w * 0.5 + qb.w * 0.5);
             qm.x = (float)(qa.x * 0.5 + qb.x * 0.5);
@@ -147,8 +151,6 @@ public:
             qm.z = (float)(qa.z * 0.5 + qb.z * 0.5);
             return qm;
         }
-        double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-        double ratioB = sin(t * halfTheta) / sinHalfTheta;
         qm.w = (float)(qa.w * ratioA + qb.w * ratioB);
         qm.x = (float)(qa.x * ratioA + qb.x * ratioB);
         qm.y = (float)(qa.y * ratioA + qb.y * ratioB);

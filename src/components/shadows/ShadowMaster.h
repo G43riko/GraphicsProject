@@ -29,7 +29,8 @@ private:
     Matrix4f updateOrthoProjectionMatrix(float width, float height, float length);
     //void finish();
 public:
-    ShadowMaster(PointerBasicShader shader, PointerCamera camera) : shader(shader), box(ShadowBox(&lightViewMatrix, camera)){};
+//    ShadowMaster(PointerBasicShader shader, PointerCamera camera) : shader(shader), box(ShadowBox(&lightViewMatrix, camera)){};
+    ShadowMaster(PointerBasicShader shader, BasicCamera& camera) : shader(shader), box(ShadowBox(&lightViewMatrix, camera)){};
     void cleanUp(void){};
     void renderShadows(EntitiesList entities, PointerPointLight sun, PointerCamera camera);
     void renderShadows(std::vector<PointerEntity> entities, PointerPointLight sun, PointerCamera camera);

@@ -28,7 +28,7 @@ public:
         textures.push_back(texture);
     }
     //RENDERERS
-    virtual void renderSceneDeferred(BasicScene * scene) = 0;
+//    virtual void renderSceneDeferred(BasicScene * scene) = 0;
     virtual void renderScene(BasicScene * scene) = 0;
 
     //GETTERS

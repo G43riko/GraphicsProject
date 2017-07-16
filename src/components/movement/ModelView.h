@@ -8,6 +8,8 @@
 #include <src/rendering/Camera.h>
 #include "BasicView.h"
 
+#define MODEL_VIEW_MIN_PITCH -M_PI_2
+#define MODEL_VIEW_MAX_PITCH M_PI_2
 
 class ModelView : public BasicView{
     float _yaw = 0;
@@ -22,16 +24,19 @@ class ModelView : public BasicView{
         const bool rotY = NEZ(deltaPos.x);
         const bool rotX = NEZ(deltaPos.y);
 
-        if(rotY ){
-            float dist = TO_RADIANS(deltaPos.x);
+        if(rotY){
+            const float dist = TO_RADIANS(deltaPos.x);
             _yaw -= dist;
             camera -> getTransform() -> rotate(Vector3f(0, 1, 0), -dist);
         }
 
         if(rotX){
-            float dist = TO_RADIANS(deltaPos.y);
-            _pitch += dist;
-            camera -> getTransform() -> rotate(camera -> getTransform() -> getRotation().getRight(), -dist);
+            const float dist = TO_RADIANS(deltaPos.y);
+            const float newPitch = _pitch + dist;
+            if(GBETWEEN(newPitch, MODEL_VIEW_MIN_PITCH, MODEL_VIEW_MAX_PITCH)){
+                _pitch = newPitch;
+                camera -> getTransform() -> rotate(camera -> getTransform() -> getRotation().getRight(), -dist);
+            }
         }
         if (NEZ(rotY) || NEZ(rotX) || NEZ(_zoomVelocity)) {
             camera ->getTransform() -> getPosition().set(_center.x + SINF(_yaw) * COSF(_pitch) * _distance,
@@ -59,8 +64,18 @@ public:
                                                      _center.y + SINF(_pitch) * _distance,
                                                      _center.z + COSF(_yaw) * COSF(_pitch) * _distance);
     }
-
     inline void update(const float delta){
+        if(Input::getMouseDown(MODEL_VIEW_MOUSE_BUTTON_MOVE)){
+            _lastMousePosition = Input::getMousePosition();
+        }
+        else if(Input::isButtonDown(MODEL_VIEW_MOUSE_BUTTON_MOVE)){
+            const Vector2f deltaPos = Input::getMousePosition() - _lastMousePosition;
+
+            updatePos(deltaPos);
+            _lastMousePosition = Input::getMousePosition();
+        }
+    }
+    inline void update2(const float delta){
         if(Input::getMouseDown(MODEL_VIEW_MOUSE_BUTTON_MOVE) || Input::getMouseDown(MODEL_VIEW_MOUSE_BUTTON_ZOOM)){
             _lastMousePosition = Input::getMousePosition();
         }
@@ -76,7 +91,6 @@ public:
             checkVelocity();
         }
         else if(Input::isButtonDown(MODEL_VIEW_MOUSE_BUTTON_ZOOM)){
-
             const float yOffset = Input::getMousePosition().y - _lastMousePosition.y;
 
             if(NEZ(yOffset)){
@@ -116,6 +130,7 @@ public:
         }
         _distance += _zoomVelocity;
         _distance = GCLAMP(_distance, MODEL_VIEW_MIN_DISTANCE, MODEL_VIEW_MAX_DISTANCE);
+
         updatePos(_velocity);
     }
 };

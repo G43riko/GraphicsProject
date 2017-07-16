@@ -11,19 +11,40 @@
 #include <src/components/gui/GuiMaster.h>
 #include "RenderUtil.h"
 
-class DefferedRenderer{
+class DefferedRenderer : BasicRenderer{
     Fbo multiFbo;
     Fbo fbo, fbo2, fbo3;
+    int options = 0;
     PostProccessing pp;
-
+    PointerBasicShader shader;
     std::vector<GuiTexture *> textures;
+
+    inline void setCamera(PointerCamera camera){
+        actualCamera = camera;
+        updateProjectionMatrix(camera);
+    };
+
+    inline void updateProjectionMatrix(PointerCamera camera, PointerBasicShader i_shader = nullptr) {
+        if(i_shader){
+            i_shader -> bind();
+            i_shader -> updateUniform4m(UNIFORM_PROJECTION_MATRIX, camera -> getProjectionMatrix());
+        }
+        master.updateProjectionMatrix(*camera);
+    };
 public:
     inline DefferedRenderer(Loader loader, uint width, uint height) :
             multiFbo(Fbo(width, height, FBO_DEPTH_RENDER_BUFFER, 4)),
             fbo(Fbo(width, height, FBO_DEPTH_TEXTURE)),
             fbo2(Fbo(width, height, FBO_DEPTH_TEXTURE)),
             fbo3(Fbo(width, height, FBO_DEPTH_TEXTURE)),
-            pp(PostProccessing(loader)){
+            pp(PostProccessing(loader)),
+            shader(PointerBasicShader(new DeferredShader())){
+
+        if(actualCamera && shader -> hasUniform(UNIFORM_PROJECTION_MATRIX)){
+            updateProjectionMatrix(actualCamera, shader);
+        }
+        setCamera(PointerCamera(new Camera()));
+        master.init(loader, width, height, *actualCamera, shader);
 
         textures.push_back(new GuiTexture(fbo.getColourTexture(), Vector2f(0.75f, 0.75f), Vector2f(0.25f, 0.25f)));
         textures.push_back(new GuiTexture(fbo2.getColourTexture(), Vector2f(0.25f, 0.75f), Vector2f(0.25f, 0.25f)));
@@ -37,6 +58,13 @@ public:
         pp.cleanUp();
         multiFbo.cleanUp();
     }
+
+    inline void renderScene(BasicScene * scene) override {
+        master.getSkyBox() -> renderSky(*scene -> getSky(), *actualCamera);
+
+        renderSceneDeferred(scene, shader, actualCamera, options);
+        master.getGui() -> renderGui(getTextures());
+    };
 
     inline void renderSceneDeferred(BasicScene * scene,
                                     PointerBasicShader shader,
@@ -56,7 +84,7 @@ public:
 
                 RawModel model = it->first->getModel();
                 RenderUtil::prepareModel(model, 3);
-                RenderUtil::prepareMaterial(it->first->getMaterial(), shader, options);
+                RenderUtil::prepareMaterial(*it->first->getMaterial(), *shader, options);
 
                 ITERATE_VECTOR(it->second, i){
                     shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX,

@@ -7,10 +7,10 @@
 
 
 #include <src/rendering/RenderUtil.h>
-#include "WaterTile.h"
 #include <src/rendering/shader/WaterShader.h>
 #include <src/rendering/material/TextureManager.h>
 #include "WaterFrameBuffer.h"
+#include "WaterTile.h"
 
 
 class WaterMaster {
@@ -28,11 +28,11 @@ class WaterMaster {
     PointerTexture2D dudvMap = TextureManager::instance.createTexture2D("res/textures/waterDUDV.png");
     PointerTexture2D normalMap = TextureManager::instance.createTexture2D("res/textures/matchingNormalMap.png");
 
-    BasicShader * shader = new WaterShader();
+    WaterShader shader = WaterShader();
     float distance;
 public:
-    inline WaterMaster(PointerCamera camera, Loader loader) : quad(loader.loadToVao(WATER_VERTICES, 2)){
-        RenderUtil::updateProjectionMatrix(*shader, camera);
+    inline WaterMaster(BasicCamera& camera, Loader loader) : quad(loader.loadToVao(WATER_VERTICES, 2)){
+        RenderUtil::updateProjectionMatrix(shader, camera);
     };
     inline void addWater(float centerX,
                          float centerZ,
@@ -47,8 +47,7 @@ public:
         moveFactor += waterSpeed * delta;
     };
     inline void cleanUp(void){
-        shader -> cleanUp();
-        delete shader;
+        shader.cleanUp();
         ITERATE_VECTOR(waters, i){
             delete waters[i];
         }
@@ -74,7 +73,7 @@ public:
     /******************GETTERS******************/
     inline float getTilig(void){ return tiling; };
     inline float getShineDumper(void){ return tiling; };
-    inline BasicShader * getShader(void){ return shader; };
+    inline BasicShader& getShader(void){ return shader; };
     inline float getWaterSpeed(void){ return waterSpeed; };
     inline float getWaveStrenght(void){ return waveStrength; };
     inline float getReflectivity(void){ return reflectivity; };

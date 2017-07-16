@@ -12,7 +12,7 @@ namespace Collisions2D{
         return point.x > rectPosition.x && point.x < rectPosition.x + rectSize.x &&
                point.y > rectPosition.y && point.y < rectPosition.y + rectSize.y;
     }
-    inline bool pointArc(const Vector2f& point, const Vector2f& arcCenter, float arcRadius){
+    inline bool pointArc(const Vector2f& point, const Vector2f& arcCenter, const float arcRadius){
         return (point - arcCenter).length() < arcRadius;
     }
 }

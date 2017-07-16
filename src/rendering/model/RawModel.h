@@ -10,20 +10,20 @@
 #include <src/utils/GTypes.h>
 
 class RawModel{
-    const GLuint _vaoID;
-    const GLuint _vertexCount;
+    const uint _vaoID;
+    const uint _vertexCount;
     const GLenum _renderType;
 
-    inline RawModel(const GLint id, const GLint count, const GLenum type = GL_TRIANGLES) :
+    inline RawModel(const uint id, const uint count, const GLenum type = GL_TRIANGLES) :
             _vaoID(id),
             _vertexCount(count),
             _renderType(type){};
 public:
-    inline GLuint getVaoID(void) const{return _vaoID; }
-    inline GLuint getVertexCount(void) const{return _vertexCount; }
+    inline uint getVaoID(void) const{return _vaoID; }
+    inline uint getVertexCount(void) const{return _vertexCount; }
     inline GLenum getRenderType(void) const{return _renderType; }
 
-    inline static PointerRawModel create(GLuint vaoId, GLuint vertexCount, GLenum type = GL_TRIANGLES){
+    inline static PointerRawModel create(uint vaoId, uint vertexCount, GLenum type = GL_TRIANGLES){
         return PointerRawModel(new RawModel(vaoId, vertexCount, type));
     }
 

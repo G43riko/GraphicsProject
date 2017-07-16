@@ -10,13 +10,11 @@
 #include <src/rendering/Camera.h>
 
 class ShadowBox {
-private:
-
     float minX, maxX;
     float minY, maxY;
     float minZ, maxZ;
     Matrix4f * lightViewMatrix;
-    PointerCamera cam;
+    BasicCamera cam;
     float farHeight, farWidth, nearHeight, nearWidth;
 
     Vector4f * calculateFrustumVertices(Matrix4f rotation, Vector3f forwardVector, Vector3f centerNear, Vector3f centerFar) {
@@ -40,9 +38,9 @@ private:
         return points;
     }
 public:
-    ShadowBox(Matrix4f * lightViewMatrix, PointerCamera camera) {
-        this -> lightViewMatrix = lightViewMatrix;
-        this -> cam = camera;
+    ShadowBox(Matrix4f * lightViewMatrix, BasicCamera& camera) :
+            lightViewMatrix(lightViewMatrix),
+            cam(camera){
         calculateWidthsAndHeights();
     }
 
@@ -50,11 +48,10 @@ public:
         Matrix4f rotation = calculateCameraRotationMatrix();
         Vector3f forwardVector = Matrix4f::transform(rotation, DIR_FORWARD).getXYZ();
         Vector3f toFar = forwardVector * SHADOW_DISTANCE;
-        Vector3f toNear = forwardVector * cam -> NEAR_PLANE;
-        Vector3f centerNear = toNear + cam -> getPosition();
-        Vector3f centerFar = toFar + cam -> getPosition();
-        Vector4f* points = calculateFrustumVertices(rotation, forwardVector, centerNear,
-                                                     centerFar);
+        Vector3f toNear = forwardVector * cam.NEAR_PLANE;
+        Vector3f centerNear = toNear + cam.getPosition();
+        Vector3f centerFar = toFar + cam.getPosition();
+        Vector4f* points = calculateFrustumVertices(rotation, forwardVector, centerNear, centerFar);
 
         bool first = true;
         //for (Vector4f point : points) {
@@ -109,8 +106,8 @@ public:
 
     Matrix4f calculateCameraRotationMatrix() {
         //return Matrix4f::initRotation((float)(TO_RADIANS(-cam -> pitch)), (float)(TO_RADIANS(-cam -> yaw)), 0);
-        return Matrix4f::initRotation((float)(-cam -> pitch), (float)(-cam -> yaw), 0);
-
+//        return Matrix4f::initRotation((float)(-cam.pitch), (float)(-cam.yaw), 0);//TODO toto prerobiť na Quaterniony
+        return Matrix4f();
         /*
         Matrix4f rotation = Matrix4f();
         Matrix4f::rotate(static_cast<float>(TO_RADIANS(-cam -> yaw)), Vector3f(0, 1, 0), rotation, &rotation);
@@ -120,9 +117,8 @@ public:
     }
 
     void calculateWidthsAndHeights() {
-        farWidth = (float) (SHADOW_DISTANCE * tan(TO_RADIANS(cam -> FOV)));
-        nearWidth = (float) (cam -> NEAR_PLANE
-                             * tan(TO_RADIANS(cam -> FOV)));
+        farWidth = (float) (SHADOW_DISTANCE * tan(TO_RADIANS(cam.FOV)));
+        nearWidth = (float) (cam.NEAR_PLANE * tan(TO_RADIANS(cam.FOV)));
         farHeight = farWidth / WindowManager::getRation();
         nearHeight = nearWidth / WindowManager::getRation();
     }

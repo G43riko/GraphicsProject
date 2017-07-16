@@ -11,8 +11,8 @@
 #include "../components/gui/GuiMaster.h"
 #include "../components/sky/SkyBoxMaster.h"
 #include "../components/particles/ParticleMaster.h"
-#include "../components/entities/EntityMaster.h"
 #include "../components/water/WaterMaster.h"
+#include "../components/entities/EntityMaster.h"
 
 
 
@@ -30,16 +30,37 @@ class Master {
 
     MasterOptions options;
 
-    void initOptions(void);
+    void initOptions(void) {
+        options.useShadows = false;
+        options.useEntities = true;
+        options.useParticles = true;
+        options.useSkybox = true;
+        options.useWaters = true;
+        options.usePostFx = false;
+        options.useVoxels = true;
+        options.useGuis = true;
+        options.useTextures = false;
+        options.useNormals = false;
+        options.useLights = false;
+        options.useSpeculars = false;
+        options.useEnviromentals = false;
+    };
 public:
-    Master(void);
-    void updateProjectionMatrix(PointerCamera camera);
+    inline Master(void){
+        initOptions();
+    };
+
+    void updateProjectionMatrix(const BasicCamera& camera);
 
     void cleanUp(void);
 
-    void update(float delta);
+    inline void update(float delta){
+        if(waterMaster){
+            waterMaster -> update(delta);
+        }
+    }
 
-    void init(Loader loader, int width, int height, PointerCamera camera, PointerBasicShader shadowShader);
+    void init(Loader loader, int width, int height, BasicCamera& camera, PointerBasicShader shadowShader);
 
     //SETTERS
     inline void setPostFx(bool val){ options.usePostFx = val; }

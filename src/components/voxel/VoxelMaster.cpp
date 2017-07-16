@@ -24,16 +24,16 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
         return;
     }
 
-    shader -> bind();
-    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
-    shader -> updateUniform3f(UNIFORM_CAMERA_POSITION, camera -> getTransform() -> getPosition());
+    shader.bind();
+    shader.updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
+    shader.updateUniform3f(UNIFORM_CAMERA_POSITION, camera -> getTransform() -> getPosition());
 //    shader -> updateUniform4m(PROJECTION_MATRIX, camera -> getProjectionMatrix());
 
 //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     PointerRawModel model = world -> getModel();
 //    model = world->getBoxModel();
-    RenderUtil::prepareModel(model, 3);
+    RenderUtil::prepareModel(*model, 3);
 
     Vector3f position, scale;
     Matrix4f translation;
@@ -48,11 +48,11 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
 
     Vector3f cameraPosition = camera -> getPosition();
     if(IS_NOT_NULL(sun)){
-        shader -> updateLight("sun", sun -> getData());
+        shader.updateLight("sun", sun -> getData());
     }
     ITERATE_VECTOR(lights, i){
 //        RenderUtil::updateLightUniforms(lights[i], shader, camera, i, false);
-        shader -> updateLight("lightData[" + std::to_string(i) + "]", lights[i] -> getData());
+        shader.updateLight("lightData[" + std::to_string(i) + "]", lights[i] -> getData());
     }
 
     //int threeFacesBoxes = 0;
@@ -68,8 +68,8 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
         //scale = block -> getScale();
         translation = Matrix4f::initTranslation(position.x, position.y, position.z);
 //        translation = *block -> getTranslation();
-        shader -> updateUniform4f("color", world -> blocks[i] -> getColor());
-        shader -> updateMaterial(UNIFORM_MATERIAL, BlockTypes::getMaterialOf(world -> blocks[i] -> getType()));
+        shader.updateUniform4f("color", world -> blocks[i] -> getColor());
+        shader.updateMaterial(UNIFORM_MATERIAL, BlockTypes::getMaterialOf(world -> blocks[i] -> getType()));
 
 //      continue;
 //        shader -> updateUniform4m(TRANSFORMATION_MATRIX, scaleMat * translation);
@@ -85,27 +85,27 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
 //        if(block -> getRenderOptions() & Block::Z_MINUS && position.z < cameraPosition.z) {counter++;}
         if(true || counter < 3){
             if(world -> blocks[i] -> getRenderOptions() & Block::X_PLUS && position.x > cameraPosition.x) {
-                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, xPlusRotation * translation);
+                shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, xPlusRotation * translation);
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
             }
             if(world -> blocks[i] -> getRenderOptions() & Block::X_MINUS && position.x < cameraPosition.x) {
-                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, xMinusRotation * translation);
+                shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, xMinusRotation * translation);
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
             }
             if(world -> blocks[i] -> getRenderOptions() & Block::Y_PLUS && position.y > cameraPosition.y){
-                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, yPlusRotation * translation);
+                shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, yPlusRotation * translation);
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
             }
             if(world -> blocks[i] -> getRenderOptions() & Block::Y_MINUS && position.y < cameraPosition.y){
-                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, yMinusRotation * translation);
+                shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, yMinusRotation * translation);
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
             }
             if(world -> blocks[i] -> getRenderOptions() & Block::Z_PLUS && position.z > cameraPosition.z) {
-                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, zPlusRotation * translation);
+                shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, zPlusRotation * translation);
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
             }
             if(world -> blocks[i] -> getRenderOptions() & Block::Z_MINUS && position.z < cameraPosition.z) {
-                shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, zMinusRotation * translation);
+                shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, zMinusRotation * translation);
                 glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
             }
         }
@@ -115,16 +115,16 @@ void VoxelMaster::render(PointerCamera camera, std::vector<PointerPointLight> li
     }
     if(!blocks.empty()){
         model = world ->getBoxModel();
-        RenderUtil::prepareModel(model, 3);
+        RenderUtil::prepareModel(*model, 3);
         for(Block * block : blocks) {
             position = block -> getAbsolutePos();
             scale = block -> getScale();
             scaleMat = Matrix4f::initScale(scale.x, scale.y, scale.z);
             translation = Matrix4f::initTranslation(position.x, position.y, position.z);
 
-            shader -> updateUniform4f("color", block -> getColor());
+            shader.updateUniform4f("color", block -> getColor());
 
-            shader->updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, scaleMat * translation);
+            shader.updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, scaleMat * translation);
             glDrawElements(GL_TRIANGLES, model->getVertexCount(), GL_UNSIGNED_INT, 0);
         }
     }

@@ -5,14 +5,14 @@
 #ifndef GRAPHICSPROJECT_HEIGHTGENERATOR_H
 #define GRAPHICSPROJECT_HEIGHTGENERATOR_H
 
-#include "src/utils/GUtils.h"
+//#include "src/utils/GUtils.h"
 
 #define HEIGHT_GENERATOR_OCTAVES 3
 #define HEIGHT_GENERATOR_ROUGHNESS 0.3f
 #define HEIGHT_GENERATOR_SEED 100000
 
 class HeightGenerator {
-    float amplitude;
+    const float amplitude;
     const int seed;
     int xOffset = 0;
     int zOffset = 0;
@@ -58,7 +58,7 @@ public:
     inline HeightGenerator(const float amplitude) :
             HeightGenerator(amplitude, HEIGHT_GENERATOR_SEED){}
 
-    inline HeightGenerator(const float amplitude, int seed) :
+    inline HeightGenerator(const float amplitude, const int seed) :
             amplitude(amplitude),
             seed(seed){}
 

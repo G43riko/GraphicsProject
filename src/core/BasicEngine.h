@@ -14,7 +14,6 @@
 #include <src/core/BasicApplication.h>
 
 class BasicEngine {
-private:
     long _fpsCounter        = 0;
     BasicApplication * _app = nullptr;
     Loader _loader          = Loader();
@@ -41,7 +40,7 @@ private:
             _gui.init();
         }
         else{
-            appStart();
+            MEASURE_FUNC_TIME(appStart(), BasicEngine_appStart);
         }
 
         DEBUG("BasicEngine::init - end: " << glfwGetTime());
@@ -93,7 +92,10 @@ private:
 //        printf("update2: %f \n", glfwGetTime() - updateTime);
     };
 public:
-    inline BasicEngine(BasicApplication * i_app, int i_width, int i_height) : _app(i_app), _width(i_width), _height(i_height){
+    inline BasicEngine(BasicApplication * i_app, uint i_width, uint i_height) :
+            _app(i_app),
+            _width(i_width),
+            _height(i_height){
         DEBUG("BasicEngine::BasicEngine" << glfwGetTime());
         _showGui = _app == nullptr;
     };
@@ -123,14 +125,15 @@ public:
             _app -> init(&_gui);
         }
         else{
-            _app -> init(nullptr);
+            MEASURE_FUNC_TIME(_app -> init(nullptr), BasicApplication_init);
         }
 
+
         //načítame potrebný obsah
-        _app -> loadContent();
+        MEASURE_FUNC_TIME(_app -> loadContent(), BasicApplication_loadContent);
 
         //spustime aplikáciu
-        _app -> start();
+        MEASURE_FUNC_TIME(_app -> start(), BasicApplication_start);
 
         //nastavím engine aby updatoval aj aplikáciu
         _running = true;
@@ -182,9 +185,10 @@ public:
         auto start = std::chrono::high_resolution_clock::now();
         auto startLoopTime = start, middleLoopTime = start, endLoopTime = start;
         float delta = 1;
+
         long long microseconds, loopTime;
 
-        init();
+        MEASURE_FUNC_TIME(init(), BasicEngine_init);
         while((_showGui && !_gui.getExitRequest()) || (!_showGui && _running)){
             fps = 0;
             start = std::chrono::high_resolution_clock::now();

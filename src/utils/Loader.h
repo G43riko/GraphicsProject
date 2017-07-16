@@ -14,14 +14,13 @@
 #include <iostream>
 
 class Loader {
-private:
     struct modelData{
-        GLuint vaoID;
-        GLuint vboIndices;
-        GLuint vboVertices;
-        GLuint vboTextures;
-        GLuint vboNormals;
-        GLuint vboTangents;
+        uint vaoID;
+        uint vboIndices;
+        uint vboVertices;
+        uint vboTextures;
+        uint vboNormals;
+        uint vboTangents;
     };
     std::list<modelData *> models;
     inline struct modelData * createAndStoreObject(void){
@@ -30,15 +29,15 @@ private:
         return result;
     }
 public:
-    inline PointerRawModel loadToVao(const VectorF positions){
+    inline PointerRawModel loadToVao(const VectorF& positions){
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         storeDataInAttributeList(0, 3, positions, &data -> vboVertices);
         unbindVAO();
-        return RawModel::create(data -> vaoID, (GLuint)positions.size() / 3);
+        return RawModel::create(data -> vaoID, (uint)positions.size() / 3);
     }
 
-    inline PointerRawModel loadToVao(const VectorF positions, const VectorUI indices){
+    inline PointerRawModel loadToVao(const VectorF& positions, const VectorUI& indices){
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         bindIndicesBuffer(indices, &data -> vboIndices);
@@ -47,10 +46,10 @@ public:
         return RawModel::create(data -> vaoID, (int)indices.size());
     }
 
-    inline PointerRawModel loadToVao(const VectorF positions,
-                                     const VectorF texts,
-                                     const VectorF normals,
-                                     const VectorUI indices){
+    inline PointerRawModel loadToVao(const VectorF& positions,
+                                     const VectorF& texts,
+                                     const VectorF& normals,
+                                     const VectorUI& indices){
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         bindIndicesBuffer(indices, &data -> vboIndices);
@@ -60,10 +59,10 @@ public:
         unbindVAO();
         return RawModel::create(data -> vaoID, (int)indices.size());
     }
-    inline PointerRawModel loadToVaoA(const GLfloat * vertices,
-                                      const GLfloat * textures,
-                                      const GLfloat * normals,
-                                      const GLuint * indices){
+    inline PointerRawModel loadToVaoA(const float * vertices,
+                                      const float * textures,
+                                      const float * normals,
+                                      const uint * indices){
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         bindIndicesBufferArray(indices, &data -> vboIndices);
@@ -71,12 +70,12 @@ public:
         storeDataInAttributeArray(1, 2, textures, &data -> vboTextures);
         storeDataInAttributeArray(2, 3, normals, &data -> vboNormals);
         unbindVAO();
-        return RawModel::create(data -> vaoID, sizeof(indices) / sizeof(GLuint));
+        return RawModel::create(data -> vaoID, sizeof(indices) / sizeof(uint));
     }
 
-    inline PointerRawModel loadToVao(const VectorF positions,
-                                     const VectorF texts,
-                                     const VectorUI indices){
+    inline PointerRawModel loadToVao(const VectorF& positions,
+                                     const VectorF& texts,
+                                     const VectorUI& indices){
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         bindIndicesBuffer(indices, &data -> vboIndices);
@@ -86,15 +85,15 @@ public:
         return RawModel::create(data -> vaoID, (int)indices.size());
     }
 
-    inline PointerRawModel loadToVao(const VectorF positions, const int dimensions) {
+    inline PointerRawModel loadToVao(const VectorF& positions, const int dimensions) {
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         storeDataInAttributeList(0, dimensions, positions, &data -> vboVertices);
         unbindVAO();
-        return RawModel::create(data -> vaoID, (GLuint)(positions.size() / dimensions));
+        return RawModel::create(data -> vaoID, (uint)(positions.size() / dimensions));
     }
 
-    inline PointerRawModel loadToVao(const PointerMesh& mesh, GLenum renderType = GL_TRIANGLES){
+    inline PointerRawModel loadToVao(const PointerMesh& mesh, const GLenum renderType = GL_TRIANGLES){
         struct modelData * data = createAndStoreObject();
         createVAO(&data -> vaoID);
         bindIndicesBuffer(mesh -> getIndices(), &data -> vboIndices);
@@ -103,7 +102,7 @@ public:
         storeDataInAttributeList(2, 3,  mesh -> getNormals(), &data -> vboNormals);
         storeDataInAttributeList(3, 3,  mesh -> getTangents(), &data -> vboTangents);
         unbindVAO();
-        return RawModel::create(data -> vaoID, (GLuint)mesh -> getIndices().size(), renderType);
+        return RawModel::create(data -> vaoID, (uint)mesh -> getIndices().size(), renderType);
     }
 
     inline void cleanUp(void){
@@ -119,17 +118,17 @@ public:
         models.clear();
     }
 private:
-    inline static void createVAO(GLuint * vaoID){
+    inline static void createVAO(uint * vaoID){
         glGenVertexArrays(1, vaoID);
         glBindVertexArray(* vaoID);
     }
 
-    inline static void bindIndicesBuffer(const VectorUI buffer, GLuint * vboID){
+    inline static void bindIndicesBuffer(const VectorUI& buffer, uint * vboID){
         glGenBuffers(1, vboID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *vboID);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer.size() * sizeof(GLuint), buffer.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer.size() * sizeof(uint), buffer.data(), GL_STATIC_DRAW);
     }
-    inline static void bindIndicesBufferArray(const GLuint * buffer, GLuint * vboID){
+    inline static void bindIndicesBufferArray(const uint * buffer, uint * vboID){
         glGenBuffers(1, vboID);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *vboID);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(buffer), buffer, GL_STATIC_DRAW);
@@ -137,7 +136,7 @@ private:
 
 
 
-    inline static void storeDataInAttributeArray(const GLuint attributeNumber, const int size, const GLfloat * buffer, GLuint * vboID){
+    inline static void storeDataInAttributeArray(const uint attributeNumber, const int size, const float * buffer, uint * vboID){
         glGenBuffers(1, vboID);
         glBindBuffer(GL_ARRAY_BUFFER, *vboID);
         glBufferData(GL_ARRAY_BUFFER, sizeof(buffer), buffer, GL_STATIC_DRAW);
@@ -145,17 +144,17 @@ private:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    inline static void storeDataInAttributeList(const GLuint attributeNumber, const int size, const VectorF buffer, GLuint * vboID){
+    inline static void storeDataInAttributeList(const uint attributeNumber, const int size, const VectorF buffer, uint * vboID){
         glGenBuffers(1, vboID);
         glBindBuffer(GL_ARRAY_BUFFER, *vboID);
-        glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(GLfloat), buffer.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, buffer.size() * sizeof(float), buffer.data(), GL_STATIC_DRAW);
         glVertexAttribPointer(attributeNumber, size, GL_FLOAT, GL_FALSE, 0, 0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     inline static void unbindVAO(void){ glBindVertexArray(0);}
 
     template <typename T>
-    inline static void showBufferData(int size, GLuint id, GLuint type = GL_ARRAY_BUFFER){
+    inline static void showBufferData(const int size, const uint id, const GLuint type = GL_ARRAY_BUFFER){
         T * target = new T[size * sizeof(T)];
         glBindBuffer(type, id);
         glGetBufferSubData(type, 0, size * sizeof(T), target);

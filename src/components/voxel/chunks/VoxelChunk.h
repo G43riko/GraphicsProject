@@ -5,8 +5,6 @@
 #ifndef GAMEENGINE_VOXELCHUNK_H
 #define GAMEENGINE_VOXELCHUNK_H
 
-//#define MINI_CHUNK_SIZE 16
-
 #include "MiniChunk.h"
 #include "src/components/voxel/VoxelRenderer.h"
 #include "src/components/voxel/VoxelPosition.h"
@@ -30,9 +28,9 @@ public:
         model = loader -> loadToVao(builder.getMesh());
 
     }
-    inline void render(VoxelRenderer renderer, VoxelPosition position) const{
+    inline void render(const VoxelRenderer& renderer, VoxelPosition position) const{
         ////toto renderuje chunky samostatne
-        renderer.render(model);
+        renderer.render(*model);
     }
 };
 

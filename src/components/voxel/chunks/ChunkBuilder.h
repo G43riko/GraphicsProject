@@ -13,7 +13,9 @@ struct LightBlockData{
     float x, y, z;
     float w = BLOCK_SIZE, h = BLOCK_SIZE, d = BLOCK_SIZE;
     BlockID type = BlockID ::Air;
+
     LightBlockData * parent = this;
+
     LightBlockData(float x = 0, float y = 0, float z = 0, BlockID type = BlockID::Air) :
             x(x),
             y(y),
@@ -346,7 +348,7 @@ class ChunkBuilder{
     }
 
 public:
-    inline ChunkBuilder(Vector3f chunkSize, float size) :
+    inline ChunkBuilder(const Vector3f& chunkSize, float size) :
             _size(size / 2),
             _chunkSize(chunkSize){}
 
@@ -385,7 +387,7 @@ public:
         }
     }
 
-    void generateFromMap(LightBlockData *** map, Vector3f position){
+    inline void generateFromMap(LightBlockData *** map, Vector3f position){
         LOOP(_chunkSize.x, i){
             LOOP(_chunkSize.y, j){
                 LOOP(_chunkSize.z, k){

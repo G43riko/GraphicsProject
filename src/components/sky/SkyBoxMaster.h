@@ -47,29 +47,24 @@
                           SKYBOX_SIZE, -SKYBOX_SIZE,  SKYBOX_SIZE}
 
 class SkyBoxMaster {
-    BasicShader * shader = new SkyBoxShader();
+    SkyBoxShader shader = SkyBoxShader();
     PointerRawModel model;
 public:
-    inline void renderSky(const PointerCubeTexture sky, const PointerCamera camera){
-        if(IS_NULL(sky)){
-            return;
-        }
-        shader -> bind();
-        shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, camera -> getViewMatrix());
+    inline void renderSky(const CubeTexture& sky, BasicCamera& camera){
+        shader.bind();
+        shader.updateUniform4m(UNIFORM_VIEW_MATRIX, camera.getViewMatrix());
 
-        RenderUtil::prepareModel(model, 1);
-        sky -> bind();
+        RenderUtil::prepareModel(*model, 1);
+        sky.bind();
         glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());
         RenderUtil::finishRender(1);
     }
-    inline void cleanUp(void){
-        CHECK_AND_CLEAR(shader);
-    };
-    inline SkyBoxMaster(const PointerCamera camera, Loader loader){
-        RenderUtil::updateProjectionMatrix(*shader, camera);
+    inline void cleanUp(void){};
+    inline SkyBoxMaster(BasicCamera& camera, Loader loader){
+        RenderUtil::updateProjectionMatrix(shader, camera);
         model = loader.loadToVao(SKYBOX_VERTICES, 3);
     };
-    inline BasicShader * getShader(void) const{ return shader; };
+    inline BasicShader& getShader(void) { return shader; };
 };
 
 

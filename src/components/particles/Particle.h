@@ -10,31 +10,30 @@
 
 
 class Particle {
-    private:
-        Vector3f position;
-        Vector3f velocity;
-        //TODO toto su konštanty no častica potom nemože byť vo vectore
-        float gravityEffect = 0;
-        float lifeLength = 0;
-        float rotation = 0;
-        float scale = 0;
-        PointerParticleTexture texture;
-        float elapsedTime = 0;
+    Vector3f position;
+    Vector3f velocity;
+    //TODO toto su konštanty no častica potom nemože byť vo vectore
+    float gravityEffect = 0;
+    float lifeLength = 0;
+    float rotation = 0;
+    float scale = 0;
+    PointerParticleTexture texture;
+    float elapsedTime = 0;
 
-        Vector2f textureOffset1;
-        Vector2f textureOffset2;
-        float blend;
-        void updateTextureCoordInfo(void){
-            const float lifeFactor = elapsedTime / lifeLength;
-            const int stageCount = texture->getRows() * texture->getColumns();
-            const float atlasProgress = lifeFactor * (float)stageCount;
-            const int index1 = (int)floor(atlasProgress);
-            const int index2 = index1 < stageCount - 1 ? index1 + 1: index1;
-            blend = (float)fmod(atlasProgress, 1.0f);
+    Vector2f textureOffset1;
+    Vector2f textureOffset2;
+    float blend;
+    inline void updateTextureCoordInfo(void){
+        const float lifeFactor = elapsedTime / lifeLength;
+        const int stageCount = texture->getRows() * texture->getColumns();
+        const float atlasProgress = lifeFactor * (float)stageCount;
+        const int index1 = (int)floor(atlasProgress);
+        const int index2 = index1 < stageCount - 1 ? index1 + 1: index1;
+        blend = (float)fmod(atlasProgress, 1.0f);
 
-            texture -> setTextureOffset(textureOffset1, index1);
-            texture -> setTextureOffset(textureOffset2, index2);
-        }
+        texture -> setTextureOffset(textureOffset1, index1);
+        texture -> setTextureOffset(textureOffset2, index2);
+    }
 public:
     inline Particle(const PointerParticleTexture texture,
                     const Vector3f &position,
@@ -68,7 +67,7 @@ public:
                                                                   textureOffset1.y,
                                                                   textureOffset2.x,
                                                                   textureOffset2.y);}
-    inline Vector2f getTextureInfo(void) const{return Vector2f((float)getTexture() ->getRows(), getBlend());}
+    inline Vector2f getTextureInfo(void) const{return Vector2f((float)texture -> getRows(), getBlend());}
     inline float getBlend(void) const{return blend;}
     inline PointerParticleTexture getTexture(void) const{return texture; };
 };

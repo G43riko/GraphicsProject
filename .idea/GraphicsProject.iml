@@ -2,11 +2,9 @@
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/DefferedRenderer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/model/models/Plane.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/rendering/Renderer.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/material/TextureManager.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/rendering/WindowManager.cpp" isTestSource="false" />
@@ -28,21 +26,23 @@
       <sourceFolder url="file://$MODULE_DIR$/src/components/water/WaterMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/Master.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/chunks/ChunkSection.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/components/voxel/VoxelMaster.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkIntroGui.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/GUI/openGL/Panel.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/GUI/openGL/Header.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/GUI/GtkIntroGui.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/math/objects/Vectors.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/math/objects/Vectors.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/GConsole.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/resources/FileLoader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/resources/FileLoader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/Input.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/utils/GLogger.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/utils/MousePicker.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/core/SfmlEngine.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/lodepng.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/static_libs/stb_image.c" isTestSource="false" />
@@ -51,6 +51,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/physics/Collider.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cmake/FindGLFW3.cmake" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cmake/FindSFML.cmake" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cmake/FindGLM.cmake" isTestSource="false" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />

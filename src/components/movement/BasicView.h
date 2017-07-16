@@ -13,7 +13,7 @@ protected:
     float moveSpeed = DEFAUL_MOVE_SPEED;
     float rotSpeed = DEFAUL_ROT_SPEED;
 public:
-    enum Type{
+    enum class Type{
         FPS_VIEW,
         TOP_VIEW,
         MODEL_VIEW,

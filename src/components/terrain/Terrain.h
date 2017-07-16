@@ -15,10 +15,16 @@
 
 class Terrain {
 public:
-    inline ~Terrain(){
+    inline ~Terrain(void){
         clearMap();
     }
-    inline Terrain(Loader loader, PointerTexture2D texture, GLuint size, GLuint vertices, float height, float textMulti, float **mapa = nullptr) :
+    inline Terrain(Loader loader,
+                   PointerTexture2D texture,
+                   const uint size,
+                   const uint vertices,
+                   const float height,
+                   const float textMulti,
+                   float **mapa = nullptr) :
             height(height),
             texture(texture),
             generator(HeightGenerator(height)),
@@ -44,8 +50,8 @@ private:
     const float height;
     const PointerTexture2D texture;
     const HeightGenerator generator;
-    const GLuint vertices;
-    const GLuint size;
+    const uint vertices;
+    const uint size;
     PointerMaterialedModel model = nullptr;
 
     inline void clearMap(void){
@@ -56,7 +62,7 @@ private:
         delete[] map;
     }
 
-    inline void initMap(const GLuint x, const GLuint y){
+    inline void initMap(const uint x, const uint y){
         if(map){
             clearMap();
         }
@@ -66,7 +72,7 @@ private:
         }
     }
 
-    inline Vector3f calculateNormal(const GLuint x, const GLuint z) const{
+    inline Vector3f calculateNormal(const uint x, const uint z) const{
         const float heightL = getTerrainHeight(x - 1, z);
         const float heightR = getTerrainHeight(x + 1, z);
         const float heightD = getTerrainHeight(x, z - 1);
@@ -74,7 +80,7 @@ private:
         return Vector3f(heightL - heightR, 2.0f, heightD - heightU).normalize();
     }
 
-    inline float getTerrainHeight(const GLuint x, const GLuint z) const{
+    inline float getTerrainHeight(const uint x, const uint z) const{
         if(x >= vertices || z >= vertices){
             return 0;
         }
@@ -99,15 +105,16 @@ private:
         verticesVector.reserve(premulVertices * 3);
         textures.reserve(premulVertices * 2);
         normals.reserve(premulVertices * 3);
+
         LOOP_U(vertices, gz){
             LOOP_U(vertices, gx){
                 if(gz < vertices - 1 && gx < vertices - 1){
                     map[gx + 1][gz + 1] = generator.generateHeight(gx + 1,  gz + 1);
 
-                    GLuint topLeft = gz * vertices + gx;
-                    GLuint topRight = topLeft + 1;
-                    GLuint bottomLeft = (gz + 1) * vertices + gx;
-                    GLuint bottomRight = bottomLeft + 1;
+                    uint topLeft = gz * vertices + gx;
+                    uint topRight = topLeft + 1;
+                    uint bottomLeft = (gz + 1) * vertices + gx;
+                    uint bottomRight = bottomLeft + 1;
 
                     indices.push_back(topLeft);
                     indices.push_back(bottomLeft);

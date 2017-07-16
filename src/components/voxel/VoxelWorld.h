@@ -18,7 +18,11 @@ class VoxelWorld{
     std::unordered_map<std::string, VoxelChunk *> chunks;
     WorldSettings settings;
 public:
-    void render(VoxelRenderer renderer, PointerCamera camera, std::vector<PointerPointLight> lights, PointerTexture2D texture, PointerDirectionalLight sun) const{
+    void render(const VoxelRenderer& renderer,
+                BasicCamera& camera,
+                std::vector<PointerPointLight> lights,
+                const Texture2D& texture,
+                const PointerDirectionalLight sun = nullptr) const{
         renderer.prepare(camera, lights, texture, sun);
 
         VoxelPosition position;
@@ -30,7 +34,7 @@ public:
 
         renderer.finish();
     }
-    void generateChunk(Vector2f pos, Loader * loader){
+    void generateChunk(const Vector2f& pos, Loader * loader){
         chunks[pos.toString()] = new VoxelChunk(pos, loader);
     }
     void generateChunk(int x, int y, int z, Loader * loader){

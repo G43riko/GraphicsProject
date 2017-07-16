@@ -14,10 +14,10 @@ class ParticleMaster {
     BasicShader * shader = new ParticleShader();
     const PointerRawModel model;
 public:
-    void renderParticles(ParticlesList particles, PointerCamera camera);
+    void renderParticles(ParticlesList particles, Camera& camera);
     void renderParticles(std::vector<Particle> particles, PointerCamera camera);
 
-    ParticleMaster(PointerCamera camera, Loader loader) :
+    ParticleMaster(BasicCamera& camera, Loader loader) :
             model(loader.loadToVao(PARTICLE_VERTICES, 2)){
         RenderUtil::updateProjectionMatrix(*shader, camera);
     };

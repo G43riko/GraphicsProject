@@ -17,7 +17,7 @@ void Renderer::renderScene(BasicScene * scene){
     }
 
     if(master.useSkybox()){
-        master.getSkyBox() -> renderSky(scene -> getSky(), actualCamera);
+        master.getSkyBox() -> renderSky(*scene -> getSky(), *actualCamera);
     }
 
     if(master.useShadows()){
@@ -38,7 +38,7 @@ void Renderer::renderScene(BasicScene * scene){
         glEnable(GL_CLIP_DISTANCE0);
         glDisable(GL_CLIP_DISTANCE0);
         if(master.useSkybox()){
-            master.getSkyBox() -> renderSky(scene -> getSky(), actualCamera);
+            master.getSkyBox() -> renderSky(*scene -> getSky(), *actualCamera);
         }
         glEnable(GL_CLIP_DISTANCE0);
         master.getEntity() -> renderEntities(scene -> getEntities(),
@@ -61,7 +61,7 @@ void Renderer::renderScene(BasicScene * scene){
 
         master.getWater() -> render(actualCamera, scene -> getLights());
     }
-    master.getParticle() -> renderParticles(scene -> getParticles(), actualCamera);
+    master.getParticle() -> renderParticles(scene -> getParticles(), *actualCamera);
 
     if(master.getPostFx() -> getUsingPostFx()){
         master.getPostFx() -> stopRender();
@@ -95,18 +95,19 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
     shader -> updateUniformi("options", options);
     shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, actualCamera -> getViewMatrix());
 
-    if(options & FLAG_LIGHT){
-        for(unsigned int i=0 ; i<lights.size() ; i++)
-            RenderUtil::updateLightUniforms(lights[i], shader, actualCamera, i);
+    if(options & Flag::LIGHT){
+        ITERATE_VECTOR(entities, i){
+            RenderUtil::updateLightUniforms(*lights[i], *shader, *actualCamera, i);
+        }
     }
 
     glEnable(GL_TEXTURE);
-    for(unsigned int i=0 ; i< entities.size() ; i++){
+    ITERATE_VECTOR(entities, i){
         RawModel model = entities[i]->getModel()->getModel();
 
         shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, entities[i] -> getTransform() -> getTransformation());
-        if(options & FLAG_TEXTURE)
-            RenderUtil::prepareMaterial(entities[i]->getModel()->getMaterial(), shader, options);
+        if(options & Flag::TEXTURE)
+            RenderUtil::prepareMaterial(*entities[i]->getModel()->getMaterial(), *shader, options);
         RenderUtil::prepareModel(model, items);
         glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
     }
@@ -117,42 +118,43 @@ void Renderer::renderObjects(std::vector<PointerEntity> entities, std::vector<Po
  * DEPRECATED
  ***************************/
 
-void Renderer::renderObject(PointerEntity object, std::vector<PointerPointLight> lights){
-    PointerBasicShader shader = shaders[OBJECT_SHADER];
-    if(!shader)
-        return;
-    shader -> bind();
+//void Renderer::renderObject(Entity& object, std::vector<PointerPointLight> lights){
+//    PointerBasicShader shader = shaders[OBJECT_SHADER];
+//    if(!shader)
+//        return;
+//    shader -> bind();
+//
+//    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, actualCamera -> getViewMatrix());
+//    //shader -> updateUniform2f("levels", 4);
+//
+//    ITERATE_VECTOR(lights, i){
+//        RenderUtil::updateLightUniforms(*lights[i], shader, *actualCamera, i);
+//    }
+//
+//    RawModel model = object.getModel()->getModel();
+//    glEnable(GL_TEXTURE);
+//
+//    shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, object.getTransform()->getTransformation());
+//    RenderUtil::prepareMaterial(object.getModel()->getMaterial(), shader, options);
+//    RenderUtil::prepareModel(model, 4);
+//    glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+//    RenderUtil::finishRender(4);
+//}
 
-    shader -> updateUniform4m(UNIFORM_VIEW_MATRIX, actualCamera -> getViewMatrix());
-    //shader -> updateUniform2f("levels", 4);
-
-    for(unsigned int i=0 ; i<lights.size() ; i++)
-        RenderUtil::updateLightUniforms(lights[i], shader, actualCamera, i);
-
-    RawModel model = object->getModel()->getModel();
-    glEnable(GL_TEXTURE);
-
-    shader -> updateUniform4m(UNIFORM_TRANSFORMATION_MATRIX, object->getTransform()->getTransformation());
-    RenderUtil::prepareMaterial(object->getModel()->getMaterial(), shader, options);
-    RenderUtil::prepareModel(model, 4);
-    glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
-    RenderUtil::finishRender(4);
-}
 
 
-
-void Renderer::render(PointerRawModel model){
-    RenderUtil::prepareModel(model, 0);
-    //glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());// - pri použíťí index baferu sa nepoužíva
-    glDrawElements(GL_TRIANGLES, model -> getVertexCount(), GL_UNSIGNED_INT, 0);
-    RenderUtil::finishRender(0);
-}
-
-void Renderer::render(PointerMaterialedModel materialedModel){
-    RawModel model = materialedModel->getModel();
-    glEnable(GL_TEXTURE);
-    RenderUtil::prepareMaterial(materialedModel->getMaterial(), nullptr, options);
-    RenderUtil::prepareModel(model, 1);
-    glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
-    RenderUtil::finishRender(1);
-}
+//void Renderer::render(const RawModel& model){
+//    RenderUtil::prepareModel(model, 0);
+//    //glDrawArrays(GL_TRIANGLES, 0, model -> getVertexCount());// - pri použíťí index baferu sa nepoužíva
+//    glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+//    RenderUtil::finishRender(0);
+//}
+//
+//void Renderer::render(const MaterialedModel& materialedModel){
+//    RawModel model = materialedModel.getModel();
+//    glEnable(GL_TEXTURE);
+//    RenderUtil::prepareMaterial(materialedModel.getMaterial(), nullptr, options);
+//    RenderUtil::prepareModel(model, 1);
+//    glDrawElements(GL_TRIANGLES, model.getVertexCount(), GL_UNSIGNED_INT, 0);
+//    RenderUtil::finishRender(1);
+//}

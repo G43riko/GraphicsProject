@@ -17,14 +17,17 @@ public:
     inline ChunkGenerator(float amplitude, int seed) :
             _generator(HeightGenerator(amplitude, seed)){
     };
-    BlockID getBlockType2(int x, uint y, int z) const{
+
+    inline BlockID getBlockType2(int x, uint y, int z) const{
         return y < getHeight(x, z) ? BlockID::Grass : BlockID::Air;
     }
-    LightBlockData getBlockType(int x, uint y, int z) const{
+
+    inline LightBlockData getBlockType(int x, uint y, int z) const{
         LightBlockData data;
         data.type = y < getHeight(x, z) ? BlockID::Grass : BlockID::Air;
         return data;
     }
+
     inline LightBlockData*** generateMap(Vector3f chunkSize, int offsetX, uint offsetY, int offsetZ) const{
         LightBlockData *** map = new LightBlockData ** [chunkSize.getXi()];
         for (uint i = 0; i < chunkSize.x; i++) {

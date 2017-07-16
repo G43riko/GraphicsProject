@@ -29,7 +29,7 @@ public:
     }
 
     inline Transform * getTransform(void){return &transform; }
-    inline PointerMaterialedModel getModel(void){return model; }
+    inline PointerMaterialedModel getModel(void) const{return model; }
     inline bool isWireframe(void) const{return false; }
     inline void setAlive(bool value){ alive = immortal || value; }
     inline bool isAlive(void) const{return alive;}

@@ -20,10 +20,12 @@ public:
         const float maxDistance = distance.max();
         return IntersectData(maxDistance < 0, distance);
     };
-    inline AABB(const Vector3f min, const Vector3f max) :
+
+    inline AABB(const Vector3f& min, const Vector3f& max) :
             Collider(Collider::TYPE_AABB),
             _min(min),
             _max(max){};
+
     inline Vector3f getMin(void) const{return _min;}
     inline Vector3f getMax(void) const{return _max;}
 };

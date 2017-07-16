@@ -14,23 +14,17 @@
 #include <src/core/BasicCamera.h>
 
 
-class MousePicker;
+//class MousePicker;
 
 class Camera : public BasicCamera{
-    const bool VERTICAL           = false;
+    const bool VERTICAL  = false;
 public:
-    const float FOV           = DEFAULT_CAMERA_FOV;
-    const float FAR_PLANE     = DEFAULT_CAMERA_FAR_PLANE;
-    const float NEAR_PLANE    = DEFAULT_CAMERA_NEAR_PLANE;
     float pitch         = 0;
     float roll          = 0;
     float yaw           = 0;
 
-    Transform * getTransform(void){
-        return &transform;
-    }
     inline Camera(void){
-        //projectionMatrix = Matrix4f::initPerspective(FOV, WindowManager::getRation(), NEAR_PLANE, FAR_PLANE); //toto nefunguje
+        //projectionMatrix = Matrix4f::initPerspective(FOV, WindowManager::getRation(), NEAR_PLANE, FAR_PLANE); //TODO toto nefunguje
         projectionMatrix = Matrix4f(glm::perspectiveFov<float>(FOV,
                                                                static_cast<float>(WindowManager::width),
                                                                static_cast<float>(WindowManager::height),

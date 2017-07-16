@@ -65,7 +65,7 @@ public:
 
     inline Vector2f& operator = (const Vector2f& v){x = v.x, y = v.y;return *this;}
 
-    friend std::ostream& operator << (std::ostream& os, const Vector2f& v){
+    inline friend std::ostream& operator << (std::ostream& os, const Vector2f& v){
         os << "[" << v.x << ", " << v.y << "]";
         return os;
     };
@@ -191,11 +191,11 @@ public:
     inline void setZ(const float i_z){z = i_z;}
     inline void set(const float i_x, const float i_y, const float i_z){x = i_x, y = i_y, z = i_z;}
     //BONUS
-    Vector3f rotate(Quaternion);
+    Vector3f rotate(const Quaternion& rotation);
 };
 class Vector4f{
     public:
-        static int count;
+//        static int count;
         float x, y, z, w;
         Vector4f(void) : Vector4f(0, 0, 0, 0){};
         Vector4f(float val) : Vector4f(val, val, val, val){};
@@ -205,11 +205,11 @@ class Vector4f{
             this -> y = y;
             this -> z = z;
             this -> w = w;
-            Vector4f::count++;
+//            Vector4f::count++;
         };
-        ~Vector4f(){
-            Vector4f::count--;
-        };
+//        ~Vector4f(){
+//            Vector4f::count--;
+//        };
         Vector4f normalize(void){
             float len = length();
             x /= len;
@@ -247,46 +247,59 @@ class Vector4f{
         }
         inline Vector3f getXYZ(void) const {return {x, y ,z};}
 };
-
-template <typename T>class GVector{
-    protected:
-        T * data;
-        int size;
-    public:
-        GVector(){};
-        GVector(GVector<T> * arg){
-            data = new T[arg -> size];
-            size = arg -> size;
-            for(int i=0 ; i<arg -> size ; i++)
-                data[i] = arg -> data[i];
-
-        }
-        GVector<T> * mul(GVector<T> * arg){
-            if(arg -> size != size)
-                exit(10);
-            for(int i=0 ; i<size ; i++)
-                data[i] *= arg -> data[i];
-        };
-
-        GVector<T> * mul(T arg){
-            if(arg -> size != size)
-                exit(10);
-            for(int i=0 ; i<size ; i++)
-                data[i] *= arg;
-        };
-        GVector<T> * getMul(GVector<T> * arg){
-            return  (new GVector<T>(this)) -> mul(arg);
-        };
-        GVector<T> * getMul(float arg){
-            return  (new GVector<T>(this)) -> mul(arg);
-        };
-        void show(){
-            std::cout << "[" << data[0];
-            for(int i=1 ; i<size ; i++)
-                std::cout << ", " << data[i];
-            std::cout << "]" << std::endl;
-        }
-};
-
+//
+//template <typename T>class GVector{
+//    protected:
+//        T * data;
+//        int size;
+//    public:
+//        GVector(){};
+//        GVector(GVector<T> * arg){
+//            data = new T[arg -> size];
+//            size = arg -> size;
+//            for(int i=0 ; i<arg -> size ; i++)
+//                data[i] = arg -> data[i];
+//
+//        }
+//        GVector<T> * mul(GVector<T> * arg){
+//            if(arg -> size != size)
+//                exit(10);
+//            for(int i=0 ; i<size ; i++)
+//                data[i] *= arg -> data[i];
+//        };
+//
+//        GVector<T> * mul(T arg){
+//            if(arg -> size != size)
+//                exit(10);
+//            for(int i=0 ; i<size ; i++)
+//                data[i] *= arg;
+//        };
+//        GVector<T> * getMul(GVector<T> * arg){
+//            return  (new GVector<T>(this)) -> mul(arg);
+//        };
+//        GVector<T> * getMul(float arg){
+//            return  (new GVector<T>(this)) -> mul(arg);
+//        };
+//        void show(){
+//            std::cout << "[" << data[0];
+//            for(int i=1 ; i<size ; i++)
+//                std::cout << ", " << data[i];
+//            std::cout << "]" << std::endl;
+//        }
+//};
+//template<typename T> class GVector3 : public GVector<T>{
+//public:
+//    template<typename S>
+//    GVector3(S x, S y, S z) : GVector3(static_cast<T>(x), static_cast<T>(y), static_cast<T>(z)){}
+//    GVector3(GVector3<T> * a) : GVector3(a -> getX(), a -> getY(), a -> getZ()) {};
+//    GVector3(T x, T y, T z){
+//        this -> size = 3;
+//        this -> data = new T[this -> size]{x, y, z};
+//    }
+//
+//    T getX(){return this -> data[0];}
+//    T getY(){return this -> data[1];}
+//    T getZ(){return this -> data[2];}
+//};
 
 #endif //GRAPHICSPROJECT_VECTORS_H

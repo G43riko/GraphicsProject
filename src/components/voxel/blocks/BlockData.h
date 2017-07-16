@@ -13,7 +13,6 @@
 
 
 class BlockData{
-private:
     BlockID _blockID;
     std::string _name;
     bool _isOpaque;

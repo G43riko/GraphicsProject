@@ -10,15 +10,15 @@
 #include "TextManager.h"
 
 class TextMaster {
-    BasicShader *shader = new TextShader();
+    BasicShader * shader = new TextShader();
     TextManager manager;
     std::vector<TextLine> texts;
-    TextLine text = TextLine("gabriel", 20, 20);
+    TextLine text = TextLine("gabriel", 0, 0);
 public:
-    inline TextMaster(const PointerCamera camera){
+    inline TextMaster(const BasicCamera& camera){
         RenderUtil::updateProjectionMatrix(*shader, camera);
     };
-    inline void renderTexts(){
+    inline void renderTexts(void){
         manager.RenderText(*shader, text);
         ITERATE_VECTOR(texts, i){
             manager.RenderText(*shader, texts[i]);

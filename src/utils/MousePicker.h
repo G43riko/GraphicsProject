@@ -14,7 +14,6 @@
 class BasicCamera;
 
 class MousePicker {
-private:
     Vector3f currentRay;
 	Matrix4f projectionMatrix;
 	Matrix4f viewMatrix;

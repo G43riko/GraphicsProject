@@ -10,12 +10,11 @@
 #include "src/utils/math/objects/Vectors.h"
 
 class GuiTexture {
-private:
     const GLuint _id;
     Vector2f _position;
     Vector2f _scale;
 public:
-    inline GuiTexture(const GLuint id, const Vector2f & position, const Vector2f & scale) :
+    inline GuiTexture(const GLuint id, const Vector2f& position, const Vector2f& scale) :
             _id(id),
             _position(position),
             _scale(scale){}

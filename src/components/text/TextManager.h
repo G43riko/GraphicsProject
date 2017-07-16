@@ -96,7 +96,7 @@ public:
 
         prepareVaoAndVbo();
     }
-    void RenderText(BasicShader& shader, const TextLine& text) {
+    void RenderText(BasicShader& shader, const TextLine& text){
         // Activate corresponding render state
         shader.bind();
         shader.updateUniform3f("textColor", text.getColor());

@@ -24,10 +24,10 @@ public:
     inline void setPosition(const float x, const float y, const float z){_position.set(x, y, z); };
     inline void setPosition(const Vector3f& pos){_position = pos; };
 
-    inline Vector3f getSpecularColor(void) const{return _specularColor; };
-    inline Vector3f getDiffuseColor(void)const{return _diffuseColor; };
-    inline Vector3f getAttenuation(void) const{return _attenuation; };
-    inline Vector3f getPosition(void) const{return _position; };
+    inline const Vector3f& getSpecularColor(void) const{return _specularColor; };
+    inline const Vector3f& getDiffuseColor(void)const{return _diffuseColor; };
+    inline const Vector3f& getAttenuation(void) const{return _attenuation; };
+    inline const Vector3f& getPosition(void) const{return _position; };
 
     inline static PointerPointLight create(const Vector3f& position, const Vector3f& color){
         return PointerPointLight(new PointLight(position, color));
